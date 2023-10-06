@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -25,11 +27,12 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "name")
-    private String name;
+// Deje este atributo ya armado para cuando ya esten las orders armada
+//    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
+//    private List<Order> orders = new ArrayList<>();
+
 
     public User (UserDTO userDTO){
-        this.name = userDTO.getName();
         this.username = userDTO.getUsername();
         this.password = userDTO.getPassword();
     }
@@ -40,7 +43,6 @@ public class User {
                         .builder()
                         .username(this.username)
                         .password(this.password)
-                        .name(this.name)
                         .build();
     }
 }
