@@ -1,10 +1,11 @@
-import './App.css';
-import Home from './home/home'
+import Home from './pages/home/home'
+import { LoginPage } from './pages';
 
 function App() {
   return (
     <>
       <Home/>
+      {/* <LoginPage /> */}
     </>
   );
 }
