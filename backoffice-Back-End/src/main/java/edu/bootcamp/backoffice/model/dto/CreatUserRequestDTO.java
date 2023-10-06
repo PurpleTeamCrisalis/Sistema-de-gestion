@@ -7,13 +7,11 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @Builder
-public class UserDTO {
+public class CreatUserRequestDTO {
 
     @JsonProperty("username")
     private String username;
     @JsonProperty("password")
     private String password;
-    @JsonProperty("userId")
-    private Integer userId;
 
 }

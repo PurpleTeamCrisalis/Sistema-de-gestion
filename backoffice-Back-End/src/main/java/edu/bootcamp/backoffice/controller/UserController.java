@@ -1,58 +1,68 @@
 package edu.bootcamp.backoffice.controller;
 
-import edu.bootcamp.backoffice.model.User;
+import edu.bootcamp.backoffice.model.dto.CreatUserRequestDTO;
 import edu.bootcamp.backoffice.model.dto.UserDTO;
 import edu.bootcamp.backoffice.service.UserService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 
 @RestController
 @RequestMapping("user")
 public class UserController {
 
-    private final UserService userService;
+    //private final UserService userService;
 
     public UserController(UserService userService)
     {
-        this.userService = userService;
+        //this.userService = userService;
     }
 
     @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public UserDTO saveUser(@RequestBody UserDTO userDTO)
+    public UserDTO saveUser(@RequestBody CreatUserRequestDTO userDTO)
     {
-        return new UserDTO("unUser","unPass","unName");
+        return new UserDTO(
+                userDTO.getUsername(),
+                userDTO.getPassword(),
+                1
+        );
         //return this.userService.saveUser(userDTO);
     }
 
-    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<UserDTO> getAllUser()
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public UserDTO getUser(@PathVariable int id)
     {
-        return this.userService.getListAllUsersInBD();
+        return new UserDTO("unUsername","unPass",id);
+        //throw new UnsupportedOperationException("endpoint getUser no implementado");
     }
 
-    @GetMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public UserDTO getUser(@RequestParam int id)
+    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<UserDTO> getAllUsers()
     {
-        return new UserDTO("unUser","unPass","unName");
-        //throw new UnsupportedOperationException("endpoint getUser no implementado");
+        int id = 1;
+        List<UserDTO> users = new ArrayList<UserDTO>();
+        users.add(new UserDTO("user"+id,"pass"+id, id++));
+        users.add(new UserDTO("user"+id,"pass"+id, id++));
+        return users;
+        //return this.userService.getListAllUsersInBD();
     }
 
     @PutMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
     public UserDTO updateUser(@RequestBody UserDTO userDTO)
     {
-        return new UserDTO("unUser","unPass","unName");
+        return new UserDTO(
+                userDTO.getUsername(),
+                userDTO.getPassword(),
+                userDTO.getUserId());
         //throw new UnsupportedOperationException("endpoint updateUser no implementado");
     }
 
-    @DeleteMapping(value = "{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public UserDTO deleteUser(@RequestBody int id)
+    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public UserDTO deleteUser(@PathVariable int id)
     {
-        return new UserDTO("unUser","unPass","unName");
+        return new UserDTO("unUsername","unPass",id);
         //throw new UnsupportedOperationException("endpoint deleteUser no implementado");
     }
 

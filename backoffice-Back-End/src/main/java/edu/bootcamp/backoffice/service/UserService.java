@@ -8,7 +8,6 @@ import edu.bootcamp.backoffice.model.dto.UserDTO;
 import edu.bootcamp.backoffice.repository.UserRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,8 +53,8 @@ public class UserService {
             throw new EmptyElementException("Password is empty");
         }
         if(!isForLogin){
-            if(StringUtils.isEmpty(userDTO.getName())){
-                throw new EmptyElementException("Name is empty");
+            if(userDTO.getUserId() < 1){
+                throw new EmptyElementException("Id less than 1");
             }
         }
 
