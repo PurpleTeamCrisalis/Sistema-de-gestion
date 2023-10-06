@@ -92,20 +92,15 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/user?id=1",
+					"raw": "http://localhost:8080/user/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"user"
-					],
-					"query": [
-						{
-							"key": "id",
-							"value": "1"
-						}
+						"user",
+						"1"
 					]
 				}
 			},
@@ -137,15 +132,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/user/1",
+					"raw": "http://localhost:8080/user",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"user",
-						"1"
+						"user"
 					],
 					"query": [
 						{
