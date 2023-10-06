@@ -26,15 +26,15 @@ replay_pid*
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
-/.pnp
+/backoffice-Front-End/backoffice-web/node_modules
+/backoffice-Front-End/backoffice-web/.pnp
 .pnp.js
 
 # testing
-/coverage
+/backoffice-Front-End/backoffice-web/coverage
 
 # production
-/build
+/backoffice-Front-End/backoffice-web/build
 
 # misc
 .DS_Store
