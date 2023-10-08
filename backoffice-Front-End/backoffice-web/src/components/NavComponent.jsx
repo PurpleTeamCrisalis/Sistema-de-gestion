@@ -13,11 +13,11 @@ export function NavComponent() {
             <div class="row flex-nowrap">
                 <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-primary">
                     <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-                        <div href="/" class="d-flex align-items-center text-white text-decoration-none">
+                        <div href="/" class="mt-4 container d-flex align-items-center justify-content-center p-0">
                             <img src={imageLogoFinnegans} alt="Logo Finnegans" width="70" height="70" />
-                            <span class="ms-n3 fs-4 d-none d-sm-inline text-dark fw-bold">Finnegans</span>
+                            <span class="fs-3 d-none d-sm-inline text-dark fw-bold">Finnegans</span>
                         </div>
-                        <span class="d-none d-sm-inline mx-auto text-dark" style={{ letterSpacing: ".3rem" }}>BACKOFFICE</span>
+                        <span class="d-none d-sm-inline mx-auto text-dark fw-normal fs-5" style={{ letterSpacing: ".3rem" }}>BACKOFFICE</span>
                         <div class="container d-flex flex-column mt-5 pt-5">
 
                             <a href="/" class="mb-3 bg-hover">
