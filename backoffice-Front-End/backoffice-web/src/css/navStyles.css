@@ -1,0 +1,11 @@
+.bg-hover:hover{
+    background-color: white;
+    box-shadow: -40px 0px 0px 0px white, 
+                40px 0px 0px 0px white, 
+                -40px 10px 0px 0px white,
+                -40px -10px 0px 0px white,
+                40px 10px 0px 0px white,
+                40px -10px 0px 0px white,
+                0px 10px 0px 0px white,
+                0px -10px 0px 0px white;
+}

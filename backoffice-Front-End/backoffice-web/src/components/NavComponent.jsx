@@ -1,4 +1,11 @@
 import imageLogoFinnegans from '../assets/images/Logo-Finnegans.png'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHouse } from '@fortawesome/free-solid-svg-icons';
+import { faUser } from '@fortawesome/free-regular-svg-icons';
+import { faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faBox } from '@fortawesome/free-solid-svg-icons';
+import { faBellConcierge } from '@fortawesome/free-solid-svg-icons';
+import { faFileInvoiceDollar } from '@fortawesome/free-solid-svg-icons';
 
 export function NavComponent() {
     return (
@@ -6,36 +13,39 @@ export function NavComponent() {
             <div class="row flex-nowrap">
                 <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-primary">
                     <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-                        <div href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                            <img src={imageLogoFinnegans} alt="Logo Finnegans" width="60" height="75" />
-                            <span class="fs-4 d-none d-sm-inline text-dark">Finnegans</span>
+                        <div href="/" class="d-flex align-items-center text-white text-decoration-none">
+                            <img src={imageLogoFinnegans} alt="Logo Finnegans" width="70" height="70" />
+                            <span class="ms-n3 fs-4 d-none d-sm-inline text-dark fw-bold">Finnegans</span>
                         </div>
-                        <span class="d-none d-sm-inline">BACKOFFICE</span>
-                        <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-                            <li class="nav-item">
-                                <a href="#menu" class="nav-link align-middle px-0">
-                                    <i class="fs-4 bi-house text-dark"></i> <span class="ms-1 d-none d-sm-inline text-dark">Home</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#menu" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                                    <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline text-dark">Dashboard</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#menu" class="nav-link px-0 align-middle">
-                                    <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline text-dark">Orders</span></a>
-                            </li>
-                            <li>
-                                <a href="#menu" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                                    <i class="fs-4 bi-grid"></i> <span class="ms-1 d-none d-sm-inline text-dark">Products</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#submenu1" class="nav-link px-0 align-middle">
-                                    <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline text-dark">Customers</span> </a>
-                            </li>
-                        </ul>
+                        <span class="d-none d-sm-inline mx-auto text-dark" style={{ letterSpacing: ".3rem" }}>BACKOFFICE</span>
+                        <div class="container d-flex flex-column mt-5 pt-5">
+
+                            <a href="/" class="mb-3 bg-hover">
+                                <FontAwesomeIcon icon={faHouse} size="xl" style={{ color: "#000000", width: "30px" }} />
+                                <span class="ms-3 d-none d-sm-inline text-dark fw-normal fs-5 align-middle">Perfil</span>
+                            </a>
+                            <a href="/" class="mb-3 bg-hover">
+                                <FontAwesomeIcon icon={faUser} size="xl" style={{ color: "#000000", width: "30px" }} />
+                                <span class="ms-3 d-none d-sm-inline text-dark fw-normal fs-5 align-middle">Clientes</span>
+                            </a>
+                            <a href="/" class="mb-3 bg-hover">
+                                <FontAwesomeIcon icon={faUsers} size="xl" style={{ color: "#000000", width: "30px" }} />
+                                <span class="ms-3 d-none d-sm-inline text-dark fw-normal fs-5 align-middle">Clientes</span>
+                            </a>
+                            <a href="/" class="mb-3 bg-hover">
+                                <FontAwesomeIcon icon={faBox} size="xl" style={{ color: "#000000", width: "30px" }} />
+                                <span class="ms-3 d-none d-sm-inline text-dark fw-normal fs-5 align-middle">Productos</span>
+                            </a>
+                            <a href="/" class="mb-3 bg-hover">
+                                <FontAwesomeIcon icon={faBellConcierge} size="xl" style={{ color: "#000000", width: "30px" }} />
+                                <span class="ms-3 d-none d-sm-inline text-dark fw-normal fs-5 align-middle">Servicios</span>
+                            </a>
+                            <a href="/" class="mb-3 bg-hover">
+                                <FontAwesomeIcon icon={faFileInvoiceDollar} size="xl" style={{ color: "#000000", width: "30px" }} />
+                                <span class="ms-3 d-none d-sm-inline text-dark fw-normal fs-5 align-middle">Cargos</span>
+                            </a>
+
+                        </div>
                         <hr />
                     </div>
                 </div>
@@ -47,3 +57,5 @@ export function NavComponent() {
 }
 
 export default NavComponent;
+
+
