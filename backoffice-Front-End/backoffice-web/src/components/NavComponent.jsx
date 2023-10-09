@@ -26,7 +26,7 @@ export function NavComponent() {
                 </a>
                 <a href="/" className="mb-3 ps-4 py-2 bg-hover container">
                     <FontAwesomeIcon icon={faUser} size="xl" style={{ color: "#000000", width: "30px" }} />
-                    <span className="ms-3 d-none d-sm-inline text-dark fw-normal fs-5 align-middle">Clientes</span>
+                    <span className="ms-3 d-none d-sm-inline text-dark fw-normal fs-5 align-middle">Usuario</span>
                 </a>
                 <a href="/" className="mb-3 ps-4 py-2 bg-hover container">
                     <FontAwesomeIcon icon={faUsers} size="xl" style={{ color: "#000000", width: "30px" }} />
