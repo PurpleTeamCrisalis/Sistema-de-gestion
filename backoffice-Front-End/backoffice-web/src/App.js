@@ -1,10 +1,16 @@
 import Home from './pages/home/home'
-import { LoginPage } from './pages';
+
+import NavPage from './pages/NavPage'
+
+//import { LoginPage } from './pages';
+
 
 function App() {
   return (
     <>
-      <Home/>
+      <NavPage/>
+
+      {/*<Home/>*/}
       {/* <LoginPage /> */}
     </>
   );
