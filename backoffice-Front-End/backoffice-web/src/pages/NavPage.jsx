@@ -1,6 +1,8 @@
 import React from "react";
 import NavComponent from "../components/NavComponent";
 
-export const NavPage = () => {
+const NavPage = () => {
   return <NavComponent />;
 };
+
+export default NavPage;
