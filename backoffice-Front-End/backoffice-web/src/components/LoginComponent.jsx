@@ -1,5 +1,5 @@
 import { useForm } from "../hooks";
-import imageLogoFinnegans from "../pages/Nav/images/Logo-Finnegans.png";
+import logoEmpresa from "../assets/images/logoEmpresa.png";
 
 const loginDTO = {
   username: "",
@@ -29,12 +29,7 @@ export const LoginComponent = () => {
         href="/"
         className="mt-5 container d-flex align-items-center justify-content-center p-0"
       >
-        <img
-          src={imageLogoFinnegans}
-          alt="Logo Finnegans"
-          width="70"
-          height="70"
-        />
+        <img src={logoEmpresa} alt="Logo Finnegans" width="70" height="70" />
         <span className="fs-3 d-none d-sm-inline text-dark fw-bold">
           Finnegans
         </span>
@@ -110,7 +105,7 @@ export const LoginComponent = () => {
               style={{
                 backgroundColor: "white",
                 height: "30px",
-                padding: "0px 8px"
+                padding: "0px 8px",
               }}
             >
               Iniciar Sesión
