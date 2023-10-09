@@ -1,5 +1,7 @@
 import { useForm } from "../hooks";
 import logoEmpresa from "../assets/images/logoEmpresa.png";
+import { useState } from "react";
+import { BiHide, BiShow } from "react-icons/bi";
 
 const loginDTO = {
   username: "",
@@ -9,6 +11,7 @@ const loginDTO = {
 export const LoginComponent = () => {
   const { username, password, handleInputChange, clearForm, emptyValidation } =
     useForm(loginDTO);
+  const [showPassword, setShowPassword] = useState(false);
 
   function handleFormSubmit(event) {
     event.preventDefault();
@@ -80,18 +83,32 @@ export const LoginComponent = () => {
               >
                 Contraseña
               </label>
-              <input
-                type="password"
-                name="password"
-                id="password"
-                placeholder="Contraseña"
-                onChange={handleInputChange}
-                value={password}
-                className="form-control p-2"
-                style={{
-                  height: "35px",
-                }}
-              />
+              <div className="d-flex" style={{ position: "relative" }}>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  id="password"
+                  placeholder="Contraseña"
+                  onChange={handleInputChange}
+                  value={password}
+                  className="form-control p-2"
+                  style={{
+                    height: "35px",
+                  }}
+                />
+                <div
+                  className="d-flex align-items-center"
+                  style={{
+                    position: "absolute",
+                    height: "100%",
+                    right: "15px",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  <i>{showPassword ? <BiHide /> : <BiShow />}</i>
+                </div>
+              </div>
               <div className="d-flex justify-content-end mt-1">
                 <span style={{ fontSize: "14px", cursor: "pointer" }}>
                   Recuperar contraseña
