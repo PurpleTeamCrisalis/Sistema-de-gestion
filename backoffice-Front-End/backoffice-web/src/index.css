@@ -10,8 +10,5 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-}
 
-.bg-hover:hover{
-  background-color: white;
 }

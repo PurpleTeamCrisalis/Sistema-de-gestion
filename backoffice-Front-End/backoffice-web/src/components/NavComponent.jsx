@@ -1,4 +1,5 @@
-import imageLogoFinnegans from '../pages/Nav/images/Logo-Finnegans.png'
+
+import imageLogoFinnegans from '../assets/images/logoEmpresa.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse } from '@fortawesome/free-solid-svg-icons';
 import { faUser } from '@fortawesome/free-regular-svg-icons';
@@ -6,6 +7,7 @@ import { faUsers } from '@fortawesome/free-solid-svg-icons';
 import { faBox } from '@fortawesome/free-solid-svg-icons';
 import { faBellConcierge } from '@fortawesome/free-solid-svg-icons';
 import { faFileInvoiceDollar } from '@fortawesome/free-solid-svg-icons';
+import '../assets/styles/navStyle.css'
 
 export function NavComponent() {
     return (
