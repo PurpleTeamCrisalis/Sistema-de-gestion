@@ -5,6 +5,10 @@
     width: 240px;
     height: 160px;
 }
+.contentItem:hover{
+    transition: transform .5s ease-out;
+    transform: scale(1.05);
+}
 
 h1{
     font-family: 'Black Han Sans', sans-serif;
