@@ -7,6 +7,7 @@ import { faUsers } from '@fortawesome/free-solid-svg-icons';
 import { faBox } from '@fortawesome/free-solid-svg-icons';
 import { faBellConcierge } from '@fortawesome/free-solid-svg-icons';
 import { faFileInvoiceDollar } from '@fortawesome/free-solid-svg-icons';
+import { faList } from '@fortawesome/free-solid-svg-icons';
 import '../assets/styles/navStyle.css'
 
 export function NavComponent() {
@@ -19,7 +20,6 @@ export function NavComponent() {
                 </div>
                 <span className="d-none d-sm-inline mx-auto text-dark fw-normal fs-5" style={{ letterSpacing: ".3rem" }}>BACKOFFICE</span>
                 <hr className="mb-5" />
-                <hr className="mb-3" />
                 <a href="/" className="mb-3 ps-4 py-2 bg-hover container">
                     <FontAwesomeIcon icon={faHouse} size="xl" style={{ color: "#000000", width: "30px" }} />
                     <span className="ms-3 d-none d-sm-inline text-dark fw-normal fs-5 align-middle">Inicio</span>
@@ -31,6 +31,10 @@ export function NavComponent() {
                 <a href="/" className="mb-3 ps-4 py-2 bg-hover container">
                     <FontAwesomeIcon icon={faUsers} size="xl" style={{ color: "#000000", width: "30px" }} />
                     <span className="ms-3 d-none d-sm-inline text-dark fw-normal fs-5 align-middle">Clientes</span>
+                </a>
+                <a href="/" className="mb-3 ps-4 py-2 bg-hover container">
+                <FontAwesomeIcon icon={faList} size="xl" style={{ color: "#000000", width: "30px" }} />
+                    <span className="ms-3 d-none d-sm-inline text-dark fw-normal fs-5 align-middle">Pedidos</span>
                 </a>
                 <a href="/" className="mb-3 ps-4 py-2 bg-hover container">
                     <FontAwesomeIcon icon={faBox} size="xl" style={{ color: "#000000", width: "30px" }} />
