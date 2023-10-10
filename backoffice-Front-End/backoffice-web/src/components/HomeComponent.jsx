@@ -35,7 +35,6 @@ const Home = () => {
                                 <img src={logoUser} alt='icono de usuario' />
                             </div>
                         </div>
-                        <p className="fw-bolder">Usuario1</p>
                     </div>
                     <div className='d-flex align-items-center'>
                         <div>
@@ -44,6 +43,7 @@ const Home = () => {
                         <h2>FINNEGANS</h2>
                     </div>
                 </div>
+                <p className="fw-bolder">Usuario1</p>
                 <div className="mt-md-5">
                     <div className='d-flex justify-content-around'>
                         {dashboard.map((item) => (
