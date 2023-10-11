@@ -1,10 +1,9 @@
-import './App.css';
+
 
 function App() {
   return (
-    <div class="alert alert-danger">
-      <h1>Hello Word</h1>
-    </div>
+    <>
+    </>
   );
 }
 
