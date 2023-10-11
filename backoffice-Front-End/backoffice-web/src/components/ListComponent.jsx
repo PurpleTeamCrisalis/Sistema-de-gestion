@@ -8,7 +8,7 @@ export function ListComponent() {
                 <div className="row">
                     {/* Navbar */}
                     <div className="col-md-3 col-lg-3 ">
-
+                        
                     </div>
 
                     {/* Table and Buttons */}

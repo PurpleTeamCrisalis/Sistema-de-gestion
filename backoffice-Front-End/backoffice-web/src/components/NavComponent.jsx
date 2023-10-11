@@ -24,27 +24,27 @@ export function NavComponent() {
                     <FontAwesomeIcon icon={faHouse} size="xl" style={{ color: "#000000", width: "30px" }} />
                     <span className="ms-3 d-none d-sm-inline text-dark fw-normal fs-5 align-middle">Inicio</span>
                 </a>
-                <a href="/" className="mb-3 ps-4 py-2 bg-hover container">
+                <a href="/user" className="mb-3 ps-4 py-2 bg-hover container">
                     <FontAwesomeIcon icon={faUser} size="xl" style={{ color: "#000000", width: "30px" }} />
                     <span className="ms-3 d-none d-sm-inline text-dark fw-normal fs-5 align-middle">Usuario</span>
                 </a>
-                <a href="/" className="mb-3 ps-4 py-2 bg-hover container">
+                <a href="/client" className="mb-3 ps-4 py-2 bg-hover container">
                     <FontAwesomeIcon icon={faUsers} size="xl" style={{ color: "#000000", width: "30px" }} />
                     <span className="ms-3 d-none d-sm-inline text-dark fw-normal fs-5 align-middle">Clientes</span>
                 </a>
-                <a href="/" className="mb-3 ps-4 py-2 bg-hover container">
+                <a href="/order" className="mb-3 ps-4 py-2 bg-hover container">
                 <FontAwesomeIcon icon={faList} size="xl" style={{ color: "#000000", width: "30px" }} />
                     <span className="ms-3 d-none d-sm-inline text-dark fw-normal fs-5 align-middle">Pedidos</span>
                 </a>
-                <a href="/" className="mb-3 ps-4 py-2 bg-hover container">
+                <a href="/product" className="mb-3 ps-4 py-2 bg-hover container">
                     <FontAwesomeIcon icon={faBox} size="xl" style={{ color: "#000000", width: "30px" }} />
                     <span className="ms-3 d-none d-sm-inline text-dark fw-normal fs-5 align-middle">Productos</span>
                 </a>
-                <a href="/" className="mb-3 ps-4 py-2 bg-hover container">
+                <a href="/service" className="mb-3 ps-4 py-2 bg-hover container">
                     <FontAwesomeIcon icon={faBellConcierge} size="xl" style={{ color: "#000000", width: "30px" }} />
                     <span className="ms-3 d-none d-sm-inline text-dark fw-normal fs-5 align-middle">Servicios</span>
                 </a>
-                <a href="/" className="mb-3 ps-4 py-2 bg-hover container">
+                <a href="/charge" className="mb-3 ps-4 py-2 bg-hover container">
                     <FontAwesomeIcon icon={faFileInvoiceDollar} size="xl" style={{ color: "#000000", width: "30px" }} />
                     <span className="ms-3 d-none d-sm-inline text-dark fw-normal fs-5 align-middle">Cargos</span>
                 </a>
