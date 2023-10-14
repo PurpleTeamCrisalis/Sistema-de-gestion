@@ -2,14 +2,13 @@ import React, { useEffect, useState } from 'react'
 import NavComponent from '../NavComponent'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
+import { useFetch } from '../../hooks/useFetch'
 
 function UserListComponent() {
     const [users, setUsers] = useState([])
+    const { data } = useFetch("http://localhost:8080/user/list");
 
     // CUANDO SE USE EL COMPONENTE, SE VA TRAER LA LISTA DE USUARIOS
-    useEffect(() => {
-        console.log("Fetch de usuarios")
-    }, [])
 
     function newUser() {
         console.log("new")
@@ -50,22 +49,24 @@ function UserListComponent() {
                                     </tr>
                                 </thead>
                                 <tbody>
-
+                                    {data?.map((user) => (
+                                        <tr >
+                                            <td>
+                                                <input type="checkbox" className="custom-checkbox" />
+                                            </td>
+                                            <td>{user.username}</td>
+                                            <td>Status</td>
+                                            <td>
+                                                {/* Icono */}
+                                                <FontAwesomeIcon
+                                                    icon={faPenToSquare}
+                                                    style={{ color: "#000000", }}
+                                                />
+                                            </td>
+                                        </tr>
+                                    ))}
                                     {/* Acá se va a recorrer la lista de la entidad */}
-                                    <tr >
-                                        <td>
-                                            <input type="checkbox" className="custom-checkbox" />
-                                        </td>
-                                        <td>Name</td>
-                                        <td>Status</td>
-                                        <td>
-                                            {/* Icono */}
-                                            <FontAwesomeIcon
-                                                icon={faPenToSquare}
-                                                style={{ color: "#000000", }}
-                                            />
-                                        </td>
-                                    </tr>
+
 
 
                                 </tbody>
