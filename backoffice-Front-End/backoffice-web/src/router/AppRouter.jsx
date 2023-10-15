@@ -8,6 +8,8 @@ import ProductListComponent from "../components/ListComponents/ProductListCompon
 import OrderListComponent from "../components/ListComponents/OrderListComponent";
 import ClientListComponent from "../components/ListComponents/ClientListComponent";
 import ChargeListComponent from "../components/ListComponents/ChargeListComponent";
+import NewUserComponent from "../components/NewElementComponents/NewUserComponent";
+import EditUserComponent from "../components/EditElementComponents/EditUserComponent"
 
 export const AppRouter = () => {
   const [status, setStatus] = useState("authenticated");
@@ -24,6 +26,8 @@ export const AppRouter = () => {
           <Route path="/order" element={<OrderListComponent/>}></Route>
           <Route path="/client" element={<ClientListComponent/>}></Route>
           <Route path="/charge" element={<ChargeListComponent/>}></Route>
+          <Route path="/user/newUser" element={<NewUserComponent/>}></Route>
+          <Route path="/user/editUser" element={<EditUserComponent/>}></Route>
         </>
       ) : (
         <>

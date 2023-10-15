@@ -50,13 +50,13 @@ export function NavComponent() {
                 <FontAwesomeIcon icon={faFileInvoiceDollar} size="xl" style={{ color: "#000000", width: "30px" }} />
                 <span className="ms-3 d-none d-sm-inline text-dark fw-normal fs-5 align-middle">Cargos</span>
             </a>
-            <div class="btn-group dropup align-self-center">
-                <button type="button" class="btn btn-secondary dropdown-toggle " data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="d-sm-none"><FontAwesomeIcon icon={faArrowUp} /></span>
-                    <span class="d-none d-sm-inline">NombreUsuario</span>
+            <div className="btn-group dropup align-self-center">
+                <button type="button" className="btn btn-secondary dropdown-toggle " data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span className="d-sm-none"><FontAwesomeIcon icon={faArrowUp} /></span>
+                    <span className="d-none d-sm-inline">NombreUsuario</span>
                 </button>
-                <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#">Cerrar sesion</a>
+                <div className="dropdown-menu">
+                    <a className="dropdown-item" href="#">Cerrar sesion</a>
                 </div>
             </div>
         </div>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from "react-router-dom";
 import NavComponent from '../NavComponent'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
@@ -6,19 +7,27 @@ import { useFetch } from '../../hooks/useFetch'
 
 function UserListComponent() {
     const [users, setUsers] = useState([])
-    const { data } = useFetch("http://localhost:8080/user/list");
+    const { data } = useFetch("http://localhost:8080/user");
+    const navigate = useNavigate();
 
     // CUANDO SE USE EL COMPONENTE, SE VA TRAER LA LISTA DE USUARIOS
 
-    function newUser() {
-        console.log("new")
+    function activeUser(event) {
+        let checkbox = event.target;
+        let tRow = event.target.closest("tr");
+        if (checkbox.checked) {
+            tRow.classList.add("table-active");
+            return true;
+        } else {
+            tRow.classList.remove("table-active");
+        }
     }
-    function editUser(user) {
-        console.log("edit")
-    }
+
     function deleteUser() {
         console.log("delete")
     }
+
+
 
     return (
         <>
@@ -30,47 +39,44 @@ function UserListComponent() {
                     {/* Table and Buttons */}
                     <div className="col-md-9 col-xl-10">
                         {/* Button Section */}
-                        <section className='d-flex justify-content-center m-3'>
-                            <button type="button" className="btn btn-primary mx-3 fw-bold btn-lg" onClick={newUser}>Nuevo</button>
+                        <section className='d-flex justify-content-center m-4'>
+                            <button type="button" className="btn btn-primary mx-3 fw-bold btn-lg" onClick={()=>navigate('/user/newUser')}>Nuevo</button>
                             <button type="button" className="btn btn-primary mx-3 fw-bold btn-lg" onClick={deleteUser}>Eliminar</button>
                         </section>
 
                         {/* Table Section */}
-                        <section className=' d-flex justify-content-center rounded-3' style={{ maxHeight: '85vh', overflowY: 'auto' }}>
-                            <table className="table table-primary">
+                        <section className='container bg-primary rounded-3 px-5 pt-4' style={{ minHeight: '75vh', width: '90%' }}>
+                            <div className="bg-white rounded-3 overflow-hidden">
+                                <table className="table table-hover">
 
-                                {/* Header de la table */}
-                                <thead style={{ position: 'sticky', top: 0, borderBottom: '2px solid black' }}>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Nombre Usuario</th>
-                                        <th scope="col">Estado</th>
-                                        <th scope="col">#</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {data?.map((user) => (
-                                        <tr >
-                                            <td>
-                                                <input type="checkbox" className="custom-checkbox" />
-                                            </td>
-                                            <td>{user.username}</td>
-                                            <td>Status</td>
-                                            <td>
-                                                {/* Icono */}
-                                                <FontAwesomeIcon
-                                                    icon={faPenToSquare}
-                                                    style={{ color: "#000000", }}
-                                                />
-                                            </td>
+                                    {/* Header de la table */}
+                                    <thead style={{ position: 'sticky', top: 0, borderBottom: '2px solid black' }}>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Nombre Usuario</th>
+                                            <th scope="col">Estado</th>
+                                            <th scope="col">#</th>
                                         </tr>
-                                    ))}
-                                    {/* Acá se va a recorrer la lista de la entidad */}
-
-
-
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        {data?.map((user) => (
+                                            <tr key={user.userId}>
+                                                <td>
+                                                    <input type="checkbox" id={user.userId} onChange={activeUser} className="custom-checkbox" />
+                                                </td>
+                                                <td>{user.username}</td>
+                                                <td>Status</td>
+                                                <td>
+                                                    <FontAwesomeIcon
+                                                        icon={faPenToSquare}
+                                                        style={{ color: "#000000", }} onClick={()=>navigate('/user/editUser')}
+                                                    />
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         </section>
                     </div>
                 </div>
