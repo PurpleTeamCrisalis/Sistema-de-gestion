@@ -1,10 +1,10 @@
-import './App.css';
+import { AppRouter } from "./router";
 
 function App() {
   return (
-    <div class="alert alert-danger">
-      <h1>Hello Word</h1>
-    </div>
+    <>
+      <AppRouter />
+    </>
   );
 }
 
