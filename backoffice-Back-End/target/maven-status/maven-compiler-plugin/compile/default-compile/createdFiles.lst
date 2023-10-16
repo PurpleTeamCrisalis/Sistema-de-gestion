@@ -4,6 +4,7 @@ edu\bootcamp\backoffice\security\CustomUserDetailsService.class
 edu\bootcamp\backoffice\exception\custom\UnauthorizedException.class
 edu\bootcamp\backoffice\exception\ApiExceptionHandler.class
 edu\bootcamp\backoffice\security\JWTAuthenticationFilter.class
+edu\bootcamp\backoffice\service\AuthService.class
 edu\bootcamp\backoffice\model\User.class
 edu\bootcamp\backoffice\security\JWTGenerator.class
 edu\bootcamp\backoffice\controller\AuthController.class

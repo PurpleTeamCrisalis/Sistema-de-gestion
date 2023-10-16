@@ -70,4 +70,7 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    public boolean isUserPresent(UserDTO userDTO){
+        return userRepository.findByUsername(userDTO.getUsername()).isPresent();
+    }
 }

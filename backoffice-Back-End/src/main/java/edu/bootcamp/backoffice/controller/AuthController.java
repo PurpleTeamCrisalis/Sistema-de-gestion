@@ -4,6 +4,8 @@ import edu.bootcamp.backoffice.model.dto.AuthResponseDTO;
 import edu.bootcamp.backoffice.model.dto.UserDTO;
 import edu.bootcamp.backoffice.repository.UserRepository;
 import edu.bootcamp.backoffice.security.JWTGenerator;
+import edu.bootcamp.backoffice.service.AuthService;
+import edu.bootcamp.backoffice.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,28 +23,26 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path="/auth")
 public class AuthController {
     private final PasswordEncoder passwordEncoder;
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private final JWTGenerator jwtGenerator;
 
-    public AuthController(PasswordEncoder passwordEncoder, UserRepository userRepository, AuthenticationManager authenticationManager, JWTGenerator jwtGenerator) {
+    private final AuthService authService;
+
+    public AuthController(PasswordEncoder passwordEncoder, UserService userService, AuthenticationManager authenticationManager, JWTGenerator jwtGenerator, AuthService authService) {
         this.passwordEncoder = passwordEncoder;
-        this.userRepository = userRepository;
+        this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.jwtGenerator = jwtGenerator;
+        this. authService = authService;
     }
 
     @PostMapping(path="/login", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AuthResponseDTO> login(@RequestBody UserDTO userDTO){
+    public ResponseEntity<String> login(@RequestBody UserDTO userDTO){
 
-        if (userRepository.findByUsername(userDTO.getUsername()).isPresent()){
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(userDTO.getUsername(), userDTO.getPassword())
-            );
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            String token = jwtGenerator.generateToken(authentication);
-            return new ResponseEntity<>(new AuthResponseDTO(token), HttpStatus.OK);
+        if (userService.isUserPresent(userDTO)){
+            return new ResponseEntity<>("User logged in successfully",authService.authenticateAndReturnHeader(userDTO), HttpStatus.OK);
         }
-        return new ResponseEntity<>(new AuthResponseDTO(null), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("Credentials do not correspond to a valid user", HttpStatus.NOT_FOUND);
     }
 }
