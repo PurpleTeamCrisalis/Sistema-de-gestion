@@ -9,21 +9,25 @@ import OrderListComponent from "../components/ListComponents/OrderListComponent"
 import ClientListComponent from "../components/ListComponents/ClientListComponent";
 import ChargeListComponent from "../components/ListComponents/ChargeListComponent";
 
+import { useSelector } from "react-redux";
+
 export const AppRouter = () => {
-  const [status, setStatus] = useState("authenticated");
+  // const [status, setStatus] = useState("authenticated");
+
+  const status = useSelector((state) => state.auth);
 
   return (
     <Routes>
-      {status === "authenticated" ? (
+      {status.status === "authenticated" ? (
         <>
           <Route path="/" element={<HomePage />} />
           <Route path="/*" element={<Navigate to="/" />} />
-          <Route path="/user" element={<UserListComponent/>}></Route>
-          <Route path="/service" element={<ServiceListComponent/>}></Route>
-          <Route path="/product" element={<ProductListComponent/>}></Route>
-          <Route path="/order" element={<OrderListComponent/>}></Route>
-          <Route path="/client" element={<ClientListComponent/>}></Route>
-          <Route path="/charge" element={<ChargeListComponent/>}></Route>
+          <Route path="/user" element={<UserListComponent />}></Route>
+          <Route path="/service" element={<ServiceListComponent />}></Route>
+          <Route path="/product" element={<ProductListComponent />}></Route>
+          <Route path="/order" element={<OrderListComponent />}></Route>
+          <Route path="/client" element={<ClientListComponent />}></Route>
+          <Route path="/charge" element={<ChargeListComponent />}></Route>
         </>
       ) : (
         <>
