@@ -14,14 +14,15 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private JWTGenerator jwtGenerator;
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
-
-
+    @Autowired
+    private TokenBlacklist tokenBlacklist;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -33,6 +34,8 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, "jwt-password", userDetails.getAuthorities());
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
+            tokenBlacklist.addToBlacklist(token, new Date().getTime() + SecurityConstants.JWT_EXPIRATION_TIME);
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             response.setHeader("Authorization","Bearer "+jwtGenerator.generateToken(authentication));
         }

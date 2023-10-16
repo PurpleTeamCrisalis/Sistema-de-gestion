@@ -19,3 +19,4 @@ edu\bootcamp\backoffice\model\dto\UserDTO.class
 edu\bootcamp\backoffice\exception\custom\EmptyElementException.class
 edu\bootcamp\backoffice\exception\custom\NotCreatedException.class
 edu\bootcamp\backoffice\BackofficeApplication.class
+edu\bootcamp\backoffice\security\TokenBlacklist.class
