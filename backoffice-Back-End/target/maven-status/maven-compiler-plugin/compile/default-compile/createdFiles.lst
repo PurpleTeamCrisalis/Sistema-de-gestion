@@ -1,9 +1,9 @@
 edu\bootcamp\backoffice\repository\UserRepository.class
-edu\bootcamp\backoffice\model\dto\AuthResponseDTO.class
 edu\bootcamp\backoffice\security\CustomUserDetailsService.class
 edu\bootcamp\backoffice\exception\custom\UnauthorizedException.class
 edu\bootcamp\backoffice\exception\ApiExceptionHandler.class
 edu\bootcamp\backoffice\security\JWTAuthenticationFilter.class
+edu\bootcamp\backoffice\config\WebConfig$1.class
 edu\bootcamp\backoffice\service\AuthService.class
 edu\bootcamp\backoffice\model\User.class
 edu\bootcamp\backoffice\security\JWTGenerator.class
@@ -19,4 +19,5 @@ edu\bootcamp\backoffice\model\dto\UserDTO.class
 edu\bootcamp\backoffice\exception\custom\EmptyElementException.class
 edu\bootcamp\backoffice\exception\custom\NotCreatedException.class
 edu\bootcamp\backoffice\BackofficeApplication.class
+edu\bootcamp\backoffice\config\WebConfig.class
 edu\bootcamp\backoffice\security\TokenBlacklist.class
