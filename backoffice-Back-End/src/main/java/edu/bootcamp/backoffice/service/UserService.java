@@ -54,7 +54,7 @@ public class UserService {
             throw new EmptyElementException("Password is empty");
         }
         if(!isForLogin){
-            if(StringUtils.isEmpty(userDTO.getName())){
+            if(StringUtils.isEmpty(userDTO.getUsername())){
                 throw new EmptyElementException("Name is empty");
             }
         }
