@@ -4,6 +4,8 @@ import edu.bootcamp.backoffice.model.dto.AuthResponseDTO;
 import edu.bootcamp.backoffice.model.dto.UserDTO;
 import edu.bootcamp.backoffice.repository.UserRepository;
 import edu.bootcamp.backoffice.security.JWTGenerator;
+import edu.bootcamp.backoffice.security.SecurityConstants;
+import edu.bootcamp.backoffice.security.TokenBlacklist;
 import edu.bootcamp.backoffice.service.AuthService;
 import edu.bootcamp.backoffice.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -19,23 +21,20 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 
 @RestController
 @RequestMapping(path="/auth")
 public class AuthController {
-    private final PasswordEncoder passwordEncoder;
-    private final UserService userService;
-    private final AuthenticationManager authenticationManager;
-    private final JWTGenerator jwtGenerator;
 
+    private final UserService userService;
+    private final TokenBlacklist tokenBlacklist;
     private final AuthService authService;
 
-    public AuthController(PasswordEncoder passwordEncoder, UserService userService, AuthenticationManager authenticationManager, JWTGenerator jwtGenerator, AuthService authService) {
-        this.passwordEncoder = passwordEncoder;
+    public AuthController(UserService userService, AuthService authService,TokenBlacklist tokenBlacklist) {
         this.userService = userService;
-        this.authenticationManager = authenticationManager;
-        this.jwtGenerator = jwtGenerator;
         this. authService = authService;
+        this.tokenBlacklist = tokenBlacklist;
     }
 
     @PostMapping(path="/login", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -50,8 +49,8 @@ public class AuthController {
     public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication){
         if (authentication != null) {
             new SecurityContextLogoutHandler().logout(request, response, authentication);
+            tokenBlacklist.addToBlacklist(request.getHeader("Authorization"), new Date().getTime() + SecurityConstants.JWT_EXPIRATION_TIME);
         }
-        SecurityContextHolder.clearContext();
         return new ResponseEntity<>("User logged out successfully",HttpStatus.OK);
     }
 }
