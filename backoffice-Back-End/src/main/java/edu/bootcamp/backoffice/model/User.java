@@ -31,7 +31,10 @@ public class User {
 //    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
 //    private List<Order> orders = new ArrayList<>();
 
-
+    public User (String username, String password){
+        this.username = username;
+        this. password = password;
+    }
     public User (UserDTO userDTO){
         this.username = userDTO.getUsername();
         this.password = userDTO.getPassword();
