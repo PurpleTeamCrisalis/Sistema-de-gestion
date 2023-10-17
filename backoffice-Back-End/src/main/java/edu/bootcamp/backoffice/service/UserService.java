@@ -1,3 +1,5 @@
+
+/*
 package edu.bootcamp.backoffice.service;
 
 import edu.bootcamp.backoffice.exception.custom.EmptyElementException;
@@ -8,11 +10,10 @@ import edu.bootcamp.backoffice.model.dto.UserDTO;
 import edu.bootcamp.backoffice.repository.UserRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
+/*
 @Service
 public class UserService {
 
@@ -54,7 +55,7 @@ public class UserService {
             throw new EmptyElementException("Password is empty");
         }
         if(!isForLogin){
-            if(StringUtils.isEmpty(userDTO.getName())){
+            if(StringUtils.isEmpty(userDTO.getUsername())){
                 throw new EmptyElementException("Name is empty");
             }
         }
@@ -70,4 +71,8 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    public boolean isUserPresent(UserDTO userDTO){
+        return userRepository.findByUsername(userDTO.getUsername()).isPresent();
+    }
 }
+*/

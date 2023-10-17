@@ -1,4 +1,4 @@
-package edu.bootcamp.backoffice.model;
+/*package edu.bootcamp.backoffice.model;
 
 import edu.bootcamp.backoffice.model.dto.UserDTO;
 import lombok.AllArgsConstructor;
@@ -31,7 +31,10 @@ public class User {
 //    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
 //    private List<Order> orders = new ArrayList<>();
 
-
+    public User (String username, String password){
+        this.username = username;
+        this. password = password;
+    }
     public User (UserDTO userDTO){
         this.username = userDTO.getUsername();
         this.password = userDTO.getPassword();
@@ -45,4 +48,4 @@ public class User {
                         .password(this.password)
                         .build();
     }
-}
+}*/
