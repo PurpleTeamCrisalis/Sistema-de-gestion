@@ -2,7 +2,6 @@ package edu.bootcamp.backoffice.security;
 
 import edu.bootcamp.backoffice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,8 +21,16 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        edu.bootcamp.backoffice.model.User user = userRepository.findByUsername(username).orElseThrow(()-> new UsernameNotFoundException("Username not found"));
-        return new User(user.getUsername(),user.getPassword(), AuthorityUtils.createAuthorityList("ADMIN"));
+        edu.bootcamp.backoffice.model.user.User user = userRepository
+                .findByUsername(username)
+                .orElseThrow(
+                        ()-> new UsernameNotFoundException("Username not found")
+                );
+        return new User(
+                user.getUsername(),
+                user.getPassword(),
+                AuthorityUtils.createAuthorityList("ADMIN")
+        );
     }
 
 }

@@ -1,3 +1,5 @@
+
+/*
 package edu.bootcamp.backoffice.service;
 
 import edu.bootcamp.backoffice.exception.custom.EmptyElementException;
@@ -11,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
+/*
 @Service
 public class UserService {
 
@@ -73,3 +75,4 @@ public class UserService {
         return userRepository.findByUsername(userDTO.getUsername()).isPresent();
     }
 }
+*/

@@ -1,7 +1,8 @@
 package edu.bootcamp.backoffice.service;
 
-import edu.bootcamp.backoffice.model.dto.UserDTO;
+import edu.bootcamp.backoffice.model.user.dto.UserRequest;
 import edu.bootcamp.backoffice.security.JWTGenerator;
+import edu.bootcamp.backoffice.service.Interface.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -9,7 +10,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
 
 @Service
 public class AuthService {
@@ -24,7 +24,7 @@ public class AuthService {
         this.jwtGenerator = jwtGenerator;
     }
 
-    public HttpHeaders authenticateAndReturnHeader(UserDTO userDTO) {
+    public HttpHeaders authenticateAndReturnHeader(UserRequest userDTO) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(userDTO.getUsername(), userDTO.getPassword())
         );
