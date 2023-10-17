@@ -15,8 +15,9 @@ projectApi.interceptors.response.use(response => {
 projectApi.interceptors.request.use(config => {
   config.headers = {
     ...config.headers,
-    'Accept': 'application/json',
-    'Authorization': localStorage.getItem('token')
+    'Content-Type': 'application/json',
+    'Authorization': localStorage.getItem('token'),
+    // 'Origin' : 'http://localhost:3000'
   }
   return config
 })
