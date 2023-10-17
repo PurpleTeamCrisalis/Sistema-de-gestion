@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Navigate, useNavigate } from "react-router-dom";
 import NavComponent from '../NavComponent'
+import Toastify from '../../../node_modules/toastify-js/src/toastify'
+import "../../../node_modules/toastify-js/src/toastify.css"
 
 function NewUserComponent() {
 
@@ -11,6 +13,13 @@ function NewUserComponent() {
         let userPassword = document.getElementById("password");
         // Acá debería mandar el objeto para que se guarde en BD
         // después añadir un navigate to /user
+        Toastify({
+            text: "Usuario Añadido",
+            duration: 1000,
+            style: {
+                background: "linear-gradient(to right, #00b09b, #96c93d)",
+            },
+        }).showToast();
     }
 
     return (
@@ -42,7 +51,7 @@ function NewUserComponent() {
                         </section>
                         <section className='d-flex justify-content-center '>
                             <button type="button" className="btn btn-primary mx-3 fw-bold btn-lg" onClick={addUser}>Añadir</button>
-                            <button type="button" className="btn btn-primary mx-3 fw-bold btn-lg" onClick={() => navigate('/user')}>Cancelar</button>
+                            <button type="button" className="btn btn-primary mx-3 fw-bold btn-lg" onClick={() => navigate('/user')}>Volver</button>
                         </section>
                     </div>
                 </div>
