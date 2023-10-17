@@ -10,10 +10,25 @@ export function useForm(formDTO) {
     })
   }
 
+  function clearForm() {
+    setForm(formDTO)
+  }
+
+  function emptyValidation() {
+    for (const key in form) {
+      if (form[key].length === 0) {
+        return false
+      }
+    }
+    return true
+  }
+
   return {
     // Atributos
     ...form,
     // Metodos
-    handleInputChange
+    handleInputChange,
+    clearForm,
+    emptyValidation
   }
 }
