@@ -1,4 +1,4 @@
-package edu.bootcamp.backoffice.model;
+/*package edu.bootcamp.backoffice.model;
 
 import edu.bootcamp.backoffice.model.dto.UserDTO;
 import lombok.AllArgsConstructor;
@@ -48,4 +48,4 @@ public class User {
                         .password(this.password)
                         .build();
     }
-}
+}*/

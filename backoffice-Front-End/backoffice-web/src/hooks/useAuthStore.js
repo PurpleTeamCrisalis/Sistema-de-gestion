@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { LoginApi } from "../api/LoginApi";
+import { authApi } from "../api";
 import {
   onChecking,
   onLogin,
@@ -9,36 +9,32 @@ import {
 
 export const useAuthStore = () => {
   const dispatch = useDispatch();
-  const state = useSelector((state) => state.auth);
+  const { status, user, errorMessage } = useSelector((state) => state.auth);
 
   async function startLogin(username, password) {
     // Cambia estado a chequeando
     dispatch(onChecking());
 
     try {
-      // TRAE USER DE LA API
-      const response = await LoginApi.get("user/login", {
-        params: {
-          username: username,
-          password: password,
-        },
-      });
-      // En data se almacena el objeto user traido del back
-      const data = response.data;
+      // Peticion a API para Login
+      const response = await authApi.post('/login', { username, password })
+      console.log(response)
 
-      if (data) {
+      if (response.data) {
         // Si la API devuelve datos, el inicio de sesión fue exitoso
-        dispatch(onLogin()); // Actualiza el estado con los datos del usuario
+        dispatch(onLogin({ username })); // Actualiza el estado con los datos del usuario
       }
     } catch (error) {
       // Ingresa al catch si el fetch no encuentra datos
-      console.log(error.message);
+      console.log(error);
     }
   }
 
   return {
     // Atributos
-
+    status,
+    user,
+    errorMessage,
     // Metodos
     startLogin,
   };

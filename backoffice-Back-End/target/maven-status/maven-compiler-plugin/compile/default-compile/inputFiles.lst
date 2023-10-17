@@ -1,3 +1,18 @@
+<<<<<<< HEAD
+C:\Users\54911\Documents\GitHub\Crisalis Bootcamp\Sistema-de-gestion\backoffice-Back-End\src\main\java\edu\bootcamp\backoffice\repository\UserRepository.java
+C:\Users\54911\Documents\GitHub\Crisalis Bootcamp\Sistema-de-gestion\backoffice-Back-End\src\main\java\edu\bootcamp\backoffice\service\UserService.java
+C:\Users\54911\Documents\GitHub\Crisalis Bootcamp\Sistema-de-gestion\backoffice-Back-End\src\main\java\edu\bootcamp\backoffice\exception\custom\UnauthorizedException.java
+C:\Users\54911\Documents\GitHub\Crisalis Bootcamp\Sistema-de-gestion\backoffice-Back-End\src\main\java\edu\bootcamp\backoffice\model\dto\UserDTO.java
+C:\Users\54911\Documents\GitHub\Crisalis Bootcamp\Sistema-de-gestion\backoffice-Back-End\src\main\java\edu\bootcamp\backoffice\exception\ApiExceptionHandler.java
+C:\Users\54911\Documents\GitHub\Crisalis Bootcamp\Sistema-de-gestion\backoffice-Back-End\src\main\java\edu\bootcamp\backoffice\model\dto\CreatUserRequestDTO.java
+C:\Users\54911\Documents\GitHub\Crisalis Bootcamp\Sistema-de-gestion\backoffice-Back-End\src\main\java\edu\bootcamp\backoffice\model\User.java
+C:\Users\54911\Documents\GitHub\Crisalis Bootcamp\Sistema-de-gestion\backoffice-Back-End\src\main\java\edu\bootcamp\backoffice\exception\custom\NotCreatedException.java
+C:\Users\54911\Documents\GitHub\Crisalis Bootcamp\Sistema-de-gestion\backoffice-Back-End\src\main\java\edu\bootcamp\backoffice\controller\UserController.java
+C:\Users\54911\Documents\GitHub\Crisalis Bootcamp\Sistema-de-gestion\backoffice-Back-End\src\main\java\edu\bootcamp\backoffice\exception\custom\EmptyElementException.java
+C:\Users\54911\Documents\GitHub\Crisalis Bootcamp\Sistema-de-gestion\backoffice-Back-End\src\main\java\edu\bootcamp\backoffice\exception\ErrorMessage.java
+C:\Users\54911\Documents\GitHub\Crisalis Bootcamp\Sistema-de-gestion\backoffice-Back-End\src\main\java\edu\bootcamp\backoffice\BackofficeApplication.java
+C:\Users\54911\Documents\GitHub\Crisalis Bootcamp\Sistema-de-gestion\backoffice-Back-End\src\main\java\edu\bootcamp\backoffice\exception\custom\InvalidIdException.java
+=======
 D:\Programacion\Finnegans\Sistema-de-gestion\backoffice-Back-End\src\main\java\edu\bootcamp\backoffice\BackofficeApplication.java
 D:\Programacion\Finnegans\Sistema-de-gestion\backoffice-Back-End\src\main\java\edu\bootcamp\backoffice\exception\custom\UnauthorizedException.java
 D:\Programacion\Finnegans\Sistema-de-gestion\backoffice-Back-End\src\main\java\edu\bootcamp\backoffice\exception\custom\EmptyElementException.java
@@ -9,3 +24,4 @@ D:\Programacion\Finnegans\Sistema-de-gestion\backoffice-Back-End\src\main\java\e
 D:\Programacion\Finnegans\Sistema-de-gestion\backoffice-Back-End\src\main\java\edu\bootcamp\backoffice\repository\UserRepository.java
 D:\Programacion\Finnegans\Sistema-de-gestion\backoffice-Back-End\src\main\java\edu\bootcamp\backoffice\controller\UserController.java
 D:\Programacion\Finnegans\Sistema-de-gestion\backoffice-Back-End\src\main\java\edu\bootcamp\backoffice\model\User.java
+>>>>>>> dev
