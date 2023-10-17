@@ -16,6 +16,7 @@ public class UserFactory
                 .builder()
                 .username(username)
                 .password(password)
+                .enabled(true)
                 .build();
     }
 
