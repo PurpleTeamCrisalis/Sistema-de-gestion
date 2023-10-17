@@ -7,11 +7,13 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @Builder
-public class UserRequest
-{
+public class UserRequest {
     @JsonProperty("username")
     private String username;
 
     @JsonProperty("password")
     private String password;
+
+    @JsonProperty("fullName")
+    private String fullName;
 }

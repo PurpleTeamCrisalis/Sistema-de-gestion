@@ -11,10 +11,11 @@ export const usersSlice = createSlice({
   initialState,
   reducers: {
     onLoadUsers: (state, { payload = [] }) => {
+      console.log(payload)
       state.isLoadingUsers = false
       // state.users = payload
       payload.forEach(user => {
-        const exists = state.users.some(dbUser => dbUser.userId === user.userId)
+        const exists = state.users.some(dbUser => dbUser.id === user.id)
         if (!exists) state.users.push(user)
       })
     },
@@ -29,11 +30,11 @@ export const usersSlice = createSlice({
       state.activeUser = null
     },
     onUpdateUser: (state, { payload }) => {
-      state.users = state.users.map(user => user.userId === payload.userId ? payload : user)
+      state.users = state.users.map(user => user.id === payload.id ? payload : user)
       state.activeUser = null
     },
     onDeleteUser: (state) => {
-      state.users = state.users.filter(user => user.userId !== state.activeUser.userId)
+      state.users = state.users.filter(user => user.id !== state.activeUser.id)
       state.activeUser = null
     }
   }
