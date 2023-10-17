@@ -1,4 +1,5 @@
 package edu.bootcamp.backoffice.model.user;
+
 import edu.bootcamp.backoffice.model.SoftDeletable;
 import edu.bootcamp.backoffice.model.order.Order;
 import lombok.AllArgsConstructor;
@@ -49,7 +50,7 @@ public class User implements SoftDeletable
             mappedBy = "user",
             fetch = FetchType.LAZY
     )
-    private List<Order> processedOrders = new ArrayList<Order>();
+    private List<Order> processedOrders = new ArrayList<>();
 
     //@Override
     public Boolean isDeleted() {

@@ -5,9 +5,21 @@ import edu.bootcamp.backoffice.model.user.dto.UserResponse;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserDtoFactory
+public class UserFactory
 {
-    public User createEntity(
+    public User CreateUserEntity(
+            String username,
+            String password
+        )
+    {
+        return User
+                .builder()
+                .username(username)
+                .password(password)
+                .build();
+    }
+
+    public User createUserEntity(
             int id,
             UserRequest userDTO,
             Boolean enabled

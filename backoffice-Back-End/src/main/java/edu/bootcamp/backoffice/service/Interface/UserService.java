@@ -20,4 +20,11 @@ public interface UserService
 
     public UserResponse delete(int id)
             throws InvalidIdFormatException;
+
+
+
+    //For Login
+
+
+    public boolean isUserPresent(UserRequest userDTO);
 }

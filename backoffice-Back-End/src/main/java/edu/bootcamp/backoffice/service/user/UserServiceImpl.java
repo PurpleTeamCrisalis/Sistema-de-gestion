@@ -5,7 +5,7 @@ import edu.bootcamp.backoffice.exception.custom.parameterValidation.InvalidArgum
 import edu.bootcamp.backoffice.model.order.Order;
 import edu.bootcamp.backoffice.model.user.User;
 import edu.bootcamp.backoffice.model.user.UserConstraints;
-import edu.bootcamp.backoffice.model.user.UserDtoFactory;
+import edu.bootcamp.backoffice.model.user.UserFactory;
 import edu.bootcamp.backoffice.model.user.dto.UserRequest;
 import edu.bootcamp.backoffice.model.user.dto.UserResponse;
 import edu.bootcamp.backoffice.repository.UserRepository;
@@ -21,12 +21,12 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService
 {
     private final UserRepository userRepository;
-    private final UserDtoFactory dtoFactory;
+    private final UserFactory dtoFactory;
     private final Validator validator;
 
     public UserServiceImpl(
             UserRepository userRepository,
-            UserDtoFactory dtoFactory,
+            UserFactory dtoFactory,
             Validator validator
         )
     {
@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService
                 errorBuilder
         );
         User user = validateUpdateConflicts(id, userRequest);
-        user = dtoFactory.createEntity(
+        user = dtoFactory.createUserEntity(
                 id,
                 userRequest,
                 user.isNotDeleted()
@@ -195,5 +195,14 @@ public class UserServiceImpl implements UserService
                 errorBuilder,
                 "Password"
         );
+    }
+
+
+
+    // For login
+
+
+    public boolean isUserPresent(UserRequest userDTO){
+        return userRepository.findByUsername(userDTO.getUsername()).isPresent();
     }
 }
