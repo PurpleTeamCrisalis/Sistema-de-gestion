@@ -53,7 +53,7 @@ public class UserService {
             throw new EmptyElementException("Password is empty");
         }
         if(!isForLogin){
-            if(StringUtils.isEmpty(userDTO.getName())){
+            if(StringUtils.isEmpty(userDTO.getUsername())){
                 throw new EmptyElementException("Name is empty");
             }
         }
@@ -69,4 +69,7 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    public boolean isUserPresent(UserDTO userDTO){
+        return userRepository.findByUsername(userDTO.getUsername()).isPresent();
+    }
 }
