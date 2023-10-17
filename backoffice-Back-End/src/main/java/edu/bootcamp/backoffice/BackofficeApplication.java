@@ -15,7 +15,7 @@ public class BackofficeApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(BackofficeApplication.class, args);
 	}
-
+/*
 	@Bean
 	public CorsFilter corsFilter() {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -30,5 +30,5 @@ public class BackofficeApplication {
 		config.addAllowedMethod("DELETE");
 		source.registerCorsConfiguration("/**", config);
 		return new CorsFilter();
-	}
+	}*/
 }
