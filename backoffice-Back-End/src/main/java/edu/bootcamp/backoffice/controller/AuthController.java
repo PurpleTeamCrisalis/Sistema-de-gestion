@@ -1,10 +1,10 @@
 package edu.bootcamp.backoffice.controller;
 
-import edu.bootcamp.backoffice.model.dto.UserDTO;
+import edu.bootcamp.backoffice.model.user.dto.UserRequest;
 import edu.bootcamp.backoffice.security.SecurityConstants;
 import edu.bootcamp.backoffice.security.TokenBlacklist;
 import edu.bootcamp.backoffice.service.AuthService;
-import edu.bootcamp.backoffice.service.UserService;
+import edu.bootcamp.backoffice.service.Interface.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +31,7 @@ public class AuthController {
     }
 
     @PostMapping(path="/login", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> login(@RequestBody UserDTO userDTO){
+    public ResponseEntity<String> login(@RequestBody UserRequest userDTO){
 
         if (userService.isUserPresent(userDTO)){
             return new ResponseEntity<>("User logged in successfully",authService.authenticateAndReturnHeader(userDTO), HttpStatus.OK);

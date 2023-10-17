@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Navigate, useNavigate } from "react-router-dom";
 import NavComponent from '../NavComponent'
-import Toastify from '../../../node_modules/toastify-js/src/toastify'
-import "../../../node_modules/toastify-js/src/toastify.css"
 
 function EditUserComponent() {
 
@@ -13,13 +11,6 @@ function EditUserComponent() {
         let userPassword = document.getElementById("password");
         // Acá debería mandar el objeto para que se guarde en BD
         // después añadir un navigate to /user
-        Toastify({
-            text: "Usuario Editado",
-            duration: 1000,
-            style: {
-                background: "linear-gradient(to right, #00b09b, #96c93d)",
-            },
-        }).showToast();
     }
 
     return (
