@@ -16,7 +16,7 @@ projectApi.interceptors.request.use(config => {
   config.headers = {
     ...config.headers,
     'Content-Type': 'application/json',
-    'Authorization': localStorage.getItem('token'),
+    'authorization': localStorage.getItem('token'),
     // 'Origin' : 'http://localhost:3000'
   }
   return config

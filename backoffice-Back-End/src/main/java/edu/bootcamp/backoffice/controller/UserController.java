@@ -13,7 +13,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("user")
+@RequestMapping(path = "/user")
 public class UserController {
 
     private final UserService userService;
@@ -25,7 +25,7 @@ public class UserController {
     }
 
     @PostMapping(
-            value = "",
+            path = "/create",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
@@ -53,7 +53,7 @@ public class UserController {
     }
 
     @GetMapping(
-            value = "",
+            path = "/list",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<List<UserResponse>> getAllUsers()
@@ -63,7 +63,7 @@ public class UserController {
     }
 
     @PatchMapping(
-            value = "/{id}",
+            path = "update/{id}",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
@@ -76,7 +76,7 @@ public class UserController {
     }
 
     @DeleteMapping(
-            value = "/{id}",
+            value = "delete/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<UserResponse> deleteUser(@PathVariable int id)
