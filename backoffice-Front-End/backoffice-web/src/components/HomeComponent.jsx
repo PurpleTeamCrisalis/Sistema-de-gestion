@@ -3,8 +3,11 @@ import logoEmpresa from "../assets/images/logoEmpresa.png"
 import { LuFileSignature, LuFilePlus2, LuFileClock } from 'react-icons/lu';
 import '../assets/styles/homeStyle.css'
 import NavPage from "../pages/NavPage";
+import { useAuthStore } from "../hooks/useAuthStore";
 
 const Home = () => {
+    const { user } = useAuthStore()
+
     const dashboard = [
         {
             id: 1,
@@ -25,7 +28,7 @@ const Home = () => {
 
     return (
         <div className="d-flex">
-            <NavPage/>
+            <NavPage />
             <section className="w-100 m-5">
                 <div className='d-flex justify-content-between'>
                     <div>
@@ -43,7 +46,7 @@ const Home = () => {
                         <h2>FINNEGANS</h2>
                     </div>
                 </div>
-                <p className="fw-bolder">Usuario1</p>
+                <p className="fw-bolder">{user.username}</p>
                 <div className="mt-md-5">
                     <div className='d-flex justify-content-around'>
                         {dashboard.map((item) => (

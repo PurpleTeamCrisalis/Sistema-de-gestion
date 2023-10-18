@@ -1,11 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { authApi } from "../api";
-import {
-  onChecking,
-  onLogin,
-  clearErrorMessage,
-  onLogout,
-} from "../redux/auth/authSlice";
+import { onChecking, onLogin, onLogout } from "../redux/auth/authSlice";
+import Swal from "sweetalert2";
 
 export const useAuthStore = () => {
   const dispatch = useDispatch();
@@ -17,8 +13,7 @@ export const useAuthStore = () => {
 
     try {
       // Peticion a API para Login
-      const response = await authApi.post('/login', { username, password })
-      console.log(response)
+      const response = await authApi.post("/login", { username, password });
 
       if (response.data) {
         // Si la API devuelve datos, el inicio de sesión fue exitoso
@@ -26,8 +21,19 @@ export const useAuthStore = () => {
       }
     } catch (error) {
       // Ingresa al catch si el fetch no encuentra datos
-      console.log(error);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Usuario o contraseña incorrectos",
+      });
     }
+  }
+
+  function startLogout() {
+    // Cambia estado a deslogueado
+    dispatch(onLogout({ user }));
+    // Borrar token
+    localStorage.removeItem("token");
   }
 
   return {
@@ -37,5 +43,6 @@ export const useAuthStore = () => {
     errorMessage,
     // Metodos
     startLogin,
+    startLogout,
   };
 };
