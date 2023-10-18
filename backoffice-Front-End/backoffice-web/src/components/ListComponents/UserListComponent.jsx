@@ -33,6 +33,8 @@ function UserListComponent() {
     console.log("delete");
   }
 
+  console.log(users);
+
   return (
     <>
       <div className="container-fluid">
@@ -84,11 +86,11 @@ function UserListComponent() {
                   </thead>
                   <tbody>
                     {users?.map((user) => (
-                      <tr key={user.userId}>
+                      <tr key={user.id}>
                         <td>
                           <input
                             type="checkbox"
-                            id={user.userId}
+                            id={user.id}
                             onChange={activeUser}
                             className="custom-checkbox"
                           />
