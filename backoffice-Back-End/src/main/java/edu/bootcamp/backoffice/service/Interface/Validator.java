@@ -1,7 +1,6 @@
 package edu.bootcamp.backoffice.service.Interface;
 
 import edu.bootcamp.backoffice.model.SoftDeletable;
-import edu.bootcamp.backoffice.model.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface Validator
@@ -11,7 +10,7 @@ public interface Validator
             JpaRepository<Entity, Integer> repository
     );
 
-    public <Entity> Entity validateId(
+    public <Entity> Entity completeValidationForId(
             int id,
             JpaRepository<Entity, Integer> repository
         );

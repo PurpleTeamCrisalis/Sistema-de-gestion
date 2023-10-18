@@ -1,5 +1,6 @@
 package edu.bootcamp.backoffice.controller;
 
+import edu.bootcamp.backoffice.model.user.dto.UpdateUserRequest;
 import edu.bootcamp.backoffice.model.user.dto.UserRequest;
 import edu.bootcamp.backoffice.model.user.dto.UserResponse;
 import edu.bootcamp.backoffice.service.Interface.UserService;
@@ -69,7 +70,7 @@ public class UserController {
     )
     public ResponseEntity<UserResponse> updateUser(
             @PathVariable int id,
-            @RequestBody UserRequest userDTO)
+            @RequestBody UpdateUserRequest userDTO)
     {
         UserResponse user = userService.update(id, userDTO);
         return ResponseEntity.ok(user);
