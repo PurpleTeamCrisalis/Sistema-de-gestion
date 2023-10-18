@@ -26,6 +26,7 @@ export function useUsersStore() {
       const { data } = await projectApi.post('/user/create', user)
       dispatch(onAddNewUser({
         username: data.username,
+        enabled: data.enabled,
         id: data.id
       }))
     } catch (error) {
@@ -34,7 +35,7 @@ export function useUsersStore() {
   }
   async function startDeletingUser() {
     try {
-      await projectApi.delete(`/user/${activeUser.userId}`)
+      await projectApi.delete(`/user/delete/${activeUser.id}`)
       dispatch(onDeleteUser())
     } catch (error) {
       console.error(error)
@@ -42,8 +43,8 @@ export function useUsersStore() {
   }
   async function startUpdatingUser(user) {
     try {
-      await projectApi.put('/user', user)
-      dispatch(onUpdateUser(user))
+      const {data} = await projectApi.patch(`/user/update/${user.id}`, user)
+      dispatch(onUpdateUser(data))
     } catch (error) {
       console.error(error)
     }
