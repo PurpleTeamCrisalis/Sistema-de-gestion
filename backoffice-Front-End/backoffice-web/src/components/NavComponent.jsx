@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-
 import imageLogoFinnegans from "../assets/images/logoEmpresa.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse } from "@fortawesome/free-solid-svg-icons";
@@ -12,8 +11,34 @@ import { faList } from "@fortawesome/free-solid-svg-icons";
 import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import "../../node_modules/bootstrap/dist/js/bootstrap.bundle";
 import "../assets/styles/navStyle.css";
+import { useAuthStore } from "../hooks/useAuthStore";
+import Swal from 'sweetalert2';
 
 export function NavComponent() {
+  const { user } = useAuthStore()
+  const { startLogout } = useAuthStore()
+
+  function handleLogout(event) {
+    event.preventDefault();
+
+    // Muestra una alerta de confirmación al usuario
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: '¿Quieres cerrar la sesión?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, cerrar sesión'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Si el usuario hace clic en "Sí, cerrar sesión", entonces llama a startLogout
+        startLogout();
+      }
+    })
+  }
+
+
   return (
     <div className="col-auto col-md-3 col-xl-2 px-0 bg-primary min-vh-100 d-flex flex-column align-items-center align-items-sm-start">
       <div
@@ -118,10 +143,10 @@ export function NavComponent() {
           <span className="d-sm-none">
             <FontAwesomeIcon icon={faArrowUp} />
           </span>
-          <span className="d-none d-sm-inline">NombreUsuario</span>
+          <span className="d-none d-sm-inline">{user.username}</span>
         </button>
         <div className="dropdown-menu">
-          <a className="dropdown-item" href="#">
+          <a className="dropdown-item" href="/" onClick={event => handleLogout(event)}>
             Cerrar sesion
           </a>
         </div>
