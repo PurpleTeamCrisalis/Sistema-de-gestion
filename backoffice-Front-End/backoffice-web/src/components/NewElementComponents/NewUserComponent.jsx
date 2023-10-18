@@ -5,19 +5,12 @@ import { useForm, useUsersStore } from "../../hooks";
 const formDTO = {
   username: "",
   password: "",
-  fullName: "",
 };
 
 function NewUserComponent() {
   const navigate = useNavigate();
-  const {
-    username,
-    password,
-    fullName,
-    handleInputChange,
-    clearForm,
-    emptyValidation,
-  } = useForm(formDTO);
+  const { username, password, handleInputChange, clearForm, emptyValidation } =
+    useForm(formDTO);
   const { startAddingUser } = useUsersStore();
 
   function addUser(event) {
@@ -25,7 +18,7 @@ function NewUserComponent() {
 
     if (!emptyValidation()) return console.error("Error: Campos vacíos");
 
-    const user = { username, password, fullName };
+    const user = { username, password };
     startAddingUser(user);
     clearForm();
     navigate("/user");
@@ -53,23 +46,6 @@ function NewUserComponent() {
                 style={{ minHeight: "50vh" }}
               >
                 <div>
-                  <div className="mb-5">
-                    <span
-                      className="d-inline-block fs-2"
-                      style={{ width: "350px" }}
-                    >
-                      Nombre Completo
-                    </span>
-                    <input
-                      type="text"
-                      name="fullName"
-                      id="fullName"
-                      onChange={handleInputChange}
-                      value={fullName}
-                      placeholder="Ingresar nombre completo"
-                      style={{ width: "350px", height: "50px" }}
-                    />
-                  </div>
                   <div className="mb-5">
                     <span
                       className="d-inline-block fs-2"
