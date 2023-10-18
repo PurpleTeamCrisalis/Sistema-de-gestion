@@ -18,19 +18,26 @@ function UserListComponent() {
   }, []);
 
   function activeUser(event) {
-    console.log(event.target);
+    let checkboxes = document.getElementsByClassName("custom-checkbox");
     let checkbox = event.target;
     let tRow = event.target.closest("tr");
-    if (checkbox.checked) {
-      tRow.classList.add("table-active");
-      return true;
-    } else {
-      tRow.classList.remove("table-active");
+    for (const item of checkboxes) {
+      if (item.id == checkbox.id) {
+        if (checkbox.checked) {
+          tRow.classList.add("table-active");
+        } else {
+          tRow.classList.remove("table-active");
+        }
+      }else{
+        item.checked = false;
+        tRow.classList.remove("table-active");
+      }
     }
+    return checkbox.id;
   }
 
   function deleteUser() {
-    console.log("delete");
+    
   }
 
   return (
@@ -84,11 +91,11 @@ function UserListComponent() {
                   </thead>
                   <tbody>
                     {users?.map((user) => (
-                      <tr key={user.userId}>
+                      <tr key={user.id}>
                         <td>
                           <input
                             type="checkbox"
-                            id={user.userId}
+                            id={user.id}
                             onChange={activeUser}
                             className="custom-checkbox"
                           />
@@ -98,7 +105,10 @@ function UserListComponent() {
                         <td>
                           <FontAwesomeIcon
                             icon={faPenToSquare}
-                            style={{ color: "#000000" }}
+                            style={{ 
+                              color: "#000000",
+                              cursor: "pointer",
+                           }}
                             onClick={() => navigate("/user/editUser")}
                           />
                         </td>

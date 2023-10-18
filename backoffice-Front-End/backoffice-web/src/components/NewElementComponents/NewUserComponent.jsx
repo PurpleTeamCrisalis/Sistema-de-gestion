@@ -1,11 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import NavComponent from "../NavComponent";
 import { useForm, useUsersStore } from "../../hooks";
+import Toastify from 'toastify-js';
+import "toastify-js/src/toastify.css"
 
 const formDTO = {
   username: "",
   password: "",
-  name: "",
+  fullName: "",
 };
 
 function NewUserComponent() {
@@ -13,7 +15,7 @@ function NewUserComponent() {
   const {
     username,
     password,
-    name,
+    fullName,
     handleInputChange,
     clearForm,
     emptyValidation,
@@ -25,10 +27,16 @@ function NewUserComponent() {
 
     if (!emptyValidation()) return console.error("Error: Campos vacíos");
 
-    const user = { username, password, name };
+    const user = { username, password, fullName };
     startAddingUser(user);
     clearForm();
-    navigate("/user");
+    Toastify({
+      text: "Usuario Creado",
+      duration: 2000,
+      style: {
+        background: "linear-gradient(to right, #00b09b, #96c93d)",
+      },
+    }).showToast();
   }
 
   return (
@@ -62,10 +70,10 @@ function NewUserComponent() {
                     </span>
                     <input
                       type="text"
-                      name="name"
-                      id="name"
+                      name="fullName"
+                      id="fullName"
                       onChange={handleInputChange}
-                      value={name}
+                      value={fullName}
                       placeholder="Ingresar nombre completo"
                       style={{ width: "350px", height: "50px" }}
                     />
@@ -120,7 +128,7 @@ function NewUserComponent() {
                 className="btn btn-primary mx-3 fw-bold btn-lg"
                 onClick={() => navigate("/user")}
               >
-                Cancelar
+                Volver
               </button>
             </section>
           </div>

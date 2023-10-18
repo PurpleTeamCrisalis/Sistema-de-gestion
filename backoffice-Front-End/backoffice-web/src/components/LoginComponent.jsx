@@ -3,6 +3,7 @@ import logoEmpresa from "../assets/images/logoEmpresa.png";
 import { useState } from "react";
 import { BiHide, BiShow } from "react-icons/bi";
 import { useAuthStore } from '../hooks/useAuthStore'
+import Swal from "sweetalert2";
 
 const loginDTO = {
   username: "",
@@ -19,9 +20,13 @@ export const LoginComponent = () => {
 
   function handleFormSubmit(event) {
     event.preventDefault();
-    if (!emptyValidation()) return console.log("Error: Campos vacíos");
-    
-    // console.log({ username, password });
+    if (!emptyValidation()) {
+      return Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Campos vacios",
+      });
+    }
 
     // CAMBIO DE ESTADO Y COMPROBACION DE USUARIO
     startLogin(username, password)
