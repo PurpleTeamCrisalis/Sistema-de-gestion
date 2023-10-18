@@ -11,7 +11,6 @@ export const usersSlice = createSlice({
   initialState,
   reducers: {
     onLoadUsers: (state, { payload = [] }) => {
-      console.log(payload)
       state.isLoadingUsers = false
       // state.users = payload
       payload.forEach(user => {

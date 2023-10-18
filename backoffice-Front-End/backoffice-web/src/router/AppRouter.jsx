@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import HomePage from "../pages/HomePage";
 import { LoginPage } from "../pages/LoginPage";
@@ -13,7 +13,11 @@ import EditUserComponent from "../components/EditElementComponents/EditUserCompo
 import { useAuthStore } from "../hooks";
 
 export const AppRouter = () => {
-  const { status } = useAuthStore();
+  const { status, checkAuthToken } = useAuthStore();
+
+  useEffect(() => {
+    checkAuthToken();
+  }, []);
 
   return (
     <Routes>

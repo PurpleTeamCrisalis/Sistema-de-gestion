@@ -33,8 +33,6 @@ function UserListComponent() {
     console.log("delete");
   }
 
-  console.log(users);
-
   return (
     <>
       <div className="container-fluid">
