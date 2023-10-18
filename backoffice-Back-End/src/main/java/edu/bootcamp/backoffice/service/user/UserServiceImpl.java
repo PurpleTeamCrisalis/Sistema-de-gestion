@@ -6,11 +6,13 @@ import edu.bootcamp.backoffice.model.order.Order;
 import edu.bootcamp.backoffice.model.user.User;
 import edu.bootcamp.backoffice.model.user.UserConstraints;
 import edu.bootcamp.backoffice.model.user.UserFactory;
+import edu.bootcamp.backoffice.model.user.dto.UpdateUserRequest;
 import edu.bootcamp.backoffice.model.user.dto.UserRequest;
 import edu.bootcamp.backoffice.model.user.dto.UserResponse;
 import edu.bootcamp.backoffice.repository.UserRepository;
 import edu.bootcamp.backoffice.service.Interface.UserService;
 import edu.bootcamp.backoffice.service.Interface.Validator;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,53 +25,164 @@ public class UserServiceImpl implements UserService
     private final UserRepository userRepository;
     private final UserFactory dtoFactory;
     private final Validator validator;
+    private  final PasswordEncoder encoder;
 
     public UserServiceImpl(
             UserRepository userRepository,
             UserFactory dtoFactory,
-            Validator validator
+            Validator validator,
+            PasswordEncoder encoder
         )
     {
         this.userRepository = userRepository;
         this.dtoFactory = dtoFactory;
         this.validator = validator;
+        this.encoder = encoder;
+    }
+
+    public boolean isUserPresent(UserRequest userDto){
+        StringBuilder errors = new StringBuilder();
+        validateUsername(userDto.getUsername(), errors);
+        if(errors.length() > 0)
+            throw new InvalidCredentialsException("Invalid username");
+        Optional<User> result =  userRepository
+                .findByUsername(userDto.getUsername());
+        if(result.isPresent())
+            return true;//return ! result.get().isDeleted();
+        return false;
     }
 
     public UserResponse registerUser(UserRequest userRequest)
     {
-        validateCredentials(
-                userRequest.getUsername(),
-                userRequest.getPassword(),
-                new StringBuilder()
-        );
+        validateNewUserRequest(userRequest);
+        String password = encoder.encode(userRequest.getPassword());
+        userRequest.setPassword(password);
         validateNewUserDbConflicts(userRequest);
         User user = dtoFactory.CreateEntityForInsertNewRecord(userRequest);
         user = userRepository.save(user);
         return dtoFactory.createResponse(user);
     }
 
-    public UserResponse update(int id, UserRequest userRequest)
+    private void validateNewUserRequest(UserRequest userRequest)
     {
-        StringBuilder errorBuilder = new StringBuilder();
-        validator.validateIdFormat(id, errorBuilder);
-        validateCredentials(
-                userRequest.getUsername(),
-                userRequest.getPassword(),
-                errorBuilder
+        StringBuilder errors = new StringBuilder();
+        validateUsername(userRequest.getUsername(),errors);
+        validatePassword(userRequest.getPassword(),errors);
+        validateErrors(errors);
+    }
+
+    private void validateNewUserDbConflicts(
+            UserRequest userRequest
+    )
+    {
+        Optional<User> result = userRepository.findByUsername(
+                userRequest.getUsername()
         );
+        if(result.isPresent())
+            throw new AlreadyRegisteredException(
+                    "Username not available."
+            );
+    }
+
+    public UserResponse update(int id, UpdateUserRequest userRequest)
+    {
+        validateUpdateRequest(id, userRequest);
         User user = validateUpdateConflicts(id, userRequest);
-        user = dtoFactory.createUserEntity(
-                id,
-                userRequest,
-                user.isNotDeleted()
-        );
         user = userRepository.save(user);
         return dtoFactory.createResponse(user);
     }
 
+    private void validateUpdateRequest(
+            int id,
+            UpdateUserRequest userRequest
+        )
+    {
+        StringBuilder errors = new StringBuilder();
+        validator.validateIdFormat(id, errors);
+        if(userRequest.getUsername() != null)
+            validateUsername(userRequest.getUsername(), errors);
+        if(userRequest.getPassword() != null)
+            validatePassword(userRequest.getPassword(), errors);
+        validateErrors(errors);
+    }
+
+    private User validateUpdateConflicts(
+            int id,
+            UpdateUserRequest userDto
+        )
+    {
+        Optional<User> result = userRepository
+                .findByUsername(userDto.getUsername());
+        User user;
+        boolean modified = ! result.isPresent();
+        if(modified)
+            user = findAndSetUsernameIfNotNull(id, userDto.getUsername());
+        else
+            user = validateEnabledUserSearchResult(result, id);
+        modified |= mergeEnabled(userDto, user);
+        modified |= mergePassword(userDto, user);
+        if( ! modified )
+            throw new AlreadyUpdatedException(
+                    "Not modified database."
+            );
+        return user;
+    }
+
+    private User validateEnabledUserSearchResult(
+            Optional<User> result,
+            int requesteId
+        )
+    {
+        User user = result.get();
+        /* Si se decide evitar dar alta logica :
+        if(user.isDeleted())
+            throw new DeletedAccountUpdateException("");*/
+        if(user.getId() != requesteId)
+            throw new AlreadyRegisteredException(
+                    "Username not available"
+            );
+        return user;
+    }
+
+    private User findAndSetUsernameIfNotNull(int id, String username)
+    {
+        User user = validator.completeValidationForId(
+                id,
+                userRepository
+        );
+        if(username != null)
+            user.setUsername(username);
+        return user;
+    }
+
+    private boolean mergePassword(UpdateUserRequest userDto, User user)
+    {
+        String dtoPassword = userDto.getPassword();
+        String userPassword = user.getPassword();
+        if(dtoPassword!=null && ! userPassword.equals(dtoPassword))
+        {
+            String hashedPassword = encoder.encode(dtoPassword);
+            user.setPassword(hashedPassword);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean mergeEnabled(UpdateUserRequest userDto, User user)
+    {
+        Boolean dtoEnabled = userDto.getEnabled();
+        Boolean userEnabled = user.isEnabled();
+        if(dtoEnabled != null && !userEnabled.equals(dtoEnabled))
+        {
+            user.setEnabled(userDto.getEnabled());
+            return true;
+        }
+        return false;
+    }
+
     public UserResponse get(int id)
     {
-        User user = validator.validateSoftDeletableEntityExistence(
+        User user = validator.completeValidationForId(
                 id,
                 userRepository
         );
@@ -81,8 +194,7 @@ public class UserServiceImpl implements UserService
         List<User> users = userRepository.findAll();
         List<UserResponse> dtos = new ArrayList<>();
         for (User user : users)
-            if(user.isNotDeleted())
-                dtos.add(dtoFactory.createResponse(user));
+            dtos.add(dtoFactory.createResponse(user));
         if(dtos.isEmpty())
             throw new EmptyTableException(
                     "There aren't registered users."
@@ -106,70 +218,15 @@ public class UserServiceImpl implements UserService
         return dtoFactory.createResponse(user);
     }
 
-    private void validateNewUserDbConflicts(
-            UserRequest userRequest
-        )
+    private void validateErrors(StringBuilder errors)
     {
-        Optional<User> result = userRepository.findByUsername(
-                userRequest.getUsername()
-        );
-        if(result.isPresent())
-            throw new AlreadyRegisteredException(
-                    "Username not available."
-            );
-    }
-
-    private User validateUpdateConflicts(int requestedId, UserRequest userDto)
-    {
-        Optional<User> result = userRepository
-                .findByUsername(userDto.getUsername());
-        User user;
-        if(result.isPresent())
-        {
-            if(result.get().isDeleted())
-                throw new DeletedAccountUpdateException("");
-            user = result.get();
-            resolveSameUsername(user, requestedId, userDto);
-        } else
-            user = validator.validateSoftDeletableEntityExistence(
-                    requestedId,
-                    userRepository
-            );
-        return user;
-    }
-
-    private void resolveSameUsername(
-            User user,
-            int requestedId,
-            UserRequest userDto
-        )
-    {
-        if(user.getId() != requestedId)
-            throw new AlreadyRegisteredException(
-                    "Username not available"
-            );
-        String userPassword = user.getPassword();
-        if (userDto.getPassword().equals(userPassword))
-            throw new AlreadyUpdatedException(
-                    "Not modified database."
-            );
-    }
-
-    public void validateCredentials(
-            String username,
-            String password,
-            StringBuilder errorBuilder
-        )
-    {
-        validateUsername(username, errorBuilder);
-        validatePassword(password, errorBuilder);
-        if(errorBuilder.length() != 0)
+        if(errors.length() != 0)
             throw new InvalidArgumentsFormatException(
-                errorBuilder.toString()
+                    errors.toString()
             );
     }
 
-    public void validateUsername(
+    private void validateUsername(
             String username,
             StringBuilder errorBuilder
         )
@@ -183,11 +240,10 @@ public class UserServiceImpl implements UserService
         );
     }
 
-    public void validatePassword(
+    private void validatePassword(
             String password,
             StringBuilder errorBuilder
-        )
-    {
+        ) {
         validator.validateVarchar(
                 password,
                 UserConstraints.PASSWORD_MIN_LENGTH,
@@ -195,14 +251,5 @@ public class UserServiceImpl implements UserService
                 errorBuilder,
                 "Password"
         );
-    }
-
-
-
-    // For login
-
-
-    public boolean isUserPresent(UserRequest userDTO){
-        return userRepository.findByUsername(userDTO.getUsername()).isPresent();
     }
 }

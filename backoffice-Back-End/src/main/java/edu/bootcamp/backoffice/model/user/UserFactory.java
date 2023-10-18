@@ -1,7 +1,9 @@
 package edu.bootcamp.backoffice.model.user;
 
+import edu.bootcamp.backoffice.model.user.dto.UpdateUserRequest;
 import edu.bootcamp.backoffice.model.user.dto.UserRequest;
 import edu.bootcamp.backoffice.model.user.dto.UserResponse;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -19,21 +21,6 @@ public class UserFactory
                 .build();
     }
 
-    public User createUserEntity(
-            int id,
-            UserRequest userDTO,
-            Boolean enabled
-        )
-    {
-        return User
-                .builder()
-                .id(id)
-                .username(userDTO.getUsername())
-                .password(userDTO.getPassword())
-                .enabled(enabled)
-                .build();
-    }
-
     public User CreateEntityForInsertNewRecord(UserRequest userDTO){
         return User
                 .builder()
@@ -47,7 +34,7 @@ public class UserFactory
         return UserResponse
             .builder()
             .username(user.getUsername())
-            .password(user.getPassword())
+            .enabled(user.isEnabled())
             .id(user.getId())
             .build();
     }
