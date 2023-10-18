@@ -23,10 +23,10 @@ export function useUsersStore() {
   }
   async function startAddingUser(user) {
     try {
-      const { data } = await projectApi.post('/user', user)
+      const { data } = await projectApi.post('/user/create', user)
       dispatch(onAddNewUser({
         username: data.username,
-        userId: data.userId
+        id: data.id
       }))
     } catch (error) {
       console.error(error)

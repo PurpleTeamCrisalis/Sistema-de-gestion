@@ -5,7 +5,7 @@ import { useForm, useUsersStore } from "../../hooks";
 const formDTO = {
   username: "",
   password: "",
-  name: "",
+  fullName: "",
 };
 
 function NewUserComponent() {
@@ -13,7 +13,7 @@ function NewUserComponent() {
   const {
     username,
     password,
-    name,
+    fullName,
     handleInputChange,
     clearForm,
     emptyValidation,
@@ -25,7 +25,7 @@ function NewUserComponent() {
 
     if (!emptyValidation()) return console.error("Error: Campos vacíos");
 
-    const user = { username, password, name };
+    const user = { username, password, fullName };
     startAddingUser(user);
     clearForm();
     navigate("/user");
@@ -62,10 +62,10 @@ function NewUserComponent() {
                     </span>
                     <input
                       type="text"
-                      name="name"
-                      id="name"
+                      name="fullName"
+                      id="fullName"
                       onChange={handleInputChange}
-                      value={name}
+                      value={fullName}
                       placeholder="Ingresar nombre completo"
                       style={{ width: "350px", height: "50px" }}
                     />
