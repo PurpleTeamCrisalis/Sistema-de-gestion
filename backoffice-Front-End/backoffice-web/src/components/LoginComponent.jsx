@@ -2,6 +2,8 @@ import { useForm } from "../hooks";
 import logoEmpresa from "../assets/images/logoEmpresa.png";
 import { useState } from "react";
 import { BiHide, BiShow } from "react-icons/bi";
+import { useAuthStore } from '../hooks/useAuthStore'
+import Swal from "sweetalert2";
 
 const loginDTO = {
   username: "",
@@ -9,14 +11,26 @@ const loginDTO = {
 };
 
 export const LoginComponent = () => {
+
+  const { startLogin } = useAuthStore()
+
   const { username, password, handleInputChange, clearForm, emptyValidation } =
     useForm(loginDTO);
   const [showPassword, setShowPassword] = useState(false);
 
   function handleFormSubmit(event) {
     event.preventDefault();
-    if (!emptyValidation()) return console.log("Error: Campos vacíos");
-    console.log({ username, password });
+    if (!emptyValidation()) {
+      return Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Campos vacios",
+      });
+    }
+
+    // CAMBIO DE ESTADO Y COMPROBACION DE USUARIO
+    startLogin(username, password)
+
     clearForm();
   }
 

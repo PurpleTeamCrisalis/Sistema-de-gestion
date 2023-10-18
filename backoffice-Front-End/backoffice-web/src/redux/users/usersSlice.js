@@ -1,18 +1,44 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-  counter: 1
+  isLoadingUsers: true,
+  users: [],
+  activeUser: null
 }
 
 export const usersSlice = createSlice({
   name: 'users',
   initialState,
   reducers: {
-    increment: (state) => {
-      state.counter = state.counter + 1
+    onLoadUsers: (state, { payload = [] }) => {
+      console.log(payload)
+      state.isLoadingUsers = false
+      // state.users = payload
+      payload.forEach(user => {
+        const exists = state.users.some(dbUser => dbUser.id === user.id)
+        if (!exists) state.users.push(user)
+      })
+    },
+    onAddNewUser: (state, { payload }) => {
+      state.users.push(payload)
+      state.activeUser = null
+    },
+    onSetActiveUser: (state, { payload }) => {
+      state.activeUser = payload
+    },
+    onPullActiveUser: (state) => {
+      state.activeUser = null
+    },
+    onUpdateUser: (state, { payload }) => {
+      state.users = state.users.map(user => user.id === payload.id ? payload : user)
+      state.activeUser = null
+    },
+    onDeleteUser: (state) => {
+      state.users = state.users.filter(user => user.id !== state.activeUser.id)
+      state.activeUser = null
     }
   }
 });
 
 // Action creators are generated for each case redicer function
-export const { increment } = usersSlice.actions;
+export const { onLoadUsers, onAddNewUser, onSetActiveUser, onDeleteUser, onPullActiveUser, onUpdateUser } = usersSlice.actions;
