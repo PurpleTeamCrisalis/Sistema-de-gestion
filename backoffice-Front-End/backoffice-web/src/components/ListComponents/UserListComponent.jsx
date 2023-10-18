@@ -9,35 +9,44 @@ import { useUsersStore } from "../../hooks";
 function UserListComponent() {
   //   const { data } = useFetch("http://localhost:8080/user");
   const navigate = useNavigate();
-  const { users, startLoadingUsers } = useUsersStore();
+  const { users, startLoadingUsers, setActiveUser, startDeletingUser } = useUsersStore();
+  let userActive;
 
   // CUANDO SE USE EL COMPONENTE, SE VA TRAER LA LISTA DE USUARIOS
 
   useEffect(() => {
     startLoadingUsers();
   }, []);
-
-  function activeUser(event) {
+  
+  function activeUser(event, user) {
     let checkboxes = document.getElementsByClassName("custom-checkbox");
     let checkbox = event.target;
-    let tRow = event.target.closest("tr");
+    let tRow = checkbox.closest("tr");
     for (const item of checkboxes) {
       if (item.id == checkbox.id) {
         if (checkbox.checked) {
           tRow.classList.add("table-active");
+          setActiveUser(user);
+          userActive = checkbox;
         } else {
           tRow.classList.remove("table-active");
+          setActiveUser(null);
+          userActive = null;
         }
       }else{
         item.checked = false;
-        tRow.classList.remove("table-active");
+        item.closest("tr").classList.remove("table-active");
       }
     }
-    return checkbox.id;
   }
 
   function deleteUser() {
-    
+    startDeletingUser();
+  }
+
+  function editUser(event, user){
+    setActiveUser(user);
+    navigate("/user/editUser")
   }
 
   return (
@@ -96,20 +105,17 @@ function UserListComponent() {
                           <input
                             type="checkbox"
                             id={user.id}
-                            onChange={activeUser}
+                            onChange={(event)=>activeUser(event,user)}
                             className="custom-checkbox"
                           />
                         </td>
                         <td>{user.username}</td>
-                        <td>Status</td>
+                        <td>{user?.enabled?"habilitado":"deshabilitado"}</td>
                         <td>
                           <FontAwesomeIcon
                             icon={faPenToSquare}
-                            style={{ 
-                              color: "#000000",
-                              cursor: "pointer",
-                           }}
-                            onClick={() => navigate("/user/editUser")}
+                            style={{ color: "#000000" }}
+                            onClick={(event) => editUser(event, user)}
                           />
                         </td>
                       </tr>

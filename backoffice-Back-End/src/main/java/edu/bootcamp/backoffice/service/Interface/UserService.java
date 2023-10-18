@@ -1,6 +1,7 @@
 package edu.bootcamp.backoffice.service.Interface;
 
 import edu.bootcamp.backoffice.exception.custom.parameterValidation.InvalidIdFormatException;
+import edu.bootcamp.backoffice.model.user.dto.UpdateUserRequest;
 import edu.bootcamp.backoffice.model.user.dto.UserRequest;
 import edu.bootcamp.backoffice.model.user.dto.UserResponse;
 
@@ -15,7 +16,7 @@ public interface UserService
     public List<UserResponse> get()
             throws InvalidIdFormatException;
 
-    public UserResponse update(int id, UserRequest userDto)
+    public UserResponse update(int id, UpdateUserRequest userDto)
             throws InvalidIdFormatException;
 
     public UserResponse delete(int id)

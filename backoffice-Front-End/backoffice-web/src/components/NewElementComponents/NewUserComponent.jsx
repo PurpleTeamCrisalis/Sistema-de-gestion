@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import NavComponent from "../NavComponent";
 import { useForm, useUsersStore } from "../../hooks";
-import Toastify from 'toastify-js';
+import Toastify from 'toastify-js'
 import "toastify-js/src/toastify.css"
 
 const formDTO = {

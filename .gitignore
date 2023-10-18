@@ -22,6 +22,8 @@
 #IDE IntelliJ
 /backoffice-Back-End/.idea
 /backoffice-Back-End/.idea/*
+/backoffice-Back-End/target
+/backoffice-Back-End/target/*
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 /backoffice-Front-End/backoffice-web/hs_err_pid*
