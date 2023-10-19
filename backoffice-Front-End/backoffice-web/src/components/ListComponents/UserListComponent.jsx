@@ -9,7 +9,8 @@ import { useUsersStore } from "../../hooks";
 function UserListComponent() {
   //   const { data } = useFetch("http://localhost:8080/user");
   const navigate = useNavigate();
-  const { users, startLoadingUsers, setActiveUser, startDeletingUser } = useUsersStore();
+  const { users, startLoadingUsers, setActiveUser, startDeletingUser } =
+    useUsersStore();
   let userActive;
 
   // CUANDO SE USE EL COMPONENTE, SE VA TRAER LA LISTA DE USUARIOS
@@ -17,7 +18,7 @@ function UserListComponent() {
   useEffect(() => {
     startLoadingUsers();
   }, []);
-  
+
   function activeUser(event, user) {
     let checkboxes = document.getElementsByClassName("custom-checkbox");
     let checkbox = event.target;
@@ -33,7 +34,7 @@ function UserListComponent() {
           setActiveUser(null);
           userActive = null;
         }
-      }else{
+      } else {
         item.checked = false;
         item.closest("tr").classList.remove("table-active");
       }
@@ -44,9 +45,9 @@ function UserListComponent() {
     startDeletingUser();
   }
 
-  function editUser(event, user){
+  function editUser(event, user) {
     setActiveUser(user);
-    navigate("/user/editUser")
+    navigate("/user/editUser");
   }
 
   return (
@@ -105,12 +106,18 @@ function UserListComponent() {
                           <input
                             type="checkbox"
                             id={user.id}
-                            onChange={(event)=>activeUser(event,user)}
+                            onChange={(event) => activeUser(event, user)}
                             className="custom-checkbox"
                           />
                         </td>
                         <td>{user.username}</td>
-                        <td>{user?.enabled?"habilitado":"deshabilitado"}</td>
+                        <td
+                          style={{
+                            color: user.enabled ? "green" : "red",
+                          }}
+                        >
+                          {user?.enabled ? "habilitado" : "deshabilitado"}
+                        </td>
                         <td>
                           <FontAwesomeIcon
                             icon={faPenToSquare}
