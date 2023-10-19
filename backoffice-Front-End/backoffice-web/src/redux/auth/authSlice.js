@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-  status: 'not-authenticated',  // 'checking' || 'authenticated' || 'not-authenticated'
+  status: localStorage.getItem('token') ? 'authenticated' : 'not-authenticated',  // 'checking' || 'authenticated' || 'not-authenticated'
   user: {},
   errorMessage: null
 }

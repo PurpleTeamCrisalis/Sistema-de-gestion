@@ -1,5 +1,11 @@
 import React, { useEffect } from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import {
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import HomePage from "../pages/HomePage";
 import { LoginPage } from "../pages/LoginPage";
 import UserListComponent from "../components/ListComponents/UserListComponent";
@@ -11,20 +17,29 @@ import ChargeListComponent from "../components/ListComponents/ChargeListComponen
 import NewUserComponent from "../components/NewElementComponents/NewUserComponent";
 import EditUserComponent from "../components/EditElementComponents/EditUserComponent";
 import { useAuthStore } from "../hooks";
+import { getLastView } from "../helpers";
 
 export const AppRouter = () => {
   const { status, checkAuthToken } = useAuthStore();
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     checkAuthToken();
+    if (status === "authenticated") navigate(localStorage.getItem("lastView"));
   }, []);
+
+  useEffect(() => {
+    if (pathname !== "/login") {
+      localStorage.setItem("lastView", getLastView(pathname));
+    }
+  }, [pathname]);
 
   return (
     <Routes>
       {status === "authenticated" ? (
         <>
           <Route path="/" element={<HomePage />} />
-          <Route path="/*" element={<Navigate to="/" />} />
           <Route path="/user" element={<UserListComponent />}></Route>
           <Route path="/service" element={<ServiceListComponent />}></Route>
           <Route path="/product" element={<ProductListComponent />}></Route>
@@ -33,6 +48,7 @@ export const AppRouter = () => {
           <Route path="/charge" element={<ChargeListComponent />}></Route>
           <Route path="/user/newUser" element={<NewUserComponent />}></Route>
           <Route path="/user/editUser" element={<EditUserComponent />}></Route>
+          <Route path="/*" element={<Navigate to="/" />} />
         </>
       ) : (
         <>
