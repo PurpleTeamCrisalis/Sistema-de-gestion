@@ -7,27 +7,43 @@ import "toastify-js/src/toastify.css"
 const formDTO = {
   username: "",
   password: "",
-  fullName: "",
 };
 
 function NewUserComponent() {
   const navigate = useNavigate();
-  const {
-    username,
-    password,
-    fullName,
-    handleInputChange,
-    clearForm,
-    emptyValidation,
-  } = useForm(formDTO);
+
+  const { username, password, handleInputChange, clearForm, emptyValidation } =
+    useForm(formDTO);
+
   const { startAddingUser } = useUsersStore();
 
   function addUser(event) {
     event.preventDefault();
 
-    if (!emptyValidation()) return console.error("Error: Campos vacíos");
+    if (!emptyValidation()) {
+      Toastify({
+        text: "Hay campos vacíos",
+        duration: 2000,
+        style: {
+          background: "linear-gradient(to right, #f44336, #b71c1c)",
+        },
+      }).showToast();
+      return console.error("Error: Campos vacíos");
+    }
 
-    const user = { username, password, fullName };
+    if(username.length < 5){
+      Toastify({
+        text: "Nombre de usuario debe ser mayor a 5 caracteres",
+        duration: 2000,
+        style: {
+          background: "linear-gradient(to right, #f44336, #b71c1c)",
+        },
+      }).showToast();
+      return console.error("Error: Nombre de usuario menor a 5 caracteres");;
+    }
+
+    const user = { username, password };
+
     startAddingUser(user);
     clearForm();
     Toastify({
@@ -66,23 +82,7 @@ function NewUserComponent() {
                       className="d-inline-block fs-2"
                       style={{ width: "350px" }}
                     >
-                      Nombre Completo
-                    </span>
-                    <input
-                      type="text"
-                      name="fullName"
-                      id="fullName"
-                      onChange={handleInputChange}
-                      value={fullName}
-                      placeholder="Ingresar nombre completo"
-                      style={{ width: "350px", height: "50px" }}
-                    />
-                  </div>
-                  <div className="mb-5">
-                    <span
-                      className="d-inline-block fs-2"
-                      style={{ width: "350px" }}
-                    >
+
                       Nombre de Usuario
                     </span>
                     <input

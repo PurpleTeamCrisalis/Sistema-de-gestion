@@ -5,20 +5,24 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 // import { useFetch } from "../../hooks/useFetch";
 import { useUsersStore } from "../../hooks";
+import { useAuthStore } from "../../hooks";
+import Toastify from 'toastify-js'
+import "toastify-js/src/toastify.css"
+import Swal from 'sweetalert2'
 
 function UserListComponent() {
   //   const { data } = useFetch("http://localhost:8080/user");
   const navigate = useNavigate();
-  const { users, startLoadingUsers, setActiveUser, startDeletingUser } = useUsersStore();
-  let userActive;
+  const { users, startLoadingUsers, setActiveUser, startDeletingUser, activeUser } = useUsersStore();
+  const { user } = useAuthStore()
 
   // CUANDO SE USE EL COMPONENTE, SE VA TRAER LA LISTA DE USUARIOS
 
   useEffect(() => {
     startLoadingUsers();
   }, []);
-  
-  function activeUser(event, user) {
+
+  function checkActiveUser(event, user) {
     let checkboxes = document.getElementsByClassName("custom-checkbox");
     let checkbox = event.target;
     let tRow = checkbox.closest("tr");
@@ -27,13 +31,11 @@ function UserListComponent() {
         if (checkbox.checked) {
           tRow.classList.add("table-active");
           setActiveUser(user);
-          userActive = checkbox;
         } else {
           tRow.classList.remove("table-active");
           setActiveUser(null);
-          userActive = null;
         }
-      }else{
+      } else {
         item.checked = false;
         item.closest("tr").classList.remove("table-active");
       }
@@ -41,10 +43,40 @@ function UserListComponent() {
   }
 
   function deleteUser() {
-    startDeletingUser();
+    if (activeUser) {
+      if (activeUser.username != user.username) {
+        Swal.fire({
+          title: `Seguro que quieres eliminar a ${activeUser.username}?`,
+          showCancelButton: true,
+          confirmButtonText: 'confirmar',
+          cancelButtonText: 'cancelar',
+        }).then((result) => {
+          /* Read more about isConfirmed, isDenied below */
+          if (result.isConfirmed) {
+            startDeletingUser();
+            Swal.fire('Usuario Eliminado', '', 'success')
+          }
+        })
+      }else{
+        return Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "No puede eliminar el usuario con el que está logeado",
+        });
+      }
+
+    } else {
+      Toastify({
+        text: "Seleccionar un usuario para eliminar",
+        duration: 2000,
+        style: {
+          background: "linear-gradient(to right, #f44336, #b71c1c)",
+        },
+      }).showToast();
+    }
   }
 
-  function editUser(event, user){
+  function editUser(event, user) {
     setActiveUser(user);
     navigate("/user/editUser")
   }
@@ -105,16 +137,23 @@ function UserListComponent() {
                           <input
                             type="checkbox"
                             id={user.id}
-                            onChange={(event)=>activeUser(event,user)}
+                            style={{
+                              color: "#000000",
+                              cursor: "pointer",
+                            }}
+                            onChange={(event) => checkActiveUser(event, user)}
                             className="custom-checkbox"
                           />
                         </td>
                         <td>{user.username}</td>
-                        <td>{user?.enabled?"habilitado":"deshabilitado"}</td>
+                        <td>{user.enabled ? "habilitado" : "deshabilitado"}</td>
                         <td>
                           <FontAwesomeIcon
                             icon={faPenToSquare}
-                            style={{ color: "#000000" }}
+                            style={{
+                              color: "#000000",
+                              cursor: "pointer",
+                            }}
                             onClick={(event) => editUser(event, user)}
                           />
                         </td>

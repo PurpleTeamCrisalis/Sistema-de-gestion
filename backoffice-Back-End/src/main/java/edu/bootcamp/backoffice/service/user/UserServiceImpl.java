@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService
         Optional<User> result =  userRepository
                 .findByUsername(userDto.getUsername());
         if(result.isPresent())
-            return true;//return ! result.get().isDeleted();
+            return ! result.get().isDeleted();
         return false;
     }
 

@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { authApi } from "../api";
-import { onChecking, onLogin, onLogout } from "../redux/auth/authSlice";
+import { onChangeAuthUsername, onChecking, onLogin, onLogout } from "../redux/auth/authSlice";
 import Swal from "sweetalert2";
 
 export const useAuthStore = () => {
@@ -17,6 +17,7 @@ export const useAuthStore = () => {
 
       if (response.data) {
         // Si la API devuelve datos, el inicio de sesión fue exitoso
+        localStorage.setItem('user', JSON.stringify({ username })) // Guarda en localStorage el usuario autenticado
         dispatch(onLogin({ username })); // Actualiza el estado con los datos del usuario
       }
     } catch (error) {
@@ -31,9 +32,21 @@ export const useAuthStore = () => {
 
   function startLogout() {
     // Cambia estado a deslogueado
-    dispatch(onLogout({ user }));
+    dispatch(onLogout());
     // Borrar token
-    localStorage.removeItem("token");
+    localStorage.clear();
+  }
+
+  function checkAuthToken() {
+    const token = localStorage.getItem('token') // Busca en localStorage el Token.
+    const userAuthenticated = JSON.parse(localStorage.getItem('user')) // Busca en localStorage el usuario autenticado.
+    if (!token) return dispatch(onLogout()) // Si no se encuentra el token, despacha la funcion onLogout para cambiar el estado a 'not-authenticated'.
+    if (!userAuthenticated) return dispatch(onLogout()) // Si no se encuentra el token, despacha la funcion onLogout para cambiar el estado a 'not-authenticated'.
+    dispatch(onLogin(userAuthenticated)) // Si se encuentra el token, despacha la funcion onLogin para cambiar el estado con las credenciales del usuario autenticado.
+  }
+
+  function changeAuthUsername(username) {
+    dispatch(onChangeAuthUsername(username));
   }
 
   return {
@@ -44,5 +57,7 @@ export const useAuthStore = () => {
     // Metodos
     startLogin,
     startLogout,
+    checkAuthToken,
+    changeAuthUsername
   };
 };
