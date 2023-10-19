@@ -53,7 +53,7 @@ function EditUserComponent() {
     if (activeUser.username != user.username) {
       startUpdatingUser(userAux);
     } else {
-      if (userAux.enabled) {
+      if (enabled !== "false") {
         console.log("Entró");
         startUpdatingUser(userAux);
         changeAuthUsername(userAux.username);
@@ -99,7 +99,7 @@ function EditUserComponent() {
                 <hr></hr>
               </div>
               <div
-                className="d-flex d-sm-block flex-column align-items-center justify-content-center gap-5"
+                className="d-flex flex-column align-items-center justify-content-center gap-5"
                 style={{ minHeight: "50vh" }}
               >
                 <div className="d-flex">
@@ -119,7 +119,7 @@ function EditUserComponent() {
                     style={{ width: "350px", height: "50px" }}
                   />
                 </div>
-                <div className="d-flex d-sm-block align-items-center gap-5">
+                <div className="d-flex align-items-center gap-5">
                   <span
                     className="d-inline-block fs-2"
                     style={{ width: "400px" }}
