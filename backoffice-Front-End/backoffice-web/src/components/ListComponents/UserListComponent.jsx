@@ -45,19 +45,27 @@ function UserListComponent() {
   function deleteUser() {
     if (activeUser) {
       if (activeUser.username != user.username) {
-        Swal.fire({
-          title: `Seguro que quieres eliminar a ${activeUser.username}?`,
-          showCancelButton: true,
-          confirmButtonText: 'confirmar',
-          cancelButtonText: 'cancelar',
-        }).then((result) => {
-          /* Read more about isConfirmed, isDenied below */
-          if (result.isConfirmed) {
-            startDeletingUser();
-            Swal.fire('Usuario Eliminado', '', 'success')
-          }
-        })
-      }else{
+        if (activeUser.enabled === true) {
+          Swal.fire({
+            title: `¿Seguro que quieres eliminar a ${activeUser.username}?`,
+            showCancelButton: true,
+            confirmButtonText: 'confirmar',
+            cancelButtonText: 'cancelar',
+          }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+              startDeletingUser();
+              Swal.fire('Usuario Eliminado', '', 'success')
+            }
+          });
+        } else {
+          return Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "No puede eliminar un usuario que esté deshabilitado",
+          });
+        }
+      } else {
         return Swal.fire({
           icon: "error",
           title: "Error",

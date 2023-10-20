@@ -42,7 +42,6 @@ export function useUsersStore() {
     }
   }
   async function startUpdatingUser(user) {
-    console.log(user);
     try {
       const {data} = await projectApi.patch(`/user/update/${user.id}`, user)
       dispatch(onUpdateUser(data))

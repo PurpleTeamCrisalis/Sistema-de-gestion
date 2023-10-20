@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import NavComponent from "../NavComponent";
 import { useForm, useUsersStore } from "../../hooks";
 import { useAuthStore } from "../../hooks";
@@ -12,7 +11,7 @@ import "toastify-js/src/toastify.css";
 
 function EditUserComponent() {
   const navigate = useNavigate();
-  const { startUpdatingUser, activeUser, setActiveUser } = useUsersStore();
+  const { startUpdatingUser, activeUser, setActiveUser, users } = useUsersStore();
   const { username, enabled, handleInputChange, emptyValidation } = useForm({
     username: activeUser?.username,
     enabled: activeUser?.enabled,
@@ -44,20 +43,30 @@ function EditUserComponent() {
       return console.error("Error: Nombre de usuario menor a 5 caracteres");;
     }
 
+    const usuarioExiste = users?.find(user => user.username === username);
+    if((usuarioExiste) && (activeUser.username !== username)){
+      Toastify({
+        text: "Nombre de usuario ya existe",
+        duration: 2000,
+        style: {
+          background: "linear-gradient(to right, #f44336, #b71c1c)",
+        },
+      }).showToast();
+      return console.error("Error: Nombre de usuario ya existe");
+    }
+
     const userAux = {
       username,
       id: activeUser.id,
       enabled
     };
 
-    if (activeUser.username != user.username) {
+    if (activeUser.username !== user.username) {
       startUpdatingUser(userAux);
     } else {
       if (enabled !== "false") {
-        console.log("Entró");
         startUpdatingUser(userAux);
         changeAuthUsername(userAux.username);
-        
       } else {
         Toastify({
           text: "No se puede deshabilitar el usuario con el que está logeado",
@@ -134,6 +143,7 @@ function EditUserComponent() {
                         id="enabled"
                         onChange={handleInputChange}
                         value="true"
+                        defaultChecked={activeUser.enabled === true}
                       />
                       <label className="ms-4 fs-5">Habilitado</label>
                     </div>
@@ -144,6 +154,7 @@ function EditUserComponent() {
                         id="enabled"
                         onChange={handleInputChange}
                         value="false"
+                        defaultChecked={activeUser.enabled === false}
                       />
                       <label className="ms-4 fs-5">Deshabilitado</label>
                     </div>

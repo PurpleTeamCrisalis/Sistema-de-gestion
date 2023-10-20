@@ -15,7 +15,7 @@ function NewUserComponent() {
   const { username, password, handleInputChange, clearForm, emptyValidation } =
     useForm(formDTO);
 
-  const { startAddingUser } = useUsersStore();
+  const { startAddingUser, users } = useUsersStore();
 
   function addUser(event) {
     event.preventDefault();
@@ -39,9 +39,20 @@ function NewUserComponent() {
           background: "linear-gradient(to right, #f44336, #b71c1c)",
         },
       }).showToast();
-      return console.error("Error: Nombre de usuario menor a 5 caracteres");;
+      return console.error("Error: Nombre de usuario menor a 5 caracteres");
     }
 
+    const usuarioExiste = users?.find(user => user.username == username);
+    if(usuarioExiste){
+      Toastify({
+        text: "Nombre de usuario ya existe",
+        duration: 2000,
+        style: {
+          background: "linear-gradient(to right, #f44336, #b71c1c)",
+        },
+      }).showToast();
+      return console.error("Error: Nombre de usuario ya existe");
+    }
     const user = { username, password };
 
     startAddingUser(user);
