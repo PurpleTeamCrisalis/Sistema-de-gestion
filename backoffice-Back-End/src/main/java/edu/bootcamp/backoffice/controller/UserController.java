@@ -1,36 +1,88 @@
 package edu.bootcamp.backoffice.controller;
 
-import edu.bootcamp.backoffice.model.User;
-import edu.bootcamp.backoffice.model.dto.UserDTO;
-import edu.bootcamp.backoffice.service.UserService;
+import edu.bootcamp.backoffice.model.user.dto.UpdateUserRequest;
+import edu.bootcamp.backoffice.model.user.dto.UserRequest;
+import edu.bootcamp.backoffice.model.user.dto.UserResponse;
+import edu.bootcamp.backoffice.service.Interface.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("user")
+@RequestMapping(path = "/user")
 public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserService userService){
+    @Autowired
+    public UserController(UserService userService)
+    {
         this.userService = userService;
     }
 
-    @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public User saveUser(@RequestBody UserDTO userDTO){
-        return this.userService.saveUser(userDTO);
+    @PostMapping(
+            path = "/create",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<UserResponse> registerUser(
+            @RequestBody UserRequest createRequest
+        )
+    {
+        UserResponse userDto = userService.registerUser(createRequest);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(userDto.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(userDto);
     }
 
-    @GetMapping(value = "login", produces = MediaType.APPLICATION_JSON_VALUE)
-    public UserDTO loginUser(@RequestParam String username, @RequestParam String password){
-        return this.userService.loginUserWithCredentials(username, password);
+    @GetMapping(
+            value = "/{id}",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<UserResponse> getUser(@PathVariable int id)
+    {
+        UserResponse user = userService.get(id);
+        return ResponseEntity.ok(user);
     }
 
-    @GetMapping(value = "list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<UserDTO> getAllUser(){
-        return this.userService.getListAllUsersInBD();
+    @GetMapping(
+            path = "/list",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<List<UserResponse>> getAllUsers()
+    {
+        List<UserResponse> users = userService.get();
+        return ResponseEntity.ok(users);
     }
 
+    @PatchMapping(
+            path = "update/{id}",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<UserResponse> updateUser(
+            @PathVariable int id,
+            @RequestBody UpdateUserRequest userDTO)
+    {
+        UserResponse user = userService.update(id, userDTO);
+        return ResponseEntity.ok(user);
+    }
+
+    @DeleteMapping(
+            value = "delete/{id}",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<UserResponse> deleteUser(@PathVariable int id)
+    {
+        UserResponse user = userService.delete(id);
+        return ResponseEntity.ok(user);
+    }
 }
