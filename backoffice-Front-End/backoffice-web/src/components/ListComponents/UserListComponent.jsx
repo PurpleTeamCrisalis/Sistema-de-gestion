@@ -13,8 +13,10 @@ import Swal from 'sweetalert2'
 function UserListComponent() {
   //   const { data } = useFetch("http://localhost:8080/user");
   const navigate = useNavigate();
+
   const { users, startLoadingUsers, setActiveUser, startDeletingUser, activeUser } = useUsersStore();
   const { user } = useAuthStore()
+
 
   // CUANDO SE USE EL COMPONENTE, SE VA TRAER LA LISTA DE USUARIOS
 
@@ -22,7 +24,9 @@ function UserListComponent() {
     startLoadingUsers();
   }, []);
 
+
   function checkActiveUser(event, user) {
+
     let checkboxes = document.getElementsByClassName("custom-checkbox");
     let checkbox = event.target;
     let tRow = checkbox.closest("tr");
@@ -86,7 +90,7 @@ function UserListComponent() {
 
   function editUser(event, user) {
     setActiveUser(user);
-    navigate("/user/editUser")
+    navigate("/user/editUser");
   }
 
   return (
