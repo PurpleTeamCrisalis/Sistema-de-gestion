@@ -1,4 +1,4 @@
-package edu.bootcamp.backoffice.model.user.dto;
+package edu.bootcamp.backoffice.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -7,13 +7,11 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @Builder
-public class UserRequest {
+public class CreatUserRequestDTO {
+
     @JsonProperty("username")
     private String username;
-
     @JsonProperty("password")
     private String password;
 
-    @JsonProperty("fullName")
-    private String fullName;
 }

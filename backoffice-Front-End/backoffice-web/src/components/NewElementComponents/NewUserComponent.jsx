@@ -1,34 +1,80 @@
 import { useNavigate } from "react-router-dom";
 import NavComponent from "../NavComponent";
 import { useForm, useUsersStore } from "../../hooks";
+import Toastify from 'toastify-js'
+import "toastify-js/src/toastify.css"
 
 const formDTO = {
   username: "",
   password: "",
-  name: "",
 };
 
 function NewUserComponent() {
   const navigate = useNavigate();
-  const {
-    username,
-    password,
-    name,
-    handleInputChange,
-    clearForm,
-    emptyValidation,
-  } = useForm(formDTO);
-  const { startAddingUser } = useUsersStore();
+
+  const { username, password, handleInputChange, clearForm, emptyValidation } =
+    useForm(formDTO);
+
+  const { startAddingUser, users } = useUsersStore();
 
   function addUser(event) {
     event.preventDefault();
 
-    if (!emptyValidation()) return console.error("Error: Campos vacíos");
+    if (!emptyValidation()) {
+      Toastify({
+        text: "Hay campos vacíos",
+        duration: 2000,
+        style: {
+          background: "linear-gradient(to right, #f44336, #b71c1c)",
+        },
+      }).showToast();
+      return console.error("Error: Campos vacíos");
+    }
 
-    const user = { username, password, name };
+    if(username.length < 5){
+      Toastify({
+        text: "El Nombre de usuario debe ser mayor a 5 caracteres",
+        duration: 2000,
+        style: {
+          background: "linear-gradient(to right, #f44336, #b71c1c)",
+        },
+      }).showToast();
+      return console.error("Error: Nombre de usuario menor a 5 caracteres");
+    }
+
+    if(password.length < 5){
+      Toastify({
+        text: "La contraseña debe ser mayor a 5 caracteres",
+        duration: 2000,
+        style: {
+          background: "linear-gradient(to right, #f44336, #b71c1c)",
+        },
+      }).showToast();
+      return console.error("Error: Contraseña menor a 5 caracteres");
+    }
+
+    const usuarioExiste = users?.find(user => user.username === username);
+    if(usuarioExiste){
+      Toastify({
+        text: "Nombre de usuario ya existe",
+        duration: 2000,
+        style: {
+          background: "linear-gradient(to right, #f44336, #b71c1c)",
+        },
+      }).showToast();
+      return console.error("Error: Nombre de usuario ya existe");
+    }
+    const user = { username, password };
+
     startAddingUser(user);
     clearForm();
-    navigate("/user");
+    Toastify({
+      text: "Usuario Creado",
+      duration: 2000,
+      style: {
+        background: "linear-gradient(to right, #00b09b, #96c93d)",
+      },
+    }).showToast();
   }
 
   return (
@@ -58,23 +104,7 @@ function NewUserComponent() {
                       className="d-inline-block fs-2"
                       style={{ width: "350px" }}
                     >
-                      Nombre Completo
-                    </span>
-                    <input
-                      type="text"
-                      name="name"
-                      id="name"
-                      onChange={handleInputChange}
-                      value={name}
-                      placeholder="Ingresar nombre completo"
-                      style={{ width: "350px", height: "50px" }}
-                    />
-                  </div>
-                  <div className="mb-5">
-                    <span
-                      className="d-inline-block fs-2"
-                      style={{ width: "350px" }}
-                    >
+
                       Nombre de Usuario
                     </span>
                     <input
@@ -120,7 +150,7 @@ function NewUserComponent() {
                 className="btn btn-primary mx-3 fw-bold btn-lg"
                 onClick={() => navigate("/user")}
               >
-                Cancelar
+                Volver
               </button>
             </section>
           </div>

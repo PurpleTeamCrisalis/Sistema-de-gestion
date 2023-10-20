@@ -17,14 +17,14 @@ public class ValidatorImpl implements Validator
             JpaRepository<Entity, Integer> repository
         )
     {
-        Entity entity = validateId(id, repository);
+        Entity entity = completeValidationForId(id, repository);
         if(entity.isDeleted())
             throw new IdNotFountException(
                     " Not found, the element was previously deleted");
         return entity;
     }
 
-    public <Entity> Entity validateId(
+    public <Entity> Entity completeValidationForId(
             int id,
             JpaRepository<Entity, Integer> repository
         )

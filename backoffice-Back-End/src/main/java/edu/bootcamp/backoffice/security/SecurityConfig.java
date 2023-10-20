@@ -47,6 +47,8 @@ public class SecurityConfig {
                 .antMatchers("/auth/login").permitAll()
                 .antMatchers("/h2-console").permitAll()
                 .antMatchers("/**").authenticated()
+                .antMatchers("/**").authenticated()
+                //.antMatchers("/**").permitAll()
                 .and()
                 .httpBasic();
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

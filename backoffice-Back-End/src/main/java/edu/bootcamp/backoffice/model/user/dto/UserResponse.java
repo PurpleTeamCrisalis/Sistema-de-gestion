@@ -12,8 +12,8 @@ public class UserResponse
     @JsonProperty("username")
     private String username;
 
-    @JsonProperty("password")
-    private String password;
+    @JsonProperty("enabled")
+    private Boolean enabled;
 
     @JsonProperty("id")
     private Integer id;
