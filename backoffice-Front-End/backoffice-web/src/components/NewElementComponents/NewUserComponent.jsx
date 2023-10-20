@@ -33,7 +33,7 @@ function NewUserComponent() {
 
     if(username.length < 5){
       Toastify({
-        text: "Nombre de usuario debe ser mayor a 5 caracteres",
+        text: "El Nombre de usuario debe ser mayor a 5 caracteres",
         duration: 2000,
         style: {
           background: "linear-gradient(to right, #f44336, #b71c1c)",
@@ -42,7 +42,18 @@ function NewUserComponent() {
       return console.error("Error: Nombre de usuario menor a 5 caracteres");
     }
 
-    const usuarioExiste = users?.find(user => user.username == username);
+    if(password.length < 5){
+      Toastify({
+        text: "La contraseña debe ser mayor a 5 caracteres",
+        duration: 2000,
+        style: {
+          background: "linear-gradient(to right, #f44336, #b71c1c)",
+        },
+      }).showToast();
+      return console.error("Error: Contraseña menor a 5 caracteres");
+    }
+
+    const usuarioExiste = users?.find(user => user.username === username);
     if(usuarioExiste){
       Toastify({
         text: "Nombre de usuario ya existe",
