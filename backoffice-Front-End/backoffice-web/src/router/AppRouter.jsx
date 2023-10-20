@@ -1,11 +1,7 @@
 import React, { useEffect } from "react";
-import {
-  Navigate,
-  Route,
-  Routes,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+
+import { Navigate, Route, Routes } from "react-router-dom";
+
 import HomePage from "../pages/HomePage";
 import { LoginPage } from "../pages/LoginPage";
 import UserListComponent from "../components/ListComponents/UserListComponent";
@@ -21,7 +17,13 @@ import { getLastView } from "../helpers";
 
 export const AppRouter = () => {
   const { status, checkAuthToken } = useAuthStore();
-  const { pathname } = useLocation();
+
+
+  useEffect(() => {
+    checkAuthToken();
+  }, []);
+
+ /* const { pathname } = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,7 +35,8 @@ export const AppRouter = () => {
     if (pathname !== "/login") {
       localStorage.setItem("lastView", getLastView(pathname));
     }
-  }, [pathname]);
+  }, [pathname]);*/
+
 
   return (
     <Routes>

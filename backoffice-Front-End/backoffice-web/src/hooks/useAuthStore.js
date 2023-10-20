@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { authApi } from "../api";
-import { onChecking, onLogin, onLogout } from "../redux/auth/authSlice";
+import { onChangeAuthUsername, onChecking, onLogin, onLogout } from "../redux/auth/authSlice";
 import Swal from "sweetalert2";
 
 export const useAuthStore = () => {
@@ -43,6 +43,12 @@ export const useAuthStore = () => {
     if (!token) return dispatch(onLogout()) // Si no se encuentra el token, despacha la funcion onLogout para cambiar el estado a 'not-authenticated'.
     if (!userAuthenticated) return dispatch(onLogout()) // Si no se encuentra el token, despacha la funcion onLogout para cambiar el estado a 'not-authenticated'.
     dispatch(onLogin(userAuthenticated)) // Si se encuentra el token, despacha la funcion onLogin para cambiar el estado con las credenciales del usuario autenticado.
+
+  }
+
+  function changeAuthUsername(username) {
+    dispatch(onChangeAuthUsername(username));
+
   }
 
   return {
@@ -53,6 +59,8 @@ export const useAuthStore = () => {
     // Metodos
     startLogin,
     startLogout,
-    checkAuthToken
+    checkAuthToken,
+    changeAuthUsername
+
   };
 };

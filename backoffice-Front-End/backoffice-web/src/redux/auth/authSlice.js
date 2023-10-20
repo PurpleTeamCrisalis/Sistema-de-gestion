@@ -24,9 +24,15 @@ export const authSlice = createSlice({
     },
     clearErrorMessage: (state) => {
       state.errorMessage = null
+    },
+    onChangeAuthUsername: (state, { payload }) => {
+      state.user = {
+        ...state.user,
+        username: payload
+      }
     }
   }
 });
 
 // Action creators are generated for each case redicer function
-export const { onChecking, onLogin, onLogout, clearErrorMessage } = authSlice.actions;
+export const { onChecking, onLogin, onLogout, clearErrorMessage, onChangeAuthUsername } = authSlice.actions;

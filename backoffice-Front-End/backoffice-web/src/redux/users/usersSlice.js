@@ -30,6 +30,12 @@ export const usersSlice = createSlice({
     },
     onUpdateUser: (state, { payload }) => {
       state.users = state.users.map(user => user.id === payload.id ? payload : user)
+      for (const key in payload) {
+        state.activeUser = {
+          ...state.activeUser,
+          [key]: payload[key]
+        }
+      }
     },
     onDeleteUser: (state) => {
       state.users = state.users.filter(user => user.id !== state.activeUser.id)

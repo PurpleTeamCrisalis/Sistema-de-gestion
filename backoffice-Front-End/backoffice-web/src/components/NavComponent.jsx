@@ -79,7 +79,7 @@ export function NavComponent() {
           style={{ color: "#000000", width: "30px" }}
         />
         <span className="ms-3 d-none d-sm-inline text-dark fw-normal fs-5 align-middle">
-          Usuario
+          Usuarios
         </span>
       </Link>
       <Link to="/client" className="mb-3 ps-4 py-2 bg-hover container">
