@@ -3,6 +3,7 @@ package edu.bootcamp.backoffice.model.user;
 import edu.bootcamp.backoffice.model.SoftDeletable;
 import edu.bootcamp.backoffice.model.order.Order;
 import lombok.AllArgsConstructor;
+
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
