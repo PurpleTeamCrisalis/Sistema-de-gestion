@@ -1,10 +1,10 @@
-package edu.bootcamp.backoffice.service.user;
+package edu.bootcamp.backoffice.service;
 
 import edu.bootcamp.backoffice.exception.custom.dbValidation.*;
 import edu.bootcamp.backoffice.exception.custom.parameterValidation.InvalidArgumentsFormatException;
 import edu.bootcamp.backoffice.model.order.Order;
 import edu.bootcamp.backoffice.model.user.User;
-import edu.bootcamp.backoffice.model.user.UserConstraints;
+import edu.bootcamp.backoffice.model.EntitiesConstraints;
 import edu.bootcamp.backoffice.model.user.UserFactory;
 import edu.bootcamp.backoffice.model.user.dto.UpdateUserRequest;
 import edu.bootcamp.backoffice.model.user.dto.UserRequest;
@@ -233,8 +233,8 @@ public class UserServiceImpl implements UserService
     {
         validator.validateVarchar(
                 username,
-                UserConstraints.USERNAME_MIN_LENGTH,
-                UserConstraints.USERNAME_MAX_LENGTH,
+                EntitiesConstraints.USERNAME_MIN_LENGTH,
+                EntitiesConstraints.USERNAME_MAX_LENGTH,
                 errorBuilder,
                 "Username"
         );
@@ -246,8 +246,8 @@ public class UserServiceImpl implements UserService
         ) {
         validator.validateVarchar(
                 password,
-                UserConstraints.PASSWORD_MIN_LENGTH,
-                UserConstraints.PASSWORD_MAX_LENGTH,
+                EntitiesConstraints.PASSWORD_MIN_LENGTH,
+                EntitiesConstraints.PASSWORD_MAX_LENGTH,
                 errorBuilder,
                 "Password"
         );
