@@ -17,13 +17,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Table(name = "client")
 @Builder
-public class Client {
+public class Client
+{
   @Id
   @Column(name = "id")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
-  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
   private List<Order> orders = new ArrayList<>();
 }
 

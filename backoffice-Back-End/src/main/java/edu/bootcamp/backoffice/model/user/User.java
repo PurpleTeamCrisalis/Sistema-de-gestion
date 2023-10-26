@@ -1,6 +1,7 @@
 package edu.bootcamp.backoffice.model.user;
 
 import edu.bootcamp.backoffice.model.SoftDeletable;
+import edu.bootcamp.backoffice.model.EntitiesConstraints;
 import edu.bootcamp.backoffice.model.order.Order;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,14 +30,14 @@ public class User implements SoftDeletable
     @Column(
             name = "username",
             nullable = false,
-            length = UserConstraints.USERNAME_MAX_LENGTH
+            length = EntitiesConstraints.USERNAME_MAX_LENGTH
     )
     private String username;
 
     @Column(
             name = "password",
             nullable = false,
-            length = UserConstraints.PASSWORD_MAX_LENGTH
+            length = EntitiesConstraints.PASSWORD_MAX_LENGTH
     )
     private String password;
 

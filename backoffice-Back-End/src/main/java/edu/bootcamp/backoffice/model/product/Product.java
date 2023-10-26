@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
-import edu.bootcamp.backoffice.model.productDetail.ProductDetail;
+import edu.bootcamp.backoffice.model.orderDetail.productDetail.ProductDetail;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

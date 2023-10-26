@@ -7,7 +7,8 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @Builder
-public class OrderRequest {
+public class OrderRequest
+{
   @JsonProperty("clientId")
   private Integer clientId;
 

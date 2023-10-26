@@ -28,9 +28,15 @@ public class OrderController {
     this.orderService = orderService;
   }
 
-  @PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<OrderResponse> registerUser(
-      @RequestBody OrderRequest createRequest) {
+  @PostMapping(
+          path = "",
+          consumes = MediaType.APPLICATION_JSON_VALUE,
+          produces = MediaType.APPLICATION_JSON_VALUE
+    )
+  public ResponseEntity<OrderResponse> registerOrder(
+      @RequestBody OrderRequest createRequest
+    )
+  {
     OrderResponse orderDto = orderService.registerOrder(createRequest);
     URI location = ServletUriComponentsBuilder
         .fromCurrentRequest()

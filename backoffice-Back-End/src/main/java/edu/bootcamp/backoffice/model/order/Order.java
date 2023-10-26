@@ -1,8 +1,8 @@
 package edu.bootcamp.backoffice.model.order;
 
 import edu.bootcamp.backoffice.model.client.Client;
-import edu.bootcamp.backoffice.model.productDetail.ProductDetail;
-import edu.bootcamp.backoffice.model.serviceDetail.ServiceDetail;
+import edu.bootcamp.backoffice.model.orderDetail.productDetail.ProductDetail;
+import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.ServiceDetail;
 import edu.bootcamp.backoffice.model.serviceEntity.ServiceEntity;
 import edu.bootcamp.backoffice.model.user.User;
 import lombok.AllArgsConstructor;
@@ -22,8 +22,8 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Table(name = "orderTable")
 @Builder
-public class Order {
-
+public class Order
+{
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,24 +33,16 @@ public class Order {
     // @Column(name = "orderState", nullable = false)
     // private OrderState orderState;
 
-    @ManyToOne
-    private User user;
-
     @Temporal(TemporalType.DATE)
     @Column(name = "date", nullable = false, updatable = false)
     private Calendar date;
 
-    // ProductDetail
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
-    private List<ProductDetail> products = new ArrayList<>();
-
-    // ServiceDetail
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
-    private List<ServiceDetail> services = new ArrayList<>();
-
     // Total
     @Column(name = "total", nullable = false)
     private Float total;
+
+    @ManyToOne
+    private User user;
 
     // Client
     @ManyToOne
@@ -59,4 +51,12 @@ public class Order {
     // discountServiceId
     @ManyToOne
     private ServiceEntity discountService;
+
+    // ProductDetail
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    private List<ProductDetail> products = new ArrayList<>();
+
+    // ServiceDetail
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    private List<ServiceDetail> services = new ArrayList<>();
 }

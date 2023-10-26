@@ -13,10 +13,19 @@ import edu.bootcamp.backoffice.service.Interface.OrderService;
 @Service
 public class OrderServiceImpl implements OrderService {
 
+  // Injectar Repository
+
   @Override
-  public OrderResponse registerOrder(OrderRequest OrderDto) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'registerOrder'");
+  public OrderResponse registerOrder(OrderRequest OrderDto)
+  {
+    // Plan A Didactico
+    // convertir el dtoRequest en un entity
+    // convertir la entity en dtoResponse con los datos del dtoRequest
+    // retornas la dtoResponse
+
+    // Plan B Practico
+    // Ignorar la request y la factory
+    // Crear un new dtoResponse() y retornalo
   }
 
   @Override
