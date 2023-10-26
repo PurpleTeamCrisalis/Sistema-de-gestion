@@ -3,6 +3,7 @@ package edu.bootcamp.backoffice.model.serviceDetail;
 import javax.persistence.*;
 
 import edu.bootcamp.backoffice.model.order.Order;
+import edu.bootcamp.backoffice.model.orderDetail.OrderDetail;
 import edu.bootcamp.backoffice.model.serviceEntity.ServiceEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,8 +15,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "serviceDetail")
-@Builder
-public class ServiceDetail {
+// @Builder -> Tira error con el OrderDetail
+public class ServiceDetail extends OrderDetail{
 
   @Id
   @Column(name = "id")

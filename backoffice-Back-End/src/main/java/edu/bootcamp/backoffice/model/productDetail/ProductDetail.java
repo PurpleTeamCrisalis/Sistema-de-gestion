@@ -3,7 +3,8 @@ package edu.bootcamp.backoffice.model.productDetail;
 import javax.persistence.*;
 
 import edu.bootcamp.backoffice.model.order.Order;
-import edu.bootcamp.backoffice.model.productEntity.Product;
+import edu.bootcamp.backoffice.model.orderDetail.OrderDetail;
+import edu.bootcamp.backoffice.model.product.Product;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,8 +15,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "productDetail")
-@Builder
-public class ProductDetail {
+// @Builder -> Tira error con el OrderDetail
+public class ProductDetail extends OrderDetail {
   @Id
   @Column(name = "id")
   @GeneratedValue(strategy = GenerationType.IDENTITY)

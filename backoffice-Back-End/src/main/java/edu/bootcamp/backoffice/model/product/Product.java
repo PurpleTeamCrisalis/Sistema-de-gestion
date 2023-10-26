@@ -1,4 +1,4 @@
-package edu.bootcamp.backoffice.model.productEntity;
+package edu.bootcamp.backoffice.model.product;
 
 import java.util.ArrayList;
 import java.util.List;
