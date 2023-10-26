@@ -1,4 +1,4 @@
-package edu.bootcamp.backoffice.service.user;
+package edu.bootcamp.backoffice.service;
 
 import edu.bootcamp.backoffice.exception.custom.dbValidation.*;
 import edu.bootcamp.backoffice.exception.custom.parameterValidation.InvalidArgumentsFormatException;
