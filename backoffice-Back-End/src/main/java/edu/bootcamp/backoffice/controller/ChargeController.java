@@ -5,6 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +19,8 @@ import edu.bootcamp.backoffice.service.Interface.ChargeService;
 
 import java.net.URI;
 
+import javax.websocket.server.PathParam;
+
 @RestController
 @RequestMapping(path="/charge")
 public class ChargeController {
@@ -27,7 +31,7 @@ public class ChargeController {
     }
 
     @PostMapping(
-        path = "/",
+        path = "/create",
         consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE
     )
@@ -44,4 +48,12 @@ public class ChargeController {
         //         .created() nos da el status code: 201
         return ResponseEntity.created(location).body(chargeDTO);
     }
+
+    // @DeleteMapping(
+    //     value = "delete/{id}",
+    //     produces =  MediaType.APPLICATION_JSON_VALUE
+    // )
+    // public ResponseEntity<ChargeResponse> deleteCharge(@PathVariable id){
+    //     ChargeResponse charge = use
+    // }
 }

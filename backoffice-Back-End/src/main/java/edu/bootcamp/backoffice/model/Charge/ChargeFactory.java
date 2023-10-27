@@ -14,6 +14,7 @@ public class ChargeFactory {
                 .builder()
                 .chargeName(chargeDTO.getChargeName())
                 .chargePercentage(chargeDTO.getChargePercentage())
+                .enabled(true)
                 .build();
     }
 
@@ -24,6 +25,7 @@ public class ChargeFactory {
                 .builder()
                 .chargeName(charge.getChargeName())
                 .chargePercentage(charge.getChargePercentage())
+                .enabled(charge.isEnabled())
                 .id(charge.getId())
                 .build();
     }
