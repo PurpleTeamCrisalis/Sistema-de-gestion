@@ -31,15 +31,15 @@ function NewChargeComponent() {
       return console.error("Error: Campos vacíos");
     }
 
-    if(name.length < 2){
+    if(name.length < 3){
       Toastify({
-        text: "El Nombre del cargo debe ser mayor a 1 caracter",
+        text: "El Nombre del cargo debe ser mayor a 2 caracteres",
         duration: 2000,
         style: {
           background: "linear-gradient(to right, #f44336, #b71c1c)",
         },
       }).showToast();
-      return console.error("Error: Nombre del cargo menor a 2 caracteres");
+      return console.error("Error: Nombre del cargo menor a 3 caracteres");
     }
 
     if(percentage < 0){
