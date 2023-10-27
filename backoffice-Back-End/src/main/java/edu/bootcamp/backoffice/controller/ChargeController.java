@@ -80,9 +80,8 @@ public class ChargeController {
             @PathVariable int id,
             @RequestBody UpdateChargeRequest chargeDTO)
     {
-        // UserResponse user = userService.update(id, userDTO);
-        ChargeResponse response = new ChargeResponse("Charge"+id, chargeDTO.getChargePercentage(), chargeDTO.getEnabled(), id);
-        return ResponseEntity.ok(response);
+        ChargeResponse charge = chargeService.update(id, chargeDTO);
+        return ResponseEntity.ok(charge);
     }
 
     @GetMapping(

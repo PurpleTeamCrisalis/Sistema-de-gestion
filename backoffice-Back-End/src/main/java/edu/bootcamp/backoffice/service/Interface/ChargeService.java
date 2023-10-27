@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 
 import edu.bootcamp.backoffice.model.Charge.dto.ChargeRequest;
 import edu.bootcamp.backoffice.model.Charge.dto.ChargeResponse;
+import edu.bootcamp.backoffice.model.Charge.dto.UpdateChargeRequest;
+
 import java.util.List;
 
 public interface ChargeService {
@@ -17,8 +19,8 @@ public interface ChargeService {
     // -- Obteniendo un registro
     public ChargeResponse get(int id);
 
-    // // -- Modificar impuesto (Debemos crear un UpdateChargeRequest?) 
-    // public ChargeResponse update(int id);
+    // -- Modificar impuesto (Debemos crear un UpdateChargeRequest?) 
+    public ChargeResponse update(int id, UpdateChargeRequest chargeDto);
 
     // -- Eliminar impuesto
     public ChargeResponse delete(int id);
