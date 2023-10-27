@@ -7,17 +7,21 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import edu.bootcamp.backoffice.model.Charge.Charge;
 import edu.bootcamp.backoffice.model.Charge.dto.ChargeRequest;
 import edu.bootcamp.backoffice.model.Charge.dto.ChargeResponse;
+import edu.bootcamp.backoffice.repository.ChargeRepository;
 import edu.bootcamp.backoffice.service.Interface.ChargeService;
+import io.swagger.models.Response;
 
 import java.net.URI;
+import java.util.List;
+
 
 import javax.websocket.server.PathParam;
 
@@ -49,11 +53,22 @@ public class ChargeController {
         return ResponseEntity.created(location).body(chargeDTO);
     }
 
-    // @DeleteMapping(
-    //     value = "delete/{id}",
-    //     produces =  MediaType.APPLICATION_JSON_VALUE
-    // )
-    // public ResponseEntity<ChargeResponse> deleteCharge(@PathVariable id){
-    //     ChargeResponse charge = use
-    // }
+    @DeleteMapping(
+        value = "delete/{id}",
+        produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<ChargeResponse> deleteUser(@PathVariable int id){
+        ChargeResponse charge = chargeService.delete(id);
+        return ResponseEntity.ok(charge);
+    }
+
+    @GetMapping(
+        path="/list",
+        produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<List<ChargeResponse>> getAllCharge(){
+        List<ChargeResponse> charges = chargeService.get();
+        return ResponseEntity.ok(charges);
+    }
+    
 }

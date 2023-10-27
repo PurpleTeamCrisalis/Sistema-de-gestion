@@ -2,6 +2,7 @@ package edu.bootcamp.backoffice.model.Charge;
 
 import javax.persistence.*;
 
+import edu.bootcamp.backoffice.model.SoftDeletable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "chargeTable") //Nombre de la tabla
 @Builder
 
-public class Charge {
+public class Charge implements SoftDeletable{
     //Creamos la id
     @Id
     @Column(name="id")
@@ -41,4 +42,13 @@ public class Charge {
         nullable = false
     )
     private boolean enabled = true;
+
+    //@Override
+    public Boolean isDeleted() {
+        return !enabled;
+    }
+
+    public Boolean isNotDeleted() {
+        return enabled;
+    }
 }
