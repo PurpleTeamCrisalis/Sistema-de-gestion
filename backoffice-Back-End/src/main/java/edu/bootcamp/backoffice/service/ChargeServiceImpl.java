@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 import edu.bootcamp.backoffice.exception.custom.dbValidation.AlreadyRegisteredException;
+import edu.bootcamp.backoffice.exception.custom.dbValidation.EmptyTableException;
 import edu.bootcamp.backoffice.exception.custom.parameterValidation.InvalidArgumentsFormatException;
 import edu.bootcamp.backoffice.model.Charge.Charge;
 import edu.bootcamp.backoffice.model.Charge.ChargeFactory;
@@ -13,6 +14,9 @@ import edu.bootcamp.backoffice.model.Charge.dto.ChargeResponse;
 import edu.bootcamp.backoffice.model.order.ChargeConstraints;
 import edu.bootcamp.backoffice.repository.ChargeRepository;
 import edu.bootcamp.backoffice.service.Interface.ChargeService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service //Implementamos la interfaz de ChargeService
 public class ChargeServiceImpl implements ChargeService{
@@ -73,5 +77,21 @@ public class ChargeServiceImpl implements ChargeService{
 
 
     /** Eliminando un impuesto **/
+    public ChargeResponse delete(int id){
+        Charge charge = validator.validateSoftDeletableEntityExistence(id, chargeRepository);
+        chargeRepository.delete(charge);
+        return dtoFactory.createResponse(charge);
+    }
 
+    /** Obteniendo TODOS un registro */
+    public List<ChargeResponse> get(){
+        List<Charge> charges = chargeRepository.findAll();
+        List<ChargeResponse> dtos = new ArrayList<>();
+
+        for(Charge charge : charges) dtos.add(dtoFactory.createResponse(charge));
+        if(dtos.isEmpty()) 
+            throw new EmptyTableException("There aren't registered users.");
+
+        return dtos;
+    }
 }

@@ -5,19 +5,22 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import edu.bootcamp.backoffice.model.Charge.Charge;
 import edu.bootcamp.backoffice.model.Charge.dto.ChargeRequest;
 import edu.bootcamp.backoffice.model.Charge.dto.ChargeResponse;
+import edu.bootcamp.backoffice.model.Charge.dto.UpdateChargeRequest;
+import edu.bootcamp.backoffice.model.user.dto.UpdateUserRequest;
+import edu.bootcamp.backoffice.model.user.dto.UserResponse;
+import edu.bootcamp.backoffice.repository.ChargeRepository;
 import edu.bootcamp.backoffice.service.Interface.ChargeService;
+import io.swagger.models.Response;
 
 import java.net.URI;
+import java.util.List;
+
 
 import javax.websocket.server.PathParam;
 
@@ -49,11 +52,47 @@ public class ChargeController {
         return ResponseEntity.created(location).body(chargeDTO);
     }
 
-    // @DeleteMapping(
-    //     value = "delete/{id}",
-    //     produces =  MediaType.APPLICATION_JSON_VALUE
-    // )
-    // public ResponseEntity<ChargeResponse> deleteCharge(@PathVariable id){
-    //     ChargeResponse charge = use
-    // }
+    @DeleteMapping(
+        value = "delete/{id}",
+        produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<ChargeResponse> deleteCharge(@PathVariable int id){
+        ChargeResponse charge = chargeService.delete(id);
+        return ResponseEntity.ok(charge);
+    }
+
+    @GetMapping(
+            value = "/{id}",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<ChargeResponse> getCharge(@PathVariable int id)
+    {
+        // UserResponse user = userService.get(id);
+        ChargeResponse response = new ChargeResponse("Charge"+id, 10, true, id);
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping(
+            path = "update/{id}",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<ChargeResponse> updateCharge(
+            @PathVariable int id,
+            @RequestBody UpdateChargeRequest chargeDTO)
+    {
+        // UserResponse user = userService.update(id, userDTO);
+        ChargeResponse response = new ChargeResponse("Charge"+id, chargeDTO.getChargePercentage(), chargeDTO.getEnabled(), id);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping(
+        path="/list",
+        produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<List<ChargeResponse>> getAllCharge(){
+        List<ChargeResponse> charges = chargeService.get();
+        return ResponseEntity.ok(charges);
+    }
+    
 }
