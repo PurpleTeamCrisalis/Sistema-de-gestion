@@ -94,4 +94,10 @@ public class ChargeServiceImpl implements ChargeService{
 
         return dtos;
     }
+
+    /** Obteniendo un registro */
+    public ChargeResponse get(int id){
+        Charge charge  = validator.completeValidationForId(id, chargeRepository);
+        return dtoFactory.createResponse(charge);
+    }
 }

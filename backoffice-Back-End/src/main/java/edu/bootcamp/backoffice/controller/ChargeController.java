@@ -67,9 +67,8 @@ public class ChargeController {
     )
     public ResponseEntity<ChargeResponse> getCharge(@PathVariable int id)
     {
-        // UserResponse user = userService.get(id);
-        ChargeResponse response = new ChargeResponse("Charge"+id, 10, true, id);
-        return ResponseEntity.ok(response);
+        ChargeResponse charge = chargeService.get(id);
+        return ResponseEntity.ok(charge);
     }
 
     @PatchMapping(

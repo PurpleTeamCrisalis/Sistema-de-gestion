@@ -14,8 +14,8 @@ public interface ChargeService {
     // -- Obteniendo TODOS los registros
     public List<ChargeResponse> get();
 
-    // // -- Obteniendo un registro
-    // public ChargeResponse get(int id);
+    // -- Obteniendo un registro
+    public ChargeResponse get(int id);
 
     // // -- Modificar impuesto (Debemos crear un UpdateChargeRequest?) 
     // public ChargeResponse update(int id);
