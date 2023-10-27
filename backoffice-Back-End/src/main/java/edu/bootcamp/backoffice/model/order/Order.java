@@ -3,7 +3,7 @@ package edu.bootcamp.backoffice.model.order;
 import edu.bootcamp.backoffice.model.client.Client;
 import edu.bootcamp.backoffice.model.orderDetail.productDetail.ProductDetail;
 import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.ServiceDetail;
-import edu.bootcamp.backoffice.model.serviceEntity.Service;
+import edu.bootcamp.backoffice.model.serviceEntity.ServiceEntity;
 import edu.bootcamp.backoffice.model.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -48,7 +48,7 @@ public class Order {
 
     // discountServiceId
     @ManyToOne
-    private Service discountService;
+    private ServiceEntity discountServiceEntity;
 
     // ProductDetail
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)

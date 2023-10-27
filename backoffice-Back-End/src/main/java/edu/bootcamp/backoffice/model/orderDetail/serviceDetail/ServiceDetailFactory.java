@@ -1,28 +1,23 @@
 package edu.bootcamp.backoffice.model.orderDetail.serviceDetail;
 
+import edu.bootcamp.backoffice.model.order.Order;
 import org.springframework.stereotype.Component;
 
-import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.dto.ServiceDetailRequest;
-import edu.bootcamp.backoffice.model.serviceEntity.Service;
+import edu.bootcamp.backoffice.model.serviceEntity.ServiceEntity;
 
 @Component
 public class ServiceDetailFactory {
 
-  private final ServiceService serviceService;
 
-  public ServiceDetailFactory(
-    ServiceService serviceService
-  ) {
-    this.serviceService = serviceService;
-  }
-
-  public ServiceDetail CreateServiceDetailEntity (ServiceDetailRequest serviceDetailDTO) {
-
-    Service service = serviceService.getServiceById(serviceDetailDTO.getServiceId())
-
-    return ServiceDetail 
+  public ServiceDetail CreateServiceDetailEntity (
+          Order order,
+          ServiceEntity serviceEntity
+          )
+  {
+    return ServiceDetail
         .builder()
-        .id(null)
+            .order(order)
+            .serviceEntity(serviceEntity)
         .build();
   }
 }

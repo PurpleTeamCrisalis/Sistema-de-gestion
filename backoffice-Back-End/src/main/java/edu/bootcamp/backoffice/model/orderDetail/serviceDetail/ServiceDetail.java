@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 import edu.bootcamp.backoffice.model.EntitiesConstraints;
 import edu.bootcamp.backoffice.model.order.Order;
-import edu.bootcamp.backoffice.model.serviceEntity.Service;
+import edu.bootcamp.backoffice.model.serviceEntity.ServiceEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,9 +23,6 @@ public class ServiceDetail // extends OrderDetail
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
-  @Column(name = "basePrice", nullable = false)
-  private Float basePrice;
-
   @Column(name = "taxesApplied", nullable = false, length = EntitiesConstraints.TAXES_APPLIED_MAX_LENGTH)
   private String taxesApplied;
 
@@ -39,5 +36,5 @@ public class ServiceDetail // extends OrderDetail
   private Order order;
 
   @ManyToOne
-  private Service service;
+  private ServiceEntity serviceEntity;
 }

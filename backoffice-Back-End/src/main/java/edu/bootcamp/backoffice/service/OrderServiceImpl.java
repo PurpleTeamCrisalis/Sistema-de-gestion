@@ -3,6 +3,12 @@ package edu.bootcamp.backoffice.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.bootcamp.backoffice.model.client.Client;
+import edu.bootcamp.backoffice.model.order.Order;
+import edu.bootcamp.backoffice.model.serviceEntity.ServiceEntity;
+import edu.bootcamp.backoffice.model.user.User;
+import edu.bootcamp.backoffice.service.Interface.ClientService;
+import edu.bootcamp.backoffice.service.Interface.UserService;
 import org.springframework.stereotype.Service;
 
 import edu.bootcamp.backoffice.exception.custom.parameterValidation.InvalidIdFormatException;
@@ -19,7 +25,6 @@ import edu.bootcamp.backoffice.service.Interface.OrderService;
 
 import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.ServiceDetailFactory;
 import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.dto.ServiceDetailRequest;
-import edu.bootcamp.backoffice.model.product.Product;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -29,6 +34,9 @@ public class OrderServiceImpl implements OrderService {
   private final OrderRepository orderRepository;
   private final ServiceDetailFactory serviceDetailFactory;
   private final ProductDetailFactory productDetailFactory;
+  private final UserService userService;
+  private final ClientService clientService;
+ // private final ServiceService serviceService;
   // private final ProductService productService;
   // private final ServiceService serviceService;
 
@@ -36,9 +44,15 @@ public class OrderServiceImpl implements OrderService {
       OrderFactory orderFactory,
       OrderRepository orderRepository,
       ServiceDetailFactory serviceDetailFactory,
-      ProductDetailFactory productDetailFactory
+      ProductDetailFactory productDetailFactory,
+      UserService userService,
+      ClientService clientService
+      //ServiceService serviceService,
       // ProductService productService
   ) {
+    //this.serviceService = serviceService;
+    this.userService = userService;
+    this.clientService = clientService;
     this.orderFactory = orderFactory;
     this.orderRepository = orderRepository;
     this.serviceDetailFactory = serviceDetailFactory;
@@ -51,10 +65,32 @@ public class OrderServiceImpl implements OrderService {
     OrderRequest orderDto,
     String username
   ) {
+    // Validar correct username ( eventualmente el token puede estar mal formado )
+    User user = userService.getUserByUsername(username);
+    // Valido id cliente
+    Client client = clientService.getClientById(orderDto.getClientId());
+    Order order = orderFactory.CreateOrderEntity(user, client);
 
-    // Product product = productService.getProductById(productDetailDTO.getProductId());
-    // List<ServiceDetail> orderServices = getOrderServicesDetails(orderDto.getServices()); -> No va acá
-    // List<ProductDetail> orderProducts = getOrderProductsDetails(orderDto.getProducts()); -> No va acá
+    // BEGIN TRANSACTIONS
+
+    // Repository.Insert order
+    validateAndInsertOrderServicesDetails(
+            orderDto.getServices(),
+            order
+    );
+
+    //Lo mismo para ProductDetails
+
+    // END TRANSACTION
+
+    // CREAR OrderResponse
+
+    return null; // Return OrderResponse
+  }
+
+  @Override
+  public OrderResponse get(int id) {
+    // TODO Auto-generated method stub
 
     // Plan A Didactico
     // convertir el dtoRequest en un entity
@@ -64,12 +100,7 @@ public class OrderServiceImpl implements OrderService {
     // Plan B Practico
     // Ignorar la request y la factory
     // Crear un new dtoResponse() y retornalo
-    throw new UnsupportedOperationException("Unimplemented method 'get'");
-  }
 
-  @Override
-  public OrderResponse get(int id) {
-    // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'get'");
   }
 
@@ -91,19 +122,32 @@ public class OrderServiceImpl implements OrderService {
     throw new UnsupportedOperationException("Unimplemented method 'delete'");
   }
 
-  private List<ServiceDetail> getOrderServicesDetails(List<ServiceDetailRequest> servicesRequestsForOrder) {
-    List<ServiceDetail> orderServices = new ArrayList<ServiceDetail>();
+  private void validateAndInsertOrderServicesDetails(
+          List<ServiceDetailRequest> servicesRequestsForOrder,
+          Order order
+    )
+  {
     for (ServiceDetailRequest serviceDetailRequest : servicesRequestsForOrder) {
-      ServiceDetail serviceDetail = serviceDetailFactory.CreateServiceDetailEntity(serviceDetailRequest);
-      orderServices.add(serviceDetail);
+
+      ServiceEntity service = null;
+      //Service service = serviceService.getServiceById(serviceDetailDTO.getServiceId());
+
+      ServiceDetail serviceDetail = serviceDetailFactory.CreateServiceDetailEntity(order, service);
+
+      // REPOSITORY.save(serviceDetail)
+
+      order.getServices().add(serviceDetail);
     }
-    return orderServices;
   }
 
-  private List<ProductDetail> getOrderProductsDetails(List<ProductDetailRequest> productsRequestsForOrder) {
+  private List<ProductDetail> validateAndInsertOrderProductsDetails(
+          List<ProductDetailRequest> productsRequestsForOrder
+  ) {
     List<ProductDetail> orderProducts = new ArrayList<ProductDetail>();
     for (ProductDetailRequest productDetailRequest : productsRequestsForOrder) {
+
       ProductDetail productDetail = productDetailFactory.CreateProductDetailEntity(productDetailRequest);
+
       orderProducts.add(productDetail);
     }
     return orderProducts;

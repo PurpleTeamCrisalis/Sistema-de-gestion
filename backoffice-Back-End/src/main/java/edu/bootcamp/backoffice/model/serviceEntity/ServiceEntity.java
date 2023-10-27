@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Table(name = "service")
 @Builder
-public class Service
+public class ServiceEntity
 {
   @Id
   @Column(name = "id")

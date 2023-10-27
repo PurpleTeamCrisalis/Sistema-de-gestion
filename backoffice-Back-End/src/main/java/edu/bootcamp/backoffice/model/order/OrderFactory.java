@@ -1,8 +1,13 @@
 package edu.bootcamp.backoffice.model.order;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import edu.bootcamp.backoffice.model.client.Client;
+import edu.bootcamp.backoffice.model.orderDetail.productDetail.dto.ProductDetailRequest;
+import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.dto.ServiceDetailRequest;
+import edu.bootcamp.backoffice.model.user.User;
 import org.springframework.stereotype.Component;
 
 import edu.bootcamp.backoffice.model.order.dto.OrderRequest;
@@ -26,10 +31,8 @@ public class OrderFactory {
   }
 
   public Order CreateOrderEntity(
-    OrderRequest orderDTO,
-    String username,
-    List<ServiceDetail> orderServices,
-    List<ProductDetail> orderProducts
+    User user,
+    Client client
   ) {
 
     // Deberia iterar acá porque sino me llegarian 4 listas.
@@ -38,14 +41,11 @@ public class OrderFactory {
 
     return Order
         .builder()
-        .user(
-            userService.getUserByUsername(username))
-        .client(
-            clientService.getClientById(
-                orderDTO.getClientId()))
+        .user(user)
+        .client(client)
         .date(new Date())
-        .products(orderProducts)
-        .services(orderServices)
         .build();
   }
+
+
 }
