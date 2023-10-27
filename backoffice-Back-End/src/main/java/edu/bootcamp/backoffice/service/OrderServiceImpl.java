@@ -128,10 +128,15 @@ public class OrderServiceImpl implements OrderService {
     Order order
   ) {
     for (ServiceDetailRequest serviceDetailRequest : servicesRequestsForOrder) {
-      ServiceEntity service = null; //serviceService.getServiceById(serviceDetailRequest.getId())
+
+      ServiceEntity service = new ServiceEntity(); //serviceService.getServiceById(serviceDetailRequest.getId())
+      service.setId(1);
+      service.setBasePrice(1f);
+
       ServiceDetail serviceDetail = serviceDetailFactory.CreateServiceDetailEntity(order, service);
       // REPOSITORY.save(serviceDetail)
-      order.getServices().add(serviceDetail);
+      List<ServiceDetail> list= order.getServices();
+      list.add(serviceDetail);
     }
   }
 

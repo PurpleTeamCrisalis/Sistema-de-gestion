@@ -1,8 +1,12 @@
 package edu.bootcamp.backoffice.model.order;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import edu.bootcamp.backoffice.model.client.Client;
+import edu.bootcamp.backoffice.model.orderDetail.productDetail.ProductDetail;
+import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.ServiceDetail;
+import edu.bootcamp.backoffice.model.product.Product;
 import edu.bootcamp.backoffice.model.user.User;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +24,8 @@ public class OrderFactory {
         .user(user)
         .client(client)
         .date(new Date())
+        .products(new ArrayList<ProductDetail>())
+        .services(new ArrayList<ServiceDetail>())
         .build();
   }
 
