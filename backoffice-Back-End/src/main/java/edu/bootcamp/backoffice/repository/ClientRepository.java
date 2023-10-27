@@ -9,10 +9,4 @@ import java.util.Optional;
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Integer> {
 
-  public Optional<Client> findById(
-      Integer id);
-
-  public Optional<Client> findByDni(
-      Integer dni);
-
 }
