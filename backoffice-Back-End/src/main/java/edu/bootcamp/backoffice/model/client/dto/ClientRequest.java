@@ -15,7 +15,7 @@ public class ClientRequest {
     private String name;
 
     @JsonProperty("lastName")
-    private String lastName;
+    private String lastname;
 
     @JsonProperty("dni")
     private Integer dni;
@@ -27,13 +27,13 @@ public class ClientRequest {
     private String adress;
 
     @JsonProperty("isBussiness")
-    private Boolean isBussiness;
+    private Boolean isbussiness;
 
     @JsonProperty("bussinessName")
-    private String bussinessName;
+    private String bussinessname;
 
     @JsonProperty("StartDate")
-    private Date startDate;
+    private Date startdate;
 
     @JsonProperty("cuit")
     private Long cuit;

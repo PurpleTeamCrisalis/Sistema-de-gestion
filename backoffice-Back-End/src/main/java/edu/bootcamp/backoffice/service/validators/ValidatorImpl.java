@@ -7,6 +7,7 @@ import edu.bootcamp.backoffice.service.Interface.Validator;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.Optional;
 
 @Component
@@ -58,6 +59,42 @@ public class ValidatorImpl implements Validator
             );
     }
 
+    public void validateLongValue(
+            Long longNumber,
+            Long maxStrict,
+            Long minStrict,
+            String propertyName,
+            StringBuilder errorBuilder
+    )
+    {
+        if(longNumber<minStrict )
+            errorBuilder.append(
+                    " The " + propertyName + " must be smaller than " + minStrict +  "."
+            );
+        else if(longNumber>maxStrict)
+            errorBuilder.append(
+                    " The " + propertyName + " must be grater than " + maxStrict +  "."
+            );
+    }
+
+    public void validateIntegerValue(
+            Integer integerNumber,
+            Integer maxStrict,
+            Integer minStrict,
+            String propertyName,
+            StringBuilder errorBuilder
+    )
+    {
+        if(integerNumber<minStrict )
+            errorBuilder.append(
+                    " The " + propertyName + " must be smaller than " + minStrict +  "."
+            );
+        else if(integerNumber>maxStrict)
+            errorBuilder.append(
+                    " The " + propertyName + " must be grater than " + maxStrict +  "."
+            );
+    }
+
     public void validateVarchar(
             String varchar,
             int minLength,
@@ -91,6 +128,58 @@ public class ValidatorImpl implements Validator
         return  Boolean.FALSE;
     }
 
+    @Override
+    public Boolean isEmpty(
+            Long longNumber,
+            StringBuilder errors)
+    {
+        if (longNumber == null)
+        {
+            errors.append(" It has no content.");
+            return Boolean.TRUE;
+        }
+        return  Boolean.FALSE;
+    }
+
+    @Override
+    public Boolean isEmpty(
+            Integer intNumber,
+            StringBuilder errors)
+    {
+        if (intNumber == null)
+        {
+            errors.append(" It has no content.");
+            return Boolean.TRUE;
+        }
+        return  Boolean.FALSE;
+    }
+
+    @Override
+    public Boolean isEmpty(
+            Boolean flag,
+            StringBuilder errors)
+    {
+        if (flag == null)
+        {
+            errors.append(" It has no content.");
+            return Boolean.TRUE;
+        }
+        return  Boolean.FALSE;
+    }
+
+    @Override
+    public Boolean isEmpty(
+            Date date,
+            StringBuilder errors)
+    {
+        if (date == null)
+        {
+            errors.append(" It has no content.");
+            return Boolean.TRUE;
+        }
+        return  Boolean.FALSE;
+    }
+
     public Boolean isLonger(
             String varchar,
             Integer maxLength,
@@ -115,6 +204,74 @@ public class ValidatorImpl implements Validator
         )
     {
         if (varchar.length() < minLength)
+        {
+            errors
+                    .append(" Is less than ")
+                    .append(minLength)
+                    .append(" characters.");
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
+    }
+
+    @Override
+    public Boolean isLonger(
+            Long longNumber,
+            Long maxLength,
+            StringBuilder errors)
+    {
+        if (longNumber > maxLength)
+        {
+            errors
+                    .append(" Exceeds ")
+                    .append(maxLength)
+                    .append(" characters.");
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
+    }
+
+    @Override
+    public Boolean isShorter(
+            Long longNumber,
+            Long minLength,
+            StringBuilder errors)
+    {
+        if (longNumber < minLength)
+        {
+            errors
+                    .append(" Is less than ")
+                    .append(minLength)
+                    .append(" characters.");
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
+    }
+
+    @Override
+    public Boolean isLonger(
+            Integer intNumber,
+            Integer maxLength,
+            StringBuilder errors)
+    {
+        if (intNumber > maxLength)
+        {
+            errors
+                    .append(" Exceeds ")
+                    .append(maxLength)
+                    .append(" characters.");
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
+    }
+
+    @Override
+    public Boolean isShorter(
+            Integer intNumber,
+            Integer minLength,
+            StringBuilder errors)
+    {
+        if (intNumber < minLength)
         {
             errors
                     .append(" Is less than ")

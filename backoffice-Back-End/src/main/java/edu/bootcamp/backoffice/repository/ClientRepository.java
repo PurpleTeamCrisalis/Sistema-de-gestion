@@ -17,4 +17,7 @@ public interface ClientRepository extends JpaRepository<Client, Integer> {
             Integer dni
     );
 
+    public Optional<Client> findByCuit(
+            Long cuit
+    );
 }

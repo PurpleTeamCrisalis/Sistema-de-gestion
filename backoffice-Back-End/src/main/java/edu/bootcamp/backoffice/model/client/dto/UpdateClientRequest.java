@@ -18,7 +18,7 @@ public class UpdateClientRequest {
     private String name;
 
     @JsonProperty("lastName")
-    private String lastName;
+    private String lastname;
 
     @JsonProperty("dni")
     private Integer dni;
@@ -30,21 +30,18 @@ public class UpdateClientRequest {
     private String adress;
 
     @JsonProperty("isBussiness")
-    private Boolean isBussiness;
+    private Boolean isbussiness;
 
     @JsonProperty("bussinessName")
-    private String bussinessName;
+    private String bussinessname;
 
     @JsonProperty("startDate")
-    private Date startDate;
+    private Date startdate;
 
     @JsonProperty("cuit")
     private Long cuit;
 
     @JsonProperty("enabled")
     private Boolean enabled;
-
-    @JsonProperty("id")
-    private Integer id;
 
 }
