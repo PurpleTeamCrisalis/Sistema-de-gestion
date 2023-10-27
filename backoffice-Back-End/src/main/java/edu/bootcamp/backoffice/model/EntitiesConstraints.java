@@ -5,4 +5,5 @@ public class EntitiesConstraints {
     public static final int USERNAME_MIN_LENGTH = 5;
     public static final int PASSWORD_MAX_LENGTH = 72;
     public static final int PASSWORD_MIN_LENGTH = 5;
+    public static final int DESCRIPTION_MAX_LENGTH = 200;
 }
