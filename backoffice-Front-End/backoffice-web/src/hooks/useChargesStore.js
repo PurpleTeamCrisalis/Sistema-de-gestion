@@ -16,7 +16,7 @@ export function useChargesStore() {
     async function startLoadingCharges() {
         try {
         const { data } = await projectApi.get('/charge/list')
-        dispatch(onLoadUsers(data))
+        dispatch(onLoadCharges(data))
         } catch (error) {
         console.error(error)
         }

@@ -10,9 +10,9 @@ export const chargesSlice = createSlice({
   name: 'charges',
   initialState,
   reducers: {
-    onLoadCharge: (state, { payload = [] }) => {
+    onLoadCharges: (state, { payload = [] }) => {
       state.isLoadingCharges = false
-      // state.users = payload
+      state.charges = payload
       payload.forEach(charge => {
         const exists = state.charges.some(dbCharge => dbCharge.id === charge.id)
         if (!exists) state.charges.push(charge)
