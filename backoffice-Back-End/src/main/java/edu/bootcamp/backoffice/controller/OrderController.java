@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.List;
 
 import javax.print.attribute.standard.Media;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import edu.bootcamp.backoffice.model.order.dto.OrderRequest;
 import edu.bootcamp.backoffice.model.order.dto.OrderResponse;
 import edu.bootcamp.backoffice.model.order.dto.UpdateOrderRequest;
+import edu.bootcamp.backoffice.security.JWTGenerator;
 import edu.bootcamp.backoffice.service.Interface.OrderService;
 import io.swagger.models.Response;
 
@@ -34,10 +36,13 @@ public class OrderController {
           produces = MediaType.APPLICATION_JSON_VALUE
     )
   public ResponseEntity<OrderResponse> registerOrder(
-      @RequestBody OrderRequest createRequest
+      @RequestBody OrderRequest createRequest,
+      HttpServletRequest request
     )
   {
-    OrderResponse orderDto = orderService.registerOrder(createRequest);
+    String token = request.getHeader("Authorization");
+    String username = JWTGenerator.getUsernameFromJWT(token);
+    OrderResponse orderDto = orderService.registerOrder(createRequest, username);
     URI location = ServletUriComponentsBuilder
         .fromCurrentRequest()
         .path("/{id}")

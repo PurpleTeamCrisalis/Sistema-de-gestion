@@ -3,7 +3,7 @@ package edu.bootcamp.backoffice.model.order;
 import edu.bootcamp.backoffice.model.client.Client;
 import edu.bootcamp.backoffice.model.orderDetail.productDetail.ProductDetail;
 import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.ServiceDetail;
-import edu.bootcamp.backoffice.model.serviceEntity.ServiceEntity;
+import edu.bootcamp.backoffice.model.serviceEntity.Service;
 import edu.bootcamp.backoffice.model.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.*;
@@ -22,8 +22,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Table(name = "orderTable")
 @Builder
-public class Order
-{
+public class Order {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,9 +32,8 @@ public class Order
     // @Column(name = "orderState", nullable = false)
     // private OrderState orderState;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "date", nullable = false, updatable = false)
-    private Calendar date;
+    private Date date;
 
     // Total
     @Column(name = "total", nullable = false)
@@ -50,7 +48,7 @@ public class Order
 
     // discountServiceId
     @ManyToOne
-    private ServiceEntity discountService;
+    private Service discountService;
 
     // ProductDetail
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)

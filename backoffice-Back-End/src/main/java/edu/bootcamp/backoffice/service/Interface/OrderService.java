@@ -8,17 +8,19 @@ import edu.bootcamp.backoffice.model.order.dto.OrderRequest;
 import edu.bootcamp.backoffice.model.order.dto.OrderResponse;
 
 public interface OrderService {
-    public OrderResponse registerOrder(OrderRequest createRequest);
+  public OrderResponse registerOrder(OrderRequest createRequest, String username);
 
-    public OrderResponse get(int id);
+  public OrderResponse get(int id);
 
-    public List<OrderResponse> get()
-            throws InvalidIdFormatException;
+  public List<OrderResponse> get()
+      throws InvalidIdFormatException;
 
-    public OrderResponse update(int id, UpdateOrderRequest OrderDto)
-            throws InvalidIdFormatException;
+  public OrderResponse update(int id, UpdateOrderRequest OrderDto)
+      throws InvalidIdFormatException;
 
-    public OrderResponse delete(int id)
-            throws InvalidIdFormatException;
+  public OrderResponse delete(int id)
+      throws InvalidIdFormatException;
 
+  // public Float getOrderTotal()
+  //     throws InvalidIdFormatException;
 }

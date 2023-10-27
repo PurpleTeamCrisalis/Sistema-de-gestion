@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 import edu.bootcamp.backoffice.model.EntitiesConstraints;
 import edu.bootcamp.backoffice.model.order.Order;
-import edu.bootcamp.backoffice.model.serviceEntity.ServiceEntity;
+import edu.bootcamp.backoffice.model.serviceEntity.Service;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,8 +15,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "serviceDetail")
-// @Builder -> Tira error con el OrderDetail
-public class ServiceDetail //extends OrderDetail
+@Builder
+public class ServiceDetail // extends OrderDetail
 {
   @Id
   @Column(name = "id")
@@ -26,11 +26,7 @@ public class ServiceDetail //extends OrderDetail
   @Column(name = "basePrice", nullable = false)
   private Float basePrice;
 
-  @Column(
-          name = "taxesApplied",
-          nullable = false,
-          length = EntitiesConstraints.TAXES_APPLIED_MAX_LENGTH
-  )
+  @Column(name = "taxesApplied", nullable = false, length = EntitiesConstraints.TAXES_APPLIED_MAX_LENGTH)
   private String taxesApplied;
 
   @Column(name = "taxCharges", nullable = false)
@@ -43,5 +39,5 @@ public class ServiceDetail //extends OrderDetail
   private Order order;
 
   @ManyToOne
-  private ServiceEntity service;
+  private Service service;
 }

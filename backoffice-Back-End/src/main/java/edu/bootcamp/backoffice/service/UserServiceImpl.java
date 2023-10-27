@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService
     private final UserRepository userRepository;
     private final UserFactory dtoFactory;
     private final Validator validator;
-    private  final PasswordEncoder encoder;
+    private final PasswordEncoder encoder;
 
     public UserServiceImpl(
             UserRepository userRepository,
@@ -251,5 +251,10 @@ public class UserServiceImpl implements UserService
                 errorBuilder,
                 "Password"
         );
+    }
+
+    public User getUserByUsername(String username) {
+        User user = userRepository.findByUsername(username).orElse(null);
+        return user;
     }
 }

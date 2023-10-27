@@ -25,4 +25,7 @@ public class Product {
 
   @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
   private List<ProductDetail> productDetails = new ArrayList<>();
+
+  @Column(name = "basePrice")
+  private Float basePrice;
 }

@@ -1,5 +1,10 @@
 package edu.bootcamp.backoffice.model.order.dto;
 
+import edu.bootcamp.backoffice.model.orderDetail.productDetail.dto.ProductDetailRequest;
+import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.dto.ServiceDetailRequest;
+
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
@@ -7,11 +12,15 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @Builder
-public class OrderRequest
-{
+public class OrderRequest {
   @JsonProperty("clientId")
   private Integer clientId;
 
-  @JsonProperty("userId")
-  private Integer userId;
+  @JsonProperty("services")
+  @Singular
+  private List<ServiceDetailRequest> services;
+
+  @JsonProperty("products")
+  @Singular
+  private List<ProductDetailRequest> products;
 }
