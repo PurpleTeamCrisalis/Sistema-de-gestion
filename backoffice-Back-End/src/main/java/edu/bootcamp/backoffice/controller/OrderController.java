@@ -3,7 +3,6 @@ package edu.bootcamp.backoffice.controller;
 import java.net.URI;
 import java.util.List;
 
-import javax.print.attribute.standard.Media;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ import edu.bootcamp.backoffice.model.order.dto.OrderResponse;
 import edu.bootcamp.backoffice.model.order.dto.UpdateOrderRequest;
 import edu.bootcamp.backoffice.security.JWTGenerator;
 import edu.bootcamp.backoffice.service.Interface.OrderService;
-import io.swagger.models.Response;
 
 @RestController
 @RequestMapping(path = "order")
@@ -36,12 +34,13 @@ public class OrderController {
           produces = MediaType.APPLICATION_JSON_VALUE
     )
   public ResponseEntity<OrderResponse> registerOrder(
-      @RequestBody OrderRequest createRequest,
-      HttpServletRequest request
+    // HttpServletRequest request,
+      @RequestBody OrderRequest createRequest
     )
   {
-    String token = request.getHeader("Authorization");
-    String username = JWTGenerator.getUsernameFromJWT(token);
+    // String token = request.getHeader("Authorization");
+    // String username = JWTGenerator.getUsernameFromJWT(token);
+    String username = "admin";
     OrderResponse orderDto = orderService.registerOrder(createRequest, username);
     URI location = ServletUriComponentsBuilder
         .fromCurrentRequest()

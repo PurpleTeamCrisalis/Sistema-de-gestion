@@ -36,5 +36,5 @@ public class ServiceDetail // extends OrderDetail
   private Order order;
 
   @ManyToOne
-  private ServiceEntity serviceEntity;
+  private ServiceEntity service;
 }

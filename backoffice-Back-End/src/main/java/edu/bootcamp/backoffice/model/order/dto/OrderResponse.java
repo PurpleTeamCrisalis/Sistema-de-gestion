@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.bootcamp.backoffice.model.client.Client;
 import edu.bootcamp.backoffice.model.orderDetail.productDetail.ProductDetail;
 import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.ServiceDetail;
-import edu.bootcamp.backoffice.model.user.User;
+// import edu.bootcamp.backoffice.model.user.User;
 import lombok.*;
 
 @Getter

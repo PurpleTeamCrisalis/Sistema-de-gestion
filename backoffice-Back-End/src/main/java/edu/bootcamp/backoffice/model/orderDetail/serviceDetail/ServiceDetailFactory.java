@@ -8,16 +8,14 @@ import edu.bootcamp.backoffice.model.serviceEntity.ServiceEntity;
 @Component
 public class ServiceDetailFactory {
 
-
-  public ServiceDetail CreateServiceDetailEntity (
-          Order order,
-          ServiceEntity serviceEntity
-          )
-  {
+  public ServiceDetail CreateServiceDetailEntity(
+    Order order,
+    ServiceEntity serviceEntity
+  ) {
     return ServiceDetail
-        .builder()
-            .order(order)
-            .serviceEntity(serviceEntity)
-        .build();
+      .builder()
+      .order(order)
+      .service(serviceEntity)
+      .build();
   }
 }

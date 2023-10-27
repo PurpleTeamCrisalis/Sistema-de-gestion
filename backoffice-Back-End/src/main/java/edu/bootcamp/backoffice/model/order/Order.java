@@ -48,7 +48,7 @@ public class Order {
 
     // discountServiceId
     @ManyToOne
-    private ServiceEntity discountServiceEntity;
+    private ServiceEntity discountService;
 
     // ProductDetail
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)

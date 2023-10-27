@@ -25,6 +25,9 @@ public class ServiceEntity
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
+  @Column(name = "basePrice")
+  private Float basePrice;
+
   @OneToMany(mappedBy = "discountService", fetch = FetchType.LAZY)
   private List<Order> ordersWithDiscount = new ArrayList<>();
 

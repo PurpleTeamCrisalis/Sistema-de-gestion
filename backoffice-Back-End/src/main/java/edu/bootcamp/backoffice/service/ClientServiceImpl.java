@@ -186,8 +186,8 @@ public class ClientServiceImpl implements ClientService {
   }
 
   public Client getClientById(int id) {
-    Client client = clientRepository.findById(id).orElse(null);
-    return client;
+    return validator.completeValidationForId(
+        id,
+        clientRepository);
   }
-
 }
