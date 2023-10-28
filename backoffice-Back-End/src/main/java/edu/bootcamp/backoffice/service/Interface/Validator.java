@@ -56,16 +56,6 @@ public interface Validator
     );
 
     public Boolean isEmpty(
-            Long longNumber,
-            StringBuilder errors
-    );
-
-    public Boolean isEmpty(
-            Integer intNumber,
-            StringBuilder errors
-    );
-
-    public Boolean isEmpty(
             Boolean flag,
             StringBuilder errors
     );
@@ -87,27 +77,4 @@ public interface Validator
             StringBuilder errors
     );
 
-    public Boolean isLonger(
-            Long longNumber,
-            Long maxLength,
-            StringBuilder errors
-    );
-
-    public Boolean isShorter(
-            Long longNumber,
-            Long minLength,
-            StringBuilder errors
-    );
-
-    public Boolean isLonger(
-            Integer intNumber,
-            Integer maxLength,
-            StringBuilder errors
-    );
-
-    public Boolean isShorter(
-            Integer intNumber,
-            Integer minLength,
-            StringBuilder errors
-    );
 }

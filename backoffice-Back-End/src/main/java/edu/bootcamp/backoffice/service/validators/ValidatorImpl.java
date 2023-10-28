@@ -130,32 +130,6 @@ public class ValidatorImpl implements Validator
 
     @Override
     public Boolean isEmpty(
-            Long longNumber,
-            StringBuilder errors)
-    {
-        if (longNumber == null)
-        {
-            errors.append(" It has no content.");
-            return Boolean.TRUE;
-        }
-        return  Boolean.FALSE;
-    }
-
-    @Override
-    public Boolean isEmpty(
-            Integer intNumber,
-            StringBuilder errors)
-    {
-        if (intNumber == null)
-        {
-            errors.append(" It has no content.");
-            return Boolean.TRUE;
-        }
-        return  Boolean.FALSE;
-    }
-
-    @Override
-    public Boolean isEmpty(
             Boolean flag,
             StringBuilder errors)
     {
@@ -214,71 +188,4 @@ public class ValidatorImpl implements Validator
         return Boolean.FALSE;
     }
 
-    @Override
-    public Boolean isLonger(
-            Long longNumber,
-            Long maxLength,
-            StringBuilder errors)
-    {
-        if (longNumber > maxLength)
-        {
-            errors
-                    .append(" Exceeds ")
-                    .append(maxLength)
-                    .append(" characters.");
-            return Boolean.TRUE;
-        }
-        return Boolean.FALSE;
-    }
-
-    @Override
-    public Boolean isShorter(
-            Long longNumber,
-            Long minLength,
-            StringBuilder errors)
-    {
-        if (longNumber < minLength)
-        {
-            errors
-                    .append(" Is less than ")
-                    .append(minLength)
-                    .append(" characters.");
-            return Boolean.TRUE;
-        }
-        return Boolean.FALSE;
-    }
-
-    @Override
-    public Boolean isLonger(
-            Integer intNumber,
-            Integer maxLength,
-            StringBuilder errors)
-    {
-        if (intNumber > maxLength)
-        {
-            errors
-                    .append(" Exceeds ")
-                    .append(maxLength)
-                    .append(" characters.");
-            return Boolean.TRUE;
-        }
-        return Boolean.FALSE;
-    }
-
-    @Override
-    public Boolean isShorter(
-            Integer intNumber,
-            Integer minLength,
-            StringBuilder errors)
-    {
-        if (intNumber < minLength)
-        {
-            errors
-                    .append(" Is less than ")
-                    .append(minLength)
-                    .append(" characters.");
-            return Boolean.TRUE;
-        }
-        return Boolean.FALSE;
-    }
 }
