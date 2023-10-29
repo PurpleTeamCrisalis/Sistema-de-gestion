@@ -1,37 +1,137 @@
-import React, { useState } from 'react'
+import React, { startTransition, useState } from 'react'
 import NavComponent from '../NavComponent'
 import { useNavigate } from 'react-router-dom'
 import { useForm } from '../../hooks'
+import { useClientsStore } from '../../hooks/useClientsStore'
+import Toastify from 'toastify-js'
+import "toastify-js/src/toastify.css"
+import { faPhoneSquare } from '@fortawesome/free-solid-svg-icons'
 
 const formDTO = {
     name: "",
-    lastname: "",
-    dni: "",
-    phone: "",
-    address: ""
+    lastName: "",
+    dni: "", // Integer
+    phone: "", //Long
+    adress: "",
+    isBussiness: false,
+    bussinessName: "",
+    StartDate: "", // Ver lo de hacer post con tipo date
+    cuit: "", //Long
 }
 
 function NewClientComponent() {
     const navigate = useNavigate();
     const [isEmpresa, setIsEmpresa] = useState(false)
+    const { startAddingClients, clients } = useClientsStore();
+    const { name, lastName, dni, phone, adress, isBussiness, bussinessName, StartDate, cuit, handleInputChange, clearForm } = useForm(formDTO);
 
-    const { name, lastname, dni, phone, address, handleInputChange, clearForm, emptyValidation } = useForm(formDTO);
-
-    function addClient() {
-        const clientTemp = {
-            name: name,
-            lastname: lastname,
-            dni: dni,
-            phone: phone,
-            address: address
-        }
-        console.log(clientTemp)
+    function emptyForm() {
+        return (
+            name.length === 0,
+            lastName.length === 0,
+            dni.length === 0,
+            phone.length === 0,
+            adress.length === 0
+        )
     }
 
-    function handleCheckboxChange(event) {
-        const isChecked = event.target.checked
-        setIsEmpresa(isChecked)
-        console.log(isChecked)
+    function formValidations() {
+        function validateField(value, fieldName, minLength, maxLength) {
+            let errorMessage;
+            if (value.length < minLength || value.length > maxLength) {
+                if (fieldName != "teléfono") {
+                    errorMessage = `Error: ${fieldName} debe tener entre ${minLength} y ${maxLength} caracteres`;
+                } else {
+                    errorMessage = `Error: ${fieldName} debe tener ${minLength} caracteres`
+                }
+                Toastify({
+                    text: errorMessage,
+                    duration: 2000,
+                    style: {
+                        background: "linear-gradient(to right, #f44336, #b71c1c)",
+                    },
+                }).showToast();
+                return false;
+            }
+            return true;
+        }
+
+        if (!validateField(name, "Nombre", 5, 50) || !validateField(lastName, "Apellido", 5, 50) ||
+            !validateField(dni, "DNI", 7, 9) || !validateField(phone, "teléfono", 10, 10) ||
+            !validateField(adress, "dirección", 0, 100)) {
+            return true
+        } else {
+            return false
+        }
+
+    }
+
+    function addClient(event) {
+        event.preventDefault();
+
+        // Alerta campos vacíos
+        if (emptyForm()) {
+            Toastify({
+                text: "Hay campos vacíos",
+                duration: 2000,
+                style: {
+                    background: "linear-gradient(to right, #f44336, #b71c1c)",
+                },
+            }).showToast();
+            return console.error("Error: Campos vacíos");
+        }
+
+        // Objeto del cliente
+        const client = {
+            name,
+            lastName,
+            dni: parseInt(dni),
+            phone: parseInt(phone), // Convierte a número entero (Long)
+            adress,
+            isBussiness,
+            bussinessName,
+            StartDate,
+            cuit: parseInt(0), // Convierte a número entero (Long)
+        };
+
+        // Validaciones de los datos ingresados
+        if (formValidations()) {
+            return console.log("Campos incorrectos")
+        }
+
+        // Comprueba existencia de Cliente
+        const clienteExiste = clients?.find(clientList => { return clientList.dni === client.dni });
+        if (clienteExiste) {
+            Toastify({
+                text: "El cliente ya existe",
+                duration: 2000,
+                style: {
+                    background: "linear-gradient(to right, #f44336, #b71c1c)",
+                },
+            }).showToast();
+            return console.error("Error: El cliente ya existe");
+        }
+
+        try {
+            startAddingClients(client);
+            clearForm();
+            Toastify({
+                text: "Cliente Creado",
+                duration: 2000,
+                style: {
+                    background: "linear-gradient(to right, #00b09b, #96c93d)",
+                },
+            }).showToast();
+        } catch (error) {
+            Toastify({
+                text: "ERROR",
+                duration: 2000,
+                style: {
+                    background: "linear-gradient(to right, #f44336, #b71c1c)",
+                },
+            }).showToast();
+            return console.error("ERROR EXTERNO");
+        }
     }
 
     return (
@@ -52,7 +152,7 @@ function NewClientComponent() {
 
                             <div className="row justify-content-center align-items-center">
                                 {/* Persona */}
-                                
+
                                 <div className="col-sm-6">
                                     <h2 className='text-center'>Persona</h2>
                                     <div className="row m-4">
@@ -68,14 +168,14 @@ function NewClientComponent() {
                                             />
                                         </div>
                                         <div className="col-md-6 mb-3">
-                                            <label htmlFor="lastname" className="form-label">Apellido</label>
+                                            <label htmlFor="lastName" className="form-label">Apellido</label>
                                             <input
                                                 type="text"
-                                                name="lastname"
-                                                id="lastname"
+                                                name="lastName"
+                                                id="lastName"
                                                 className="form-control"
                                                 onChange={handleInputChange}
-                                                value={lastname}
+                                                value={lastName}
                                             />
                                         </div>
                                         <div className="col-md-6 mb-3">
@@ -101,14 +201,14 @@ function NewClientComponent() {
                                             />
                                         </div>
                                         <div className="col-12 mb-3">
-                                            <label htmlFor="address" className="form-label">Dirección</label>
+                                            <label htmlFor="adress" className="form-label">Dirección</label>
                                             <input
                                                 type="text"
-                                                name="address"
-                                                id="address"
+                                                name="adress"
+                                                id="adress"
                                                 className="form-control"
                                                 onChange={handleInputChange}
-                                                value={address}
+                                                value={adress}
                                             />
                                         </div>
                                     </div>
