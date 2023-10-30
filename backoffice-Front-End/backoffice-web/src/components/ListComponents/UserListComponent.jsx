@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NavComponent from "../NavComponent";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,6 +9,7 @@ import { useAuthStore } from "../../hooks";
 import Toastify from 'toastify-js'
 import "toastify-js/src/toastify.css"
 import Swal from 'sweetalert2'
+import SearchBar from "../Utils/SearchBar";
 
 function UserListComponent() {
   //   const { data } = useFetch("http://localhost:8080/user");
@@ -16,6 +17,10 @@ function UserListComponent() {
 
   const { users, startLoadingUsers, setActiveUser, startDeletingUser, activeUser } = useUsersStore();
   const { user } = useAuthStore()
+
+  const [filteredList, setFilteredList] = useState(users);
+
+  
 
 
   // CUANDO SE USE EL COMPONENTE, SE VA TRAER LA LISTA DE USUARIOS
@@ -92,7 +97,7 @@ function UserListComponent() {
     setActiveUser(user);
     navigate("/user/editUser");
   }
-
+console.log(filteredList)
   return (
     <>
       <div className="container-fluid">
@@ -125,6 +130,7 @@ function UserListComponent() {
               className="container bg-primary rounded-3 px-5 pt-4"
               style={{ minHeight: "75vh", width: "90%" }}
             >
+              <SearchBar rawList={users} setFilteredList={setFilteredList} compareTag="username"/>
               <div className="bg-white rounded-3 overflow-hidden">
                 <table className="table table-hover">
                   {/* Header de la table */}
@@ -143,7 +149,7 @@ function UserListComponent() {
                     </tr>
                   </thead>
                   <tbody>
-                    {users?.map((user) => (
+                    {filteredList?.map((user) => (
                       <tr key={user.id}>
                         <td>
                           <input
