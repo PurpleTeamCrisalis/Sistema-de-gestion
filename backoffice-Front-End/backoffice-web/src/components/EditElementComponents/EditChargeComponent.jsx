@@ -12,10 +12,11 @@ import "toastify-js/src/toastify.css";
 function EditChargeComponent() {
   const navigate = useNavigate();
   const { startUpdatingCharge, activeCharge, setActiveCharge, charges } = useChargesStore();
-  const { name, percentage, enabled, handleInputChange, emptyValidation } = useForm({
+  const { name, percentage, enabled, id, handleInputChange, emptyValidation } = useForm({
     name: activeCharge?.name,
     percentage: activeCharge?.percentage,
     enabled: activeCharge?.enabled,
+    id : activeCharge?.id
   });
   // const { user, changeAuthUsername } = useAuthStore()
 
@@ -58,14 +59,13 @@ function EditChargeComponent() {
 
     const chargeAux = {
       name,
-      id: activeCharge.id,
+      id,
       enabled,
       percentage
     };
-
-    if (activeCharge.name !== name) {
-      startUpdatingCharge(chargeAux);
-    }
+    console.log(chargeAux)
+    startUpdatingCharge(chargeAux);
+    
     // } else {
     //   if (enabled !== "false") {
     //     startUpdatingCharge(chargeAux);

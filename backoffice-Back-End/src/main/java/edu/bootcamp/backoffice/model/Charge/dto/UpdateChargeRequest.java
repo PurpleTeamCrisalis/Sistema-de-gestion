@@ -12,11 +12,11 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class UpdateChargeRequest {
-    @JsonProperty("chargename")
-    private String Name;
+    @JsonProperty("name")
+    private String name;
 
     @JsonProperty("percentage")
-    private Integer chargePercentage;
+    private Integer percentage;
 
     @JsonProperty("enabled")
     private Boolean enabled;

@@ -14,8 +14,6 @@ import edu.bootcamp.backoffice.model.Charge.dto.ChargeRequest;
 import edu.bootcamp.backoffice.model.Charge.dto.ChargeResponse;
 import edu.bootcamp.backoffice.model.Charge.dto.UpdateChargeRequest;
 import edu.bootcamp.backoffice.model.order.ChargeConstraints;
-import edu.bootcamp.backoffice.model.user.User;
-import edu.bootcamp.backoffice.model.user.dto.UpdateUserRequest;
 import edu.bootcamp.backoffice.repository.ChargeRepository;
 import edu.bootcamp.backoffice.service.Interface.ChargeService;
 
@@ -50,15 +48,15 @@ public class ChargeServiceImpl implements ChargeService{
 
     /** Verificamos que no se repitan de nuevo los nombre del impuesto */
     public void validateNewChargeDbConflicts(ChargeRequest chargeRequest){
-        Optional<Charge> result = chargeRepository.findByChargeName(chargeRequest.getChargeName());
+        Optional<Charge> result = chargeRepository.findByName(chargeRequest.getName());
         if(result.isPresent()) throw new AlreadyRegisteredException("Charge not available.");
     }
 
     /** Validamos entradas del Request */
     public void validateNewChargeRequest(ChargeRequest chargeRequest){
         StringBuilder errors = new StringBuilder();
-        validateChargename(chargeRequest.getChargeName(), errors);
-        validatePercentage(chargeRequest.getChargePercentage(), errors);
+        validateChargename(chargeRequest.getName(), errors);
+        validatePercentage(chargeRequest.getPercentage(), errors);
         validateErrors(errors);
 
     }
@@ -128,13 +126,13 @@ public class ChargeServiceImpl implements ChargeService{
         validator.validateIdFormat(id, errors);
         if(chargeRequest.getName() != null) 
             validateChargename(chargeRequest.getName(), errors);
-        if(chargeRequest.getChargePercentage() != null) 
-            validatePercentage(chargeRequest.getChargePercentage(), errors);
+        if(chargeRequest.getPercentage() != null)
+            validatePercentage(chargeRequest.getPercentage(), errors);
         validateErrors(errors);
     }
 
     private Charge validateUpdateConflicts(int id, UpdateChargeRequest chargeDto){
-        Optional<Charge> result = chargeRepository.findByChargeName(chargeDto.getName());
+        Optional<Charge> result = chargeRepository.findByName(chargeDto.getName());
         Charge charge;
         boolean modified = !result.isPresent();
         if(modified) 
@@ -155,7 +153,7 @@ public class ChargeServiceImpl implements ChargeService{
     {
         Charge charge = validator.completeValidationForId(id, chargeRepository);
         if(charge != null)
-            charge.setChargeName(chargename);
+            charge.setName(chargename);
         return charge;
     }
 
@@ -173,11 +171,11 @@ public class ChargeServiceImpl implements ChargeService{
     
     private boolean mergePercentage(UpdateChargeRequest chargeDto, Charge charge)
     {
-        Integer dtoPercentage = chargeDto.getChargePercentage();
-        Integer chargePercentage = charge.getChargePercentage();
+        Integer dtoPercentage = chargeDto.getPercentage();
+        Integer chargePercentage = charge.getPercentage();
         if(dtoPercentage != null && !chargePercentage.equals(dtoPercentage))
         {
-            charge.setChargePercentage(chargeDto.getChargePercentage());
+            charge.setPercentage(chargeDto.getPercentage());
             return true;
         }
         return false;

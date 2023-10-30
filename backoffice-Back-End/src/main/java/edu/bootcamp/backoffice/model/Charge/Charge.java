@@ -26,16 +26,16 @@ public class Charge implements SoftDeletable{
 
     //Creamos columnas
     @Column(
-        name = "chargename",
+        name = "name",
         nullable = false
     )
-    private String chargeName;
+    private String name;
 
     @Column(
-        name = "chargepercentage",
+        name = "percentage",
         nullable = false
     )
-    private Integer chargePercentage;
+    private Integer percentage;
 
     @Column(
         name = "enabled",

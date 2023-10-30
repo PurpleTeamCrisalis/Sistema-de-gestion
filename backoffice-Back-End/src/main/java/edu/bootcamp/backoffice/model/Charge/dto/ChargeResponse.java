@@ -13,10 +13,10 @@ import lombok.Setter;
 @Builder
 public class ChargeResponse {
     @JsonProperty("name")
-    private String chargeName;
+    private String name;
 
     @JsonProperty("percentage")
-    private Integer chargePercentage;
+    private Integer percentage;
 
     @JsonProperty("enabled")
     private Boolean enabled;

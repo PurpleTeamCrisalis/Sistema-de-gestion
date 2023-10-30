@@ -9,5 +9,5 @@ import edu.bootcamp.backoffice.model.Charge.Charge;
 @Repository
 public interface ChargeRepository extends JpaRepository<Charge, Integer>{
 
-    public Optional<Charge> findByChargeName(String chargeName);
+    public Optional<Charge> findByName(String name);
 }
