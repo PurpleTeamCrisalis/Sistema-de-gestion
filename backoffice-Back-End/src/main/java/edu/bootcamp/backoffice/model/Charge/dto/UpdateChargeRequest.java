@@ -13,9 +13,9 @@ import lombok.Setter;
 @Builder
 public class UpdateChargeRequest {
     @JsonProperty("chargename")
-    private String chargeName;
+    private String Name;
 
-    @JsonProperty("chargepercentage")
+    @JsonProperty("percentage")
     private Integer chargePercentage;
 
     @JsonProperty("enabled")
