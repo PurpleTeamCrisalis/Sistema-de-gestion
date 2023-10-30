@@ -323,10 +323,10 @@ public class ClientServiceImpl implements ClientService {
                 errorBuilder,
                 "Client adress"
         );
-        validator.isEmpty(
+       if(validator.isEmpty(
                 clientRequest.getIsbussiness(),
                 errorBuilder
-        );
+        ))return;
         if(clientRequest.getIsbussiness()){
             validator.validateVarchar(
                     clientRequest.getBussinessname(),
