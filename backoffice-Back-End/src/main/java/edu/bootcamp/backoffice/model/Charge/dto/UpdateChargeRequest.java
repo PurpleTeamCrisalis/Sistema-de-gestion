@@ -12,6 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class UpdateChargeRequest {
+    
     @JsonProperty("name")
     private String Name;
 

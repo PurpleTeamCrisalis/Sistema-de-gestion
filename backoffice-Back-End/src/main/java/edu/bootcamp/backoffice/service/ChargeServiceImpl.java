@@ -14,8 +14,7 @@ import edu.bootcamp.backoffice.model.Charge.dto.ChargeRequest;
 import edu.bootcamp.backoffice.model.Charge.dto.ChargeResponse;
 import edu.bootcamp.backoffice.model.Charge.dto.UpdateChargeRequest;
 import edu.bootcamp.backoffice.model.EntitiesConstraints;
-import edu.bootcamp.backoffice.model.user.User;
-import edu.bootcamp.backoffice.model.user.dto.UpdateUserRequest;
+
 import edu.bootcamp.backoffice.repository.ChargeRepository;
 import edu.bootcamp.backoffice.service.Interface.ChargeService;
 
