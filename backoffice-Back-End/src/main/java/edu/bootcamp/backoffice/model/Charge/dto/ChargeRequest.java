@@ -12,9 +12,9 @@ import lombok.*;
 //Lo que nos va a mandar el usuario con el JSON
 public class ChargeRequest {
     @JsonProperty("name")
-    private String chargeName;
+    private String name;
     
     @JsonProperty("percentage")
-    private Integer chargePercentage;
+    private Integer percentage;
 
 }

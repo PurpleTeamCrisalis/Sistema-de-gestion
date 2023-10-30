@@ -12,8 +12,8 @@ public class ChargeFactory {
         //Entity(char) 
         return Charge
                 .builder()
-                .chargeName(chargeDTO.getChargeName())
-                .chargePercentage(chargeDTO.getChargePercentage())
+                .name(chargeDTO.getName())
+                .percentage(chargeDTO.getPercentage())
                 .enabled(true)
                 .build();
     }
@@ -23,8 +23,8 @@ public class ChargeFactory {
         //? Lo hacemos por seguridad y flexibilidad
         return ChargeResponse
                 .builder()
-                .chargeName(charge.getChargeName())
-                .chargePercentage(charge.getChargePercentage())
+                .name(charge.getName())
+                .percentage(charge.getPercentage())
                 .enabled(charge.isEnabled())
                 .id(charge.getId())
                 .build();

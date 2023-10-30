@@ -31,14 +31,14 @@ public class Charge implements SoftDeletable{
         length = EntitiesConstraints.CHARGENAME_MAX_LENGTH,
         nullable = false
     )
-    private String chargeName;
+    private String name;
 
     @Column(
         name = "chargepercentage",
         length = EntitiesConstraints.CHARGEPERCENTAGE_MAX_LENGTH,
         nullable = false
     )
-    private Integer chargePercentage;
+    private Integer percentage;
 
     @Column(
         name = "enabled",
