@@ -4,30 +4,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.bootcamp.backoffice.model.client.Client;
+import edu.bootcamp.backoffice.model.client.dto.ClientResponse;
 import edu.bootcamp.backoffice.model.order.Order;
-import edu.bootcamp.backoffice.model.serviceEntity.ServiceEntity;
-import edu.bootcamp.backoffice.model.user.User;
 import edu.bootcamp.backoffice.service.Interface.ClientService;
 import edu.bootcamp.backoffice.service.Interface.UserService;
 import org.springframework.stereotype.Service;
 
+import edu.bootcamp.backoffice.exception.custom.NotCreatedException;
 import edu.bootcamp.backoffice.exception.custom.dbValidation.EmptyTableException;
-import edu.bootcamp.backoffice.exception.custom.parameterValidation.InvalidIdFormatException;
 import edu.bootcamp.backoffice.model.order.OrderFactory;
 import edu.bootcamp.backoffice.model.order.dto.OrderRequest;
 import edu.bootcamp.backoffice.model.order.dto.OrderResponse;
-import edu.bootcamp.backoffice.model.order.dto.UpdateOrderRequest;
 import edu.bootcamp.backoffice.model.orderDetail.productDetail.ProductDetail;
 import edu.bootcamp.backoffice.model.orderDetail.productDetail.ProductDetailFactory;
-import edu.bootcamp.backoffice.model.orderDetail.productDetail.dto.ProductDetailRequest;
-import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.ServiceDetail;
+import edu.bootcamp.backoffice.model.orderDetail.productDetail.dto.ProductDetailResponse;
 import edu.bootcamp.backoffice.repository.OrderRepository;
 import edu.bootcamp.backoffice.service.Interface.OrderService;
+import edu.bootcamp.backoffice.service.Interface.ProductDetailService;
+import edu.bootcamp.backoffice.service.Interface.ServiceDetailService;
 import edu.bootcamp.backoffice.service.Interface.Validator;
-
+import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.ServiceDetail;
 import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.ServiceDetailFactory;
-import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.dto.ServiceDetailRequest;
-import edu.bootcamp.backoffice.model.product.Product;
+import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.dto.ServiceDetailResponse;
+import edu.bootcamp.backoffice.model.user.User;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -35,17 +34,15 @@ public class OrderServiceImpl implements OrderService {
   // Injectar Repository
   private final OrderFactory orderFactory;
   private final OrderRepository orderRepository;
-  private final ServiceDetailFactory serviceDetailFactory;
-  private final ProductDetailFactory productDetailFactory;
+  private final ProductDetailService productDetailService;
+  private final ServiceDetailService serviceDetailService;
   private final UserService userService;
   private final ClientService clientService;
   private final Validator validator;
-  // private final ServiceService serviceService;
-  // private final ProductService productService;
 
   public OrderServiceImpl(
-    // ServiceService serviceService,
-    // ProductService productService,
+      ProductDetailService productDetailService,
+      ServiceDetailService serviceDetailService,
       OrderFactory orderFactory,
       OrderRepository orderRepository,
       ServiceDetailFactory serviceDetailFactory,
@@ -58,50 +55,50 @@ public class OrderServiceImpl implements OrderService {
     this.clientService = clientService;
     this.orderFactory = orderFactory;
     this.orderRepository = orderRepository;
-    this.serviceDetailFactory = serviceDetailFactory;
-    this.productDetailFactory = productDetailFactory;
+    this.productDetailService = productDetailService;
+    this.serviceDetailService = serviceDetailService;
     this.validator = validator;
-    // this.serviceService = serviceService;
-    // this.productService = productService;
   }
 
-  @Override
   public OrderResponse registerOrder(
     OrderRequest orderDto,
     String username
   ) {
-    User user = userService.getUserByUsername(username); // Validar correct username ( eventualmente el token puede estar mal formado )
-    Client client = clientService.getClientById(orderDto.getClientId()); // Valido id cliente
-    Order order = orderFactory.createOrderEntityForInsertNewRecord(user, client); // Creo la ordenEntity
+    // Validaciones
+    validateOrderDetails(orderDto);
+    User user = userService.getUserByUsername(username); // Validacion username.
+    Client client = clientService.getClient(orderDto.getClientId()); // Validacion cliente.
+    List<ServiceDetail> servicesDetails = serviceDetailService.getServicesDetails(orderDto.getServices()); // Validacion productos. 
+    List<ProductDetail> productsDetails = productDetailService.getProductsDetails(orderDto.getProducts()); // Validacion servicios.
 
+    // Creo la ordenEntity
+    Order order = orderFactory.CreateOrderEntityForInsertNewRecord(); 
+    order.setUser(user);
+    order.setClient(client);
+    setServicesDetailsIntoOrder(servicesDetails, order);
+    setProductsDetailsIntoOrder(productsDetails, order);
+    order.calculateTotal();
+    
     // BEGIN TRANSACTIONS
-    // Repository.Insert order
-    validateAndInsertServicesDetails(orderDto.getServices(), order);
-    // Lo mismo para ProductDetails
-    validateAndInsertProductsDetails(orderDto.getProducts(), order);
-    // Agregar el total
-    // calculateOrderTotal()
-    // END TRANSACTION
-
-
+    // Guardo la orden en BD (tabla order_table)
     order = orderRepository.save(order);
-    // CREAR OrderResponse
-    return orderFactory.createResponse(order); // Return OrderResponse
+    
+    // Creo y estructuro la OrderResponse
+    return createAndGetOrderResponse(order); // Return OrderResponse
+    // END TRANSACTION
   }
 
-  @Override
   public OrderResponse get(int id) {
     Order order = validator.completeValidationForId(id, orderRepository);
-    return orderFactory.createResponse(order);
+    return createAndGetOrderResponse(order);
   }
 
-  @Override
   public List<OrderResponse> get() {
     List<Order> orders = orderRepository.findAll();
     List<OrderResponse> dtos = new ArrayList<OrderResponse>();
 
     for (Order order : orders) {
-      dtos.add(orderFactory.createResponse(order));
+      dtos.add(createAndGetOrderResponse(order));
     }
     
     if (dtos.isEmpty()) {
@@ -111,54 +108,40 @@ public class OrderServiceImpl implements OrderService {
     return dtos;
   }
 
-  @Override
-  public OrderResponse update(int id, UpdateOrderRequest OrderDto) throws InvalidIdFormatException {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'update'");
+  // public OrderResponse update(int id, UpdateOrderRequest OrderDto) throws InvalidIdFormatException {
+  //   // TODO Auto-generated method stub
+  //   throw new UnsupportedOperationException("Unimplemented method 'update'");
+  // }
+
+  public OrderResponse delete(int id) {
+    Order order = validator.validateIdExistence(id, orderRepository);
+    order.setEnabled(false);
+    return createAndGetOrderResponse(order);
   }
 
-  @Override
-  public OrderResponse delete(int id) throws InvalidIdFormatException {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'delete'");
-  }
-
-  private void validateAndInsertServicesDetails(
-    List<ServiceDetailRequest> servicesRequestsForOrder,
-    Order order
-  ) {
-    for (ServiceDetailRequest serviceDetailRequest : servicesRequestsForOrder) {
-
-      ServiceEntity service = new ServiceEntity(); //serviceService.getServiceById(serviceDetailRequest.getId())
-      service.setId(1);
-      service.setBasePrice(1f);
-
-      ServiceDetail serviceDetail = serviceDetailFactory.CreateServiceDetailEntity(order, service);
-      // REPOSITORY.save(serviceDetail)
-      List<ServiceDetail> list= order.getServices();
-      list.add(serviceDetail);
+  private void setServicesDetailsIntoOrder(List<ServiceDetail> services, Order order) {
+    for(ServiceDetail serviceDetail : services) {
+      order.getServices().add(serviceDetail);
+      serviceDetail.setOrder(order);
     }
   }
 
-  private void validateAndInsertProductsDetails(
-    List<ProductDetailRequest> productsRequestsForOrder, 
-    Order order
-  ) {
-    for (ProductDetailRequest productDetailRequest : productsRequestsForOrder) {
-      Product product = null; // productService.getProductById(productDetailRequest.getId())
-      ProductDetail productDetail = productDetailFactory.CreateProductDetailEntity(productDetailRequest,product, order);
+  private void setProductsDetailsIntoOrder(List<ProductDetail> products,Order order) {
+    for(ProductDetail productDetail : products) {
       order.getProducts().add(productDetail);
+      productDetail.setOrder(order);
     }
   }
 
-  // private Float calculateOrderTotal() {
-  // }
+  private OrderResponse createAndGetOrderResponse(Order order) {
+    List<ProductDetailResponse> productsResponse = productDetailService.getProductsDetailsByOrder(order.getId());
+    List<ServiceDetailResponse> servicesResponse = serviceDetailService.getServicesDetailsByOrder(order.getId());
+    ClientResponse clientResponse = clientService.getClientResponse(order.getClient().getId());
+    return orderFactory.CreateResponse(order, servicesResponse, productsResponse, clientResponse);
+  }
 
-  // private validateOrderProductsDetails () {
-      
-  // }
-  // private validateOrderServicesDetails () {
-
-  // }
-
+  private void validateOrderDetails (OrderRequest orderDto) {
+    if (orderDto.getProducts().size() == 0 && orderDto.getServices().size() == 0)
+      throw new NotCreatedException("Empty services and products lists");
+  }
 }

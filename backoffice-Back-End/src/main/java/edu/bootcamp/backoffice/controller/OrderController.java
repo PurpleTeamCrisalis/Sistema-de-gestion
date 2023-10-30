@@ -13,7 +13,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import edu.bootcamp.backoffice.model.order.dto.OrderRequest;
 import edu.bootcamp.backoffice.model.order.dto.OrderResponse;
-import edu.bootcamp.backoffice.model.order.dto.UpdateOrderRequest;
 import edu.bootcamp.backoffice.security.JWTGenerator;
 import edu.bootcamp.backoffice.service.Interface.OrderService;
 
@@ -47,6 +46,7 @@ public class OrderController {
         .path("/{id}")
         .buildAndExpand(orderDto.getId())
         .toUri();
+
     return ResponseEntity.created(location).body(orderDto);
   }
 
@@ -62,13 +62,13 @@ public class OrderController {
     return ResponseEntity.ok(orders);
   }
 
-  @PatchMapping(value = "update/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<OrderResponse> updateOrder(
-      @PathVariable int id,
-      @RequestBody UpdateOrderRequest orderDTO) {
-    OrderResponse order = orderService.update(id, orderDTO);
-    return ResponseEntity.ok(order);
-  }
+  // @PatchMapping(value = "update/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+  // public ResponseEntity<OrderResponse> updateOrder(
+  //     @PathVariable int id,
+  //     @RequestBody UpdateOrderRequest orderDTO) {
+  //   OrderResponse order = orderService.update(id, orderDTO);
+  //   return ResponseEntity.ok(order);
+  // }
 
   @DeleteMapping(value = "delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<OrderResponse> deleteOrder(@PathVariable int id) {

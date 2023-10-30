@@ -27,5 +27,5 @@ public class Product {
   private List<ProductDetail> productDetails = new ArrayList<>();
 
   @Column(name = "basePrice")
-  private Float basePrice;
+  private Double basePrice;
 }

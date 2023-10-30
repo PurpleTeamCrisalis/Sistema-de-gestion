@@ -1,5 +1,6 @@
 package edu.bootcamp.backoffice.model.order;
 
+import edu.bootcamp.backoffice.model.SoftDeletable;
 import edu.bootcamp.backoffice.model.client.Client;
 import edu.bootcamp.backoffice.model.orderDetail.productDetail.ProductDetail;
 import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.ServiceDetail;
@@ -10,7 +11,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -22,7 +25,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Table(name = "orderTable")
 @Builder
-public class Order {
+public class Order implements SoftDeletable{
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,17 +36,23 @@ public class Order {
     // private OrderState orderState;
 
     @Column(name = "date", nullable = false, updatable = false)
-    private Date date;
+    private String date;
 
     // Total
     @Column(name = "total", nullable = false)
-    private Float total;
+    private Double total;
+
+    @Column(name="enabled", nullable = false)
+    private boolean enabled;
+
 
     @ManyToOne
+    // @JoinColumn(nullable = false) // Revisar como reacciona.
     private User user;
 
     // Client
     @ManyToOne
+    // @JoinColumn(nullable = false) // Revisar como reacciona.
     private Client client;
 
     // discountServiceId
@@ -57,4 +66,28 @@ public class Order {
     // ServiceDetail
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
     private List<ServiceDetail> services = new ArrayList<>();
+
+    public void getFormattedDate() {
+        Calendar calendar = Calendar.getInstance();
+        Date fecha = calendar.getTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        date = sdf.format(fecha);
+    }
+
+    public void calculateTotal () {
+        for(ServiceDetail service : services) {
+            total = total + service.getSubTotal();
+        }
+        for(ProductDetail product : products) {
+            total = total + product.getSubTotal();
+        }
+    }
+
+    public Boolean isDeleted() {
+        return !enabled;
+    }
+
+    public Boolean isNotDeleted() {
+        return enabled;
+    }
 }

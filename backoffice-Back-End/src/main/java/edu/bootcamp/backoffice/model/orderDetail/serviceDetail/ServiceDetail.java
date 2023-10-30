@@ -23,18 +23,25 @@ public class ServiceDetail // extends OrderDetail
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
-  @Column(name = "taxesApplied", nullable = false, length = EntitiesConstraints.TAXES_APPLIED_MAX_LENGTH)
+  @Column(
+    name = "taxesApplied", nullable = false, 
+    length = EntitiesConstraints.TAXES_APPLIED_MAX_LENGTH
+  )
   private String taxesApplied;
 
   @Column(name = "taxCharges", nullable = false)
-  private Float taxCharges;
+  private Double taxCharges;
 
   @Column(name = "subTotal", nullable = false)
-  private Float subTotal;
+  private Double subTotal;
 
   @ManyToOne
   private Order order;
 
   @ManyToOne
   private ServiceEntity service;
+
+  public void calculateSubtotal() {
+    subTotal = (service.getBasePrice() * 1);
+  }
 }

@@ -26,7 +26,7 @@ public class ServiceEntity
   private Integer id;
 
   @Column(name = "basePrice")
-  private Float basePrice;
+  private Double basePrice;
 
   @OneToMany(mappedBy = "discountService", fetch = FetchType.LAZY)
   private List<Order> ordersWithDiscount = new ArrayList<>();

@@ -16,5 +16,5 @@ public class ProductDetailRequest {
   private Integer quantity;
 
   @JsonProperty("warranty")
-  private Float warranty;
+  private Double warranty;
 }

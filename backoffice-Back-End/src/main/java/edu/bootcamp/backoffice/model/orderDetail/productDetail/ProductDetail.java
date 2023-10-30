@@ -23,9 +23,6 @@ public class ProductDetail // extends OrderDetail
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
-  @Column(name = "basePrice", nullable = false)
-  private Float basePrice;
-
   @Column(
     name = "taxesApplied", 
     nullable = false, 
@@ -34,10 +31,16 @@ public class ProductDetail // extends OrderDetail
   private String taxesApplied;
 
   @Column(name = "taxCharges", nullable = false)
-  private Float taxCharges;
+  private Double taxCharges;
 
   @Column(name = "subTotal", nullable = false)
-  private Float subTotal;
+  private Double subTotal;
+  
+  @Column(name = "quantity")
+  private Integer quantity;
+  
+  @Column(name = "warranty")
+  private Double warranty;
 
   @ManyToOne
   private Order order;
@@ -45,9 +48,7 @@ public class ProductDetail // extends OrderDetail
   @ManyToOne
   private Product product;
 
-  @Column(name = "quantity")
-  private Integer quantity;
-
-  @Column(name = "warranty")
-  private Float warranty;
+  public void calculateSubtotal() {
+    subTotal = (product.getBasePrice() * quantity);
+  }
 }

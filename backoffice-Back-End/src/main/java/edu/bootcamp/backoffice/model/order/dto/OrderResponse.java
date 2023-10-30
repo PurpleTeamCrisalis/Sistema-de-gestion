@@ -1,14 +1,14 @@
 package edu.bootcamp.backoffice.model.order.dto;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import edu.bootcamp.backoffice.model.client.Client;
-import edu.bootcamp.backoffice.model.orderDetail.productDetail.ProductDetail;
-import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.ServiceDetail;
-// import edu.bootcamp.backoffice.model.user.User;
+import edu.bootcamp.backoffice.model.client.dto.ClientResponse;
+import edu.bootcamp.backoffice.model.orderDetail.productDetail.dto.ProductDetailResponse;
+import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.dto.ServiceDetailResponse;
 import lombok.*;
 
 @Getter
@@ -21,25 +21,25 @@ public class OrderResponse {
   private Integer id;
 
   @JsonProperty("date")
-  private Date date;
+  private String date;
 
   @JsonProperty("total")
-  private Float total;
-
-  // @JsonProperty("user")
-  // private User user;
+  private Double total;
 
   @JsonProperty("client")
-  private Client client;
+  private ClientResponse client;
 
   // @JsonProperty("discountService")
   // private
 
+  @JsonProperty("enabled")
+  private Boolean enabled;
+
   @JsonProperty("products")
   @Singular
-  private List<ProductDetail> products;
+  private List<ProductDetailResponse> products;
 
   @JsonProperty("services")
   @Singular
-  private List<ServiceDetail> services;
+  private List<ServiceDetailResponse> services;
 }
