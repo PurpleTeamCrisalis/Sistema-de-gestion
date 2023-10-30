@@ -62,15 +62,7 @@ public class OrderController {
     return ResponseEntity.ok(orders);
   }
 
-  // @PatchMapping(value = "update/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-  // public ResponseEntity<OrderResponse> updateOrder(
-  //     @PathVariable int id,
-  //     @RequestBody UpdateOrderRequest orderDTO) {
-  //   OrderResponse order = orderService.update(id, orderDTO);
-  //   return ResponseEntity.ok(order);
-  // }
-
-  @DeleteMapping(value = "delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<OrderResponse> deleteOrder(@PathVariable int id) {
     OrderResponse order = orderService.delete(id);
     return ResponseEntity.ok(order);

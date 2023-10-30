@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import edu.bootcamp.backoffice.exception.custom.EmptyElementException;
+import edu.bootcamp.backoffice.model.order.Order;
 import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.ServiceDetail;
 import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.ServiceDetailFactory;
 import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.dto.ServiceDetailRequest;
@@ -28,19 +28,15 @@ public class ServiceDetailServiceImpl implements ServiceDetailService{
     this.serviceDetailRepository = serviceDetailRepository;
   }
 
-  public List<ServiceDetailResponse> registerServiceDetail(
-    List<ServiceDetail> createServiceRequests
+  public void registerServiceDetail(
+    List<ServiceDetail> createServiceRequests,
+    Order order
   ) {
-    // Creo la lista de services donde almaceno los ServiceDetailResponse
-    List<ServiceDetailResponse> services = new ArrayList<ServiceDetailResponse>();
     for (ServiceDetail serviceDetail : createServiceRequests) {
       // Guardo serviceDetail en la BD (tabla service_detail)
-      serviceDetail = serviceDetailRepository.save(serviceDetail);
-      // Agrego serviceDetailResponse a lista services
-      services.add(serviceDetailFactory.CreateResponse(serviceDetail));
+      serviceDetail.setOrder(order);
+      serviceDetailRepository.save(serviceDetail);
     }
-    // Retorno la lista de serviceDetailResponse
-    return services;
   }
 
   public List<ServiceDetail> getServicesDetails(
@@ -58,19 +54,5 @@ public class ServiceDetailServiceImpl implements ServiceDetailService{
       services.add(serviceDetail);
     }
     return services;
-  }
-
-  public List<ServiceDetailResponse> getServicesDetailsByOrder(Integer orderId) {
-    // Validacion de que existan ServicesDetails
-    List<ServiceDetail> dbServicesDetails = serviceDetailRepository.findAllByOrderId(orderId).orElse(null);
-    if(dbServicesDetails == null)
-      throw new EmptyElementException("No services details were found for that order.");
-    
-    List<ServiceDetailResponse> servicesResponse = new ArrayList<ServiceDetailResponse>();
-    for(ServiceDetail serviceDetail : dbServicesDetails) {
-      ServiceDetailResponse serviceDetailResponse = serviceDetailFactory.CreateResponse(serviceDetail);
-      servicesResponse.add(serviceDetailResponse);
-    }
-    return servicesResponse;
   }
 }

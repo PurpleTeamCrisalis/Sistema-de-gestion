@@ -42,6 +42,6 @@ public class ServiceDetail // extends OrderDetail
   private ServiceEntity service;
 
   public void calculateSubtotal() {
-    subTotal = (service.getBasePrice() * 1);
+    subTotal = service.getBasePrice();
   }
 }

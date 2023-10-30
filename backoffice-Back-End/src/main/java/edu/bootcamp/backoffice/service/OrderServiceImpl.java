@@ -4,20 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.bootcamp.backoffice.model.client.Client;
-import edu.bootcamp.backoffice.model.client.dto.ClientResponse;
+import edu.bootcamp.backoffice.model.client.ClientFactory;
 import edu.bootcamp.backoffice.model.order.Order;
 import edu.bootcamp.backoffice.service.Interface.ClientService;
 import edu.bootcamp.backoffice.service.Interface.UserService;
 import org.springframework.stereotype.Service;
 
-import edu.bootcamp.backoffice.exception.custom.NotCreatedException;
 import edu.bootcamp.backoffice.exception.custom.dbValidation.EmptyTableException;
+import edu.bootcamp.backoffice.exception.custom.parameterValidation.EmptyElementException;
 import edu.bootcamp.backoffice.model.order.OrderFactory;
 import edu.bootcamp.backoffice.model.order.dto.OrderRequest;
 import edu.bootcamp.backoffice.model.order.dto.OrderResponse;
 import edu.bootcamp.backoffice.model.orderDetail.productDetail.ProductDetail;
 import edu.bootcamp.backoffice.model.orderDetail.productDetail.ProductDetailFactory;
-import edu.bootcamp.backoffice.model.orderDetail.productDetail.dto.ProductDetailResponse;
 import edu.bootcamp.backoffice.repository.OrderRepository;
 import edu.bootcamp.backoffice.service.Interface.OrderService;
 import edu.bootcamp.backoffice.service.Interface.ProductDetailService;
@@ -25,7 +24,6 @@ import edu.bootcamp.backoffice.service.Interface.ServiceDetailService;
 import edu.bootcamp.backoffice.service.Interface.Validator;
 import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.ServiceDetail;
 import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.ServiceDetailFactory;
-import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.dto.ServiceDetailResponse;
 import edu.bootcamp.backoffice.model.user.User;
 
 @Service
@@ -43,18 +41,18 @@ public class OrderServiceImpl implements OrderService {
   public OrderServiceImpl(
       ProductDetailService productDetailService,
       ServiceDetailService serviceDetailService,
-      OrderFactory orderFactory,
-      OrderRepository orderRepository,
+      OrderFactory         orderFactory,
+      OrderRepository      orderRepository,
       ServiceDetailFactory serviceDetailFactory,
       ProductDetailFactory productDetailFactory,
-      UserService userService,
-      ClientService clientService,
-      Validator validator
+      UserService          userService,
+      ClientService        clientService,
+      Validator            validator
   ) {
-    this.userService = userService;
-    this.clientService = clientService;
-    this.orderFactory = orderFactory;
-    this.orderRepository = orderRepository;
+    this.userService          = userService;
+    this.clientService        = clientService;
+    this.orderFactory         = orderFactory;
+    this.orderRepository      = orderRepository;
     this.productDetailService = productDetailService;
     this.serviceDetailService = serviceDetailService;
     this.validator = validator;
@@ -75,22 +73,25 @@ public class OrderServiceImpl implements OrderService {
     Order order = orderFactory.CreateOrderEntityForInsertNewRecord(); 
     order.setUser(user);
     order.setClient(client);
-    setServicesDetailsIntoOrder(servicesDetails, order);
-    setProductsDetailsIntoOrder(productsDetails, order);
+    order.setServices(servicesDetails);
+    order.setProducts(productsDetails);
     order.calculateTotal();
     
     // BEGIN TRANSACTIONS
     // Guardo la orden en BD (tabla order_table)
     order = orderRepository.save(order);
+    // Guardo serviceDetails y productDetails en BD (tablas service_detail y product_detail)
+    serviceDetailService.registerServiceDetail(servicesDetails, order);
+    productDetailService.registerProductDetail(productsDetails, order);
     
     // Creo y estructuro la OrderResponse
-    return createAndGetOrderResponse(order); // Return OrderResponse
+    return orderFactory.createOrderResponse(order); // Return OrderResponse
     // END TRANSACTION
   }
 
   public OrderResponse get(int id) {
     Order order = validator.completeValidationForId(id, orderRepository);
-    return createAndGetOrderResponse(order);
+    return orderFactory.createOrderResponse(order);
   }
 
   public List<OrderResponse> get() {
@@ -98,7 +99,7 @@ public class OrderServiceImpl implements OrderService {
     List<OrderResponse> dtos = new ArrayList<OrderResponse>();
 
     for (Order order : orders) {
-      dtos.add(createAndGetOrderResponse(order));
+      dtos.add(orderFactory.createOrderResponse(order));
     }
     
     if (dtos.isEmpty()) {
@@ -108,40 +109,16 @@ public class OrderServiceImpl implements OrderService {
     return dtos;
   }
 
-  // public OrderResponse update(int id, UpdateOrderRequest OrderDto) throws InvalidIdFormatException {
-  //   // TODO Auto-generated method stub
-  //   throw new UnsupportedOperationException("Unimplemented method 'update'");
-  // }
-
   public OrderResponse delete(int id) {
     Order order = validator.validateIdExistence(id, orderRepository);
-    order.setEnabled(false);
-    return createAndGetOrderResponse(order);
-  }
-
-  private void setServicesDetailsIntoOrder(List<ServiceDetail> services, Order order) {
-    for(ServiceDetail serviceDetail : services) {
-      order.getServices().add(serviceDetail);
-      serviceDetail.setOrder(order);
-    }
-  }
-
-  private void setProductsDetailsIntoOrder(List<ProductDetail> products,Order order) {
-    for(ProductDetail productDetail : products) {
-      order.getProducts().add(productDetail);
-      productDetail.setOrder(order);
-    }
-  }
-
-  private OrderResponse createAndGetOrderResponse(Order order) {
-    List<ProductDetailResponse> productsResponse = productDetailService.getProductsDetailsByOrder(order.getId());
-    List<ServiceDetailResponse> servicesResponse = serviceDetailService.getServicesDetailsByOrder(order.getId());
-    ClientResponse clientResponse = clientService.getClientResponse(order.getClient().getId());
-    return orderFactory.CreateResponse(order, servicesResponse, productsResponse, clientResponse);
+    // order.setEnabled(false);
+    return orderFactory.createOrderResponse(order);
   }
 
   private void validateOrderDetails (OrderRequest orderDto) {
-    if (orderDto.getProducts().size() == 0 && orderDto.getServices().size() == 0)
-      throw new NotCreatedException("Empty services and products lists");
+    if ((orderDto.getProducts() == null || orderDto.getProducts().size() == 0) && 
+        (orderDto.getServices() == null || orderDto.getServices().size() == 0)
+    )
+      throw new EmptyElementException("No se recibieron ni productos ni servicios.");
   }
 }

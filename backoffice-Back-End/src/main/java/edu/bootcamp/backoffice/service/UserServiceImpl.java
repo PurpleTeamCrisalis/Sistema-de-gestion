@@ -257,10 +257,10 @@ public class UserServiceImpl implements UserService
         // Valido que el username sea valido
         StringBuilder errors = new StringBuilder();
         validateUsername(username, errors);
-        if(errors.length() > 0) throw new InvalidCredentialsException("Invalid username");
+        if(errors.length() > 0) throw new InvalidCredentialsException("Invalid token");
         // Valido que el user exista
         User user = userRepository.findByUsername(username).orElse(null);
-        if (user == null) throw new InvalidCredentialsException("User doesn't exist");
+        if (user == null) throw new InvalidCredentialsException("Invalid token");
         // Si el usuario existe, lo agrega a la orden
         return user;
     }

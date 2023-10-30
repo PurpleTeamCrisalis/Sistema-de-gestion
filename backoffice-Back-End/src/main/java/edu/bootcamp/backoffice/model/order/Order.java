@@ -25,7 +25,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Table(name = "orderTable")
 @Builder
-public class Order implements SoftDeletable{
+public class Order{
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,9 +42,8 @@ public class Order implements SoftDeletable{
     @Column(name = "total", nullable = false)
     private Double total;
 
-    @Column(name="enabled", nullable = false)
-    private boolean enabled;
-
+    // @Column(name="enabled", nullable = false)
+    // private boolean enabled;
 
     @ManyToOne
     // @JoinColumn(nullable = false) // Revisar como reacciona.
@@ -75,6 +74,7 @@ public class Order implements SoftDeletable{
     }
 
     public void calculateTotal () {
+        total = 0.00;
         for(ServiceDetail service : services) {
             total = total + service.getSubTotal();
         }
@@ -83,11 +83,11 @@ public class Order implements SoftDeletable{
         }
     }
 
-    public Boolean isDeleted() {
-        return !enabled;
-    }
+    // public Boolean isDeleted() {
+    //     return !enabled;
+    // }
 
-    public Boolean isNotDeleted() {
-        return enabled;
-    }
+    // public Boolean isNotDeleted() {
+    //     return enabled;
+    // }
 }

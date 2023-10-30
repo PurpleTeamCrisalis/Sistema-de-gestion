@@ -15,7 +15,6 @@ public class ServiceDetailFactory {
     ServiceDetail serviceDetail = ServiceDetail
       .builder()
       .service(serviceEntity)
-      .subTotal(0.00)
       // .taxCharges(serviceEntity.getTaxCharges())
       // .taxesApplied(serviceEntity.getTaxesApplied())
       .build();

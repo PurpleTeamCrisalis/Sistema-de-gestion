@@ -5,11 +5,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import edu.bootcamp.backoffice.exception.custom.EmptyElementException;
+import edu.bootcamp.backoffice.model.order.Order;
 import edu.bootcamp.backoffice.model.orderDetail.productDetail.ProductDetail;
 import edu.bootcamp.backoffice.model.orderDetail.productDetail.ProductDetailFactory;
 import edu.bootcamp.backoffice.model.orderDetail.productDetail.dto.ProductDetailRequest;
-import edu.bootcamp.backoffice.model.orderDetail.productDetail.dto.ProductDetailResponse;
 import edu.bootcamp.backoffice.model.product.Product;
 import edu.bootcamp.backoffice.repository.ProductDetailRepository;
 import edu.bootcamp.backoffice.service.Interface.ProductDetailService;
@@ -29,22 +28,16 @@ public class ProductDetailServiceImpl implements ProductDetailService{
 
   }
 
-  public List<ProductDetailResponse> registerProductDetail(
-    List<ProductDetail> createProductRequest
+  public void registerProductDetail(
+    List<ProductDetail> createProductRequest,
+    Order order
   ) {
-    // Creo la lista de products donde almaceno los ProductDetailResponse
-    List<ProductDetailResponse> products = new ArrayList<ProductDetailResponse>();
     for (ProductDetail productDetail : createProductRequest) {
       // Guardo productDetail en la BD (tabla product_detail)
-      productDetail = productDetailRepository.save(productDetail);
-      // Agrego serviceDetailResponse a lista products
-      products.add(productDetailFactory.CreateResponse(productDetail));
+      productDetail.setOrder(order);
+      productDetailRepository.save(productDetail);
     }
-    // Retorno la lista de productDetailResponse
-    return products;
   }
-
-  
 
   public List<ProductDetail> getProductsDetails(
     List<ProductDetailRequest> orderProductRequests
@@ -63,19 +56,5 @@ public class ProductDetailServiceImpl implements ProductDetailService{
     }
     // Retorno la lista de ProductDetail
     return products;
-  }
-
-  public List<ProductDetailResponse> getProductsDetailsByOrder(Integer orderId) {
-    // Validacion de que existan productsDetails
-    List<ProductDetail> dbServicesDetails = productDetailRepository.findAllByOrderId(orderId).orElse(null);
-    if(dbServicesDetails == null)
-      throw new EmptyElementException("No products details were found for that order.");
-    
-    List<ProductDetailResponse> servicesResponse = new ArrayList<ProductDetailResponse>();
-    for(ProductDetail productDetail : dbServicesDetails) {
-      ProductDetailResponse productDetailResponse = productDetailFactory.CreateResponse(productDetail);
-      servicesResponse.add(productDetailResponse);
-    }
-    return servicesResponse;
   }
 }
