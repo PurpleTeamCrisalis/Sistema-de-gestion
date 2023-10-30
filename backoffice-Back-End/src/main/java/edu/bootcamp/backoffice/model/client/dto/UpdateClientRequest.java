@@ -35,7 +35,7 @@ public class UpdateClientRequest {
     @JsonProperty("bussinessName")
     private String bussinessname;
 
-    @JsonProperty("startDate")
+    @JsonProperty("StartDate")
     private Date startdate;
 
     @JsonProperty("cuit")

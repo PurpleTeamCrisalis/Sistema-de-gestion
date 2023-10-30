@@ -34,17 +34,7 @@ public class ClientServiceImpl implements ClientService {
         this.validator = validator;
     }
 
-    public boolean isClientPresent(ClientRequest clientDto) {
-        StringBuilder errors = new StringBuilder();
-        validateClient(clientDto, errors);
-        if (errors.length() > 0)
-            throw new InvalidCredentialsException("Invalid client name");
-        Optional<Client> result = clientRepository
-                .findByDni(clientDto.getDni());
-        if (result.isPresent())
-            return !result.get().isDeleted();
-        return false;
-    }
+
 
     public ClientResponse registerClient(ClientRequest clientRequest) {
         validateNewClientRequest(clientRequest);
@@ -104,30 +94,11 @@ public class ClientServiceImpl implements ClientService {
                 .findById(id);
         Client client;
         boolean modified = checkIfModified(result.get(), clientDto);
-        if (modified)
-            client = findAndSetAtributesIfNotNull(id, clientDto);
-        else
-            client = validateEnabledClientSearchResult(result, id);
-        modified |= mergeEnabled(clientDto, client);
         if (!modified)
             throw new AlreadyUpdatedException(
                     "Not modified database."
             );
-        return client;
-    }
-
-    private Client validateEnabledClientSearchResult(
-            Optional<Client> result,
-            int requestId
-    ) {
-        Client client = result.get();
-        /* Si se decide evitar dar alta logica :
-        if(user.isDeleted())
-            throw new DeletedAccountUpdateException("");*/
-        if (client.getId() != requestId)
-            throw new AlreadyRegisteredException(
-                    "Name not available"
-            );
+        client = findAndSetAtributesIfNotNull(id, clientDto);
         return client;
     }
 
@@ -140,7 +111,8 @@ public class ClientServiceImpl implements ClientService {
                         !client.getAdress().equals(clientDto.getAdress()) ||
                         !client.getBussinessName().equals(clientDto.getBussinessname()) ||
                         !client.getStartDate().equals(clientDto.getStartdate()) ||
-                        !client.getCuit().equals(clientDto.getCuit())
+                        !client.getCuit().equals(clientDto.getCuit()) ||
+                                !((Boolean)client.isEnabled()).equals(clientDto.getEnabled())
         ) return true;
         return false;
     }
@@ -150,32 +122,19 @@ public class ClientServiceImpl implements ClientService {
                 id,
                 clientRepository
         );
-        if (clientDto.getName() != null)
-            client.setName(clientDto.getName());
-        if (clientDto.getLastname() != null)
-            client.setLastName(clientDto.getLastname());
-        if (clientDto.getDni() != null)
-            client.setDni(clientDto.getDni());
-        if (clientDto.getPhone() != null)
-            client.setPhone(clientDto.getPhone());
-        if (clientDto.getAdress() != null)
-            client.setAdress(clientDto.getAdress());
-        client.setBussinessName(clientDto.getBussinessname());
-        client.setStartDate(clientDto.getStartdate());
-        client.setCuit(clientDto.getCuit());
-        if (clientDto.getEnabled() != null)
-            client.setEnabled(clientDto.getEnabled());
-        return client;
-    }
 
-    private boolean mergeEnabled(UpdateClientRequest clientDto, Client client) {
-        Boolean dtoEnabled = clientDto.getEnabled();
-        Boolean clientEnabled = client.isEnabled();
-        if (dtoEnabled != null && !clientEnabled.equals(dtoEnabled)) {
-            client.setEnabled(clientDto.getEnabled());
-            return true;
+        client.setName(clientDto.getName());
+        client.setLastName(clientDto.getLastname());
+        client.setDni(clientDto.getDni());
+        client.setPhone(clientDto.getPhone());
+        client.setAdress(clientDto.getAdress());
+        if(client.getIsBussiness()) {
+            client.setBussinessName(clientDto.getBussinessname());
+            client.setStartDate(clientDto.getStartdate());
+            client.setCuit(clientDto.getCuit());
         }
-        return false;
+        client.setEnabled(clientDto.getEnabled());
+        return client;
     }
 
     public ClientResponse get(int id) {

@@ -28,33 +28,34 @@ public class Client implements SoftDeletable {
     private Integer id;
 
     @Column(
-            name = "clientName",
+            name = "name",
             nullable = false,
             length = EntitiesConstraints.CLIENTNAME_MAX_LENGTH
     )
     private String name;
 
     @Column(
-            name = "clientLastName",
+            name = "lastName",
             nullable = false,
             length = EntitiesConstraints.CLIENTNAME_MAX_LENGTH
     )
     private String lastName;
 
     @Column(
-            name = "clientDNI",
-            nullable = false
+            name = "dni",
+            nullable = false,
+            unique = true
     )
     private Integer dni;
 
     @Column(
-            name = "clientPhone",
+            name = "phone",
             nullable = false
     )
     private Long phone;
 
     @Column(
-            name = "clientAdress",
+            name = "adress",
             nullable = false,
             length = EntitiesConstraints.CLIENTADRESS_MAX_LENGTH
     )
@@ -68,23 +69,25 @@ public class Client implements SoftDeletable {
     private Boolean isBussiness;
 
     @Column(
-            name = "clientBussinessName",
+            name = "bussinessName",
             length = EntitiesConstraints.CLIENTBUSSINESSNAME_MAX_LENGTH
     )
     private String bussinessName;
 
     @Column(
-            name = "clientStartDate"
+            name = "startDate"
     )
     private Date startDate;
 
     @Column(
-            name = "clientCUIT"
+            name = "cuit",
+            unique = true
     )
     private Long cuit;
 
     @Column(
-            name="enabled"
+            name="enabled",
+            nullable = false
     )
     private boolean enabled = true;
 

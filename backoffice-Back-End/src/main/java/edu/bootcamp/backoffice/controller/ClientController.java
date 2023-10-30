@@ -23,7 +23,7 @@ public class ClientController {
     public ClientController(ClientService clientService) { this.clientService = clientService; }
 
     @PostMapping(
-            path = "/create",
+            path = "/",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )

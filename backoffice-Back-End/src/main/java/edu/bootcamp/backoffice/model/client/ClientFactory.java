@@ -9,33 +9,6 @@ import java.util.Date;
 @Component
 public class ClientFactory {
 
-    public Client CreateClientEntity(
-            String name,
-            String lastName,
-            Integer dni,
-            Long phone,
-            String adress,
-            Boolean isBussiness,
-            String bussinessName,
-            Date startDate,
-            Long cuit
-    )
-    {
-        return Client
-                .builder()
-                .name(name)
-                .lastName(lastName)
-                .dni(dni)
-                .phone(phone)
-                .adress(adress)
-                .isBussiness(isBussiness)
-                .bussinessName(bussinessName)
-                .startDate(startDate)
-                .cuit(cuit)
-                .enabled(true)
-                .build();
-    }
-
     public Client CreateEntityForInsertNewRecord(ClientRequest clientDTO){
         return Client
                 .builder()

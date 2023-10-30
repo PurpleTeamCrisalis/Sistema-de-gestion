@@ -32,7 +32,7 @@ public class ClientRequest {
     @JsonProperty("bussinessName")
     private String bussinessname;
 
-    @JsonProperty("StartDate")
+    @JsonProperty("startDate")
     private Date startdate;
 
     @JsonProperty("cuit")

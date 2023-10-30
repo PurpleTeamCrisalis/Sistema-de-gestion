@@ -21,6 +21,4 @@ public interface ClientService {
     public ClientResponse delete(int id)
             throws InvalidIdFormatException;
 
-    public boolean isClientPresent(ClientRequest clientDTO);
-
 }
