@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import NavComponent from '../NavComponent'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
+import HeaderComponent from '../HeaderComponent';
+import AddRemoveButtonsComponent from '../AddRemoveButtonsComponent';
 
 function ChargeListComponent() {
     const [Charges, setCharges] = useState([])
@@ -23,23 +25,21 @@ function ChargeListComponent() {
 
     return (
         <>
+        
+            <HeaderComponent/>
             <div className="container-fluid">
                 <div className="row">
                     {/* Navbar */}
                     <NavComponent />
 
                     {/* Table and Buttons */}
-                    <div className="col-md-9 col-xl-10  ">
+                    <div className="col-md-9 col-xl-10  bgGrey">
                         {/* Button Section */}
-                        <section className='d-flex justify-content-center m-3'>
-                            <h2>Cargos</h2>
-                            <button type="button" className="btn btn-primary mx-3 fw-bold btn-lg" onClick={newCharge}>Nuevo</button>
-                            <button type="button" className="btn btn-primary mx-3 fw-bold btn-lg" onClick={deleteCharge}>Eliminar</button>
-                        </section>
+                        <AddRemoveButtonsComponent addHandler={newCharge} removeHandler={deleteCharge} name="Cargos"/>
 
                         {/* Table Section */}
                         <section className='d-flex justify-content-center rounded-3' style={{ maxHeight: '85vh', overflowY: 'auto' }}>
-                            <table className="table table-primary">
+                            <table className="table">
                                 <thead style={{ position: 'sticky', top: 0, borderBottom: '2px solid black' }}>
                                     <tr>
                                         <th scope="col">#</th>
@@ -51,7 +51,7 @@ function ChargeListComponent() {
                                 </thead>
                                 <tbody>
                                     {/* Acá se va a recorrer la lista de la entidad */}
-                                    <tr className='table-primary'>
+                                    <tr className=''>
                                         <td>
                                             <input type="checkbox" className="custom-checkbox" />
                                         </td>

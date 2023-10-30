@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import NavComponent from '../NavComponent'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
+import HeaderComponent from '../HeaderComponent';
 
 function ProductListComponent() {
     const [Products, setProducts] = useState([])
@@ -23,13 +24,14 @@ function ProductListComponent() {
 
     return (
         <>
+            <HeaderComponent/>
             <div className="container-fluid">
                 <div className="row">
                     {/* Navbar */}
                     <NavComponent />
 
                     {/* Table and Buttons */}
-                    <div className="col-md-9 col-xl-10  ">
+                    <div className="col-md-9 col-xl-10 bgGrey ">
                         {/* Button Section */}
                         <section className='d-flex justify-content-center m-3'>
                             <button type="button" className="btn btn-primary mx-3 fw-bold btn-lg" onClick={newProduct}>Nuevo</button>

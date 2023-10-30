@@ -1,0 +1,8 @@
+.gradient-sky {
+  background: linear-gradient(180deg, #87B0EE 0%, rgba(135, 176, 238, 0.62) 99.77%);
+  width: 100%;
+}
+
+.withShadow {
+  box-shadow:  5px 2px 10px rgba(0, 0, 0, 0.3);
+}

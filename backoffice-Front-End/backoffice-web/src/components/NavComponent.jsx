@@ -40,27 +40,8 @@ export function NavComponent() {
 
 
   return (
-    <div className="col-auto col-md-3 col-xl-2 px-0 bg-primary min-vh-100 d-flex flex-column align-items-center align-items-sm-start">
-      <div
-        href="/"
-        className="mt-4 container d-flex align-items-center justify-content-center p-0"
-      >
-        <img
-          src={imageLogoFinnegans}
-          alt="Logo Finnegans"
-          width="70"
-          height="60"
-        />
-        <span className="fs-3 d-none d-sm-inline text-dark fw-bold">
-          Finnegans
-        </span>
-      </div>
-      <span
-        className="d-none d-sm-inline mx-auto text-dark fw-normal fs-5"
-        style={{ letterSpacing: ".3rem" }}
-      >
-        BACKOFFICE
-      </span>
+    <div className="col-auto col-md-3 col-xl-2 px-0 min-vh-100 d-flex flex-column align-items-center align-items-sm-start">
+      
       <hr className="mb-5" />
       <Link to="/" className="mb-3 ps-4 py-2 bg-hover container">
         <FontAwesomeIcon

@@ -4,6 +4,7 @@ import { LuFileSignature, LuFilePlus2, LuFileClock } from 'react-icons/lu';
 import '../assets/styles/homeStyle.css'
 import NavPage from "../pages/NavPage";
 import { useAuthStore } from "../hooks/useAuthStore";
+import HeaderComponent from './HeaderComponent';
 
 const Home = () => {
     const { user } = useAuthStore()
@@ -27,9 +28,11 @@ const Home = () => {
     ]
 
     return (
-        <div className="d-flex">
+        <>
+        <HeaderComponent/>
+        <div className="d-flex ">
             <NavPage />
-            <section className="w-100 m-5">
+            <section className="w-100 p-5 bgGrey">
                 <div className='d-flex justify-content-between'>
                     <div>
                         <div className='d-flex align-items-center'>
@@ -59,6 +62,7 @@ const Home = () => {
                 </div>
             </section>
         </div>
+        </>
     )
 }
 

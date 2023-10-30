@@ -9,6 +9,8 @@ import { useAuthStore } from "../../hooks";
 import Toastify from 'toastify-js'
 import "toastify-js/src/toastify.css"
 import Swal from 'sweetalert2'
+import HeaderComponent from '../HeaderComponent';
+import AddRemoveButtonsComponent from '../AddRemoveButtonsComponent';
 
 function UserListComponent() {
   //   const { data } = useFetch("http://localhost:8080/user");
@@ -93,37 +95,28 @@ function UserListComponent() {
     navigate("/user/editUser");
   }
 
+  function newUser()
+  {
+    navigate("/user/newUser");
+  }
+
   return (
     <>
+            <HeaderComponent/>
       <div className="container-fluid">
         <div className="row">
           {/* Navbar */}
           <NavComponent />
 
           {/* Table and Buttons */}
-          <div className="col-md-9 col-xl-10">
+          <div className="col-md-3 col-xl-10 bgGrey">
             {/* Button Section */}
-            <section className="d-flex justify-content-center m-4">
-              <button
-                type="button"
-                className="btn btn-primary mx-3 fw-bold btn-lg"
-                onClick={() => navigate("/user/newUser")}
-              >
-                Nuevo
-              </button>
-              <button
-                type="button"
-                className="btn btn-primary mx-3 fw-bold btn-lg"
-                onClick={deleteUser}
-              >
-                Eliminar
-              </button>
-            </section>
+            <AddRemoveButtonsComponent newHandler={newUser} removeHandler={deleteUser} name=""/>
 
             {/* Table Section */}
             <section
-              className="container bg-primary rounded-3 px-5 pt-4"
-              style={{ minHeight: "75vh", width: "90%" }}
+              className="container shadow-lg p-0"
+              style={{ maxHeight: '85vh', overflowY: 'auto' }}
             >
               <div className="bg-white rounded-3 overflow-hidden">
                 <table className="table table-hover">
@@ -144,7 +137,7 @@ function UserListComponent() {
                   </thead>
                   <tbody>
                     {users?.map((user) => (
-                      <tr key={user.id}>
+                      <tr key={user.id} style={{ marginBottom: '0px'}}>
                         <td>
                           <input
                             type="checkbox"

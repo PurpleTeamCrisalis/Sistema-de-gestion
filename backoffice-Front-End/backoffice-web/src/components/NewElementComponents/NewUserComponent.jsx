@@ -3,6 +3,7 @@ import NavComponent from "../NavComponent";
 import { useForm, useUsersStore } from "../../hooks";
 import Toastify from 'toastify-js'
 import "toastify-js/src/toastify.css"
+import HeaderComponent from '../HeaderComponent';
 
 const formDTO = {
   username: "",
@@ -79,6 +80,8 @@ function NewUserComponent() {
 
   return (
     <>
+    
+    <HeaderComponent/>
       <div className="container-fluid">
         <div className="row">
           {/* Navbar */}
