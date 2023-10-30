@@ -40,13 +40,8 @@ public class OrderFactory {
 
   public Order CreateOrderEntityForInsertNewRecord() {
     Order order = new Order();
-        // .builder()
-        // .products(new ArrayList<ProductDetail>())
-        // .services(new ArrayList<ServiceDetail>())
-        // .total(0.00)
-        // .enabled(true)
-        // .build();
     order.getFormattedDate();
+    order.setEnabled(true);
     return order;
   }
 
@@ -60,7 +55,7 @@ public class OrderFactory {
       .builder()
       .id(order.getId())
       .date(order.getDate())
-      // .enabled(order.isEnabled())
+      .enabled(order.isEnabled())
       .client(client)
       .products(products)
       .services(services)

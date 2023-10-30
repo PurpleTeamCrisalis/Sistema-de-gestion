@@ -32,8 +32,8 @@ public class OrderResponse {
   // @JsonProperty("discountService")
   // private
 
-  // @JsonProperty("enabled")
-  // private Boolean enabled;
+  @JsonProperty("enabled")
+  private Boolean enabled;
 
   @JsonProperty("products")
   @Singular
