@@ -13,7 +13,7 @@ import edu.bootcamp.backoffice.model.Charge.ChargeFactory;
 import edu.bootcamp.backoffice.model.Charge.dto.ChargeRequest;
 import edu.bootcamp.backoffice.model.Charge.dto.ChargeResponse;
 import edu.bootcamp.backoffice.model.Charge.dto.UpdateChargeRequest;
-import edu.bootcamp.backoffice.model.order.ChargeConstraints;
+import edu.bootcamp.backoffice.model.EntitiesConstraints;
 import edu.bootcamp.backoffice.model.user.User;
 import edu.bootcamp.backoffice.model.user.dto.UpdateUserRequest;
 import edu.bootcamp.backoffice.repository.ChargeRepository;
@@ -73,8 +73,8 @@ public class ChargeServiceImpl implements ChargeService{
     private void validateChargename(String chargename, StringBuilder errorBuilder){
         validator.validateVarchar(
             chargename, 
-            ChargeConstraints.CHARGENAME_MIN_LENGTH, 
-            ChargeConstraints.CHARGENAME_MAX_LENGTH,
+            EntitiesConstraints.CHARGENAME_MIN_LENGTH, 
+            EntitiesConstraints.CHARGENAME_MAX_LENGTH,
             errorBuilder, 
             chargename
         );
@@ -84,8 +84,8 @@ public class ChargeServiceImpl implements ChargeService{
     public void validatePercentage(int percentage, StringBuilder errorBuilder){
         validator.validateInterge(
             percentage, 
-            ChargeConstraints.CHARGEPERCENTAGE_MIN_LENGTH, 
-            ChargeConstraints.CHARGEPERCENTAGE_MAX_LENGTH,
+            EntitiesConstraints.CHARGEPERCENTAGE_MIN_LENGTH, 
+            EntitiesConstraints.CHARGEPERCENTAGE_MAX_LENGTH,
             errorBuilder, 
             "Percentage");;
     }
