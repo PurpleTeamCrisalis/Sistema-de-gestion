@@ -29,19 +29,20 @@ public class UpdateClientRequest {
     @JsonProperty("adress")
     private String adress;
 
+    @JsonProperty("StartDate")
+    private Date startdate;
+
+    @JsonProperty("enabled")
+    private Boolean enabled;
+
     @JsonProperty("isBussiness")
     private Boolean isbussiness;
 
     @JsonProperty("bussinessName")
     private String bussinessname;
 
-    @JsonProperty("StartDate")
-    private Date startdate;
-
     @JsonProperty("cuit")
     private Long cuit;
 
-    @JsonProperty("enabled")
-    private Boolean enabled;
 
 }

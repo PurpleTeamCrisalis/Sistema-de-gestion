@@ -1,6 +1,7 @@
 package edu.bootcamp.backoffice.service;
 
 import edu.bootcamp.backoffice.exception.custom.dbValidation.*;
+import edu.bootcamp.backoffice.exception.custom.parameterValidation.EmptyElementException;
 import edu.bootcamp.backoffice.exception.custom.parameterValidation.InvalidArgumentsFormatException;
 import edu.bootcamp.backoffice.model.order.Order;
 import edu.bootcamp.backoffice.model.client.Client;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 
 @Service
 public class ClientServiceImpl implements ClientService {
@@ -86,54 +88,57 @@ public class ClientServiceImpl implements ClientService {
         validateErrors(errors);
     }
 
-    private Client validateUpdateConflicts(
-            int id,
-            UpdateClientRequest clientDto
-    ) {
-        Optional<Client> result = clientRepository
-                .findById(id);
-        Client client;
-        boolean modified = checkIfModified(result.get(), clientDto);
-        if (!modified)
-            throw new AlreadyUpdatedException(
-                    "Not modified database."
-            );
-        client = findAndSetAtributesIfNotNull(id, clientDto);
-        return client;
-    }
-
-    private Boolean checkIfModified(Client client, UpdateClientRequest clientDto) {
-        if (
-                !client.getName().equals(clientDto.getName()) ||
-                        !client.getLastName().equals(clientDto.getLastname()) ||
-                        !client.getDni().equals(clientDto.getDni()) ||
-                        !client.getPhone().equals(clientDto.getPhone()) ||
-                        !client.getAdress().equals(clientDto.getAdress()) ||
-                        !client.getBussinessName().equals(clientDto.getBussinessname()) ||
-                        !client.getStartDate().equals(clientDto.getStartdate()) ||
-                        !client.getCuit().equals(clientDto.getCuit()) ||
-                                !((Boolean)client.isEnabled()).equals(clientDto.getEnabled())
-        ) return true;
-        return false;
-    }
-
-    private Client findAndSetAtributesIfNotNull(int id, UpdateClientRequest clientDto) {
+    private Client validateUpdateConflicts(int id, UpdateClientRequest clientDto)
+    {
         Client client = validator.completeValidationForId(
                 id,
                 clientRepository
         );
-
-        client.setName(clientDto.getName());
-        client.setLastName(clientDto.getLastname());
-        client.setDni(clientDto.getDni());
-        client.setPhone(clientDto.getPhone());
-        client.setAdress(clientDto.getAdress());
-        if(client.getIsBussiness()) {
-            client.setBussinessName(clientDto.getBussinessname());
+        if(clientDto.getName()!=null)
+            client.setName(clientDto.getName());
+        if(clientDto.getLastname()!=null)
+            client.setLastName(clientDto.getLastname());
+        if(clientDto.getDni()!=null)
+            client.setDni(clientDto.getDni());
+        if(clientDto.getPhone()!=null)
+            client.setPhone(clientDto.getPhone());
+        if(clientDto.getAdress()!=null)
+            client.setAdress(clientDto.getAdress());
+        if (clientDto.getStartdate() != null)
             client.setStartDate(clientDto.getStartdate());
-            client.setCuit(clientDto.getCuit());
+        if(clientDto.getIsbussiness()!=null)
+        {
+            if(clientDto.getIsbussiness()) {
+                if (client.getIsBussiness()) {
+                    if (clientDto.getBussinessname() != null)
+                        client.setBussinessName(clientDto.getBussinessname());
+                    if (clientDto.getCuit() != null)
+                        client.setCuit(clientDto.getCuit());
+                } else {
+                    StringBuilder errorBuilder = new StringBuilder(
+                        "Intentando actualizar el usuario Persona a usuario Empresa: "
+                    );
+                    int count = errorBuilder.length();
+                    if (clientDto.getBussinessname() == null)
+                        errorBuilder.append("No se provee el nombre de la empresa.");
+                    if (clientDto.getCuit() == null)
+                        errorBuilder.append("No se provee el cuit de la empresa.");
+                    if (errorBuilder.length() > count)
+                        throw new EmptyElementException(errorBuilder.toString());
+                    client.setBussinessName(clientDto.getBussinessname());
+                    client.setCuit(clientDto.getCuit());
+                    client.setIsBussiness(true);
+                }
+            }
+            else
+            {
+                client.setBussinessName(null);
+                client.setCuit(null);
+                client.setIsBussiness(false);
+            }
         }
-        client.setEnabled(clientDto.getEnabled());
+        if(clientDto.getEnabled()!=null)
+            client.setEnabled(clientDto.getEnabled());
         return client;
     }
 
@@ -212,8 +217,8 @@ public class ClientServiceImpl implements ClientService {
         );
         validator.validateVarchar(
                 clientRequest.getAdress(),
-                EntitiesConstraints.CLIENTNAME_MIN_LENGTH,
-                EntitiesConstraints.CLIENTNAME_MAX_LENGTH,
+                EntitiesConstraints.CLIENTADDRESS_MIN_LENGTH,
+                EntitiesConstraints.CLIENTADDRESS_MAX_LENGTH,
                 errorBuilder,
                 "Client adress"
         );
@@ -224,8 +229,8 @@ public class ClientServiceImpl implements ClientService {
         if(clientRequest.getIsbussiness()){
             validator.validateVarchar(
                     clientRequest.getBussinessname(),
-                    EntitiesConstraints.CLIENTNAME_MIN_LENGTH,
-                    EntitiesConstraints.CLIENTNAME_MAX_LENGTH,
+                    EntitiesConstraints.CLIENT_BUSSINESSNAME_MIN_LENGTH,
+                    EntitiesConstraints.CLIENT_BUSSINESSNAME_MAX_LENGTH,
                     errorBuilder,
                     "Client bussiness name"
             );
@@ -247,64 +252,63 @@ public class ClientServiceImpl implements ClientService {
             UpdateClientRequest clientRequest,
             StringBuilder errorBuilder
     ) {
-        validator.validateVarchar(
-                clientRequest.getName(),
-                EntitiesConstraints.CLIENTNAME_MIN_LENGTH,
-                EntitiesConstraints.CLIENTNAME_MAX_LENGTH,
-                errorBuilder,
-                "Client name"
-        );
-        validator.validateVarchar(
-                clientRequest.getLastname(),
-                EntitiesConstraints.CLIENTLASTNAME_MIN_LENGTH,
-                EntitiesConstraints.CLIENTLASTNAME_MAX_LENGTH,
-                errorBuilder,
-                "Client lastname"
-        );
-        validator.validateLongValue(
-                (long)clientRequest.getDni(),
-                (long)EntitiesConstraints.CLIENTDNI_MAX,
-                (long)EntitiesConstraints.CLIENTDNI_MIN,
-                "Client dni",
-                errorBuilder
-        );
-        validator.validateLongValue(
-                clientRequest.getPhone(),
-                EntitiesConstraints.CLIENTPHONE_MAX,
-                EntitiesConstraints.CLIENTPHONE_MIN,
-                "Client phone",
-                errorBuilder
-        );
-        validator.validateVarchar(
-                clientRequest.getAdress(),
-                EntitiesConstraints.CLIENTNAME_MIN_LENGTH,
-                EntitiesConstraints.CLIENTNAME_MAX_LENGTH,
-                errorBuilder,
-                "Client adress"
-        );
-       if(validator.isEmpty(
-                clientRequest.getIsbussiness(),
-                errorBuilder
-        ))return;
-        if(clientRequest.getIsbussiness()){
+        if(clientRequest.getName()!=null)
             validator.validateVarchar(
-                    clientRequest.getBussinessname(),
+                    clientRequest.getName(),
                     EntitiesConstraints.CLIENTNAME_MIN_LENGTH,
                     EntitiesConstraints.CLIENTNAME_MAX_LENGTH,
                     errorBuilder,
-                    "Client bussiness name"
+                    "Client name"
             );
-            validator.isEmpty(
-                    clientRequest.getStartdate(),
-                    errorBuilder
+        if(clientRequest.getLastname()!=null)
+            validator.validateVarchar(
+                    clientRequest.getLastname(),
+                    EntitiesConstraints.CLIENTLASTNAME_MIN_LENGTH,
+                    EntitiesConstraints.CLIENTLASTNAME_MAX_LENGTH,
+                    errorBuilder,
+                    "Client lastname"
             );
+        if(clientRequest.getDni()!=null)
             validator.validateLongValue(
-                    clientRequest.getCuit(),
-                    EntitiesConstraints.CLIENTCUIT_MAX,
-                    EntitiesConstraints.CLIENTCUIT_MIN,
-                    "Client cuit",
+                    (long)clientRequest.getDni(),
+                    (long)EntitiesConstraints.CLIENTDNI_MAX,
+                    (long)EntitiesConstraints.CLIENTDNI_MIN,
+                    "Client dni",
                     errorBuilder
             );
+        if(clientRequest.getPhone()!=null)
+            validator.validateLongValue(
+                    clientRequest.getPhone(),
+                    EntitiesConstraints.CLIENTPHONE_MAX,
+                    EntitiesConstraints.CLIENTPHONE_MIN,
+                    "Client phone",
+                    errorBuilder
+            );
+        if(clientRequest.getAdress()!=null)
+            validator.validateVarchar(
+                    clientRequest.getAdress(),
+                    EntitiesConstraints.CLIENTNAME_MIN_LENGTH,
+                    EntitiesConstraints.CLIENTNAME_MAX_LENGTH,
+                    errorBuilder,
+                    "Client adress"
+            );
+       if(clientRequest.getIsbussiness() != null && clientRequest.getIsbussiness()){
+           if(clientRequest.getBussinessname()!=null)
+               validator.validateVarchar(
+                        clientRequest.getBussinessname(),
+                        EntitiesConstraints.CLIENTNAME_MIN_LENGTH,
+                        EntitiesConstraints.CLIENTNAME_MAX_LENGTH,
+                        errorBuilder,
+                        "Client bussiness name"
+                );
+           if(clientRequest.getCuit()!=null)
+                validator.validateLongValue(
+                        clientRequest.getCuit(),
+                        EntitiesConstraints.CLIENTCUIT_MAX,
+                        EntitiesConstraints.CLIENTCUIT_MIN,
+                        "Client cuit",
+                        errorBuilder
+                );
         }
     }
 }

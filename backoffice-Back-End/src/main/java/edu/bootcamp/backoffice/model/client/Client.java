@@ -57,7 +57,7 @@ public class Client implements SoftDeletable {
     @Column(
             name = "adress",
             nullable = false,
-            length = EntitiesConstraints.CLIENTADRESS_MAX_LENGTH
+            length = EntitiesConstraints.CLIENTADDRESS_MAX_LENGTH
     )
     private String adress;
 
@@ -70,7 +70,7 @@ public class Client implements SoftDeletable {
 
     @Column(
             name = "bussinessName",
-            length = EntitiesConstraints.CLIENTBUSSINESSNAME_MAX_LENGTH
+            length = EntitiesConstraints.CLIENT_BUSSINESSNAME_MAX_LENGTH
     )
     private String bussinessName;
 
