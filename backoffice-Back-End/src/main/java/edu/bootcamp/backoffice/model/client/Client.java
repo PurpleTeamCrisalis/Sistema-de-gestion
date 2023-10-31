@@ -43,8 +43,7 @@ public class Client implements SoftDeletable {
 
     @Column(
             name = "dni",
-            nullable = false,
-            unique = true
+            nullable = false
     )
     private Integer dni;
 
@@ -80,8 +79,7 @@ public class Client implements SoftDeletable {
     private Date startDate;
 
     @Column(
-            name = "cuit",
-            unique = true
+            name = "cuit"
     )
     private Long cuit;
 

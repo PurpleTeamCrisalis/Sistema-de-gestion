@@ -286,7 +286,7 @@ public class ClientServiceImpl implements ClientService {
                 clientRequest.getIsbussiness(),
                 errorBuilder
         ))return;
-        if(clientRequest.getIsbussiness()){
+       if(clientRequest.getIsbussiness()){
             validator.validateVarchar(
                     clientRequest.getBussinessname(),
                     EntitiesConstraints.CLIENTNAME_MIN_LENGTH,
@@ -305,6 +305,10 @@ public class ClientServiceImpl implements ClientService {
                     "Client cuit",
                     errorBuilder
             );
-        }
+       }
+       validator.isEmpty(
+               clientRequest.getEnabled(),
+               errorBuilder
+       );
     }
 }
