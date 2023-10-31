@@ -19,12 +19,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Data
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-
+@SuperBuilder
 public abstract class Asset implements SoftDeletable {
 
 	@Id
@@ -44,7 +45,12 @@ public abstract class Asset implements SoftDeletable {
 	@Column(name = "enabled", nullable = false)
 	private boolean enabled = true;
 
-	// private List<Tax> taxs = new ArrayList<>();
+	
+	//Descomentar cuando esté la clase taxs
+	
+	//private List<Tax> taxs = new ArrayList<>();
+	
+	
 
 	public Boolean isDeleted() {
 		return !enabled;
@@ -53,4 +59,5 @@ public abstract class Asset implements SoftDeletable {
 	public Boolean isNotDeleted() {
 		return enabled;
 	}
+
 }

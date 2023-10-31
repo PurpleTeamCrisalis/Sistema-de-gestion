@@ -6,13 +6,16 @@ import javax.persistence.Table;
 
 import edu.bootcamp.backoffice.model.asset.Asset;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Data
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@SuperBuilder
 @Table(name = "serviceTable")
 public class Service extends Asset {
 
@@ -33,6 +36,5 @@ public class Service extends Asset {
 
 		return suport;
 	}
-		
 
 }

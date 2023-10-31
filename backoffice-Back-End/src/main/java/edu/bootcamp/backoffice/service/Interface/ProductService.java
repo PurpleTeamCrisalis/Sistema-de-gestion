@@ -16,7 +16,7 @@ public interface ProductService
 
     public ProductResponse get(int id);
 
-    public List<Product> get()
+    public List<ProductResponse> get()
             throws InvalidIdFormatException;
 
     public ProductResponse update(int id, UpdateProductRequest productDto)

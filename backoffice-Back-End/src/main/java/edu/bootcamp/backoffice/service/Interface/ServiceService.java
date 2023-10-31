@@ -14,7 +14,7 @@ public interface ServiceService {
 
 	public ServiceResponse get(int id);
 
-	public List<Service> get() throws InvalidIdFormatException;
+	public List<ServiceResponse> get() throws InvalidIdFormatException;
 
 	public ServiceResponse update(int id, UpdateServiceRequest productDto) throws InvalidIdFormatException;
 
