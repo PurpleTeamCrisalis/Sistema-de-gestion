@@ -128,6 +128,7 @@ function NewChargeComponent() {
                       type="number"
                       name="percentage"
                       id="percentage"
+                      min="0"
                       onChange={handleInputChange}
                       value={percentage}
                       placeholder="Ingresar porcentaje"
