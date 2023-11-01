@@ -2,33 +2,33 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import NavComponent from "../NavComponent";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
 // import { useFetch } from "../../hooks/useFetch";
-import { useUsersStore } from "../../hooks";
+import { useOrdersStore } from "../../hooks";
 import { useAuthStore } from "../../hooks";
 import Toastify from 'toastify-js'
 import "toastify-js/src/toastify.css"
 import Swal from 'sweetalert2'
 import HeaderComponent from '../HeaderComponent';
-import { ScrollModalComponent } from "../ScrollModalComponent/ScrollModalComponent.jsx"
-import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faCirclePlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import "../../assets/styles/AddRemoveButtonsStyle.css"
 
-function UserListComponent() {
+function OrderListComponent() {
   //   const { data } = useFetch("http://localhost:8080/user");
   const navigate = useNavigate();
 
-  const { users, startLoadingUsers, setActiveUser, startDeletingUser, activeUser } = useUsersStore();
+  const { orders, startLoadingOrders, setActiveOrder, /*startDeletingUser,*/ activeUser } = useOrdersStore();
   const { user } = useAuthStore()
 
 
   // CUANDO SE USE EL COMPONENTE, SE VA TRAER LA LISTA DE USUARIOS
 
   useEffect(() => {
-    startLoadingUsers();
+    startLoadingOrders();
   }, []);
 
 
-  function checkActiveUser(event, user) {
+  function checkActiveOrder(event, user) {
 
     let checkboxes = document.getElementsByClassName("custom-checkbox");
     let checkbox = event.target;
@@ -37,10 +37,10 @@ function UserListComponent() {
       if (item.id == checkbox.id) {
         if (checkbox.checked) {
           tRow.classList.add("table-active");
-          setActiveUser(user);
+          setActiveOrder(user);
         } else {
           tRow.classList.remove("table-active");
-          setActiveUser(null);
+          setActiveOrder(null);
         }
       } else {
         item.checked = false;
@@ -49,56 +49,59 @@ function UserListComponent() {
     }
   }
 
-  function deleteUser() {
-    if (activeUser) {
-      if (activeUser.username != user.username) {
-        if (activeUser.enabled === true) {
-          Swal.fire({
-            title: `¿Seguro que quieres eliminar a ${activeUser.username}?`,
-            showCancelButton: true,
-            confirmButtonText: 'confirmar',
-            cancelButtonText: 'cancelar',
-          }).then((result) => {
-            /* Read more about isConfirmed, isDenied below */
-            if (result.isConfirmed) {
-              startDeletingUser();
-              Swal.fire('Usuario Eliminado', '', 'success')
-            }
-          });
-        } else {
-          return Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: "No puede eliminar un usuario que esté deshabilitado",
-          });
-        }
-      } else {
-        return Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "No puede eliminar el usuario con el que está logeado",
-        });
-      }
+  // function deleteUser() {
+  //   if (activeUser) {
+  //     if (activeUser.username != user.username) {
+  //       if (activeUser.enabled === true) {
+  //         Swal.fire({
+  //           title: `¿Seguro que quieres eliminar a ${activeUser.username}?`,
+  //           showCancelButton: true,
+  //           confirmButtonText: 'confirmar',
+  //           cancelButtonText: 'cancelar',
+  //         }).then((result) => {
+  //           /* Read more about isConfirmed, isDenied below */
+  //           if (result.isConfirmed) {
+  //             startDeletingUser();
+  //             Swal.fire('Usuario Eliminado', '', 'success')
+  //           }
+  //         });
+  //       } else {
+  //         return Swal.fire({
+  //           icon: "error",
+  //           title: "Error",
+  //           text: "No puede eliminar un usuario que esté deshabilitado",
+  //         });
+  //       }
+  //     } else {
+  //       return Swal.fire({
+  //         icon: "error",
+  //         title: "Error",
+  //         text: "No puede eliminar el usuario con el que está logeado",
+  //       });
+  //     }
 
-    } else {
-      Toastify({
-        text: "Seleccionar un usuario para eliminar",
-        duration: 2000,
-        style: {
-          background: "linear-gradient(to right, #f44336, #b71c1c)",
-        },
-      }).showToast();
-    }
+  //   } else {
+  //     Toastify({
+  //       text: "Seleccionar un usuario para eliminar",
+  //       duration: 2000,
+  //       style: {
+  //         background: "linear-gradient(to right, #f44336, #b71c1c)",
+  //       },
+  //     }).showToast();
+  //   }
+  // }
+
+  function showDetails(event, order) {
+    alert("Mostrar modal con protuctos y sercicios");
+    /*
+    setActiveOrder(order);
+    navigate("/user/editOrder");*/
   }
 
-  function editUser(event, user) {
-    setActiveUser(user);
-    navigate("/user/editUser");
-  }
-
-  function newUser()
+  
+  function newOrder()
   {
-    navigate("/user/newUser");
+    navigate("/order/newOrder");
   }
 
   return (
@@ -112,16 +115,24 @@ function UserListComponent() {
           {/* Table and Buttons */}
           <div className="col-md-3 col-xl-10 bgGrey">
             {/* Button Section */}
-            <section className='d-flex justify-content-center m-3 gap-4'>
-                <button type="button" className="btn fw-bold btn-lg bgAdd circle" onClick={()=>{}} data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                <FontAwesomeIcon icon={faPlus} color="white"/>
+            {/*<section className='d-flex justify-content-center m-3 gap-2'>
+                <button type="button" className="btn fw-bold btn-lg bgAdd circle iconButton" onClick={()=>{}} data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                  <FontAwesomeIcon className="gradientWhite" icon={faCirclePlus} color="white"/>
                 </button>
-                <button type="button" className="btn fw-bold btn-lg bgRemove circle" onClick={deleteUser}>
-                <FontAwesomeIcon icon={faTrash} color="white"/>
+                {/*<button type="button" className="btn fw-bold btn-lg bgRemove circle iconButton" onClick={deleteUser}>
+                  <FontAwesomeIcon className="gradientWhite" icon={faTrash} color="white"/>
+  </button>}
+                <ScrollModalComponent list={orders}/>
+            </section>*/}
+
+            <section className='d-flex justify-content-center m-3 gap-2'>
+                <button type="button" className="btn fw-bold btn-lg bgAdd circle iconButton" onClick={newOrder} >
+                  <FontAwesomeIcon className="gradientWhite" icon={faCirclePlus} color="white"/>
                 </button>
-                <ScrollModalComponent list={users}/>
+                {/*<ScrollModalComponent list={orders}/>*/}
             </section>
 
+            
             {/* Table Section */}
             <section
               className="container shadow-lg p-0"
@@ -139,36 +150,38 @@ function UserListComponent() {
                   >
                     <tr>
                       <th scope="col">#</th>
-                      <th scope="col">Nombre Usuario</th>
-                      <th scope="col">Estado</th>
+                      <th scope="col">Cliente</th>
+                      <th scope="col">Total</th>
+                      <th scope="col">Fecha</th>
                       <th scope="col">#</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {users?.map((user) => (
-                      <tr key={user.id} style={{ marginBottom: '0px'}}>
+                    {orders?.map((order) => (
+                      <tr key={order.id} style={{ marginBottom: '0px'}}>
                         <td>
                           <input
                             type="checkbox"
-                            id={user.id}
+                            id={order.id}
                             style={{
                               color: "#000000",
                               cursor: "pointer",
                             }}
-                            onChange={(event) => checkActiveUser(event, user)}
+                            onChange={(event) => checkActiveOrder(event, order)}
                             className="custom-checkbox"
                           />
                         </td>
-                        <td>{user.username}</td>
-                        <td>{user.enabled ? "habilitado" : "deshabilitado"}</td>
+                        <td>{order.client.id}</td>
+                        <td>{order.total}</td>
+                        <td>{order.date}</td>
                         <td>
                           <FontAwesomeIcon
-                            icon={faPenToSquare}
+                            icon={faEye}
                             style={{
                               color: "#000000",
                               cursor: "pointer",
                             }}
-                            onClick={(event) => editUser(event, user)}
+                            onClick={(event) => showDetails(event, order)}
                           />
                         </td>
                       </tr>
@@ -184,7 +197,7 @@ function UserListComponent() {
   );
 }
 
-export default UserListComponent;
+export default OrderListComponent;
 
     
     // import React, { useEffect, useState } from 'react'

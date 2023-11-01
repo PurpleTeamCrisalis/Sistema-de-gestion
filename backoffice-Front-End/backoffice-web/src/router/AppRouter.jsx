@@ -12,6 +12,7 @@ import ClientListComponent from "../components/ListComponents/ClientListComponen
 import ChargeListComponent from "../components/ListComponents/ChargeListComponent";
 import NewUserComponent from "../components/NewElementComponents/NewUserComponent";
 import EditUserComponent from "../components/EditElementComponents/EditUserComponent";
+import {NewOrderComponent} from "../components/NewElementComponents/NewOrder/NewOrderComponent";
 import { useAuthStore } from "../hooks";
 import { getLastView } from "../helpers";
 
@@ -42,7 +43,7 @@ export const AppRouter = () => {
     <Routes>
       {status === "authenticated" ? (
         <>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<HomePage />}/>
           <Route path="/user" element={<UserListComponent />}></Route>
           <Route path="/service" element={<ServiceListComponent />}></Route>
           <Route path="/product" element={<ProductListComponent />}></Route>
@@ -51,7 +52,8 @@ export const AppRouter = () => {
           <Route path="/charge" element={<ChargeListComponent />}></Route>
           <Route path="/user/newUser" element={<NewUserComponent />}></Route>
           <Route path="/user/editUser" element={<EditUserComponent />}></Route>
-          <Route path="/*" element={<Navigate to="/" />} />
+          <Route path="/order/newOrder" element={<NewOrderComponent />}></Route>
+          <Route path="/*" element={<Navigate to="/" />}/>
         </>
       ) : (
         <>
