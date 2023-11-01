@@ -21,6 +21,4 @@ public class UpdateUserRequest
     @JsonProperty("enabled")
     private Boolean enabled;
 
-    @JsonProperty("id")
-    private Integer id;
 }
