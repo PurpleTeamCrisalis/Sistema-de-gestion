@@ -49,8 +49,8 @@ public class ProductController {
 	}
 
 	@GetMapping(path = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Product>> getAllProducts() {
-		List<Product> products = productService.get();
+	public ResponseEntity<List<ProductResponse>> getAllProducts() {
+		List<ProductResponse> products = productService.get();
 		return ResponseEntity.ok(products);
 	}
 

@@ -53,8 +53,8 @@ public class ServiceController {
 	}
 
 	@GetMapping(path = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Service>> getAllServices() {
-		List<Service> services = serviceService.get();
+	public ResponseEntity<List<ServiceResponse>> getAllServices() {
+		List<ServiceResponse> services = serviceService.get();
 		return ResponseEntity.ok(services);
 	}
 
