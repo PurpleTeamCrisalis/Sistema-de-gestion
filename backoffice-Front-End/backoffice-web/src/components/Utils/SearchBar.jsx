@@ -1,8 +1,6 @@
 import React from 'react'
 
 const SearchBar = ({rawList,setFilteredList,compareTag}) => {
-    let searchText = "";
-    let filteredList = [];
     
     function handleSearchChange(e) {
         const searchText = e.target.value.toLowerCase();
@@ -17,13 +15,17 @@ const SearchBar = ({rawList,setFilteredList,compareTag}) => {
     }
     
     return (
-        <>
+        <div className='d-flex width-100 justify-content-center p-2'>
             <input 
             type="text"
             placeholder='Buscar'
             onChange={event=>handleSearchChange(event)}
+            style={{
+                width: "400px",
+                borderRadius: "5px"
+            }}
             />
-        </>
+        </div>
     )
 }
 
