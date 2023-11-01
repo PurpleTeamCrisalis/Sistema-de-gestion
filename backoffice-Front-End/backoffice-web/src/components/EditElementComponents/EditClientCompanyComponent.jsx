@@ -3,6 +3,7 @@ import NavComponent from '../NavComponent'
 import { useNavigate } from 'react-router-dom'
 import { useClientsStore } from '../../hooks/useClientsStore';
 import { useForm } from '../../hooks';
+import { formValidations } from '../../utils/FormValidations'
 import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
 
@@ -24,49 +25,6 @@ function EditClientCompanyComponent() {
         id: activeClient?.id,
     });
 
-    // Validaciones de inputs
-    function formValidations() {
-        function validateField(value, fieldName, minLength, maxLength) {
-            let errorMessage;
-            if (value.length < minLength || value.length > maxLength) {
-                if ((fieldName !== "teléfono")) {
-                    errorMessage = `Error: ${fieldName} debe tener entre ${minLength} y ${maxLength} caracteres`;
-                } else {
-                    errorMessage = `Error: ${fieldName} debe tener ${minLength} caracteres`
-                }
-                Toastify({
-                    text: errorMessage,
-                    duration: 2000,
-                    style: {
-                        background: "linear-gradient(to right, #f44336, #b71c1c)",
-                    },
-                }).showToast();
-                return false;
-            }
-            return true;
-        }
-        if (StartDate === "") {
-            Toastify({
-                text: "Ingrese una fecha",
-                duration: 2000,
-                style: {
-                    background: "linear-gradient(to right, #f44336, #b71c1c)",
-                },
-            }).showToast();
-            return true
-        }
-        if (!validateField(name, "Nombre", 5, 50) || !validateField(lastName, "Apellido", 5, 50) ||
-            !validateField(dni, "DNI", 7, 9) || !validateField(phone, "teléfono", 10, 10) ||
-            !validateField(adress, "dirección", 1, 100) || !validateField(bussinessName, "Nombre de Empresa", 5, 100)
-            || !validateField(cuit, "CUIT", 10, 11)
-        ) {
-            return true
-        } else {
-            return false
-        }
-
-    }
-
     // Edicion de cliente
     function editClient(event) {
         event.preventDefault();
@@ -82,14 +40,15 @@ function EditClientCompanyComponent() {
             isBussiness,
             bussinessName,
             StartDate,
+            enabled,
             cuit: parseInt(cuit),
         };
 
         // Validaciones de los datos Editados
-        if (formValidations()) {
+        if (formValidations(clientAux)) {
             return console.log("Campos incorrectos")
         }
-
+        console.log(clientAux)
         // Verifica si los nuevos datos son ya existentes
         const clienteExiste = clients?.find(client => client.dni === dni);
         if ((clienteExiste) && (activeClient.dni !== dni)) {
@@ -250,6 +209,37 @@ function EditClientCompanyComponent() {
                                         </div>
                                     </div>
                                 </div>
+
+                                {/* Estado del cliente */}
+                                <div className="d-flex align-items-center justify-content-center">
+                                    <h5 className="mb-0 me-3">Estado</h5>
+                                    <div className="d-flex align-items-center gap-3">
+                                        <div className="d-flex align-items-center">
+                                            <input
+                                                type="radio"
+                                                name="enabled"
+                                                id="enabled"
+                                                onChange={handleInputChange}
+                                                value="true"
+                                                defaultChecked={activeClient.enabled === true}
+                                            />
+                                            <label className="mb-0 ms-2 fs-5">Habilitado</label>
+                                        </div>
+                                        <div className="d-flex align-items-center">
+                                            <input
+                                                type="radio"
+                                                name="enabled"
+                                                id="enabled"
+                                                onChange={handleInputChange}
+                                                value="false"
+                                                defaultChecked={activeClient.enabled === false}
+                                            />
+                                            <label className="mb-0 ms-2 fs-5">Deshabilitado</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+
                             </div>
 
                         </section>

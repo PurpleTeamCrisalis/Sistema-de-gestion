@@ -1,11 +1,11 @@
-import React, { startTransition, useState } from 'react'
+import React from 'react'
 import NavComponent from '../NavComponent'
 import { useNavigate } from 'react-router-dom'
 import { useForm } from '../../hooks'
 import { useClientsStore } from '../../hooks/useClientsStore'
 import Toastify from 'toastify-js'
 import "toastify-js/src/toastify.css"
-import { faPhoneSquare } from '@fortawesome/free-solid-svg-icons'
+import { formValidations } from '../../utils/FormValidations'
 
 const formDTO = {
     name: "",
@@ -21,65 +21,21 @@ const formDTO = {
 
 function NewClientComponent() {
     const navigate = useNavigate();
-    const [isEmpresa, setIsEmpresa] = useState(false)
     const { startAddingClients, clients } = useClientsStore();
     const { name, lastName, dni, phone, adress, isBussiness, bussinessName, StartDate, cuit, handleInputChange, clearForm } = useForm(formDTO);
 
-    function emptyForm() {
-        return (
-            name.length === 0,
-            lastName.length === 0,
-            dni.length === 0,
-            phone.length === 0,
-            adress.length === 0
-        )
-    }
-
-    function formValidations() {
-        function validateField(value, fieldName, minLength, maxLength) {
-            let errorMessage;
-            if (value.length < minLength || value.length > maxLength) {
-                if (fieldName != "teléfono") {
-                    errorMessage = `Error: ${fieldName} debe tener entre ${minLength} y ${maxLength} caracteres`;
-                } else {
-                    errorMessage = `Error: ${fieldName} debe tener ${minLength} caracteres`
-                }
-                Toastify({
-                    text: errorMessage,
-                    duration: 2000,
-                    style: {
-                        background: "linear-gradient(to right, #f44336, #b71c1c)",
-                    },
-                }).showToast();
-                return false;
-            }
-            return true;
-        }
-
-        if (!validateField(name, "Nombre", 5, 50) || !validateField(lastName, "Apellido", 5, 50) ||
-            !validateField(dni, "DNI", 7, 9) || !validateField(phone, "teléfono", 10, 10) ||
-            !validateField(adress, "dirección", 0, 100)) {
-            return true
-        } else {
-            return false
-        }
-
-    }
+    // function emptyForm() {
+    //     return (
+    //         name.length === 0,
+    //         lastName.length === 0,
+    //         dni.length === 0,
+    //         phone.length === 0,
+    //         adress.length === 0
+    //     )
+    // }
 
     function addClient(event) {
         event.preventDefault();
-
-        // Alerta campos vacíos
-        if (emptyForm()) {
-            Toastify({
-                text: "Hay campos vacíos",
-                duration: 2000,
-                style: {
-                    background: "linear-gradient(to right, #f44336, #b71c1c)",
-                },
-            }).showToast();
-            return console.error("Error: Campos vacíos");
-        }
 
         // Objeto del cliente
         const client = {
@@ -94,9 +50,8 @@ function NewClientComponent() {
             cuit: parseInt(0), // Convierte a número entero (Long)
         };
 
-        // Validaciones de los datos ingresados
-        if (formValidations()) {
-            return console.log("Campos incorrectos")
+        if (formValidations(client)) {
+            return console.log("Campos erroneos o vacios")
         }
 
         // Comprueba existencia de Cliente

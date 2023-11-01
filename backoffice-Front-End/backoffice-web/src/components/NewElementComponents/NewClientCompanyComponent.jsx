@@ -6,6 +6,7 @@ import { faL } from '@fortawesome/free-solid-svg-icons'
 import { useClientsStore } from '../../hooks/useClientsStore'
 import Toastify from 'toastify-js'
 import "toastify-js/src/toastify.css"
+import { formValidations } from '../../utils/FormValidations'
 
 const formDTO = {
     name: "",
@@ -22,125 +23,10 @@ const formDTO = {
 function NewClientCompanyComponent() {
     const navigate = useNavigate();
     const { startAddingClients, clients } = useClientsStore();
-    const { name, lastName, dni, phone, adress, isBussiness, bussinessName, StartDate, cuit, handleInputChange, clearForm, emptyValidation } = useForm(formDTO);
+    const { name, lastName, dni, phone, adress, isBussiness, bussinessName, StartDate, cuit, handleInputChange, clearForm } = useForm(formDTO);
 
     function addClient(event) {
         event.preventDefault();
-
-        // if (!emptyValidation()) {
-        //     Toastify({
-        //         text: "Hay campos vacíos",
-        //         duration: 2000,
-        //         style: {
-        //             background: "linear-gradient(to right, #f44336, #b71c1c)",
-        //         },
-        //     }).showToast();
-        //     return console.error("Error: Campos vacíos");
-        // }
-
-        const clienteExiste = clients?.find(cliente => cliente.dni === dni && cliente.bussinessName === bussinessName);
-        if (clienteExiste) {
-            Toastify({
-                text: "Ya existe la empresa",
-                duration: 2000,
-                style: {
-                    background: "linear-gradient(to right, #f44336, #b71c1c)",
-                },
-            }).showToast();
-            return console.error("Error: ya existe la empresa");
-        }
-
-        const client = {
-            name,
-            lastName,
-            dni: parseInt(dni),
-            phone: parseFloat(phone), // Convierte a número de punto flotante
-            adress,
-            isBussiness,
-            bussinessName,
-            StartDate,
-            cuit: parseFloat(cuit), // Convierte a número de punto flotante
-        };
-
-        startAddingClients(client);
-        clearForm();
-        Toastify({
-            text: "Usuario Creado",
-            duration: 2000,
-            style: {
-                background: "linear-gradient(to right, #00b09b, #96c93d)",
-            },
-        }).showToast();
-    }
-
-    function formValidations() {
-        function validateField(value, fieldName, minLength, maxLength) {
-            let errorMessage;
-            if (value.length < minLength || value.length > maxLength) {
-                if ((fieldName != "teléfono") || (fieldName != "Nombre de Empresa")) {
-                    errorMessage = `Error: ${fieldName} debe tener entre ${minLength} y ${maxLength} caracteres`;
-                } else {
-                    errorMessage = `Error: ${fieldName} debe tener ${minLength} caracteres`
-                }
-                Toastify({
-                    text: errorMessage,
-                    duration: 2000,
-                    style: {
-                        background: "linear-gradient(to right, #f44336, #b71c1c)",
-                    },
-                }).showToast();
-                return false;
-            }
-            return true;
-        }
-        if (StartDate === "") {
-            Toastify({
-                text: "Ingrese una fecha",
-                duration: 2000,
-                style: {
-                    background: "linear-gradient(to right, #f44336, #b71c1c)",
-                },
-            }).showToast();
-            return true
-        }
-        if (!validateField(name, "Nombre", 5, 50) || !validateField(lastName, "Apellido", 5, 50) ||
-            !validateField(dni, "DNI", 7, 9) || !validateField(phone, "teléfono", 10, 10) ||
-            !validateField(adress, "dirección", 0, 100) || !validateField(bussinessName, "Nombre de Empresa", 0, 100)
-            || !validateField(cuit, "CUIT", 10, 11)
-        ) {
-            return true
-        } else {
-            return false
-        }
-
-    }
-
-    function emptyForm() {
-        return (
-            name.length === 0,
-            lastName.length === 0,
-            dni.length === 0,
-            phone.length === 0,
-            adress.length === 0,
-            bussinessName.length === 0,
-            cuit.length === 0
-        )
-    }
-
-    function addClient(event) {
-        event.preventDefault();
-
-        // Alerta campos vacíos
-        if (emptyForm()) {
-            Toastify({
-                text: "Hay campos vacíos",
-                duration: 2000,
-                style: {
-                    background: "linear-gradient(to right, #f44336, #b71c1c)",
-                },
-            }).showToast();
-            return console.error("Error: Campos vacíos");
-        }
 
         // Objeto del cliente
         const client = {
@@ -155,9 +41,9 @@ function NewClientCompanyComponent() {
             cuit: parseInt(cuit), // Convierte a número entero (Long)
         };
 
-        // Validaciones de los datos ingresados
-        if (formValidations()) {
-            return console.log("Campos incorrectos")
+        // Alerta campos vacíos
+        if (formValidations(client)) {
+            return
         }
 
         // Comprueba existencia de Cliente
@@ -175,7 +61,7 @@ function NewClientCompanyComponent() {
 
         try {
             startAddingClients(client);
-            // clearForm();
+            clearForm();
             Toastify({
                 text: "Cliente Creado",
                 duration: 2000,

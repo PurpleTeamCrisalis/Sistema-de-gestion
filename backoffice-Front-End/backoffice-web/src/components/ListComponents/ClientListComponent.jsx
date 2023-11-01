@@ -9,14 +9,14 @@ import Swal from 'sweetalert2'
 function ClientListComponent() {
     const navigate = useNavigate();
     const [abierto, setAbierto] = useState(false);
-    // users, startLoadingUsers, setActiveUser, startDeletingUser, activeUser 
     const { clients, startLoadingClient, startDeletingClient, activeClient, setActiveClient } = useClientsStore();
 
     useEffect(() => {
-        if (clients.length === 0) {
-            console.log("Sin Clientes")
-        } else {
-            startLoadingClient();
+        try {
+            startLoadingClient()
+
+        } catch (error) {
+            console.log(error)
         }
     }, []);
 
@@ -46,7 +46,7 @@ function ClientListComponent() {
         }
     }
 
-    function editClient(event, client) {
+    function editClient(client) {
         setActiveClient(client);
         if (client.isBussiness) {
             navigate("/client/editClientCompany");
@@ -173,7 +173,7 @@ function ClientListComponent() {
                                                         color: "#000000",
                                                         cursor: "pointer",
                                                     }}
-                                                    onClick={(event) => editClient(event, client)}
+                                                    onClick={(event) => editClient(client)}
                                                 />
                                             </td>
                                         </tr>
