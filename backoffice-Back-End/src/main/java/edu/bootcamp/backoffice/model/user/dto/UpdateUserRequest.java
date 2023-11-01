@@ -18,6 +18,9 @@ public class UpdateUserRequest
     @JsonProperty("password")
     private String password;
 
+    @JsonProperty("email")
+    private String email;
+
     @JsonProperty("enabled")
     private Boolean enabled;
 

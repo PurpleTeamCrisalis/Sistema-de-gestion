@@ -6,17 +6,9 @@ import lombok.*;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class UserResponse
-{
-    @JsonProperty("username")
-    private String username;
-
+public class UserEmailRequest {
     @JsonProperty("email")
     private String email;
-    @JsonProperty("enabled")
-    private Boolean enabled;
-
-    @JsonProperty("id")
-    private Integer id;
 }

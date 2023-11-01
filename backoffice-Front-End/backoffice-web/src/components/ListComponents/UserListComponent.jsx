@@ -138,12 +138,16 @@ function UserListComponent() {
                     <tr>
                       <th scope="col">#</th>
                       <th scope="col">Nombre Usuario</th>
+                      <th scope="col">E-Mail</th>
                       <th scope="col">Estado</th>
                       <th scope="col">#</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {users?.map((user) => (
+                    {users?.map((user) => {
+                      console.log(user)
+                      return(
+                      
                       <tr key={user.id}>
                         <td>
                           <input
@@ -158,6 +162,7 @@ function UserListComponent() {
                           />
                         </td>
                         <td>{user.username}</td>
+                        <td>{user.email}</td>
                         <td>{user.enabled ? "habilitado" : "deshabilitado"}</td>
                         <td>
                           <FontAwesomeIcon
@@ -170,7 +175,7 @@ function UserListComponent() {
                           />
                         </td>
                       </tr>
-                    ))}
+                    )})}
                   </tbody>
                 </table>
               </div>
