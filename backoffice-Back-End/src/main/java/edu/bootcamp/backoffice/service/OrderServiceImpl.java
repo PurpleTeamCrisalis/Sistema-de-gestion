@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.bootcamp.backoffice.model.client.Client;
-import edu.bootcamp.backoffice.model.client.ClientFactory;
 import edu.bootcamp.backoffice.model.order.Order;
 import edu.bootcamp.backoffice.service.Interface.ClientService;
 import edu.bootcamp.backoffice.service.Interface.UserService;
@@ -65,7 +64,7 @@ public class OrderServiceImpl implements OrderService {
     // Validaciones
     validateOrderDetails(orderDto);
     User user = userService.getUserByUsername(username); // Validacion username.
-    Client client = clientService.getClient(orderDto.getClientId()); // Validacion cliente.
+    Client client = clientService.getClientEntity(orderDto.getClientId()); // Validacion cliente.
     List<ServiceDetail> servicesDetails = serviceDetailService.getServicesDetails(orderDto.getServices()); // Validacion productos. 
     List<ProductDetail> productsDetails = productDetailService.getProductsDetails(orderDto.getProducts()); // Validacion servicios.
 

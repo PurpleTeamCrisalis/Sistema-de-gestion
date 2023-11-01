@@ -9,7 +9,6 @@ import edu.bootcamp.backoffice.model.order.Order;
 import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.ServiceDetail;
 import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.ServiceDetailFactory;
 import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.dto.ServiceDetailRequest;
-import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.dto.ServiceDetailResponse;
 import edu.bootcamp.backoffice.model.serviceEntity.ServiceEntity;
 import edu.bootcamp.backoffice.repository.ServiceDetailRepository;
 import edu.bootcamp.backoffice.service.Interface.ServiceDetailService;
