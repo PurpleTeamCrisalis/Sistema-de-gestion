@@ -33,7 +33,7 @@ public class ProductController {
 		this.productService = productService;
 	}
 
-	@PostMapping(path = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(path = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ProductResponse> registerProduct(@RequestBody ProductRequest createRequest) {
 		ProductResponse productDto = productService.registerProduct(createRequest);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(productDto.getId())

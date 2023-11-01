@@ -4,7 +4,6 @@ import java.util.List;
 
 import edu.bootcamp.backoffice.exception.custom.parameterValidation.InvalidIdFormatException;
 
-import edu.bootcamp.backoffice.model.service.Service;
 import edu.bootcamp.backoffice.model.service.dto.ServiceRequest;
 import edu.bootcamp.backoffice.model.service.dto.ServiceResponse;
 import edu.bootcamp.backoffice.model.service.dto.UpdateServiceRequest;

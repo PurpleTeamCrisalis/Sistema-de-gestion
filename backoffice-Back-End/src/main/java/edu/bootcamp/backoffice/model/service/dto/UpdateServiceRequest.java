@@ -25,13 +25,13 @@ public class UpdateServiceRequest {
 
 	@JsonProperty("basePrice")
 	private double basePrice;
-
+/*
 	@JsonProperty("isSpecial")
 	private boolean isSpecial;
 
 	@JsonProperty("suportCharge")
 	private double suportCharge;
-
+*/
 	@JsonProperty("enabled")
 	private Boolean enabled;
 

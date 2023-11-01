@@ -4,27 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import edu.bootcamp.backoffice.model.service.ServiceEntity;
 import org.springframework.stereotype.Service;
 
 import edu.bootcamp.backoffice.exception.custom.dbValidation.AlreadyRegisteredException;
 import edu.bootcamp.backoffice.exception.custom.dbValidation.AlreadyUpdatedException;
 import edu.bootcamp.backoffice.exception.custom.dbValidation.EmptyTableException;
-import edu.bootcamp.backoffice.exception.custom.dbValidation.InvalidCredentialsException;
 import edu.bootcamp.backoffice.exception.custom.parameterValidation.InvalidArgumentsFormatException;
 import edu.bootcamp.backoffice.exception.custom.parameterValidation.InvalidIdFormatException;
 import edu.bootcamp.backoffice.model.EntitiesConstraints;
-import edu.bootcamp.backoffice.model.product.Product;
-import edu.bootcamp.backoffice.model.product.ProductFactory;
-import edu.bootcamp.backoffice.model.product.dto.ProductRequest;
-import edu.bootcamp.backoffice.model.product.dto.ProductResponse;
-import edu.bootcamp.backoffice.model.product.dto.UpdateProductRequest;
 import edu.bootcamp.backoffice.model.service.ServiceFactory;
 import edu.bootcamp.backoffice.model.service.dto.ServiceRequest;
 import edu.bootcamp.backoffice.model.service.dto.ServiceResponse;
 import edu.bootcamp.backoffice.model.service.dto.UpdateServiceRequest;
-import edu.bootcamp.backoffice.repository.ProductRepository;
 import edu.bootcamp.backoffice.repository.ServiceRepository;
-import edu.bootcamp.backoffice.service.Interface.ProductService;
 import edu.bootcamp.backoffice.service.Interface.ServiceService;
 import edu.bootcamp.backoffice.service.Interface.Validator;
 
@@ -40,7 +33,7 @@ public class ServiceServiceImpl implements ServiceService {
 		this.validator = validator;
 
 	}
-
+/*
 	public boolean isPresent(ServiceRequest serviceDto) {
 		StringBuilder errors = new StringBuilder();
 		validateName(serviceDto.getName(), errors);
@@ -51,9 +44,9 @@ public class ServiceServiceImpl implements ServiceService {
 			return !result.get().isDeleted();
 		return false;
 	}
-
+*/
 	private void validateNewServiceDbConflicts(ServiceRequest serviceRequest) {
-		Optional<edu.bootcamp.backoffice.model.service.Service> result = serviceRepository.findByName(serviceRequest.getName());
+		Optional<ServiceEntity> result = serviceRepository.findByName(serviceRequest.getName());
 		if (result.isPresent())
 			throw new AlreadyRegisteredException("Already registered Service");
 	}
@@ -62,69 +55,96 @@ public class ServiceServiceImpl implements ServiceService {
 		StringBuilder errors = new StringBuilder();
 		validateName(serviceRequest.getName(), errors);
 		validateDescription(serviceRequest.getDescription(), errors);
+		validator.validateLongValue(
+				(long)serviceRequest.getBasePrice(),
+				Long.MAX_VALUE,
+				1L,
+				"Base price",
+				errors
+		);
 		validateErrors(errors);
 	}
 
-	private void validateUpdateRequest(int id, UpdateServiceRequest serviceRequest) {
+	private ServiceEntity validateUpdateRequest(int id, UpdateServiceRequest serviceRequest) {
 		StringBuilder errors = new StringBuilder();
-		validator.validateIdFormat(id, errors);
+		ServiceEntity service = validator.validateIdExistence(
+				id,
+				serviceRepository
+		);
 		if (serviceRequest.getName() != null)
+		{
 			validateName(serviceRequest.getName(), errors);
-		if (serviceRequest.getDescription() != null)
+			service.setName(serviceRequest.getName());
+		}
+		if (serviceRequest.getDescription() != null) {
 			validateDescription(serviceRequest.getDescription(), errors);
+			service.setDescription(serviceRequest.getDescription());
+		}
+		if(serviceRequest.getBasePrice() > 0)
+			service.setBasePrice(serviceRequest.getBasePrice());
+		else
+			validator.validateLongValue(
+					(long)serviceRequest.getBasePrice(),
+					Long.MAX_VALUE,
+					0L,
+					"Base price",
+					errors
+			);
+		if(serviceRequest.getEnabled() != null)
+			service.setEnabled(serviceRequest.getEnabled());
 		validateErrors(errors);
+		return service;
+
 	}
 
-	private edu.bootcamp.backoffice.model.service.Service validateUpdateConflicts(int id, UpdateServiceRequest serviceDto) {
-		Optional<edu.bootcamp.backoffice.model.service.Service> result = serviceRepository.findByName(serviceDto.getName());
-		edu.bootcamp.backoffice.model.service.Service service;
+	/*
+	private ServiceEntity validateUpdateConflicts(int id, UpdateServiceRequest serviceDto) {
+		Optional<ServiceEntity> result = serviceRepository.findByName(serviceDto.getName());
+		ServiceEntity serviceEntity;
 		boolean modified = !result.isPresent();
 		if (modified) {
-			service = findAndSetServicenameIfNotNull(id, serviceDto.getName());
+			serviceEntity = findAndSetServicenameIfNotNull(id, serviceDto.getName());
 		} else {
-			service = validateEnabledServiceSearchResult(result, id);
-			modified |= mergeEnabled(serviceDto, service);
+			serviceEntity = validateEnabledServiceSearchResult(result, id);
+			modified |= mergeEnabled(serviceDto, serviceEntity);
 			if (!modified) {
 				throw new AlreadyUpdatedException("Not modified database.");
 			}
 
 		}
-		return service;
+		return serviceEntity;
 	}
+*//*
+	private ServiceEntity validateEnabledServiceSearchResult(Optional<ServiceEntity> result, int requesteId) {
+		ServiceEntity serviceEntity = result.get();
 
-	private edu.bootcamp.backoffice.model.service.Service validateEnabledServiceSearchResult(Optional<edu.bootcamp.backoffice.model.service.Service> result, int requesteId) {
-		edu.bootcamp.backoffice.model.service.Service service = result.get();
-		/*
-		 * Si se decide evitar dar alta logica : if(user.isDeleted()) throw new
-		 * DeletedAccountUpdateException("");
-		 */
-		if (service.getId() != requesteId)
+		if (serviceEntity.getId() != requesteId)
 			throw new AlreadyRegisteredException("Already registered service");
-		return service;
+		return serviceEntity;
 	}
-
-	private edu.bootcamp.backoffice.model.service.Service findAndSetServicenameIfNotNull(int id, String name) {
-		edu.bootcamp.backoffice.model.service.Service service = validator.completeValidationForId(id, serviceRepository);
+*//*
+	private ServiceEntity findAndSetServicenameIfNotNull(int id, String name) {
+		ServiceEntity serviceEntity = validator.completeValidationForId(id, serviceRepository);
 		if (name != null)
-			service.setName(name);
+			serviceEntity.setName(name);
 		;
-		return service;
+		return serviceEntity;
 	}
 
-	private boolean mergeEnabled(UpdateServiceRequest serviceDto, edu.bootcamp.backoffice.model.service.Service service) {
+	private boolean mergeEnabled(UpdateServiceRequest serviceDto, ServiceEntity serviceEntity) {
 		Boolean dtoEnabled = serviceDto.getEnabled();
-		Boolean serviceEnabled = service.isEnabled();
+		Boolean serviceEnabled = serviceEntity.isEnabled();
 		if (dtoEnabled != null && !serviceEnabled.equals(dtoEnabled)) {
-			service.setEnabled(serviceDto.getEnabled());
+			serviceEntity.setEnabled(serviceDto.getEnabled());
 			return true;
 		}
 		return false;
-	}
+	}*/
 
 	public List<ServiceResponse> getProducts() {
-		List<edu.bootcamp.backoffice.model.service.Service> services = serviceRepository.findAll();
+		List<ServiceEntity> serviceEntities = serviceRepository.findAll();
 		List<ServiceResponse> dtos = new ArrayList<>();
-		for (edu.bootcamp.backoffice.model.service.Service s : services)
+		for (ServiceEntity s : serviceEntities)
 			dtos.add(dtoFactory.createResponse(s));
 		if (dtos.isEmpty())
 			throw new EmptyTableException("There aren't registered services.");
@@ -146,12 +166,12 @@ public class ServiceServiceImpl implements ServiceService {
 	}
 
 	private void validateName(String name, StringBuilder errorBuilder) {
-		validator.validateVarchar(name, EntitiesConstraints.USERNAME_MIN_LENGTH,
-				EntitiesConstraints.USERNAME_MAX_LENGTH, errorBuilder, "name");
+		validator.validateVarchar(name, EntitiesConstraints.ITEM_NAME_MIN_LENGTH,
+				EntitiesConstraints.ITEM_NAME_MAX_LENGTH, errorBuilder, "name");
 	}
 
 	private void validateDescription(String description, StringBuilder errorBuilder) {
-		validator.validateVarchar(description, EntitiesConstraints.DESCRIPTION_MAX_LENGTH,
+		validator.validateVarchar(description, 1,
 				EntitiesConstraints.DESCRIPTION_MAX_LENGTH, errorBuilder, "description");
 	}
 
@@ -161,48 +181,43 @@ public class ServiceServiceImpl implements ServiceService {
 	@Override
 	public ServiceResponse registerService(ServiceRequest serviceDto) {
 		validateNewServiceRequest(serviceDto);
-		String description = serviceDto.getDescription();
-		double priceBase = serviceDto.getBasePrice();
-		serviceDto.setDescription(description);
-		;
-		serviceDto.setBasePrice(priceBase);
 		validateNewServiceDbConflicts(serviceDto);
-		edu.bootcamp.backoffice.model.service.Service service = dtoFactory.CreateEntityForInsertNewRecord(serviceDto);
-		service = serviceRepository.save(service);
-		return dtoFactory.createResponse(service);
+		ServiceEntity serviceEntity = dtoFactory.CreateEntityForInsertNewRecord(serviceDto);
+		serviceEntity = serviceRepository.save(serviceEntity);
+		return dtoFactory.createResponse(serviceEntity);
 	}
 
 	@Override
 	public ServiceResponse get(int id) {
-		edu.bootcamp.backoffice.model.service.Service service = validator.completeValidationForId(id, serviceRepository);
-		return dtoFactory.createResponse(service);
+		ServiceEntity serviceEntity = validator.completeValidationForId(id, serviceRepository);
+		return dtoFactory.createResponse(serviceEntity);
 	}
 
 	@Override
 	public ServiceResponse update(int id, UpdateServiceRequest serviceDto) throws InvalidIdFormatException {
-		validateUpdateRequest(id, serviceDto);
-		edu.bootcamp.backoffice.model.service.Service service = validateUpdateConflicts(id, serviceDto);
-		service = serviceRepository.save(service);
-		return dtoFactory.createResponse(service);
+		ServiceEntity serviceEntity = validateUpdateRequest(id, serviceDto);
+		serviceEntity = serviceRepository.save(serviceEntity);
+		return dtoFactory.createResponse(serviceEntity);
 	}
 
 	@Override
 	public ServiceResponse delete(int id) throws InvalidIdFormatException {
-		edu.bootcamp.backoffice.model.service.Service service = validator.validateSoftDeletableEntityExistence(id, serviceRepository);
+		ServiceEntity serviceEntity = validator.validateSoftDeletableEntityExistence(id, serviceRepository);
+		//serviceEntity.getTaxes().clear();
 		// List<Taxs> taxs = service.getTaxs();
 		// if (taxs.size() > 0) {
 		// 	service.setEnabled(false);
 		// 	serviceRepository.save(service);
 		// } else
-			serviceRepository.delete(service);
-		return dtoFactory.createResponse(service);
+			serviceRepository.delete(serviceEntity);
+		return dtoFactory.createResponse(serviceEntity);
 	}
 
 	@Override
 	public List<ServiceResponse> get() throws InvalidIdFormatException {
-		List<edu.bootcamp.backoffice.model.service.Service> services = serviceRepository.findAll();
+		List<ServiceEntity> serviceEntities = serviceRepository.findAll();
 		List<ServiceResponse> dtos = new ArrayList<>();
-		for (edu.bootcamp.backoffice.model.service.Service s : services)
+		for (ServiceEntity s : serviceEntities)
 			dtos.add(dtoFactory.createResponse(s));
 		if (dtos.isEmpty())
 			throw new EmptyTableException("There aren't registered services.");

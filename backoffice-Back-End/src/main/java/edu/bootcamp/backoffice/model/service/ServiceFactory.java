@@ -8,26 +8,26 @@ import edu.bootcamp.backoffice.model.service.dto.ServiceResponse;
 @Component
 public class ServiceFactory {
 
-	public Service CreateServiceEntity(String name, String description, double basePrice, boolean isSpecial,
-			double suportCharge) {
+	public ServiceEntity CreateServiceEntity(String name, String description, double basePrice, boolean isSpecial,
+                                             double suportCharge) {
 
-		return Service.builder().name(name).description(description).basePrice(basePrice).isSpecial(isSpecial)
+		return ServiceEntity.builder().name(name).description(description).basePrice(basePrice).isSpecial(isSpecial)
 				.suportCharge(suportCharge).enabled(true).build();
 	}
 
-	public Service CreateEntityForInsertNewRecord(ServiceRequest servicetDto) {
+	public ServiceEntity CreateEntityForInsertNewRecord(ServiceRequest servicetDto) {
 
-		return Service.builder().name(servicetDto.getName()).description(servicetDto.getDescription())
-				.basePrice(servicetDto.getBasePrice()).isSpecial(servicetDto.isSpecial())
-				.suportCharge(servicetDto.getSuportCharge()).enabled(true).build();
+		return ServiceEntity.builder().name(servicetDto.getName()).description(servicetDto.getDescription())
+				.basePrice(servicetDto.getBasePrice())/*.isSpecial(servicetDto.isSpecial())
+				.suportCharge(servicetDto.getSuportCharge())*/.enabled(true).build();
 
 	}
 
-	public ServiceResponse createResponse(Service service) {
+	public ServiceResponse createResponse(ServiceEntity serviceEntity) {
 
-		return ServiceResponse.builder().name(service.getName()).description(service.getDescription())
-				.basePrice(service.getBasePrice()).isSpecial(service.isSpecial())
-				.suportCharge(service.getSuportCharge()).enabled(service.isEnabled()).build();
+		return ServiceResponse.builder().id(serviceEntity.getId()).name(serviceEntity.getName()).description(serviceEntity.getDescription())
+				.basePrice(serviceEntity.getBasePrice())/*.isSpecial(serviceEntity.isSpecial())
+				.suportCharge(serviceEntity.getSuportCharge())*/.enabled(serviceEntity.isEnabled()).build();
 	}
 
 }

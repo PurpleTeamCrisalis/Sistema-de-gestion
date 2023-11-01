@@ -16,15 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import edu.bootcamp.backoffice.model.product.Product;
-import edu.bootcamp.backoffice.model.product.dto.ProductRequest;
-import edu.bootcamp.backoffice.model.product.dto.ProductResponse;
-import edu.bootcamp.backoffice.model.product.dto.UpdateProductRequest;
-import edu.bootcamp.backoffice.model.service.Service;
 import edu.bootcamp.backoffice.model.service.dto.ServiceRequest;
 import edu.bootcamp.backoffice.model.service.dto.ServiceResponse;
 import edu.bootcamp.backoffice.model.service.dto.UpdateServiceRequest;
-import edu.bootcamp.backoffice.service.Interface.ProductService;
 import edu.bootcamp.backoffice.service.Interface.ServiceService;
 
 @RestController
@@ -38,7 +32,7 @@ public class ServiceController {
 		this.serviceService = serviceService;
 	}
 
-	@PostMapping(path = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(path = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ServiceResponse> registerService(@RequestBody ServiceRequest createRequest) {
 		ServiceResponse serviceDto = serviceService.registerService(createRequest);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(serviceDto.getId())

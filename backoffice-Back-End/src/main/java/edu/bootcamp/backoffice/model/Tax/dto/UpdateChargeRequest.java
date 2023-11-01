@@ -20,7 +20,4 @@ public class UpdateChargeRequest {
 
     @JsonProperty("enabled")
     private Boolean enabled;
-
-    @JsonProperty("id")
-    private Integer id;
 }

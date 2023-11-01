@@ -19,6 +19,7 @@ import edu.bootcamp.backoffice.service.Interface.TaxService;
 
 import java.util.ArrayList;
 import java.util.List;
+import edu.bootcamp.backoffice.service.Interface.ProductService;
 
 @Service //Implementamos la interfaz de ChargeService
 public class TaxServiceImpl implements TaxService{
@@ -31,7 +32,6 @@ public class TaxServiceImpl implements TaxService{
         TaxFactory dtoFactory,
         Validator validator
     ){
-
         this.dtoFactory = dtoFactory;
         this.taxRepository = taxRepository;
         this.validator = validator;
@@ -74,18 +74,19 @@ public class TaxServiceImpl implements TaxService{
             EntitiesConstraints.CHARGENAME_MIN_LENGTH, 
             EntitiesConstraints.CHARGENAME_MAX_LENGTH,
             errorBuilder, 
-            chargename
+            "Charge"
         );
     }
     
     //Validacion de percentage
-    public void validatePercentage(int percentage, StringBuilder errorBuilder){
-        validator.validateInterge(
-            percentage, 
-            EntitiesConstraints.CHARGEPERCENTAGE_MIN_LENGTH, 
+    public void validatePercentage(Integer percentage, StringBuilder errorBuilder){
+        validator.validateIntegerValue(
+            percentage,
             EntitiesConstraints.CHARGEPERCENTAGE_MAX_LENGTH,
-            errorBuilder, 
-            "Percentage");;
+            EntitiesConstraints.CHARGEPERCENTAGE_MIN_LENGTH,
+            "Percentage",
+            errorBuilder
+            );
     }
 
     /** Eliminando un impuesto **/
@@ -98,6 +99,7 @@ public class TaxServiceImpl implements TaxService{
         //     taxRepository.save(charge);
         // }
         // else{
+            charge.getProducts().clear();
             taxRepository.delete(charge);
         // }
         

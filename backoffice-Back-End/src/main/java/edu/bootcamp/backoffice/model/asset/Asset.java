@@ -33,7 +33,7 @@ import lombok.experimental.SuperBuilder;
 // @DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.STRING)       
 public abstract class Asset implements SoftDeletable {
 
-	@Column(name = "name", nullable = false, length = EntitiesConstraints.USERNAME_MAX_LENGTH)
+	@Column(name = "name", nullable = false, length = EntitiesConstraints.ITEM_NAME_MAX_LENGTH)
 	private String name;
 
 	@Column(name = "description", nullable = false, length = EntitiesConstraints.DESCRIPTION_MAX_LENGTH)
@@ -44,8 +44,6 @@ public abstract class Asset implements SoftDeletable {
 
 	@Column(name = "enabled", nullable = false)
 	private boolean enabled = true;
-	
-	
 
 	public Boolean isDeleted() {
 		return !enabled;

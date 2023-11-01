@@ -3,13 +3,14 @@ package edu.bootcamp.backoffice.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
+import edu.bootcamp.backoffice.model.Tax.Tax;
+import edu.bootcamp.backoffice.service.Interface.TaxService;
 import org.springframework.stereotype.Service;
 
 import edu.bootcamp.backoffice.exception.custom.dbValidation.AlreadyRegisteredException;
-import edu.bootcamp.backoffice.exception.custom.dbValidation.AlreadyUpdatedException;
 import edu.bootcamp.backoffice.exception.custom.dbValidation.EmptyTableException;
-import edu.bootcamp.backoffice.exception.custom.dbValidation.InvalidCredentialsException;
 import edu.bootcamp.backoffice.exception.custom.parameterValidation.InvalidArgumentsFormatException;
 import edu.bootcamp.backoffice.exception.custom.parameterValidation.InvalidIdFormatException;
 import edu.bootcamp.backoffice.model.EntitiesConstraints;
@@ -34,7 +35,7 @@ public class ProductServiceImpl implements ProductService {
 		this.validator = validator;
 
 	}
-
+/*
 	public boolean isPresent(ProductRequest productDto) {
 		StringBuilder errors = new StringBuilder();
 		validateName(productDto.getName(), errors);
@@ -45,7 +46,7 @@ public class ProductServiceImpl implements ProductService {
 			return !result.get().isDeleted();
 		return false;
 	}
-
+*/
 	private void validateNewProductDbConflicts(ProductRequest productRequest) {
 		Optional<Product> result = productRepository.findByName(productRequest.getName());
 		if (result.isPresent())
@@ -56,55 +57,59 @@ public class ProductServiceImpl implements ProductService {
 		StringBuilder errors = new StringBuilder();
 		validateName(productRequest.getName(), errors);
 		validateDescription(productRequest.getDescription(), errors);
+		validator.validateLongValue(
+				(long)productRequest.getBasePrice(),
+				Long.MAX_VALUE,
+				1L,
+				"Base price",
+				errors
+				);
 		validateErrors(errors);
 	}
 
-	private void validateUpdateRequest(int id, UpdateProductRequest productRequest) {
+	private Product validateUpdateRequest(int id, UpdateProductRequest productRequest) {
 		StringBuilder errors = new StringBuilder();
-		validator.validateIdFormat(id, errors);
+		Product product = validator.validateIdExistence(
+				id,
+				productRepository
+		);
 		if (productRequest.getName() != null)
+		{
 			validateName(productRequest.getName(), errors);
-		if (productRequest.getDescription() != null)
-			validateDescription(productRequest.getDescription(), errors);
-		validateErrors(errors);
-	}
-
-	private Product validateUpdateConflicts(int id, UpdateProductRequest productDto) {
-		Optional<Product> result = productRepository.findByName(productDto.getName());
-		Product product;
-		boolean modified = !result.isPresent();
-		if (modified) {
-			product = findAndSetProductnameIfNotNull(id, productDto.getName());
-		} else {
-			product = validateEnabledProductSearchResult(result, id);
-			modified |= mergeEnabled(productDto, product);
-			if (!modified) {
-				throw new AlreadyUpdatedException("Not modified database.");
-			}
-
+			product.setName(productRequest.getName());
 		}
+		if (productRequest.getDescription() != null) {
+			validateDescription(productRequest.getDescription(), errors);
+			product.setDescription(productRequest.getDescription());
+		}
+		if(productRequest.getBasePrice() > 0)
+			product.setBasePrice(productRequest.getBasePrice());
+		else
+			validator.validateLongValue(
+					(long)productRequest.getBasePrice(),
+					Long.MAX_VALUE,
+					0L,
+					"Base price",
+					errors
+			);
+		if(productRequest.getEnabled() != null)
+			product.setEnabled(productRequest.getEnabled());
+		validateErrors(errors);
 		return product;
 	}
 
+/*
 	private Product validateEnabledProductSearchResult(Optional<Product> result, int requesteId) {
 		Product product = result.get();
 		/*
 		 * Si se decide evitar dar alta logica : if(user.isDeleted()) throw new
 		 * DeletedAccountUpdateException("");
-		 */
+		 *
 		if (product.getId() != requesteId)
 			throw new AlreadyRegisteredException("Already registered product");
 		return product;
 	}
-
-	private Product findAndSetProductnameIfNotNull(int id, String name) {
-		Product product = validator.completeValidationForId(id, productRepository);
-		if (name != null)
-			product.setName(name);
-		;
-		return product;
-	}
-
+*
 	private boolean mergeEnabled(UpdateProductRequest productDto, Product product) {
 		Boolean dtoEnabled = productDto.getEnabled();
 		Boolean productEnabled = product.isEnabled();
@@ -114,7 +119,7 @@ public class ProductServiceImpl implements ProductService {
 		}
 		return false;
 	}
-
+*/
 	public List<ProductResponse> getProducts() {
 		List<Product> products = productRepository.findAll();
 		List<ProductResponse> dtos = new ArrayList<>();
@@ -140,28 +145,22 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	private void validateName(String name, StringBuilder errorBuilder) {
-		validator.validateVarchar(name, EntitiesConstraints.USERNAME_MIN_LENGTH,
-				EntitiesConstraints.USERNAME_MAX_LENGTH, errorBuilder, "name");
+		validator.validateVarchar(name, EntitiesConstraints.ITEM_NAME_MIN_LENGTH,
+				EntitiesConstraints.ITEM_NAME_MAX_LENGTH, errorBuilder, "name");
 	}
 
 	private void validateDescription(String description, StringBuilder errorBuilder) {
-		validator.validateVarchar(description, EntitiesConstraints.DESCRIPTION_MAX_LENGTH,
+		validator.validateVarchar(description, 1,
 				EntitiesConstraints.DESCRIPTION_MAX_LENGTH, errorBuilder, "description");
 	}
 
 	@Override
 	public ProductResponse registerProduct(ProductRequest productDto) {
 		validateNewProductRequest(productDto);
-		String description = productDto.getDescription();
-		double priceBase = productDto.getBasePrice();
-		productDto.setDescription(description);
-		;
-		productDto.setBasePrice(priceBase);
 		validateNewProductDbConflicts(productDto);
 		Product product = dtoFactory.CreateEntityForInsertNewRecord(productDto);
 		product = productRepository.save(product);
 		return dtoFactory.createResponse(product);
-
 	}
 
 	@Override
@@ -171,27 +170,30 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public ProductResponse update(int id, UpdateProductRequest productDto) throws InvalidIdFormatException {
-		validateUpdateRequest(id, productDto);
-		Product product = validateUpdateConflicts(id, productDto);
+	public ProductResponse update(int id, UpdateProductRequest productDto) {
+		Product product = validateUpdateRequest(id, productDto);
 		product = productRepository.save(product);
 		return dtoFactory.createResponse(product);
 	}
 
 	@Override
-	public ProductResponse delete(int id) throws InvalidIdFormatException {
-		Product product = validator.validateSoftDeletableEntityExistence(id, productRepository);
+	public ProductResponse delete(int id) {
+		Product product = validator.validateIdExistence(id, productRepository);
+		/*
+		Set<Tax> taxes = product.getTaxes();
+		taxes.clear();
+		*/
 		// List<Taxs> taxs = product.getTaxs();
 		// if (taxs.size() > 0) {
 		// 	product.setEnabled(false);
 		// 	productRepository.save(product);
 		// } else
-		// 	productRepository.delete(product);
+		productRepository.delete(product);
 		return dtoFactory.createResponse(product);
 	}
 
 	@Override
-	public List<ProductResponse> get() throws InvalidIdFormatException {
+	public List<ProductResponse> get() {
 		List<Product> products = productRepository.findAll();
 		List<ProductResponse> dtos = new ArrayList<>();
 		for (Product p : products)

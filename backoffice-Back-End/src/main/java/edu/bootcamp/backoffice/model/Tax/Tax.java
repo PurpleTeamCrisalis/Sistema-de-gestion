@@ -1,12 +1,13 @@
 package edu.bootcamp.backoffice.model.Tax;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.*;
 
 import edu.bootcamp.backoffice.model.SoftDeletable;
 import edu.bootcamp.backoffice.model.EntitiesConstraints;
+import edu.bootcamp.backoffice.model.product.Product;
+import edu.bootcamp.backoffice.model.service.ServiceEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,7 +23,7 @@ import lombok.NoArgsConstructor;
 public class Tax implements SoftDeletable{
     //Creamos la id
     @Id
-    @Column(name="id")
+    @Column(name="tax_id")
     @GeneratedValue(//Hacemos que sea autoincrementable
         strategy = GenerationType.IDENTITY
     )
@@ -57,8 +58,10 @@ public class Tax implements SoftDeletable{
     public Boolean isNotDeleted() {
         return enabled;
     }
-    
-	// @OneToMany(mappedBy = "charge")
-    // private List<Taxs> taxs = new ArrayList<>();
-    
+
+    @ManyToMany(mappedBy = "taxes")
+    Set<Product> products;
+
+    @ManyToMany(mappedBy = "taxes")
+    Set<ServiceEntity> serviceEntities;
 }

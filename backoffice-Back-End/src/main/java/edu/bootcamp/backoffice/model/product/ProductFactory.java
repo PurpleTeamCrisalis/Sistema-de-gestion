@@ -22,7 +22,7 @@ public class ProductFactory {
 
 	public ProductResponse createResponse(Product product) {
 
-		return ProductResponse.builder().name(product.getName()).description(product.getDescription())
+		return ProductResponse.builder().id(product.getId()).name(product.getName()).description(product.getDescription())
 				.basePrice(product.getBasePrice()).enabled(product.isEnabled()).build();
 	}
 

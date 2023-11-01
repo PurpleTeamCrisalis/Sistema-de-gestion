@@ -14,9 +14,6 @@ import lombok.Setter;
 @Builder
 public class UpdateProductRequest {
 
-	@JsonProperty("id")
-	private Integer id;
-
 	@JsonProperty("name")
 	private String name;
 
