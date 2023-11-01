@@ -32,25 +32,38 @@ function ServiceListComponent() {
                     <div className="col-md-9 col-xl-10  ">
                         {/* Button Section */}
                         <section className='d-flex justify-content-center m-3'>
-                            <h2>Servicios</h2>
-                            <button type="button" className="btn btn-primary mx-3 fw-bold btn-lg" onClick={newService}>Nuevo</button>
-                            <button type="button" className="btn btn-primary mx-3 fw-bold btn-lg" onClick={deleteService}>Eliminar</button>
+                            <button
+                                type="button"
+                                className="btn btn-primary mx-3 fw-bold btn-lg"
+                                onClick={() => {
+                                    navigate('/service/newService')
+                                }}
+                            >
+                                Nuevo
+                            </button>
+                            <button
+                                type="button"
+                                className="btn btn-primary mx-3 fw-bold btn-lg"
+                                onClick={deleteService}
+                            >
+                                Eliminar
+                            </button>
                         </section>
 
                         {/* Table Section */}
-                        <section className='d-flex justify-content-center rounded-3'  style={{ maxHeight: '85vh', overflowY: 'auto' }}>
-                            <table className="table table-primary">
-
+                        <section className='d-flex justify-content-center rounded-3 shadow-lg' style={{ maxHeight: '85vh', overflowY: 'auto' }}>
+                            <table className="table table-primary ">
                                 <thead style={{ position: 'sticky', top: 0, borderBottom: '2px solid black' }}>
                                     <tr>
                                         <th scope="col">#</th>
                                         <th scope="col">Nombre Servicio</th>
                                         <th scope="col">Descripción</th>
-                                        <th scope="col">Estado</th>
+                                        <th scope="col">Precio Base</th>
+                                        <th scope="col">Es Especial</th>
+                                        <th scope="col">Cargo de Soporte</th>
                                         <th scope="col">#</th>
                                     </tr>
                                 </thead>
-
                                 <tbody>
                                     {/* Acá se va a recorrer la lista de la entidad */}
                                     <tr className='table-primary'>
@@ -60,14 +73,19 @@ function ServiceListComponent() {
                                         <td></td>
                                         <td></td>
                                         <td></td>
+                                        <td></td>
+                                        <td></td>
                                         <td>
-
                                             {/* Icono */}
                                             <FontAwesomeIcon
                                                 icon={faPenToSquare}
                                                 style={{ color: "#000000", }}
-                                               
+                                                onClick={() => {
+                                                    navigate("/service/editService")
+                                                }
+                                                }
                                             />
+
                                         </td>
                                     </tr>
                                 </tbody>
