@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import edu.bootcamp.backoffice.exception.custom.dbValidation.AlreadyRegisteredException;
@@ -14,21 +13,13 @@ import edu.bootcamp.backoffice.exception.custom.dbValidation.InvalidCredentialsE
 import edu.bootcamp.backoffice.exception.custom.parameterValidation.InvalidArgumentsFormatException;
 import edu.bootcamp.backoffice.exception.custom.parameterValidation.InvalidIdFormatException;
 import edu.bootcamp.backoffice.model.EntitiesConstraints;
-import edu.bootcamp.backoffice.model.order.Order;
 import edu.bootcamp.backoffice.model.product.Product;
 import edu.bootcamp.backoffice.model.product.ProductFactory;
 import edu.bootcamp.backoffice.model.product.dto.ProductRequest;
 import edu.bootcamp.backoffice.model.product.dto.ProductResponse;
 import edu.bootcamp.backoffice.model.product.dto.UpdateProductRequest;
-import edu.bootcamp.backoffice.model.user.User;
-import edu.bootcamp.backoffice.model.user.UserFactory;
-import edu.bootcamp.backoffice.model.user.dto.UpdateUserRequest;
-import edu.bootcamp.backoffice.model.user.dto.UserRequest;
-import edu.bootcamp.backoffice.model.user.dto.UserResponse;
 import edu.bootcamp.backoffice.repository.ProductRepository;
-import edu.bootcamp.backoffice.repository.UserRepository;
 import edu.bootcamp.backoffice.service.Interface.ProductService;
-import edu.bootcamp.backoffice.service.Interface.UserService;
 import edu.bootcamp.backoffice.service.Interface.Validator;
 
 @Service
@@ -49,14 +40,14 @@ public class ProductServiceImpl implements ProductService {
 		validateName(productDto.getName(), errors);
 		if (errors.length() > 0)
 			throw new InvalidCredentialsException("Invalid Product Name");
-		Optional<Product> result = productRepository.findByProductName(productDto.getName());
+		Optional<Product> result = productRepository.findByName(productDto.getName());
 		if (result.isPresent())
 			return !result.get().isDeleted();
 		return false;
 	}
 
 	private void validateNewProductDbConflicts(ProductRequest productRequest) {
-		Optional<Product> result = productRepository.findByProductName(productRequest.getName());
+		Optional<Product> result = productRepository.findByName(productRequest.getName());
 		if (result.isPresent())
 			throw new AlreadyRegisteredException("Already registered product");
 	}
@@ -79,7 +70,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	private Product validateUpdateConflicts(int id, UpdateProductRequest productDto) {
-		Optional<Product> result = productRepository.findByProductName(productDto.getName());
+		Optional<Product> result = productRepository.findByName(productDto.getName());
 		Product product;
 		boolean modified = !result.isPresent();
 		if (modified) {
@@ -190,12 +181,12 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public ProductResponse delete(int id) throws InvalidIdFormatException {
 		Product product = validator.validateSoftDeletableEntityExistence(id, productRepository);
-		List<Tax> taxs = product.getTaxs();
-		if (taxs.size() > 0) {
-			product.setEnabled(false);
-			productRepository.save(product);
-		} else
-			productRepository.delete(product);
+		// List<Taxs> taxs = product.getTaxs();
+		// if (taxs.size() > 0) {
+		// 	product.setEnabled(false);
+		// 	productRepository.save(product);
+		// } else
+		// 	productRepository.delete(product);
 		return dtoFactory.createResponse(product);
 	}
 

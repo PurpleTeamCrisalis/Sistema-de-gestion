@@ -10,10 +10,16 @@ import ProductListComponent from "../components/ListComponents/ProductListCompon
 import OrderListComponent from "../components/ListComponents/OrderListComponent";
 import ClientListComponent from "../components/ListComponents/ClientListComponent";
 import ChargeListComponent from "../components/ListComponents/ChargeListComponent";
+import NewChargeComponent from "../components/NewElementComponents/NewChargeComponent";
+import EditChargeComponent from "../components/EditElementComponents/EditChargeComponent";
 import NewUserComponent from "../components/NewElementComponents/NewUserComponent";
 import EditUserComponent from "../components/EditElementComponents/EditUserComponent";
+import NewClientComponent from "../components/NewElementComponents/NewClientComponent";
+import EditClientComponent from "../components/EditElementComponents/EditClientComponent"
 import { useAuthStore } from "../hooks";
+import EditClientCompanyComponent from "../components/EditElementComponents/EditClientCompanyComponent";
 import { getLastView } from "../helpers";
+import NewClientCompanyComponent from "../components/NewElementComponents/NewClientCompanyComponent";
 
 export const AppRouter = () => {
   const { status, checkAuthToken } = useAuthStore();
@@ -23,19 +29,19 @@ export const AppRouter = () => {
     checkAuthToken();
   }, []);
 
- /* const { pathname } = useLocation();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    checkAuthToken();
-    if (status === "authenticated") navigate(localStorage.getItem("lastView"));
-  }, []);
-
-  useEffect(() => {
-    if (pathname !== "/login") {
-      localStorage.setItem("lastView", getLastView(pathname));
-    }
-  }, [pathname]);*/
+  /* const { pathname } = useLocation();
+   const navigate = useNavigate();
+ 
+   useEffect(() => {
+     checkAuthToken();
+     if (status === "authenticated") navigate(localStorage.getItem("lastView"));
+   }, []);
+ 
+   useEffect(() => {
+     if (pathname !== "/login") {
+       localStorage.setItem("lastView", getLastView(pathname));
+     }
+   }, [pathname]);*/
 
 
   return (
@@ -49,7 +55,13 @@ export const AppRouter = () => {
           <Route path="/order" element={<OrderListComponent />}></Route>
           <Route path="/client" element={<ClientListComponent />}></Route>
           <Route path="/charge" element={<ChargeListComponent />}></Route>
+          <Route path="/charge/newCharge" element={<NewChargeComponent />}></Route>
+          <Route path="/charge/editCharge" element={<EditChargeComponent />}></Route>
           <Route path="/user/newUser" element={<NewUserComponent />}></Route>
+          <Route path="/client/newClient" element={<NewClientComponent />}></Route>
+          <Route path="/client/newCompanyClient" element={<NewClientCompanyComponent />}></Route>
+          <Route path="/client/editClient" element={<EditClientComponent />}></Route>
+          <Route path="/client/editClientCompany" element={<EditClientCompanyComponent />}></Route>
           <Route path="/user/editUser" element={<EditUserComponent />}></Route>
           <Route path="/*" element={<Navigate to="/" />} />
         </>

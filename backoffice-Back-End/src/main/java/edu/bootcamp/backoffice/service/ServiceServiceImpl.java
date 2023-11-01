@@ -46,14 +46,14 @@ public class ServiceServiceImpl implements ServiceService {
 		validateName(serviceDto.getName(), errors);
 		if (errors.length() > 0)
 			throw new InvalidCredentialsException("Invalid Product Name");
-		Optional<edu.bootcamp.backoffice.model.service.Service> result = serviceRepository.findByServiceName(serviceDto.getName());
+		Optional<edu.bootcamp.backoffice.model.service.Service> result = serviceRepository.findByName(serviceDto.getName());
 		if (result.isPresent())
 			return !result.get().isDeleted();
 		return false;
 	}
 
 	private void validateNewServiceDbConflicts(ServiceRequest serviceRequest) {
-		Optional<edu.bootcamp.backoffice.model.service.Service> result = serviceRepository.findByServiceName(serviceRequest.getName());
+		Optional<edu.bootcamp.backoffice.model.service.Service> result = serviceRepository.findByName(serviceRequest.getName());
 		if (result.isPresent())
 			throw new AlreadyRegisteredException("Already registered Service");
 	}
@@ -76,7 +76,7 @@ public class ServiceServiceImpl implements ServiceService {
 	}
 
 	private edu.bootcamp.backoffice.model.service.Service validateUpdateConflicts(int id, UpdateServiceRequest serviceDto) {
-		Optional<edu.bootcamp.backoffice.model.service.Service> result = serviceRepository.findByServiceName(serviceDto.getName());
+		Optional<edu.bootcamp.backoffice.model.service.Service> result = serviceRepository.findByName(serviceDto.getName());
 		edu.bootcamp.backoffice.model.service.Service service;
 		boolean modified = !result.isPresent();
 		if (modified) {
@@ -189,11 +189,11 @@ public class ServiceServiceImpl implements ServiceService {
 	@Override
 	public ServiceResponse delete(int id) throws InvalidIdFormatException {
 		edu.bootcamp.backoffice.model.service.Service service = validator.validateSoftDeletableEntityExistence(id, serviceRepository);
-		List<Tax> taxs = service.getTaxs();
-		if (taxs.size() > 0) {
-			service.setEnabled(false);
-			serviceRepository.save(service);
-		} else
+		// List<Taxs> taxs = service.getTaxs();
+		// if (taxs.size() > 0) {
+		// 	service.setEnabled(false);
+		// 	serviceRepository.save(service);
+		// } else
 			serviceRepository.delete(service);
 		return dtoFactory.createResponse(service);
 	}

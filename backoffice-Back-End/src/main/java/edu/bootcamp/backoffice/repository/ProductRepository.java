@@ -12,6 +12,6 @@ import edu.bootcamp.backoffice.model.product.Product;
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 	public Optional<Product> findById(Integer id);
 
-	public Optional<Product> findByProductName(String name);
+	public Optional<Product> findByName(String name);
 
 }

@@ -12,6 +12,6 @@ import edu.bootcamp.backoffice.model.service.Service;
 public interface ServiceRepository extends JpaRepository<Service, Integer> {
 	public Optional<Service> findById(Integer id);
 
-	public Optional<Service> findByServiceName(String name);
+	public Optional<Service> findByName(String name);
 
 }

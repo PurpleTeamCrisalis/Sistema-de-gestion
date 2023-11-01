@@ -4,34 +4,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.OneToMany;
 
 import edu.bootcamp.backoffice.model.EntitiesConstraints;
 import edu.bootcamp.backoffice.model.SoftDeletable;
-import edu.bootcamp.backoffice.model.order.Order;
-import edu.bootcamp.backoffice.model.user.User;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Data
-@Entity
+@MappedSuperclass
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public abstract class Asset implements SoftDeletable {
 
-	@Id
-	@Column(name = "id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+// @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+// @DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.STRING)       
+public abstract class Asset implements SoftDeletable {
 
 	@Column(name = "name", nullable = false, length = EntitiesConstraints.USERNAME_MAX_LENGTH)
 	private String name;
@@ -44,11 +44,6 @@ public abstract class Asset implements SoftDeletable {
 
 	@Column(name = "enabled", nullable = false)
 	private boolean enabled = true;
-
-	
-	//Descomentar cuando esté la clase taxs
-	
-	//private List<Tax> taxs = new ArrayList<>();
 	
 	
 

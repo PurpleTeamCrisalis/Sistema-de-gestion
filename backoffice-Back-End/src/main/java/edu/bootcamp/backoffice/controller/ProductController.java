@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import edu.bootcamp.backoffice.model.product.Product;
 import edu.bootcamp.backoffice.model.product.dto.ProductRequest;
 import edu.bootcamp.backoffice.model.product.dto.ProductResponse;
 import edu.bootcamp.backoffice.model.product.dto.UpdateProductRequest;
