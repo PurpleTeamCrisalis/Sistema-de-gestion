@@ -87,11 +87,11 @@ public class ValidatorImpl implements Validator
     {
         if(integerNumber<minStrict )
             errorBuilder.append(
-                    " The " + propertyName + " must be smaller than " + minStrict +  "."
+                    " The " + propertyName + " must be greater than " + minStrict +  "."
             );
         else if(integerNumber>maxStrict)
             errorBuilder.append(
-                    " The " + propertyName + " must be grater than " + maxStrict +  "."
+                    " The " + propertyName + " must be smaller than " + maxStrict +  "."
             );
     }
 
@@ -180,7 +180,7 @@ public class ValidatorImpl implements Validator
         if (varchar.length() < minLength)
         {
             errors
-                    .append(" Is less than ")
+                    .append(" Must be greater than ")
                     .append(minLength)
                     .append(" characters.");
             return Boolean.TRUE;

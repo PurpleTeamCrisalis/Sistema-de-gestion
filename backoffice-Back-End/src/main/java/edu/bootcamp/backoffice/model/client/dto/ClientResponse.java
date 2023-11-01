@@ -29,19 +29,20 @@ public class ClientResponse {
     @JsonProperty("adress")
     private String adress;
 
+    @JsonProperty("startDate")
+    private Date startdate;
+
+    @JsonProperty("enabled")
+    private Boolean enabled;
+
     @JsonProperty("isBussiness")
     private Boolean isbussiness;
 
     @JsonProperty("bussinessName")
     private String bussinessname;
 
-    @JsonProperty("startDate")
-    private Date startdate;
-
     @JsonProperty("cuit")
     private Long cuit;
 
-    @JsonProperty("enabled")
-    private Boolean enabled;
 
 }

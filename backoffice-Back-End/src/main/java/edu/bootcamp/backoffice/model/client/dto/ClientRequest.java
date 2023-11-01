@@ -26,14 +26,14 @@ public class ClientRequest {
     @JsonProperty("adress")
     private String adress;
 
+    @JsonProperty("startDate")
+    private Date startdate;
+
     @JsonProperty("isBussiness")
     private Boolean isbussiness;
 
     @JsonProperty("bussinessName")
     private String bussinessname;
-
-    @JsonProperty("startDate")
-    private Date startdate;
 
     @JsonProperty("cuit")
     private Long cuit;
