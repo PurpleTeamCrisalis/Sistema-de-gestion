@@ -4,10 +4,11 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import edu.bootcamp.backoffice.model.Charge.Charge;
+
+import edu.bootcamp.backoffice.model.Tax.Tax;
 
 @Repository
-public interface ChargeRepository extends JpaRepository<Charge, Integer>{
+public interface TaxRepository extends JpaRepository<Tax, Integer>{
 
-    public Optional<Charge> findByName(String name);
+    public Optional<Tax> findByName(String name);
 }

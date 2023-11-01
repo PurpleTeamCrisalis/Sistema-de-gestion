@@ -1,4 +1,7 @@
-package edu.bootcamp.backoffice.model.Charge;
+package edu.bootcamp.backoffice.model.Tax;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.*;
 
@@ -13,10 +16,10 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "chargeTable") //Nombre de la tabla
+@Table(name = "Tax") //Nombre de la tabla
 @Builder
 
-public class Charge implements SoftDeletable{
+public class Tax implements SoftDeletable{
     //Creamos la id
     @Id
     @Column(name="id")
@@ -27,14 +30,14 @@ public class Charge implements SoftDeletable{
 
     //Creamos columnas
     @Column(
-        name = "chargename",
+        name = "name",
         length = EntitiesConstraints.CHARGENAME_MAX_LENGTH,
         nullable = false
     )
     private String name;
 
     @Column(
-        name = "chargepercentage",
+        name = "percentage",
         length = EntitiesConstraints.CHARGEPERCENTAGE_MAX_LENGTH,
         nullable = false
     )
@@ -54,4 +57,8 @@ public class Charge implements SoftDeletable{
     public Boolean isNotDeleted() {
         return enabled;
     }
+    
+	// @OneToMany(mappedBy = "charge")
+    // private List<Taxs> taxs = new ArrayList<>();
+    
 }

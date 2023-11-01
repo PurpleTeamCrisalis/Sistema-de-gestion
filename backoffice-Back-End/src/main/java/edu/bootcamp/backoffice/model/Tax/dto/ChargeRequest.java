@@ -1,4 +1,4 @@
-package edu.bootcamp.backoffice.model.Charge.dto;
+package edu.bootcamp.backoffice.model.Tax.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;

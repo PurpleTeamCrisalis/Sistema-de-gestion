@@ -8,32 +8,32 @@ import edu.bootcamp.backoffice.exception.custom.dbValidation.AlreadyRegisteredEx
 import edu.bootcamp.backoffice.exception.custom.dbValidation.AlreadyUpdatedException;
 import edu.bootcamp.backoffice.exception.custom.dbValidation.EmptyTableException;
 import edu.bootcamp.backoffice.exception.custom.parameterValidation.InvalidArgumentsFormatException;
-import edu.bootcamp.backoffice.model.Charge.Charge;
-import edu.bootcamp.backoffice.model.Charge.ChargeFactory;
-import edu.bootcamp.backoffice.model.Charge.dto.ChargeRequest;
-import edu.bootcamp.backoffice.model.Charge.dto.ChargeResponse;
-import edu.bootcamp.backoffice.model.Charge.dto.UpdateChargeRequest;
 import edu.bootcamp.backoffice.model.EntitiesConstraints;
-import edu.bootcamp.backoffice.repository.ChargeRepository;
-import edu.bootcamp.backoffice.service.Interface.ChargeService;
+import edu.bootcamp.backoffice.model.Tax.TaxFactory;
+import edu.bootcamp.backoffice.model.Tax.Tax;
+import edu.bootcamp.backoffice.model.Tax.dto.ChargeRequest;
+import edu.bootcamp.backoffice.model.Tax.dto.ChargeResponse;
+import edu.bootcamp.backoffice.model.Tax.dto.UpdateChargeRequest;
+import edu.bootcamp.backoffice.repository.TaxRepository;
+import edu.bootcamp.backoffice.service.Interface.TaxService;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service //Implementamos la interfaz de ChargeService
-public class ChargeServiceImpl implements ChargeService{
-    private final ChargeFactory dtoFactory;
-    private final ChargeRepository chargeRepository;
+public class TaxServiceImpl implements TaxService{
+    private final TaxFactory dtoFactory;
+    private final TaxRepository taxRepository;
     private final Validator validator;
 
-    public ChargeServiceImpl(
-        ChargeRepository chargeRepository,
-        ChargeFactory dtoFactory,
+    public TaxServiceImpl(
+        TaxRepository taxRepository,
+        TaxFactory dtoFactory,
         Validator validator
     ){
 
         this.dtoFactory = dtoFactory;
-        this.chargeRepository = chargeRepository;
+        this.taxRepository = taxRepository;
         this.validator = validator;
     }
     //Creamos la logica de las funciones creada en la interfaz
@@ -41,14 +41,14 @@ public class ChargeServiceImpl implements ChargeService{
     public ChargeResponse createCharge(ChargeRequest chargeRequest){
         validateNewChargeRequest(chargeRequest); //Validamos entradas
         validateNewChargeDbConflicts(chargeRequest); //Validamos que los registros no se repitan
-        Charge charge = dtoFactory.CreateEntityForInsertNewRecord(chargeRequest); //Creamos la Entity
-        charge = chargeRepository.save(charge); //Guardamos el registro
+        Tax charge = dtoFactory.CreateEntityForInsertNewRecord(chargeRequest); //Creamos la Entity
+        charge = taxRepository.save(charge); //Guardamos el registro
         return dtoFactory.createResponse(charge); //Devolvemos la info del registro
     }
 
     /** Verificamos que no se repitan de nuevo los nombre del impuesto */
     public void validateNewChargeDbConflicts(ChargeRequest chargeRequest){
-        Optional<Charge> result = chargeRepository.findByName(chargeRequest.getName());
+        Optional<Tax> result = taxRepository.findByName(chargeRequest.getName());
         if(result.isPresent()) throw new AlreadyRegisteredException("Charge not available.");
     }
 
@@ -90,17 +90,26 @@ public class ChargeServiceImpl implements ChargeService{
 
     /** Eliminando un impuesto **/
     public ChargeResponse delete(int id){
-        Charge charge = validator.validateSoftDeletableEntityExistence(id, chargeRepository);
-        chargeRepository.delete(charge);
+        Tax charge = validator.validateSoftDeletableEntityExistence(id, taxRepository);
+        // List<Taxs> taxs = charge.getTaxs();
+
+        // if(taxs.size() > 0){
+        //     charge.setEnabled(false);
+        //     taxRepository.save(charge);
+        // }
+        // else{
+            taxRepository.delete(charge);
+        // }
+        
         return dtoFactory.createResponse(charge);
     }
 
     /** Obteniendo TODOS un registro */
     public List<ChargeResponse> get(){
-        List<Charge> charges = chargeRepository.findAll();
+        List<Tax> charges = taxRepository.findAll();
         List<ChargeResponse> dtos = new ArrayList<>();
 
-        for(Charge charge : charges) dtos.add(dtoFactory.createResponse(charge));
+        for(Tax charge : charges) dtos.add(dtoFactory.createResponse(charge));
         if(dtos.isEmpty()) 
             throw new EmptyTableException("There aren't registered users.");
 
@@ -109,15 +118,15 @@ public class ChargeServiceImpl implements ChargeService{
 
     /** Obteniendo un registro */
     public ChargeResponse get(int id){
-        Charge charge  = validator.completeValidationForId(id, chargeRepository);
+        Tax charge  = validator.completeValidationForId(id, taxRepository);
         return dtoFactory.createResponse(charge);
     }
 
     /** Modificando un registro  */
     public ChargeResponse update(int id, UpdateChargeRequest chargeRequest){
         validateUpdateRequest(id, chargeRequest);
-        Charge charge = validateUpdateConflicts(id, chargeRequest);
-        charge = chargeRepository.save(charge);
+        Tax charge = validateUpdateConflicts(id, chargeRequest);
+        charge = taxRepository.save(charge);
         return dtoFactory.createResponse(charge);
     }
 
@@ -131,9 +140,9 @@ public class ChargeServiceImpl implements ChargeService{
         validateErrors(errors);
     }
 
-    private Charge validateUpdateConflicts(int id, UpdateChargeRequest chargeDto){
-        Optional<Charge> result = chargeRepository.findByName(chargeDto.getName());
-        Charge charge;
+    private Tax validateUpdateConflicts(int id, UpdateChargeRequest chargeDto){
+        Optional<Tax> result = taxRepository.findByName(chargeDto.getName());
+        Tax charge;
         boolean modified = !result.isPresent();
         if(modified) 
             charge = findAndSetChargenameIfNotNull(id, chargeDto.getName());
@@ -149,15 +158,15 @@ public class ChargeServiceImpl implements ChargeService{
         return charge;
     }
 
-     private Charge findAndSetChargenameIfNotNull(int id, String chargename)
+     private Tax findAndSetChargenameIfNotNull(int id, String chargename)
     {
-        Charge charge = validator.completeValidationForId(id, chargeRepository);
+        Tax charge = validator.completeValidationForId(id, taxRepository);
         if(charge != null)
             charge.setName(chargename);
         return charge;
     }
 
-    private boolean mergeEnabled(UpdateChargeRequest chargeDto, Charge charge)
+    private boolean mergeEnabled(UpdateChargeRequest chargeDto, Tax charge)
     {
         Boolean dtoEnabled = chargeDto.getEnabled();
         Boolean chargeEnabled = charge.isEnabled();
@@ -169,7 +178,7 @@ public class ChargeServiceImpl implements ChargeService{
         return false;
     }
     
-    private boolean mergePercentage(UpdateChargeRequest chargeDto, Charge charge)
+    private boolean mergePercentage(UpdateChargeRequest chargeDto, Tax charge)
     {
         Integer dtoPercentage = chargeDto.getPercentage();
         Integer chargePercentage = charge.getPercentage();
@@ -181,8 +190,8 @@ public class ChargeServiceImpl implements ChargeService{
         return false;
     }
 
-    private Charge validateEnabledUserSearchResult(Optional<Charge> result, int requesteId){
-        Charge charge = result.get();
+    private Tax validateEnabledUserSearchResult(Optional<Tax> result, int requesteId){
+        Tax charge = result.get();
         if(charge.getId() != requesteId)
             throw new AlreadyRegisteredException("Chargename not available");
         return charge;

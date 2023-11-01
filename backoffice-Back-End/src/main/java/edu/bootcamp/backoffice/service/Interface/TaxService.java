@@ -1,14 +1,12 @@
 package edu.bootcamp.backoffice.service.Interface;
 
-import org.springframework.stereotype.Service;
-
-import edu.bootcamp.backoffice.model.Charge.dto.ChargeRequest;
-import edu.bootcamp.backoffice.model.Charge.dto.ChargeResponse;
-import edu.bootcamp.backoffice.model.Charge.dto.UpdateChargeRequest;
-
 import java.util.List;
 
-public interface ChargeService {
+import edu.bootcamp.backoffice.model.Tax.dto.ChargeRequest;
+import edu.bootcamp.backoffice.model.Tax.dto.ChargeResponse;
+import edu.bootcamp.backoffice.model.Tax.dto.UpdateChargeRequest;
+
+public interface TaxService {
     //Declaramos las funciones que van haber en la interfaz
     // -- Crear Impuesto
     public ChargeResponse createCharge(ChargeRequest chargeDTO);
