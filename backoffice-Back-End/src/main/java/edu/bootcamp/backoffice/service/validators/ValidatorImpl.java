@@ -58,6 +58,60 @@ public class ValidatorImpl implements Validator
                     " The id must be grater than 0."
             );
     }
+    /** Validate Interger */
+    public void validateInterge(
+        Integer integer,
+        int minLength,
+            int maxLength,
+            StringBuilder errors,
+            String propertyName
+    ){
+        StringBuilder newErrors = new StringBuilder();
+        if( ! isValueMax(integer, maxLength, newErrors))            
+            if(isValueMin(integer, minLength, newErrors));
+            
+        if(newErrors.length() != 0)
+            errors
+                    .append("| ")
+                    .append(propertyName)
+                    .append(" :")
+                    .append(newErrors);
+    }
+    
+    public Boolean isValueMax(
+            Integer integer,
+            Integer maxLength,
+            StringBuilder errors
+        )
+    {
+        if (integer > maxLength)
+        {
+            errors
+                    .append(" Exceeds ")
+                    .append(maxLength)
+                    .append(" value.");
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
+    }
+
+    public Boolean isValueMin(
+            Integer integer,
+            Integer minLength,
+            StringBuilder errors
+        )
+    {
+        if (integer < minLength)
+        {
+            errors
+                    .append(" Exceeds ")
+                    .append(minLength)
+                    .append(" value.");
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
+    }
+    /** Validate Interger */
 
     public void validateLongValue(
             Long longNumber,
