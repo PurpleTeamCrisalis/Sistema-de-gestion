@@ -8,6 +8,13 @@ public class EntitiesConstraints {
     public static final int TAXES_APPLIED_MAX_LENGTH = 200;
     public static final int CLIENTNAME_MAX_LENGTH = 50;
     public static final int CLIENTNAME_MIN_LENGTH = 0;
+    public static final int DESCRIPTION_MAX_LENGTH = 200;
+    //ChargeName 
+    public static final int CHARGENAME_MAX_LENGTH = 50;
+    public static final int CHARGENAME_MIN_LENGTH = 3;
+    //ChargePercentage
+    public static final int CHARGEPERCENTAGE_MAX_LENGTH = 100;
+    public static final int CHARGEPERCENTAGE_MIN_LENGTH = 1;
     public static final int CLIENTDNI_MIN = 1000000;
     public static final int CLIENTDNI_MAX = 999999999;
     public static final int CLIENTBUSSINESSNAME_MAX_LENGTH = 100;
@@ -23,3 +30,4 @@ public class EntitiesConstraints {
     public static final int CLIENTADDRESS_MIN_LENGTH = 5;
     public static final int CLIENTADDRESS_MAX_LENGTH = 100;
 }
+

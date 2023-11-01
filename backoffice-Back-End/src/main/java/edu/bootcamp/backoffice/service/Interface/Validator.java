@@ -50,6 +50,14 @@ public interface Validator
             String propertyName
     );
 
+    public void validateInterge(
+            Integer integer,
+            int minLength,
+            int maxLength,
+            StringBuilder errors,
+            String propertyName
+    );
+
     public Boolean isEmpty(
             String varchar,
             StringBuilder errors
