@@ -10,32 +10,31 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class ClientRequest {
+    @JsonProperty("name")
+    private String name;
 
-  @JsonProperty("name")
-  private String name;
+    @JsonProperty("lastName")
+    private String lastname;
 
-  @JsonProperty("lastName")
-  private String lastName;
+    @JsonProperty("dni")
+    private Integer dni;
 
-  @JsonProperty("dni")
-  private Integer dni;
+    @JsonProperty("phone")
+    private Long phone;
 
-  @JsonProperty("phone")
-  private Long phone;
+    @JsonProperty("adress")
+    private String adress;
 
-  @JsonProperty("adress")
-  private String adress;
+    @JsonProperty("startDate")
+    private Date startdate;
 
-  @JsonProperty("isBussiness")
-  private Boolean isBussiness;
+    @JsonProperty("isBussiness")
+    private Boolean isbussiness;
 
-  @JsonProperty("bussinessName")
-  private String bussinessName;
+    @JsonProperty("bussinessName")
+    private String bussinessname;
 
-  @JsonProperty("StartDate")
-  private Date startDate;
-
-  @JsonProperty("cuit")
-  private Long cuit;
+    @JsonProperty("cuit")
+    private Long cuit;
 
 }

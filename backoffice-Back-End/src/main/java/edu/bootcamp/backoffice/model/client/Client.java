@@ -17,25 +17,91 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "client")
 @Builder
 public class Client implements SoftDeletable {
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(
+            strategy = GenerationType.IDENTITY
+    )
+    private Integer id;
 
-  @Id
-  @Column(name = "id")
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+    @Column(
+            name = "name",
+            nullable = false,
+            length = EntitiesConstraints.CLIENTNAME_MAX_LENGTH
+    )
+    private String name;
 
-  @Column(name = "enabled")
-  private boolean enabled;
+    @Column(
+            name = "lastName",
+            nullable = false,
+            length = EntitiesConstraints.CLIENTNAME_MAX_LENGTH
+    )
+    private String lastName;
 
-  @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
-  private List<Order> clientOrders = new ArrayList<>();
+    @Column(
+            name = "dni",
+            nullable = false,
+            unique = true
+    )
+    private Integer dni;
 
-  public Boolean isDeleted() {
-    return !enabled;
-  }
+    @Column(
+            name = "phone",
+            nullable = false
+    )
+    private Long phone;
 
-  public Boolean isNotDeleted() {
-    return enabled;
-  }
+    @Column(
+            name = "adress",
+            nullable = false,
+            length = EntitiesConstraints.CLIENTADDRESS_MAX_LENGTH
+    )
+    private String adress;
+
+    @Column(
+            name = "isBussiness",
+            nullable = false,
+            length = 1
+    )
+    private Boolean isBussiness;
+
+    @Column(
+            name = "bussinessName",
+            length = EntitiesConstraints.CLIENT_BUSSINESSNAME_MAX_LENGTH
+    )
+    private String bussinessName;
+
+    @Column(
+            name = "startDate"
+    )
+    private Date startDate;
+
+    @Column(
+            name = "cuit",
+            unique = true
+    )
+    private Long cuit;
+
+    @Column(
+            name="enabled",
+            nullable = false
+    )
+    private boolean enabled = true;
+
+    @OneToMany(
+            mappedBy = "client",
+            fetch = FetchType.LAZY
+    )
+    private List<Order> clientOrders = new ArrayList<>();
+
+    public Boolean isDeleted() {
+        return !enabled;
+    }
+
+    public Boolean isNotDeleted() {
+        return enabled;
+    }
 }

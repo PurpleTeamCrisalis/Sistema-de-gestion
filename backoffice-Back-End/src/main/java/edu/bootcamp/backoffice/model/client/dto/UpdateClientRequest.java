@@ -14,37 +14,35 @@ import java.util.Date;
 @Builder
 public class UpdateClientRequest {
 
-  @JsonProperty("name")
-  private String name;
+    @JsonProperty("name")
+    private String name;
 
-  @JsonProperty("lastName")
-  private String lastName;
+    @JsonProperty("lastName")
+    private String lastname;
 
-  @JsonProperty("dni")
-  private Integer dni;
+    @JsonProperty("dni")
+    private Integer dni;
 
-  @JsonProperty("phone")
-  private Long phone;
+    @JsonProperty("phone")
+    private Long phone;
 
-  @JsonProperty("adress")
-  private String adress;
+    @JsonProperty("adress")
+    private String adress;
 
-  @JsonProperty("isBussiness")
-  private Boolean isBussiness;
+    @JsonProperty("StartDate")
+    private Date startdate;
 
-  @JsonProperty("bussinessName")
-  private String bussinessName;
+    @JsonProperty("enabled")
+    private Boolean enabled;
 
-  @JsonProperty("startDate")
-  private Date startDate;
+    @JsonProperty("isBussiness")
+    private Boolean isbussiness;
 
-  @JsonProperty("cuit")
-  private Long cuit;
+    @JsonProperty("bussinessName")
+    private String bussinessname;
 
-  @JsonProperty("enabled")
-  private Boolean enabled;
+    @JsonProperty("cuit")
+    private Long cuit;
 
-  @JsonProperty("id")
-  private Integer id;
 
 }
