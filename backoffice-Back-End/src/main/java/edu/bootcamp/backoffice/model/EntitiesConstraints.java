@@ -8,11 +8,11 @@ public class EntitiesConstraints {
   
     public static final int CLIENTNAME_MAX_LENGTH = 50;
 
-    public static final int CLIENTNAME_MIN_LENGTH = 2;
+    public static final int CLIENTNAME_MIN_LENGTH = 1;
 
     public static final int CLIENTLASTNAME_MAX_LENGTH = 50;
 
-    public static final int CLIENTLASTNAME_MIN_LENGTH = 2;
+    public static final int CLIENTLASTNAME_MIN_LENGTH = 1;
 
     public static final int CLIENTDNI_MIN = 1000000;
 

@@ -252,63 +252,68 @@ public class ClientServiceImpl implements ClientService {
             UpdateClientRequest clientRequest,
             StringBuilder errorBuilder
     ) {
-        if(clientRequest.getName()!=null)
+        validator.validateVarchar(
+                clientRequest.getName(),
+                EntitiesConstraints.CLIENTNAME_MIN_LENGTH,
+                EntitiesConstraints.CLIENTNAME_MAX_LENGTH,
+                errorBuilder,
+                "Client name"
+        );
+        validator.validateVarchar(
+                clientRequest.getLastname(),
+                EntitiesConstraints.CLIENTLASTNAME_MIN_LENGTH,
+                EntitiesConstraints.CLIENTLASTNAME_MAX_LENGTH,
+                errorBuilder,
+                "Client lastname"
+        );
+        validator.validateLongValue(
+                (long)clientRequest.getDni(),
+                (long)EntitiesConstraints.CLIENTDNI_MAX,
+                (long)EntitiesConstraints.CLIENTDNI_MIN,
+                "Client dni",
+                errorBuilder
+        );
+        validator.validateLongValue(
+                clientRequest.getPhone(),
+                EntitiesConstraints.CLIENTPHONE_MAX,
+                EntitiesConstraints.CLIENTPHONE_MIN,
+                "Client phone",
+                errorBuilder
+        );
+        validator.validateVarchar(
+                clientRequest.getAdress(),
+                EntitiesConstraints.CLIENTNAME_MIN_LENGTH,
+                EntitiesConstraints.CLIENTNAME_MAX_LENGTH,
+                errorBuilder,
+                "Client adress"
+        );
+       if(validator.isEmpty(
+                clientRequest.getIsbussiness(),
+                errorBuilder
+        ))return;
+       if(clientRequest.getIsbussiness()){
             validator.validateVarchar(
-                    clientRequest.getName(),
+                    clientRequest.getBussinessname(),
                     EntitiesConstraints.CLIENTNAME_MIN_LENGTH,
                     EntitiesConstraints.CLIENTNAME_MAX_LENGTH,
                     errorBuilder,
-                    "Client name"
+                    "Client bussiness name"
             );
-        if(clientRequest.getLastname()!=null)
-            validator.validateVarchar(
-                    clientRequest.getLastname(),
-                    EntitiesConstraints.CLIENTLASTNAME_MIN_LENGTH,
-                    EntitiesConstraints.CLIENTLASTNAME_MAX_LENGTH,
-                    errorBuilder,
-                    "Client lastname"
-            );
-        if(clientRequest.getDni()!=null)
-            validator.validateLongValue(
-                    (long)clientRequest.getDni(),
-                    (long)EntitiesConstraints.CLIENTDNI_MAX,
-                    (long)EntitiesConstraints.CLIENTDNI_MIN,
-                    "Client dni",
+            validator.isEmpty(
+                    clientRequest.getStartdate(),
                     errorBuilder
             );
-        if(clientRequest.getPhone()!=null)
             validator.validateLongValue(
-                    clientRequest.getPhone(),
-                    EntitiesConstraints.CLIENTPHONE_MAX,
-                    EntitiesConstraints.CLIENTPHONE_MIN,
-                    "Client phone",
+                    clientRequest.getCuit(),
+                    EntitiesConstraints.CLIENTCUIT_MAX,
+                    EntitiesConstraints.CLIENTCUIT_MIN,
+                    "Client cuit",
                     errorBuilder
             );
-        if(clientRequest.getAdress()!=null)
-            validator.validateVarchar(
-                    clientRequest.getAdress(),
-                    EntitiesConstraints.CLIENTNAME_MIN_LENGTH,
-                    EntitiesConstraints.CLIENTNAME_MAX_LENGTH,
-                    errorBuilder,
-                    "Client adress"
-            );
-       if(clientRequest.getIsbussiness() != null && clientRequest.getIsbussiness()){
-           if(clientRequest.getBussinessname()!=null)
-               validator.validateVarchar(
-                        clientRequest.getBussinessname(),
-                        EntitiesConstraints.CLIENTNAME_MIN_LENGTH,
-                        EntitiesConstraints.CLIENTNAME_MAX_LENGTH,
-                        errorBuilder,
-                        "Client bussiness name"
-                );
-           if(clientRequest.getCuit()!=null)
-                validator.validateLongValue(
-                        clientRequest.getCuit(),
-                        EntitiesConstraints.CLIENTCUIT_MAX,
-                        EntitiesConstraints.CLIENTCUIT_MIN,
-                        "Client cuit",
-                        errorBuilder
-                );
-        }
+       }
+       validator.isEmpty(
+               clientRequest.getEnabled(),
+               errorBuilder
+       );
     }
 }

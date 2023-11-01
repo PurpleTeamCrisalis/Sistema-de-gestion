@@ -67,13 +67,13 @@ public class ValidatorImpl implements Validator
             StringBuilder errorBuilder
     )
     {
-        if(longNumber<minStrict )
-            errorBuilder.append(
-                    " The " + propertyName + " must be greater than " + minStrict +  "."
-            );
-        else if(longNumber>maxStrict)
+        if(longNumber>maxStrict )
             errorBuilder.append(
                     " The " + propertyName + " must be smaller than " + maxStrict +  "."
+            );
+        else if(longNumber<minStrict)
+            errorBuilder.append(
+                    " The " + propertyName + " must be grater than " + minStrict +  "."
             );
     }
 
