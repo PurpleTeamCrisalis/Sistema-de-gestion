@@ -11,15 +11,15 @@ function EditClientCompanyComponent() {
 
     const navigate = useNavigate();
     const { startUpdatingClient, activeClient, setActiveClient, clients } = useClientsStore();
-    const { name, lastName, dni, phone, adress, isBussiness, bussinessName, StartDate, cuit, enabled, handleInputChange, emptyValidation } = useForm({
+    const { name, lastname, dni, phone, adress, isbussiness, bussinessname, startdate, cuit, enabled, handleInputChange, emptyValidation } = useForm({
         name: activeClient?.name,
-        lastName: activeClient?.lastName,
+        lastname: activeClient?.lastname,
         dni: activeClient?.dni,
         phone: activeClient?.phone,
         adress: activeClient?.adress,
-        isBussiness: activeClient?.isBussiness,
-        bussinessName: activeClient?.bussinessName,
-        StartDate: activeClient?.startDate.split("T")[0],
+        isbussiness: activeClient?.isbussiness,
+        bussinessname: activeClient?.bussinessname,
+        startdate: activeClient?.startdate.split("T")[0],
         enabled: activeClient?.enabled,
         cuit: activeClient?.cuit,
         id: activeClient?.id,
@@ -33,13 +33,13 @@ function EditClientCompanyComponent() {
         const clientAux = {
             id: activeClient?.id,
             name,
-            lastName,
+            lastname,
             dni: parseInt(dni),
             phone: parseInt(phone),
             adress,
-            isBussiness,
-            bussinessName,
-            StartDate,
+            isbussiness,
+            bussinessname,
+            startdate,
             enabled,
             cuit: parseInt(cuit),
         };
@@ -48,7 +48,6 @@ function EditClientCompanyComponent() {
         if (formValidations(clientAux)) {
             return console.log("Campos incorrectos")
         }
-        console.log(clientAux)
         // Verifica si los nuevos datos son ya existentes
         const clienteExiste = clients?.find(client => client.dni === dni);
         if ((clienteExiste) && (activeClient.dni !== dni)) {
@@ -119,10 +118,10 @@ function EditClientCompanyComponent() {
                                             <h5 className="form-h5">Apellido</h5>
                                             <input
                                                 type="text"
-                                                name='lastName'
-                                                id='lastName'
+                                                name='lastname'
+                                                id='lastname'
                                                 onChange={handleInputChange}
-                                                value={lastName}
+                                                value={lastname}
                                                 className="form-control"
                                                 placeholder={"Ingresa Apellido"}
                                             />
@@ -175,10 +174,10 @@ function EditClientCompanyComponent() {
                                             <h5 className="form-h5">Nombre</h5>
                                             <input
                                                 type="text"
-                                                name='bussinessName'
-                                                id='bussinessName'
+                                                name='bussinessname'
+                                                id='bussinessname'
                                                 onChange={handleInputChange}
-                                                value={bussinessName}
+                                                value={bussinessname}
                                                 className="form-control"
                                                 placeholder={"Ingresa Nombre de Empresa"}
                                             />
@@ -199,10 +198,10 @@ function EditClientCompanyComponent() {
                                             <h5 className="form-h5">Inicio de Actividades</h5>
                                             <input
                                                 type="date"
-                                                name='StartDate'
-                                                id='StartDate'
+                                                name='startdate'
+                                                id='startdate'
                                                 onChange={handleInputChange}
-                                                value={StartDate}
+                                                value={startdate}
                                                 className="form-control"
                                                 placeholder={"Ingresa CUIT"}
                                             />

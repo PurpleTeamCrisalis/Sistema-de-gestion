@@ -10,20 +10,20 @@ import { formValidations } from '../../utils/FormValidations'
 
 const formDTO = {
     name: "",
-    lastName: "",
+    lastname: "",
     dni: "", // Integer
     phone: "", //Long
     adress: "",
-    isBussiness: true,
-    bussinessName: "",
-    StartDate: "",
+    isbussiness: true,
+    bussinessname: "",
+    startdate: "",
     cuit: "" //Long
 }
 
 function NewClientCompanyComponent() {
     const navigate = useNavigate();
     const { startAddingClients, clients } = useClientsStore();
-    const { name, lastName, dni, phone, adress, isBussiness, bussinessName, StartDate, cuit, handleInputChange, clearForm } = useForm(formDTO);
+    const { name, lastname, dni, phone, adress, isbussiness, bussinessname, startdate, cuit, handleInputChange, clearForm } = useForm(formDTO);
 
     function addClient(event) {
         event.preventDefault();
@@ -31,13 +31,13 @@ function NewClientCompanyComponent() {
         // Objeto del cliente
         const client = {
             name,
-            lastName,
+            lastname,
             dni: parseInt(dni),
             phone: parseInt(phone), // Convierte a número entero (Long)
             adress,
-            isBussiness,
-            bussinessName,
-            StartDate,
+            isbussiness,
+            bussinessname,
+            startdate,
             cuit: parseInt(cuit), // Convierte a número entero (Long)
         };
 
@@ -117,11 +117,11 @@ function NewClientCompanyComponent() {
                                             <h5 className="form-h5">Apellido</h5>
                                             <input
                                                 type="text"
-                                                name="lastName"
-                                                id="lastName"
+                                                name="lastname"
+                                                id="lastname"
                                                 className="form-control"
                                                 onChange={handleInputChange}
-                                                value={lastName}
+                                                value={lastname}
                                             />
                                         </div>
                                         <div className="col-md-6 mb-3">
@@ -168,11 +168,11 @@ function NewClientCompanyComponent() {
                                             <h5 className="form-h5">Nombre</h5>
                                             <input
                                                 type="text"
-                                                name="bussinessName"
-                                                id="bussinessName"
+                                                name="bussinessname"
+                                                id="bussinessname"
                                                 className="form-control"
                                                 onChange={handleInputChange}
-                                                value={bussinessName}
+                                                value={bussinessname}
                                             />
                                         </div>
                                         <div className="mb-3">
@@ -190,11 +190,11 @@ function NewClientCompanyComponent() {
                                             <h5 className="form-h5">Inicio de Actividades</h5>
                                             <input
                                                 type="date"
-                                                name="StartDate"
-                                                id="StartDate"
+                                                name="startdate"
+                                                id="startdate"
                                                 className="form-control"
                                                 onChange={handleInputChange}
-                                                value={StartDate}
+                                                value={startdate}
                                             />
                                         </div>
                                     </div>

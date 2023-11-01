@@ -4,18 +4,6 @@ import "toastify-js/src/toastify.css";
 export function formValidations(data) {
   function validateField(value, fieldName, minLength, maxLength) {
     let errorMessage;
-    if (fieldName === "Fecha" && data.isBussiness) {
-      if (value.length === 0) {
-        Toastify({
-          text: "Ingrese una fecha",
-          duration: 2000,
-          style: {
-            background: "linear-gradient(to right, #f44336, #b71c1c)",
-          },
-        }).showToast();
-        return false;
-      }
-    }
 
     if (value?.length < minLength || value?.length > maxLength) {
       errorMessage = `Error: ${fieldName} debe tener entre ${minLength} y ${maxLength} caracteres`;
@@ -33,27 +21,25 @@ export function formValidations(data) {
 
   const {
     name,
-    lastName,
+    lastname,
     dni,
     phone,
     adress,
-    bussinessName,
+    bussinessname,
     cuit,
-    isBussiness,
-    StartDate,
+    isbussiness,
+    startdate,
   } = data;
-
   if (
-    !validateField(name, "Nombre", 5, 50) ||
-    !validateField(lastName, "Apellido", 5, 50) ||
+    !validateField(name, "Nombre", 1, 50) ||
+    !validateField(lastname, "Apellido", 1, 50) ||
     !validateField(dni.toString(), "DNI", 7, 9) ||
     !validateField(phone.toString(), "teléfono", 10, 10) ||
-    !validateField(adress, "dirección", 5, 100) ||
-    !validateField(StartDate?.toString(), "Fecha", -1, 10) ||
-    (isBussiness &&
-      !validateField(bussinessName, "Nombre de Empresa", 2, 100)) ||
-    (isBussiness && !validateField(cuit.toString(), "CUIT", 10, 11))
+    !validateField(adress, "dirección", 1, 50) ||
+    (isbussiness && !validateField(bussinessname, "Nombre de Empresa", 1, 50)) ||
+    (isbussiness && !validateField(cuit.toString(), "CUIT", 10, 11)) 
   ) {
+    // Falta la fecha
     return true;
   } else {
     return false;

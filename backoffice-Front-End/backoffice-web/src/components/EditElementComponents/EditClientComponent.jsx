@@ -10,20 +10,20 @@ import "toastify-js/src/toastify.css";
 function EditClientComponent() {
     const navigate = useNavigate();
     const { startUpdatingClient, activeClient, setActiveClient, clients } = useClientsStore();
-    const { name, lastName, dni, phone, adress, isBussiness, bussinessName, StartDate, cuit, enabled, handleInputChange, emptyValidation } = useForm({
+    const { name, lastname, dni, phone, adress, isbussiness, bussinessname, startdate, cuit, enabled, handleInputChange, emptyValidation } = useForm({
         name: activeClient?.name,
-        lastName: activeClient?.lastName,
+        lastname: activeClient?.lastname,
         dni: activeClient?.dni,
         phone: activeClient?.phone,
         adress: activeClient?.adress,
-        isBussiness: activeClient?.isBussiness,
-        bussinessName: activeClient?.bussinessName,
-        StartDate: activeClient?.startDate,
+        isbussiness: activeClient?.isbussiness,
+        bussinessname: activeClient?.bussinessname,
+        startdate: activeClient?.startdate,
         enabled: activeClient?.enabled,
         cuit: activeClient?.cuit,
         id: activeClient?.id,
     });
-    console.log(enabled)
+
     // Edicion de cliente
     function editClient(event) {
         event.preventDefault();
@@ -32,14 +32,14 @@ function EditClientComponent() {
         const clientAux = {
             id: activeClient?.id,
             name,
-            lastName,
+            lastname,
             dni: parseInt(dni),
             phone: parseInt(phone),
             adress,
-            isBussiness,
-            bussinessName,
+            isbussiness,
+            bussinessname,
             enabled,
-            StartDate,
+            startdate,
             cuit: parseInt(cuit),
         };
 
@@ -47,6 +47,7 @@ function EditClientComponent() {
         if (formValidations(clientAux)) {
             return console.log("Campos incorrectos")
         }
+        
         // Verifica si los nuevos datos son ya existentes
         const clienteExiste = clients?.find(client => { return client.dni === dni });
         if ((clienteExiste) && (activeClient.dni !== dni)) {
@@ -109,13 +110,13 @@ function EditClientComponent() {
                                             />
                                         </div>
                                         <div className="col-md-6 mb-3">
-                                            <label htmlFor="lastName" className="form-label">Apellido</label>
+                                            <label htmlFor="lastname" className="form-label">Apellido</label>
                                             <input
                                                 type="text"
-                                                name='lastName'
-                                                id='lastName'
+                                                name='lastname'
+                                                id='lastname'
                                                 onChange={handleInputChange}
-                                                value={lastName}
+                                                value={lastname}
                                                 className="form-control"
                                                 placeholder={"Ingresa Apellido"}
                                             />

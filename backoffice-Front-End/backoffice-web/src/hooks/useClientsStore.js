@@ -14,7 +14,7 @@ import {
   onUpdateClient,
   onSetActiveClient,
   onPullActiveClient,
-  onDeleteClient
+  onDeleteClient,
 } from "../redux/client/clientsSlice";
 
 export function useClientsStore() {
@@ -22,10 +22,10 @@ export function useClientsStore() {
   const dispatch = useDispatch();
 
   function setActiveClient(client) {
-    dispatch(onSetActiveClient(client))
+    dispatch(onSetActiveClient(client));
   }
   function pullActiveClient() {
-    dispatch(onPullActiveClient())
+    dispatch(onPullActiveClient());
   }
 
   async function startLoadingClient() {
@@ -33,26 +33,26 @@ export function useClientsStore() {
       const { data } = await projectApi.get("/client/list");
       dispatch(onLoadClients(data));
     } catch (error) {
-      console.error(error);
+      console.error("Lista vacía");
     }
   }
 
   async function startAddingClients(client) {
     try {
-      const response = await projectApi.post("/client/create", client);
-      
+      const response = await projectApi.post("/client/", client);
+
       if (response && response.data) {
         const { data } = response;
         dispatch(
           onAddNewClient({
             name: data.name,
-            lastName: data.lastname,
+            lastname: data.lastname,
             dni: data.dni,
             phone: data.phone,
             adress: data.adress,
-            bussinessName: data.bussinessName,
-            isBussiness: data.isBussiness,
-            StartDate: data.StartDate,
+            bussinessname: data.bussinessname,
+            isbussiness: data.isbussiness,
+            startdate: data.startdate,
             cuit: data.cuit,
             enables: data.enabled,
             id: data.id,
@@ -76,7 +76,6 @@ export function useClientsStore() {
   }
   async function startUpdatingClient(client) {
     try {
-      
       const { data } = await projectApi.patch(
         `/client/update/${client.id}`,
         client

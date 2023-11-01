@@ -5,6 +5,9 @@ import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from 'react-router-dom'
 import { useClientsStore } from '../../hooks/useClientsStore'
 import Swal from 'sweetalert2'
+import Toastify from "toastify-js";
+import "toastify-js/src/toastify.css";
+
 
 function ClientListComponent() {
     const navigate = useNavigate();
@@ -12,12 +15,9 @@ function ClientListComponent() {
     const { clients, startLoadingClient, startDeletingClient, activeClient, setActiveClient } = useClientsStore();
 
     useEffect(() => {
-        try {
-            startLoadingClient()
 
-        } catch (error) {
-            console.log(error)
-        }
+        startLoadingClient()
+
     }, []);
 
     // Modal de nuevo cliente
@@ -48,7 +48,7 @@ function ClientListComponent() {
 
     function editClient(client) {
         setActiveClient(client);
-        if (client.isBussiness) {
+        if (client.isbussiness) {
             navigate("/client/editClientCompany");
         } else {
             navigate("/client/editClient");
@@ -58,28 +58,43 @@ function ClientListComponent() {
     function deleteClient() {
         if (activeClient) {
             if (activeClient.enabled === true) {
-                Swal.fire({
-                    title: `¿Seguro que quieres eliminar a ${activeClient.name} ${activeClient.lastName} ?`,
-                    showCancelButton: true,
-                    confirmButtonText: 'confirmar',
-                    cancelButtonText: 'cancelar',
-                }).then((result) => {
-                    /* Read more about isConfirmed, isDenied below */
-                    if (result.isConfirmed) {
-                        startDeletingClient();
-                        Swal.fire('Cliente Eliminado', '', 'success')
-                    }
-                });
+                if (activeClient.isbussiness) {
+                    Swal.fire({
+                        title: `¿Seguro que quieres eliminar a ${activeClient.bussinessname} ?`,
+                        showCancelButton: true,
+                        confirmButtonText: 'confirmar',
+                        cancelButtonText: 'cancelar',
+                    }).then((result) => {
+                        /* Read more about isConfirmed, isDenied below */
+                        if (result.isConfirmed) {
+                            startDeletingClient();
+                            Swal.fire('Empresa Eliminado', '', 'success')
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        title: `¿Seguro que quieres eliminar a ${activeClient.name} ${activeClient.lastname} ?`,
+                        showCancelButton: true,
+                        confirmButtonText: 'confirmar',
+                        cancelButtonText: 'cancelar',
+                    }).then((result) => {
+                        /* Read more about isConfirmed, isDenied below */
+                        if (result.isConfirmed) {
+                            startDeletingClient();
+                            Swal.fire('Cliente Eliminado', '', 'success')
+                        }
+                    });
+                }
             } else {
                 return Swal.fire({
                     icon: "error",
                     title: "Error",
-                    text: "No puede eliminar un usuario que esté deshabilitado",
+                    text: "No puede eliminar un cliente que esté deshabilitado",
                 });
             }
         } else {
             Toastify({
-                text: "Seleccionar un usuario para eliminar",
+                text: "Seleccionar un Cliente para eliminar",
                 duration: 2000,
                 style: {
                     background: "linear-gradient(to right, #f44336, #b71c1c)",
@@ -150,15 +165,15 @@ function ClientListComponent() {
                                             </td>
 
                                             <td>
-                                                {client.isBussiness ? client.bussinessName : client.name}
+                                                {client.isbussiness ? client.bussinessname : client.name}
                                             </td>
 
                                             <td>
-                                                {client.isBussiness ? "Empresa" : "Persona"}
+                                                {client.isbussiness ? "Empresa" : "Persona"}
                                             </td>
 
                                             <td>
-                                                {client.isBussiness ? client.cuit : client.dni}
+                                                {client.isbussiness ? client.cuit : client.dni}
                                             </td>
 
                                             <td>

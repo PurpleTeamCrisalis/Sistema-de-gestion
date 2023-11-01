@@ -9,30 +9,20 @@ import { formValidations } from '../../utils/FormValidations'
 
 const formDTO = {
     name: "",
-    lastName: "",
+    lastname: "",
     dni: "", // Integer
     phone: "", //Long
     adress: "",
-    isBussiness: false,
-    bussinessName: "",
-    StartDate: "", // Ver lo de hacer post con tipo date
+    isbussiness: false,
+    bussinessname: "",
+    startdate: "", // Ver lo de hacer post con tipo date
     cuit: "", //Long
 }
 
 function NewClientComponent() {
     const navigate = useNavigate();
     const { startAddingClients, clients } = useClientsStore();
-    const { name, lastName, dni, phone, adress, isBussiness, bussinessName, StartDate, cuit, handleInputChange, clearForm } = useForm(formDTO);
-
-    // function emptyForm() {
-    //     return (
-    //         name.length === 0,
-    //         lastName.length === 0,
-    //         dni.length === 0,
-    //         phone.length === 0,
-    //         adress.length === 0
-    //     )
-    // }
+    const { name, lastname, dni, phone, adress, isbussiness, bussinessname, startdate, cuit, handleInputChange, clearForm } = useForm(formDTO);
 
     function addClient(event) {
         event.preventDefault();
@@ -40,13 +30,13 @@ function NewClientComponent() {
         // Objeto del cliente
         const client = {
             name,
-            lastName,
+            lastname,
             dni: parseInt(dni),
             phone: parseInt(phone), // Convierte a número entero (Long)
             adress,
-            isBussiness,
-            bussinessName,
-            StartDate,
+            isbussiness,
+            bussinessname,
+            startdate,
             cuit: parseInt(0), // Convierte a número entero (Long)
         };
 
@@ -123,14 +113,14 @@ function NewClientComponent() {
                                             />
                                         </div>
                                         <div className="col-md-6 mb-3">
-                                            <label htmlFor="lastName" className="form-label">Apellido</label>
+                                            <label htmlFor="lastname" className="form-label">Apellido</label>
                                             <input
                                                 type="text"
-                                                name="lastName"
-                                                id="lastName"
+                                                name="lastname"
+                                                id="lastname"
                                                 className="form-control"
                                                 onChange={handleInputChange}
-                                                value={lastName}
+                                                value={lastname}
                                             />
                                         </div>
                                         <div className="col-md-6 mb-3">
