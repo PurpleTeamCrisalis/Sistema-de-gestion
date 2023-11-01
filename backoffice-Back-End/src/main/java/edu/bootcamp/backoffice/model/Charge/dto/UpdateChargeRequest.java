@@ -1,6 +1,7 @@
-package edu.bootcamp.backoffice.model.user.dto;
+package edu.bootcamp.backoffice.model.Charge.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,15 +11,16 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @Builder
-public class UpdateUserRequest
-{
-    @JsonProperty("username")
-    private String username;
+public class UpdateChargeRequest {
+    @JsonProperty("name")
+    private String name;
 
-    @JsonProperty("password")
-    private String password;
+    @JsonProperty("percentage")
+    private Integer percentage;
 
     @JsonProperty("enabled")
     private Boolean enabled;
 
+    @JsonProperty("id")
+    private Integer id;
 }
