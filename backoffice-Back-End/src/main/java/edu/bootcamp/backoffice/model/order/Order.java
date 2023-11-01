@@ -1,5 +1,6 @@
 package edu.bootcamp.backoffice.model.order;
 
+import edu.bootcamp.backoffice.model.client.Client;
 import edu.bootcamp.backoffice.model.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,4 +27,8 @@ public class Order {
     @ManyToOne
     //@JoinColumn(name = "employee_id")
     private User user;
+
+    @ManyToOne
+    //@JoinColumn(name = "employee_id")
+    private Client client;
 }
