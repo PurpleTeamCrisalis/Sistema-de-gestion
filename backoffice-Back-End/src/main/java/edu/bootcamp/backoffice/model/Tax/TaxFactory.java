@@ -1,16 +1,16 @@
-package edu.bootcamp.backoffice.model.Charge;
+package edu.bootcamp.backoffice.model.Tax;
 
 import org.springframework.stereotype.Component;
 
-import edu.bootcamp.backoffice.model.Charge.dto.ChargeRequest;
-import edu.bootcamp.backoffice.model.Charge.dto.ChargeResponse;
+import edu.bootcamp.backoffice.model.Tax.dto.ChargeRequest;
+import edu.bootcamp.backoffice.model.Tax.dto.ChargeResponse;
 
 @Component
-public class ChargeFactory {
+public class TaxFactory {
     //Lo que vamos a recibir
-    public Charge CreateEntityForInsertNewRecord(ChargeRequest chargeDTO){
+    public Tax CreateEntityForInsertNewRecord(ChargeRequest chargeDTO){
         //Entity(char) 
-        return Charge
+        return Tax
                 .builder()
                 .name(chargeDTO.getName())
                 .percentage(chargeDTO.getPercentage())
@@ -19,7 +19,7 @@ public class ChargeFactory {
     }
 
     //Lo que vamos a devolver
-    public ChargeResponse createResponse(Charge charge){
+    public ChargeResponse createResponse(Tax charge){
         //? Lo hacemos por seguridad y flexibilidad
         return ChargeResponse
                 .builder()

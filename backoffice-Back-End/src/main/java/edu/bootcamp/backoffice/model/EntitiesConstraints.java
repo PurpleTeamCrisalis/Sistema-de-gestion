@@ -7,6 +7,8 @@ public class EntitiesConstraints {
     public static final int PASSWORD_MIN_LENGTH = 5;
 
     public static final int DESCRIPTION_MAX_LENGTH = 200;
+    public static final int ITEM_NAME_MIN_LENGTH = 1;
+    public static final int ITEM_NAME_MAX_LENGTH = 50;
     //ChargeName 
     public static final int CHARGENAME_MAX_LENGTH = 50;
     public static final int CHARGENAME_MIN_LENGTH = 3;

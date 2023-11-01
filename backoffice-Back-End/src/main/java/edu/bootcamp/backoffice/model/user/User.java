@@ -52,6 +52,7 @@ public class User implements SoftDeletable
             mappedBy = "user",
             fetch = FetchType.LAZY
     )
+    
     private List<Order> processedOrders = new ArrayList<>();
 
     //@Override
