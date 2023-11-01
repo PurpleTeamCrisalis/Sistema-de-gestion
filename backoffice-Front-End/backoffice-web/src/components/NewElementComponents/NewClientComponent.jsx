@@ -10,13 +10,13 @@ import { formValidations } from '../../utils/FormValidations'
 const formDTO = {
     name: "",
     lastname: "",
-    dni: "", // Integer
-    phone: "", //Long
+    dni: "", 
+    phone: "", 
     adress: "",
     isbussiness: false,
     bussinessname: "",
-    startdate: "", // Ver lo de hacer post con tipo date
-    cuit: "", //Long
+    startdate: "", 
+    cuit: "", 
 }
 
 function NewClientComponent() {
@@ -32,12 +32,12 @@ function NewClientComponent() {
             name,
             lastname,
             dni: parseInt(dni),
-            phone: parseInt(phone), // Convierte a número entero (Long)
+            phone: parseInt(phone), 
             adress,
             isbussiness,
             bussinessname,
             startdate,
-            cuit: parseInt(0), // Convierte a número entero (Long)
+            cuit: parseInt(0), 
         };
 
         if (formValidations(client)) {

@@ -11,13 +11,13 @@ import { formValidations } from '../../utils/FormValidations'
 const formDTO = {
     name: "",
     lastname: "",
-    dni: "", // Integer
-    phone: "", //Long
+    dni: "", 
+    phone: "", 
     adress: "",
     isbussiness: true,
     bussinessname: "",
     startdate: "",
-    cuit: "" //Long
+    cuit: "" 
 }
 
 function NewClientCompanyComponent() {
@@ -33,12 +33,12 @@ function NewClientCompanyComponent() {
             name,
             lastname,
             dni: parseInt(dni),
-            phone: parseInt(phone), // Convierte a número entero (Long)
+            phone: parseInt(phone), 
             adress,
             isbussiness,
             bussinessname,
             startdate,
-            cuit: parseInt(cuit), // Convierte a número entero (Long)
+            cuit: parseInt(cuit),
         };
 
         // Alerta campos vacíos

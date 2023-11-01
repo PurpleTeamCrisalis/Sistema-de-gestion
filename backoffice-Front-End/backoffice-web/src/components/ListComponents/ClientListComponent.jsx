@@ -7,6 +7,7 @@ import { useClientsStore } from '../../hooks/useClientsStore'
 import Swal from 'sweetalert2'
 import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
+import EmptyList from '../../utils/EmptyList'
 
 
 function ClientListComponent() {
@@ -15,9 +16,12 @@ function ClientListComponent() {
     const { clients, startLoadingClient, startDeletingClient, activeClient, setActiveClient } = useClientsStore();
 
     useEffect(() => {
-
-        startLoadingClient()
-
+        if (clients.length == 0) {
+            // Parte cuando la lista está vacía
+            console.log("Vacio")
+        } else {
+            startLoadingClient()
+        }
     }, []);
 
     // Modal de nuevo cliente
@@ -104,6 +108,7 @@ function ClientListComponent() {
     }
     return (
         <>
+
             <div className="container-fluid">
                 <div className="row">
                     {/* Navbar */}
@@ -133,70 +138,73 @@ function ClientListComponent() {
                         </section>
 
                         {/* Table Section */}
-                        <section className='d-flex justify-content-center rounded-3 shadow-lg' style={{ maxHeight: '85vh', overflowY: 'auto' }}>
-                            <table className="table table-primary ">
-                                <thead style={{ position: 'sticky', top: 0, borderBottom: '2px solid black' }}>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Nombre</th>
-                                        <th scope="col">Tipo de Cliente</th>
-                                        <th scope="col">DNI/CUIT</th>
-                                        <th scope="col">Estado</th>
-                                        <th scope='col'>#</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {/* Acá se va a recorrer la lista de la entidad */}
-                                    {clients?.map((client) => (
-
-                                        <tr key={client.id}>
-                                            {/* Checkbox */}
-                                            <td>
-                                                <input
-                                                    type="checkbox"
-                                                    id={client.id}
-                                                    style={{
-                                                        color: "#000000",
-                                                        cursor: "pointer",
-                                                    }}
-                                                    onChange={(event) => checkActiveClient(event, client)}
-                                                    className="custom-checkbox"
-                                                />
-                                            </td>
-
-                                            <td>
-                                                {client.isbussiness ? client.bussinessname : client.name}
-                                            </td>
-
-                                            <td>
-                                                {client.isbussiness ? "Empresa" : "Persona"}
-                                            </td>
-
-                                            <td>
-                                                {client.isbussiness ? client.cuit : client.dni}
-                                            </td>
-
-                                            <td>
-                                                {client.enabled ? "Habilitado" : "Deshabilitado"}
-                                            </td>
-
-                                            {/* Editar Cliente */}
-                                            <td>
-                                                <FontAwesomeIcon
-                                                    icon={faPenToSquare}
-                                                    style={{
-                                                        color: "#000000",
-                                                        cursor: "pointer",
-                                                    }}
-                                                    onClick={(event) => editClient(client)}
-                                                />
-                                            </td>
+                        {clients.length != 0 &&
+                            <section className='d-flex justify-content-center rounded-3 shadow-lg' style={{ maxHeight: '85vh', overflowY: 'auto' }}>
+                                <table className="table table-primary ">
+                                    <thead style={{ position: 'sticky', top: 0, borderBottom: '2px solid black' }}>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Nombre</th>
+                                            <th scope="col">Tipo de Cliente</th>
+                                            <th scope="col">DNI/CUIT</th>
+                                            <th scope="col">Estado</th>
+                                            <th scope='col'>#</th>
                                         </tr>
-                                    ))}
-                                </tbody>
+                                    </thead>
+                                    <tbody>
+                                        {/* Acá se va a recorrer la lista de la entidad */}
+                                        {clients?.map((client) => (
 
-                            </table>
-                        </section>
+                                            <tr key={client.id}>
+                                                {/* Checkbox */}
+                                                <td>
+                                                    <input
+                                                        type="checkbox"
+                                                        id={client.id}
+                                                        style={{
+                                                            color: "#000000",
+                                                            cursor: "pointer",
+                                                        }}
+                                                        onChange={(event) => checkActiveClient(event, client)}
+                                                        className="custom-checkbox"
+                                                    />
+                                                </td>
+
+                                                <td>
+                                                    {client.isbussiness ? client.bussinessname : client.name}
+                                                </td>
+
+                                                <td>
+                                                    {client.isbussiness ? "Empresa" : "Persona"}
+                                                </td>
+
+                                                <td>
+                                                    {client.isbussiness ? client.cuit : client.dni}
+                                                </td>
+
+                                                <td>
+                                                    {client.enabled ? "Habilitado" : "Deshabilitado"}
+                                                </td>
+
+                                                {/* Editar Cliente */}
+                                                <td>
+                                                    <FontAwesomeIcon
+                                                        icon={faPenToSquare}
+                                                        style={{
+                                                            color: "#000000",
+                                                            cursor: "pointer",
+                                                        }}
+                                                        onClick={(event) => editClient(client)}
+                                                    />
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+
+                                </table>
+                            </section>
+                        }
+                        {clients.length == 0 && <EmptyList name={"Clientes"} />}
                     </div>
                 </div>
             </div >
@@ -238,8 +246,6 @@ function ClientListComponent() {
                     </div>
                 </div>
             </div>
-
-
 
         </>
     )
