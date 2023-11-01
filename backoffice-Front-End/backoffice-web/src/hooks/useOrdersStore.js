@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { projectApi } from '../api'
-import { onAddNewOrder/*, onDeleteUser*/, onLoadOrders, onPullActiveOrder, onSetActiveOrder } from '../redux'
+import { onAddNewOrder, onLoadOrders, onPullActiveOrder, onSetActiveOrder } from '../redux'
 
 export function useOrdersStore() {
 
@@ -16,6 +16,7 @@ export function useOrdersStore() {
   async function startLoadingOrders() {
     try {
       const { data } = await projectApi.get('/order/list')
+      console.log(data)
       dispatch(onLoadOrders(data))
     } catch (error) {
       console.error(error)
@@ -36,15 +37,7 @@ export function useOrdersStore() {
     } catch (error) {
       console.error(error)
     } 
-  }/*
-  async function startDeletingOrder() {
-    try {
-      await projectApi.delete(`/order/${activeOrder.id}`)
-      dispatch(onDeleteOrder())
-    } catch (error) {
-      console.error(error)
-    }
-  }*/
+  }
 
   return {
     // Atributos
@@ -54,7 +47,6 @@ export function useOrdersStore() {
     startLoadingOrders,
     startAddingOrder,
     setActiveOrder,
-    pullActiveOrder,
-    //startDeletingUser,
+    pullActiveOrder
   }
 }

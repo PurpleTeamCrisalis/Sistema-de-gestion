@@ -12,7 +12,7 @@ import ClientListComponent from "../components/ListComponents/ClientListComponen
 import ChargeListComponent from "../components/ListComponents/ChargeListComponent";
 import NewUserComponent from "../components/NewElementComponents/NewUserComponent";
 import EditUserComponent from "../components/EditElementComponents/EditUserComponent";
-import {NewOrderComponent} from "../components/NewElementComponents/NewOrder/NewOrderComponent";
+import {NewOrderComponent} from "../components/NewElementComponents/NewOrderComponent";
 import { useAuthStore } from "../hooks";
 import { getLastView } from "../helpers";
 

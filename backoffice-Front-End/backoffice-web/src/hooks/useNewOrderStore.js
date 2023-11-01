@@ -1,11 +1,15 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { projectApi } from '../api'
-import { onAddProducts, onAddServices, onDelete, onAddClient } from '../redux'
+import { onAddProducts, onAddServices, onDeleteDetail, onAddClient, onSetActiveDetail } from '../redux'
 
 export function useNewOrderStore() {
 
   const { newOrder } = useSelector(state => state.newOrder)
   const dispatch = useDispatch()
+
+  function setActiveDetail(detail) {
+    dispatch(onSetActiveDetail(detail))
+  }
 
   function addClient(client) {
     dispatch(onAddClient(client));
@@ -19,17 +23,18 @@ export function useNewOrderStore() {
     dispatch(onAddServices(services));
   }
   
-  function deleteItems (productIdSet, serviceIdSet) {
-    dispatch(onDelete({productIdSet, serviceIdSet}));
+  function deleteDetail () {
+    dispatch(onDeleteDetail());
   }
 
   return {
     // Atributos
     newOrder,
     // Metodos
-    deleteItems,
     addServices,
     addProducts,
-    addClient
+    addClient,
+    setActiveDetail,
+    deleteDetail
   }
 }
