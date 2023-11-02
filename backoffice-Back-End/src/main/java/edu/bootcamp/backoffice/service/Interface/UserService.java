@@ -1,14 +1,15 @@
 package edu.bootcamp.backoffice.service.Interface;
 
 import edu.bootcamp.backoffice.exception.custom.parameterValidation.InvalidIdFormatException;
+import edu.bootcamp.backoffice.model.order.Order;
+import edu.bootcamp.backoffice.model.user.User;
 import edu.bootcamp.backoffice.model.user.dto.UpdateUserRequest;
 import edu.bootcamp.backoffice.model.user.dto.UserRequest;
 import edu.bootcamp.backoffice.model.user.dto.UserResponse;
 
 import java.util.List;
 
-public interface UserService
-{
+public interface UserService {
     public UserResponse registerUser(UserRequest userDto);
 
     public UserResponse get(int id);
@@ -22,10 +23,10 @@ public interface UserService
     public UserResponse delete(int id)
             throws InvalidIdFormatException;
 
+    public User getUserByUsername(String username)
+            throws InvalidIdFormatException;
 
-
-    //For Login
-
+    // For Login
 
     public boolean isUserPresent(UserRequest userDTO);
 }

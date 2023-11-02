@@ -10,7 +10,6 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class ClientRequest {
-
     @JsonProperty("name")
     private String name;
 
