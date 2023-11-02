@@ -169,6 +169,10 @@ public class ProductServiceImpl implements ProductService {
 		return dtoFactory.createResponse(product);
 	}
 
+	public Product getProductById(Integer id) {
+		return validator.completeValidationForId(id, productRepository);
+	}
+
 	@Override
 	public ProductResponse update(int id, UpdateProductRequest productDto) {
 		Product product = validateUpdateRequest(id, productDto);
