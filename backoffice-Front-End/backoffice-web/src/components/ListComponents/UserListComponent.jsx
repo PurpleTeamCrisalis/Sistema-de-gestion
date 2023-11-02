@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import NavComponent from "../NavComponent";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
-// import { useFetch } from "../../hooks/useFetch";
 import { useUsersStore } from "../../hooks";
 import { useAuthStore } from "../../hooks";
 import Toastify from 'toastify-js'
@@ -118,8 +117,7 @@ function UserListComponent() {
               className="container shadow-lg p-0"
               style={{ maxHeight: '85vh', overflowY: 'auto' }}
             >
-              <div className="bg-white rounded-3 overflow-hidden">
-                <table className="table table-hover">
+              <table className="table table-primary">
                   {/* Header de la table */}
                   <thead
                     style={{
@@ -166,7 +164,6 @@ function UserListComponent() {
                     ))}
                   </tbody>
                 </table>
-              </div>
             </section>
           </div>
         </div>
