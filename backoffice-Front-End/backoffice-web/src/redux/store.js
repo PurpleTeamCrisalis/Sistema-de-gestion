@@ -1,6 +1,6 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { authSlice } from "./auth/authSlice";
-import { usersSlice } from "./users/usersSlice";
+import { userSlice } from "./users/userSlice";
 import { clientsSlice } from "./client/clientsSlice";
 import { chargesSlice } from './charges/chargesSlice'
 import { productsSlice } from './products'
@@ -8,7 +8,7 @@ import { servicesSlice } from './services'
 
 const rootReducer = combineReducers({
   auth: authSlice.reducer,
-  users: usersSlice.reducer,
+  users: userSlice.reducer,
   clients: clientsSlice.reducer,
   charges: chargesSlice.reducer,
   products: productsSlice.reducer,
