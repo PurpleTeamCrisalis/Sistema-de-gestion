@@ -10,7 +10,6 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class ClientResponse {
-
     @JsonProperty("id")
     private Integer id;
 
@@ -43,6 +42,4 @@ public class ClientResponse {
 
     @JsonProperty("cuit")
     private Long cuit;
-
-
 }

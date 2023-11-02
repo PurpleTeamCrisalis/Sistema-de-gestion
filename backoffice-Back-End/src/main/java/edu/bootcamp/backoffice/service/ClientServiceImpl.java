@@ -150,6 +150,10 @@ public class ClientServiceImpl implements ClientService {
         return dtoFactory.createResponse(client);
     }
 
+    public Client getClientEntity(int id) {
+        return validator.completeValidationForId(id, clientRepository);
+    }
+
     public List<ClientResponse> get() {
         List<Client> clients = clientRepository.findAll();
         List<ClientResponse> dtos = new ArrayList<>();
