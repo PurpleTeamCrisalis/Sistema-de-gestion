@@ -1,37 +1,82 @@
-import React, { useState } from 'react'
+import React from 'react'
 import NavComponent from '../NavComponent'
 import { useNavigate } from 'react-router-dom'
 import { useForm } from '../../hooks'
+import { useClientsStore } from '../../hooks/useClientsStore'
+import Toastify from 'toastify-js'
+import "toastify-js/src/toastify.css"
+import { formValidations } from '../../utils/FormValidations'
 
 const formDTO = {
     name: "",
     lastname: "",
-    dni: "",
-    phone: "",
-    address: ""
+    dni: "", 
+    phone: "", 
+    adress: "",
+    isbussiness: false,
+    bussinessname: "",
+    startdate: "", 
+    cuit: "", 
 }
 
 function NewClientComponent() {
     const navigate = useNavigate();
-    const [isEmpresa, setIsEmpresa] = useState(false)
+    const { startAddingClients, clients } = useClientsStore();
+    const { name, lastname, dni, phone, adress, isbussiness, bussinessname, startdate, cuit, handleInputChange, clearForm } = useForm(formDTO);
 
-    const { name, lastname, dni, phone, address, handleInputChange, clearForm, emptyValidation } = useForm(formDTO);
+    function addClient(event) {
+        event.preventDefault();
 
-    function addClient() {
-        const clientTemp = {
-            name: name,
-            lastname: lastname,
-            dni: dni,
-            phone: phone,
-            address: address
+        // Objeto del cliente
+        const client = {
+            name,
+            lastname,
+            dni: parseInt(dni),
+            phone: parseInt(phone), 
+            adress,
+            isbussiness,
+            bussinessname,
+            startdate,
+            cuit: parseInt(0), 
+        };
+
+        if (formValidations(client)) {
+            return console.log("Campos erroneos o vacios")
         }
-        console.log(clientTemp)
-    }
 
-    function handleCheckboxChange(event) {
-        const isChecked = event.target.checked
-        setIsEmpresa(isChecked)
-        console.log(isChecked)
+        // Comprueba existencia de Cliente
+        const clienteExiste = clients?.find(clientList => { return clientList.dni === client.dni });
+        if (clienteExiste) {
+            Toastify({
+                text: "El cliente ya existe",
+                duration: 2000,
+                style: {
+                    background: "linear-gradient(to right, #f44336, #b71c1c)",
+                },
+            }).showToast();
+            return console.error("Error: El cliente ya existe");
+        }
+
+        try {
+            startAddingClients(client);
+            clearForm();
+            Toastify({
+                text: "Cliente Creado",
+                duration: 2000,
+                style: {
+                    background: "linear-gradient(to right, #00b09b, #96c93d)",
+                },
+            }).showToast();
+        } catch (error) {
+            Toastify({
+                text: "ERROR",
+                duration: 2000,
+                style: {
+                    background: "linear-gradient(to right, #f44336, #b71c1c)",
+                },
+            }).showToast();
+            return console.error("ERROR EXTERNO");
+        }
     }
 
     return (
@@ -52,7 +97,7 @@ function NewClientComponent() {
 
                             <div className="row justify-content-center align-items-center">
                                 {/* Persona */}
-                                
+
                                 <div className="col-sm-6">
                                     <h2 className='text-center'>Persona</h2>
                                     <div className="row m-4">
@@ -101,14 +146,14 @@ function NewClientComponent() {
                                             />
                                         </div>
                                         <div className="col-12 mb-3">
-                                            <label htmlFor="address" className="form-label">Dirección</label>
+                                            <label htmlFor="adress" className="form-label">Dirección</label>
                                             <input
                                                 type="text"
-                                                name="address"
-                                                id="address"
+                                                name="adress"
+                                                id="adress"
                                                 className="form-control"
                                                 onChange={handleInputChange}
-                                                value={address}
+                                                value={adress}
                                             />
                                         </div>
                                     </div>
