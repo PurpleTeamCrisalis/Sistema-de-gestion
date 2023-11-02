@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import NavComponent from "../NavComponent";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
-// import { useFetch } from "../../hooks/useFetch";
 import { useUsersStore } from "../../hooks";
 import { useAuthStore } from "../../hooks";
 import Toastify from 'toastify-js'
@@ -103,17 +102,13 @@ function UserListComponent() {
           {/* Table and Buttons */}
           <div className="col-md-9 col-xl-10">
             {/* Button Section */}
-            <section className="d-flex justify-content-center m-4">
-              <button
-                type="button"
-                className="btn btn-primary mx-3 fw-bold btn-lg"
+            <section className='d-flex justify-content-center m-3'>
+              <button type="button" className="btn btn-primary mx-3 fw-bold btn-lg"
                 onClick={() => navigate("/user/newUser")}
               >
                 Nuevo
               </button>
-              <button
-                type="button"
-                className="btn btn-primary mx-3 fw-bold btn-lg"
+              <button type="button" className="btn btn-primary mx-3 fw-bold btn-lg"
                 onClick={deleteUser}
               >
                 Eliminar
@@ -122,11 +117,9 @@ function UserListComponent() {
 
             {/* Table Section */}
             <section
-              className="container bg-primary rounded-3 px-5 pt-4"
-              style={{ minHeight: "75vh", width: "90%" }}
+              className='d-flex justify-content-center rounded-3 shadow-lg'  style={{ maxHeight: '85vh', overflowY: 'auto' }}
             >
-              <div className="bg-white rounded-3 overflow-hidden">
-                <table className="table table-hover">
+              <table className="table table-primary">
                   {/* Header de la table */}
                   <thead
                     style={{
@@ -144,11 +137,8 @@ function UserListComponent() {
                     </tr>
                   </thead>
                   <tbody>
-                    {users?.map((user) => {
-                      console.log(user)
-                      return(
-                      
-                      <tr key={user.id}>
+                    {users?.map((user) => (
+                      <tr key={user.id} className='table-primary'>
                         <td>
                           <input
                             type="checkbox"
@@ -175,10 +165,9 @@ function UserListComponent() {
                           />
                         </td>
                       </tr>
-                    )})}
+                    ))}
                   </tbody>
                 </table>
-              </div>
             </section>
           </div>
         </div>

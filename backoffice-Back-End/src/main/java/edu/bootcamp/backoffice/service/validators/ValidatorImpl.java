@@ -58,13 +58,13 @@ public class ValidatorImpl implements Validator
                     " The id must be grater than 0."
             );
     }
-    /** Validate Interger */
-    public void validateInterge(
+/*
+    public void validateInterger(
         Integer integer,
         int minLength,
-            int maxLength,
-            StringBuilder errors,
-            String propertyName
+        int maxLength,
+        StringBuilder errors,
+        String propertyName
     ){
         StringBuilder newErrors = new StringBuilder();
         if( ! isValueMax(integer, maxLength, newErrors))            
@@ -111,7 +111,7 @@ public class ValidatorImpl implements Validator
         }
         return Boolean.FALSE;
     }
-    /** Validate Interger */
+    */
 
     public void validateLongValue(
             Long longNumber,
@@ -121,7 +121,11 @@ public class ValidatorImpl implements Validator
             StringBuilder errorBuilder
     )
     {
-        if(longNumber>maxStrict )
+        if(longNumber == null)
+            errorBuilder.append(
+                    " Debe proveerse un valor a " + propertyName + "."
+            );
+        else if(longNumber>maxStrict )
             errorBuilder.append(
                     " The " + propertyName + " must be smaller than " + maxStrict +  "."
             );
@@ -139,7 +143,11 @@ public class ValidatorImpl implements Validator
             StringBuilder errorBuilder
     )
     {
-        if(integerNumber<minStrict )
+        if(integerNumber == null)
+            errorBuilder.append(
+                    " There is no value for " + propertyName + "."
+            );
+        else if(integerNumber<minStrict )
             errorBuilder.append(
                     " The " + propertyName + " must be greater than " + minStrict +  "."
             );

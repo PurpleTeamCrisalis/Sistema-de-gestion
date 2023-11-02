@@ -3,39 +3,82 @@ import NavComponent from '../NavComponent'
 import { useNavigate } from 'react-router-dom'
 import { useForm } from '../../hooks'
 import { faL } from '@fortawesome/free-solid-svg-icons'
+import { useClientsStore } from '../../hooks/useClientsStore'
+import Toastify from 'toastify-js'
+import "toastify-js/src/toastify.css"
+import { formValidations } from '../../utils/FormValidations'
 
 const formDTO = {
     name: "",
     lastname: "",
-    dni: "",
-    phone: "",
-    address: "",
-    bussinessName: "",
-    cuit: "",
-    startActivities: "",
-    isBussiness: true
+    dni: "", 
+    phone: "", 
+    adress: "",
+    isbussiness: true,
+    bussinessname: "",
+    startdate: "",
+    cuit: "" 
 }
 
 function NewClientCompanyComponent() {
     const navigate = useNavigate();
+    const { startAddingClients, clients } = useClientsStore();
+    const { name, lastname, dni, phone, adress, isbussiness, bussinessname, startdate, cuit, handleInputChange, clearForm } = useForm(formDTO);
 
-    const { name, lastname, dni, phone, address, handleInputChange, clearForm, emptyValidation } = useForm(formDTO);
+    function addClient(event) {
+        event.preventDefault();
 
-    function addClient() {
-        const clientTemp = {
-            name: name,
-            lastname: lastname,
-            dni: dni,
-            phone: phone,
-            address: address
+        // Objeto del cliente
+        const client = {
+            name,
+            lastname,
+            dni: parseInt(dni),
+            phone: parseInt(phone), 
+            adress,
+            isbussiness,
+            bussinessname,
+            startdate,
+            cuit: parseInt(cuit),
+        };
+
+        // Alerta campos vacíos
+        if (formValidations(client)) {
+            return
         }
-        console.log(clientTemp)
-    }
 
-    function handleCheckboxChange(event) {
-        const isChecked = event.target.checked
-        setIsEmpresa(isChecked)
-        console.log(isChecked)
+        // Comprueba existencia de Cliente
+        const clienteExiste = clients?.find(clientList => { return clientList.cuit === client.cuit });
+        if (clienteExiste) {
+            Toastify({
+                text: "La empresa ya existe",
+                duration: 2000,
+                style: {
+                    background: "linear-gradient(to right, #f44336, #b71c1c)",
+                },
+            }).showToast();
+            return console.error("Error: La empresa ya existe");
+        }
+
+        try {
+            startAddingClients(client);
+            clearForm();
+            Toastify({
+                text: "Cliente Creado",
+                duration: 2000,
+                style: {
+                    background: "linear-gradient(to right, #00b09b, #96c93d)",
+                },
+            }).showToast();
+        } catch (error) {
+            Toastify({
+                text: "ERROR",
+                duration: 2000,
+                style: {
+                    background: "linear-gradient(to right, #f44336, #b71c1c)",
+                },
+            }).showToast();
+            return console.error("ERROR EXTERNO");
+        }
     }
 
     return (
@@ -84,7 +127,7 @@ function NewClientCompanyComponent() {
                                         <div className="col-md-6 mb-3">
                                             <h5 className="form-h5">D.N.I</h5>
                                             <input
-                                                type="number"
+                                                type="text"
                                                 name="dni"
                                                 id="dni"
                                                 className="form-control"
@@ -95,7 +138,7 @@ function NewClientCompanyComponent() {
                                         <div className="col-md-6 mb-3">
                                             <h5 className="form-h5">Teléfono</h5>
                                             <input
-                                                type="number"
+                                                type="text"
                                                 name="phone"
                                                 id="phone"
                                                 className="form-control"
@@ -107,11 +150,11 @@ function NewClientCompanyComponent() {
                                             <h5 className="form-h5">Dirección</h5>
                                             <input
                                                 type="text"
-                                                name="address"
-                                                id="address"
+                                                name="adress"
+                                                id="adress"
                                                 className="form-control"
                                                 onChange={handleInputChange}
-                                                value={address}
+                                                value={adress}
                                             />
                                         </div>
                                     </div>
@@ -125,21 +168,33 @@ function NewClientCompanyComponent() {
                                             <h5 className="form-h5">Nombre</h5>
                                             <input
                                                 type="text"
+                                                name="bussinessname"
+                                                id="bussinessname"
                                                 className="form-control"
+                                                onChange={handleInputChange}
+                                                value={bussinessname}
                                             />
                                         </div>
                                         <div className="mb-3">
                                             <h5 className="form-h5">CUIT</h5>
                                             <input
-                                                type="number"
+                                                type="text"
+                                                name="cuit"
+                                                id="cuit"
                                                 className="form-control"
+                                                onChange={handleInputChange}
+                                                value={cuit}
                                             />
                                         </div>
                                         <div className="mb-3">
                                             <h5 className="form-h5">Inicio de Actividades</h5>
                                             <input
                                                 type="date"
+                                                name="startdate"
+                                                id="startdate"
                                                 className="form-control"
+                                                onChange={handleInputChange}
+                                                value={startdate}
                                             />
                                         </div>
                                     </div>

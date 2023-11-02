@@ -280,4 +280,16 @@ public class UserServiceImpl implements UserService
                 "Password"
         );
     }
+
+    public User getUserByUsername(String username) {
+        // Valido que el username sea valido
+        StringBuilder errors = new StringBuilder();
+        validateUsername(username, errors);
+        if(errors.length() > 0) throw new InvalidCredentialsException("Invalid token");
+        // Valido que el user exista
+        User user = userRepository.findByUsername(username).orElse(null);
+        if (user == null) throw new InvalidCredentialsException("Invalid token");
+        // Si el usuario existe, lo agrega a la orden
+        return user;
+    }
 }
