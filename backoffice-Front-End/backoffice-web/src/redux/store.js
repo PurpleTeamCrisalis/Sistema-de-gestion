@@ -1,6 +1,6 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import { authSlice } from './auth/authSlice'
-import { usersSlice } from './users/usersSlice'
+import { usersSlice } from './users/userSlice'
 import { ordersSlice } from './orders/ordersSlice'
 import { newOrderSlice } from './newOrder/newOrderSlice'
 import { clientsSlice } from "./client/clientsSlice";

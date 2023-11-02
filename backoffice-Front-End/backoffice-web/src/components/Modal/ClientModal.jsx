@@ -1,27 +1,16 @@
-import React, { useState } from "react";
-import { useNewOrderStore } from "../../hooks";
-
-const clientsDto2 = [
-  {
-    id: 1,
-    name: "Roberto",
-    lastname: "Garcia",
-    isbussiness: true,
-    bussinessname: "Empresa Diaz",
-  },
-  {
-    id: 2,
-    name: "Alberto",
-    lastname: "Robledo",
-    isbussiness: false,
-  },
-];
+import React, { useEffect, useState } from "react";
+import { useNewOrderStore, useClientsStore } from "../../hooks";
 
 export const ClientModal = () => {
   const { addClient } = useNewOrderStore();
+
   const [client, setClient] = useState(null);
 
-  
+  const {startLoadingClient, clients} = useClientsStore();
+
+  useEffect(() => {
+    startLoadingClient();
+  },[]);
 
   function checkActiveClient(event, client) {
     let checkboxes = document.getElementsByClassName("custom-checkbox");
@@ -97,7 +86,7 @@ export const ClientModal = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {clientsDto.map((client) => (
+                  {clients?.map((client) => (
                     <tr key={client.id}>
                       <td>
                         <input

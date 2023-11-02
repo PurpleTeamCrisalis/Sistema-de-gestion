@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNewOrderStore } from "../../hooks";
+import { useNewOrderStore, useProductStore } from "../../hooks";
 
 const productsDto = [
   {
@@ -22,23 +22,6 @@ const productsDto = [
     description: "LoremLoremLoremLoremLoremLoremLorem",
     name: "Pantalones",
     type: "Product",
-  },
-];
-
-const servicesDto = [
-  {
-    id: 4,
-    basePrice: 200,
-    description: "LoremLoremLoremLoremLoremLoremLoremLoremLorem",
-    name: "Limpieza",
-    type: "Service",
-  },
-  {
-    id: 5,
-    basePrice: 200,
-    description: "LoremLoremLoremLoremLoremLoremLoremLoremLorem",
-    name: "Reparación",
-    type: "Service",
   },
 ];
 
@@ -132,7 +115,7 @@ export const ProductModal = () =>
                   </tr>
                 </thead>
                 <tbody>
-                  {productsFromAPI.map((product) => (
+                  {productsFromAPI?.map((product) => (
                     <tr key={product.id}>
                       <td>
                         <input

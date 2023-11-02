@@ -85,7 +85,7 @@ export const NewOrderComponent = () =>
                         ? ""
                         : (newOrder.client.isBussiness)
                           ? newOrder.client.bussinessName
-                          : `${newOrder.client.name} ${newOrder.client.lastName}`
+                          : `${newOrder.client.name} ${newOrder.client.lastname}`
                     }
                   </div>
                   <div style={{marginLeft: "auto"}}>

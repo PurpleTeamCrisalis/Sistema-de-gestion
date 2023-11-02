@@ -2,6 +2,7 @@ export * from './useForm'
 export * from './useAuthStore'
 export * from './useUsersStore'
 export * from './useOrdersStore'
+export * from './useClientsStore'
 export * from './useNewOrderStore'
 export * from './useChargesStore'
 

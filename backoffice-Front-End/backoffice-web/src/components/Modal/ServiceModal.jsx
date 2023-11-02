@@ -108,7 +108,7 @@ export const ServiceModal = () =>
                   </tr>
                 </thead>
                 <tbody>
-                  {servicesFromAPI.map((service) => (
+                  {servicesFromAPI?.map((service) => (
                     <tr key={service.id}>
                       <td>
                         <input
