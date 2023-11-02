@@ -1,4 +1,4 @@
-package edu.bootcamp.backoffice.model.Charge.dto;
+package edu.bootcamp.backoffice.model.Tax.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @Builder
-public class ChargeResponse {
+public class UpdateChargeRequest {
     @JsonProperty("name")
     private String name;
 
@@ -20,7 +20,4 @@ public class ChargeResponse {
 
     @JsonProperty("enabled")
     private Boolean enabled;
-
-    @JsonProperty("id")
-    private Integer id;
 }
