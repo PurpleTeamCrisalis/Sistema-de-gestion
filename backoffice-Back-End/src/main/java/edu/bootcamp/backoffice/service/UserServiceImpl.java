@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService
     private final UserRepository userRepository;
     private final UserFactory dtoFactory;
     private final Validator validator;
-    private  final PasswordEncoder encoder;
+    private final PasswordEncoder encoder;
 
     public UserServiceImpl(
             UserRepository userRepository,
@@ -251,5 +251,17 @@ public class UserServiceImpl implements UserService
                 errorBuilder,
                 "Password"
         );
+    }
+
+    public User getUserByUsername(String username) {
+        // Valido que el username sea valido
+        StringBuilder errors = new StringBuilder();
+        validateUsername(username, errors);
+        if(errors.length() > 0) throw new InvalidCredentialsException("Invalid token");
+        // Valido que el user exista
+        User user = userRepository.findByUsername(username).orElse(null);
+        if (user == null) throw new InvalidCredentialsException("Invalid token");
+        // Si el usuario existe, lo agrega a la orden
+        return user;
     }
 }

@@ -4,14 +4,16 @@ import javax.persistence.*;
 
 import edu.bootcamp.backoffice.model.Tax.Tax;
 import edu.bootcamp.backoffice.model.asset.Asset;
-
+import edu.bootcamp.backoffice.model.order.Order;
+import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.ServiceDetail;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.util.Set;
-
+import java.util.List;
+import java.util.ArrayList;
 
 @Data
 @Entity
@@ -32,24 +34,26 @@ public class ServiceEntity extends Asset {
 	private double suportCharge;
 
 	@ManyToMany
-	@JoinTable(
-			name = "taxesByServices",
-			joinColumns = @JoinColumn(name = "id"),
-			inverseJoinColumns = @JoinColumn(name = "tax_id")
-	)
+	@JoinTable(name = "taxesByServices", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "tax_id"))
 	public Set<Tax> taxes;
 
-/*
-	public double suportCharge() {
+	@OneToMany(mappedBy = "discountService", fetch = FetchType.LAZY)
+	private List<Order> ordersWithDiscount = new ArrayList<>();
 
-		double suport = 0;
+	@OneToMany(mappedBy = "service", fetch = FetchType.LAZY)
+	private List<ServiceDetail> serviceDetails = new ArrayList<>();
 
-		if (isSpecial == true) {
-
-			suport += super.getBasePrice();
-		}
-
-		return suport;
-	}
-*/
+	/*
+	 * public double suportCharge() {
+	 * 
+	 * double suport = 0;
+	 * 
+	 * if (isSpecial == true) {
+	 * 
+	 * suport += super.getBasePrice();
+	 * }
+	 * 
+	 * return suport;
+	 * }
+	 */
 }

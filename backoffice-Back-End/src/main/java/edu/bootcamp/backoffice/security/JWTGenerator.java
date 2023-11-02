@@ -1,6 +1,5 @@
 package edu.bootcamp.backoffice.security;
 
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -14,12 +13,13 @@ import java.util.Date;
 @Component
 public class JWTGenerator {
     private final TokenBlacklist tokenBlacklist;
+
     @Autowired
     public JWTGenerator(TokenBlacklist tokenBlacklist) {
         this.tokenBlacklist = tokenBlacklist;
     }
 
-    public String generateToken(Authentication authentication){
+    public String generateToken(Authentication authentication) {
         String username = authentication.getName();
         Date currentDate = new Date();
         Date expirationDate = new Date(currentDate.getTime() + SecurityConstants.JWT_EXPIRATION_TIME);
@@ -28,10 +28,11 @@ public class JWTGenerator {
                 .setSubject(username)
                 .setIssuedAt(currentDate)
                 .setExpiration(expirationDate)
-                .signWith(SignatureAlgorithm.HS512,SecurityConstants.JWT_SECRET)
+                .signWith(SignatureAlgorithm.HS512, SecurityConstants.JWT_SECRET)
                 .compact();
     }
-    public String getUsernameFromJWT(String token){
+
+    public static String getUsernameFromJWT(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(SecurityConstants.JWT_SECRET)
                 .parseClaimsJws(token)
@@ -39,11 +40,11 @@ public class JWTGenerator {
         return claims.getSubject();
     }
 
-    public boolean validateToken(String token){
-        try{
+    public boolean validateToken(String token) {
+        try {
             Jwts.parser().setSigningKey(SecurityConstants.JWT_SECRET).parseClaimsJws(token);
             return !tokenBlacklist.isTokenBlacklisted(token);
-        } catch (Exception ex){
+        } catch (Exception ex) {
             throw new AuthenticationCredentialsNotFoundException("JWT expired or incorrect");
         }
     }
