@@ -3,7 +3,7 @@ export * from './useAuthStore'
 export * from './useUsersStore'
 export * from './useOrdersStore'
 export * from './useNewOrderStore'
-
+export * from './useChargesStore'
 
 /*{
     "id": 2,

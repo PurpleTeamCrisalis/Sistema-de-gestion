@@ -3,6 +3,8 @@ package edu.bootcamp.backoffice.service.Interface;
 import edu.bootcamp.backoffice.model.SoftDeletable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Date;
+
 public interface Validator
 {
     public  <Entity extends SoftDeletable> Entity validateSoftDeletableEntityExistence(
@@ -25,6 +27,22 @@ public interface Validator
             StringBuilder errorBuilder
     );
 
+    public void validateLongValue(
+            Long longNumber,
+            Long maxStrict,
+            Long minStrict,
+            String propertyName,
+            StringBuilder errorBuilder
+    );
+
+    public void validateIntegerValue(
+            Integer longNumber,
+            Integer maxStrict,
+            Integer minStrict,
+            String propertyName,
+            StringBuilder errorBuilder
+    );
+
     public void validateVarchar(
             String varchar,
             int minLength,
@@ -33,8 +51,26 @@ public interface Validator
             String propertyName
     );
 
+    /*public void validateInterger(
+            Integer integer,
+            int minLength,
+            int maxLength,
+            StringBuilder errors,
+            String propertyName
+    );*/
+
     public Boolean isEmpty(
             String varchar,
+            StringBuilder errors
+    );
+
+    public Boolean isEmpty(
+            Boolean flag,
+            StringBuilder errors
+    );
+
+    public Boolean isEmpty(
+            Date date,
             StringBuilder errors
     );
 
@@ -49,4 +85,5 @@ public interface Validator
             Integer minLength,
             StringBuilder errors
     );
+
 }

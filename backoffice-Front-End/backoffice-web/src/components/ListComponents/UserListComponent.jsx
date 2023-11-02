@@ -111,15 +111,30 @@ function UserListComponent() {
           {/* Table and Buttons */}
           <div className="col-md-3 col-xl-10 bgGrey">
             {/* Button Section */}
-            <AddRemoveButtonsComponent newHandler={newUser} removeHandler={deleteUser} name=""/>
+           {/*} <AddRemoveButtonsComponent newHandler={newUser} removeHandler={deleteUser} name=""/>
+
+            {/* Table Section }
+            <section
+              className="container shadow-lg p-0"
+  style={{ maxHeight: '85vh', overflowY: 'auto' }}*/}
+            <section className='d-flex justify-content-center m-3'>
+              <button type="button" className="btn btn-primary mx-3 fw-bold btn-lg"
+                onClick={() => navigate("/user/newUser")}
+              >
+                Nuevo
+              </button>
+              <button type="button" className="btn btn-primary mx-3 fw-bold btn-lg"
+                onClick={deleteUser}
+              >
+                Eliminar
+              </button>
+            </section>
 
             {/* Table Section */}
             <section
-              className="container shadow-lg p-0"
-              style={{ maxHeight: '85vh', overflowY: 'auto' }}
+              className='d-flex justify-content-center rounded-3 shadow-lg'  style={{ maxHeight: '85vh', overflowY: 'auto' }}
             >
-              <div className="bg-white rounded-3 overflow-hidden">
-                <table className="table table-hover">
+              <table className="table table-primary">
                   {/* Header de la table */}
                   <thead
                     style={{
@@ -137,7 +152,8 @@ function UserListComponent() {
                   </thead>
                   <tbody>
                     {users?.map((user) => (
-                      <tr key={user.id} style={{ marginBottom: '0px'}}>
+                     /* <tr key={user.id} style={{ marginBottom: '0px'}}>*/
+                      <tr key={user.id} className='table-primary'>
                         <td>
                           <input
                             type="checkbox"
@@ -166,7 +182,6 @@ function UserListComponent() {
                     ))}
                   </tbody>
                 </table>
-              </div>
             </section>
           </div>
         </div>
