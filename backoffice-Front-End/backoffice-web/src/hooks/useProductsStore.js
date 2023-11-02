@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { projectApi } from '../api'
 import { onAddNewProduct, onDeleteProduct, onLoadProducts, onPullActiveProduct, onSetActiveProduct, onUpdateProduct } from '../redux'
 
-export function useUsersStore() {
+export function useProductsStore() {
 
   const { products, activeProduct } = useSelector(state => state.products)
   const dispatch = useDispatch()
@@ -25,7 +25,9 @@ export function useUsersStore() {
     try {
       const { data } = await projectApi.post('/product/', product)
       dispatch(onAddNewProduct({
-        username: data.username,
+        name: data.name,
+        description: data.description,
+        basePrice: data.basePrice,
         enabled: data.enabled,
         id: data.id
       }))
@@ -33,7 +35,7 @@ export function useUsersStore() {
       console.error(error)
     }
   }
-  async function startDeletingUser() {
+  async function startDeletingProduct() {
     try {
       await projectApi.delete(`/product/delete/${activeProduct.id}`)
       dispatch(onDeleteProduct())
@@ -41,7 +43,7 @@ export function useUsersStore() {
       console.error(error)
     }
   }
-  async function startUpdatingUser(product) {
+  async function startUpdatingProduct(product) {
     try {
       const {data} = await projectApi.patch(`/product/update/${product.id}`, product)
       dispatch(onUpdateProduct(data))
@@ -59,7 +61,7 @@ export function useUsersStore() {
     startAddingProduct,
     setActiveProduct,
     pullActiveProduct,
-    startDeletingUser,
-    startUpdatingUser
+    startDeletingProduct,
+    startUpdatingProduct
   }
 }
