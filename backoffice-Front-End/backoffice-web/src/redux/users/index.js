@@ -1,1 +1,1 @@
-export * from './usersSlice'
+export * from './userSlice'
