@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNewOrderStore, useProductStore } from "../../hooks";
+import { useNewOrderStore } from "../../hooks";
 
 const productsDto = [
   {

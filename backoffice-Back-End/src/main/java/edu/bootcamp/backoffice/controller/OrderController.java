@@ -56,7 +56,7 @@ public class OrderController {
     return ResponseEntity.ok(order);
   }
 
-  @GetMapping(value = "list", produces = MediaType.APPLICATION_JSON_VALUE)
+  @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<OrderResponse>> getAllOrders() {
     List<OrderResponse> orders = orderService.get();
     return ResponseEntity.ok(orders);
