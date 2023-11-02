@@ -1,27 +1,14 @@
-import React, { useState } from "react";
-import { useNewOrderStore } from "../../hooks";
-
-const servicesDto = [
-  {
-    id: 4,
-    basePrice: 200,
-    description: "LoremLoremLoremLoremLoremLoremLoremLoremLorem",
-    name: "Limpieza",
-    type: "Service",
-  },
-  {
-    id: 5,
-    basePrice: 200,
-    description: "LoremLoremLoremLoremLoremLoremLoremLoremLorem",
-    name: "Reparación",
-    type: "Service",
-  },
-];
+import React, { useEffect, useState } from "react";
+import { useNewOrderStore, useServicesStore } from "../../hooks";
 
 export const ServiceModal = () => {
-
   const { addServices } = useNewOrderStore();
-  const [services, setServices] = useState([]);
+  const { services, startLoadingServices } = useServicesStore();
+  const [servicesSelected, setServicesSelected] = useState([]);
+
+  useEffect(() => {
+    startLoadingServices();
+  }, []);
 
   function checkActiveItem(event, bien) {
     let checkboxes = document.getElementsByClassName("custom-checkbox");
@@ -31,11 +18,11 @@ export const ServiceModal = () => {
       if (item.id == checkbox.id) {
         if (checkbox.checked) {
           tRow.classList.add("table-active");
-          setServices([...services, bien]);
+          setServicesSelected([...servicesSelected, bien]);
         } else {
           tRow.classList.remove("table-active");
-          setServices(
-            [...services].filter((service) => service.id !== bien.id)
+          setServicesSelected(
+            [...servicesSelected].filter((service) => service.id !== bien.id)
           );
         }
       }
@@ -48,11 +35,11 @@ export const ServiceModal = () => {
       item.closest("tr").classList.remove("table-active");
       item.checked = false;
     }
-    setServices([]);
+    setServicesSelected([]);
   }
 
   function handleButtonClick() {
-    addServices(services);
+    addServices(servicesSelected);
     cleanCheckBoxes();
   }
 
@@ -93,12 +80,12 @@ export const ServiceModal = () => {
                 >
                   <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Tipo</th>
                     <th scope="col">Nombre</th>
+                    <th scope="col">Detalle</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {servicesDto.map((service) => (
+                  {services.map((service) => (
                     <tr key={service.id}>
                       <td>
                         <input
@@ -112,8 +99,8 @@ export const ServiceModal = () => {
                           className="custom-checkbox"
                         />
                       </td>
-                      <td>{service.type}</td>
                       <td>{service.name}</td>
+                      <td>{service.description}</td>
                     </tr>
                   ))}
                 </tbody>

@@ -15,19 +15,14 @@ function ClientListComponent() {
   const [abierto, setAbierto] = useState(false);
   const {
     clients,
+    activeClient,
     startLoadingClient,
     startDeletingClient,
-    activeClient,
     setActiveClient,
   } = useClientsStore();
 
   useEffect(() => {
-    if (clients.length == 0) {
-      // Parte cuando la lista está vacía
-      console.log("Vacio");
-    } else {
-      startLoadingClient();
-    }
+    startLoadingClient();
   }, []);
 
   // Modal de nuevo cliente
@@ -113,6 +108,7 @@ function ClientListComponent() {
   }
   return (
     <>
+      <HeaderComponent />
       <div className="container-fluid">
         <div className="row">
           {/* Navbar */}
@@ -124,7 +120,7 @@ function ClientListComponent() {
             <section className="d-flex justify-content-center m-3">
               <button
                 type="button"
-                className="btn btn-primary mx-3 fw-bold btn-lg"
+                className="btn btn-primary mx-3 fw-bold btn-lg shadow-sm"
                 data-bs-toggle="modal"
                 data-bs-target="#chooseClientModal"
                 onClick={abrirModal}
@@ -133,7 +129,7 @@ function ClientListComponent() {
               </button>
               <button
                 type="button"
-                className="btn btn-primary mx-3 fw-bold btn-lg"
+                className="btn btn-primary mx-3 fw-bold btn-lg shadow-sm"
                 onClick={deleteClient}
               >
                 Eliminar
@@ -146,7 +142,7 @@ function ClientListComponent() {
                 className="d-flex justify-content-center rounded-3 shadow-lg"
                 style={{ maxHeight: "85vh", overflowY: "auto" }}
               >
-                <table className="table table-primary ">
+                <table className="table table-primary">
                   <thead
                     style={{
                       position: "sticky",
@@ -186,10 +182,10 @@ function ClientListComponent() {
                         <td>
                           {client.isbussiness
                             ? client.bussinessname
-                            : client.name}
+                            : `${client.name} ${client.lastname}`}
                         </td>
 
-                        <td>{client.isbussiness ? "Empresa" : "Persona"}</td>
+                        <td>{client.isbussiness ? "Empresa" : "Persona Fisica"}</td>
 
                         <td>{client.isbussiness ? client.cuit : client.dni}</td>
 
@@ -205,7 +201,7 @@ function ClientListComponent() {
                               color: "#000000",
                               cursor: "pointer",
                             }}
-                            onClick={(event) => editClient(client)}
+                            onClick={() => editClient(client)}
                           />
                         </td>
                       </tr>

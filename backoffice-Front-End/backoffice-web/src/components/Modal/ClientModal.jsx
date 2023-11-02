@@ -1,25 +1,14 @@
-import React, { useState } from "react";
-import { useNewOrderStore } from "../../hooks";
-
-const clientsDto = [
-  {
-    id: 1,
-    name: "Roberto",
-    lastName: "Garcia",
-    isBussiness: true,
-    businessName: "Empresa Diaz",
-  },
-  {
-    id: 2,
-    name: "Alberto",
-    lastName: "Robledo",
-    isBussiness: false,
-  },
-];
+import React, { useEffect, useState } from "react";
+import { useClientsStore, useNewOrderStore } from "../../hooks";
 
 export const ClientModal = () => {
   const { addClient } = useNewOrderStore();
+  const { clients, startLoadingClient } = useClientsStore();
   const [client, setClient] = useState(null);
+
+  useEffect(() => {
+    startLoadingClient();
+  }, []);
 
   function checkActiveClient(event, client) {
     let checkboxes = document.getElementsByClassName("custom-checkbox");
@@ -29,7 +18,7 @@ export const ClientModal = () => {
       if (item.id == checkbox.id) {
         if (checkbox.checked) {
           tRow.classList.add("table-active");
-          setClient(client)
+          setClient(client);
         } else {
           tRow.classList.remove("table-active");
         }
@@ -46,11 +35,11 @@ export const ClientModal = () => {
       item.closest("tr").classList.remove("table-active");
       item.checked = false;
     }
-    setClient(null)
+    setClient(null);
   }
 
   function handleButtonClick() {
-    addClient(client)
+    addClient(client);
     cleanCheckBoxes();
   }
 
@@ -95,7 +84,7 @@ export const ClientModal = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {clientsDto.map((client) => (
+                  {clients.map((client) => (
                     <tr key={client.id}>
                       <td>
                         <input
@@ -109,11 +98,13 @@ export const ClientModal = () => {
                           className="custom-checkbox"
                         />
                       </td>
-                      <td>{client.isBussiness ? "Empresa" : "Persona Fisica"}</td>
                       <td>
-                        {client.isBussiness
-                          ? client.businessName
-                          : `${client.name} ${client.lastName}`}
+                        {client.isbussiness ? "Empresa" : "Persona Fisica"}
+                      </td>
+                      <td>
+                        {client.isbussiness
+                          ? client.bussinessname
+                          : `${client.name} ${client.lastname}`}
                       </td>
                     </tr>
                   ))}

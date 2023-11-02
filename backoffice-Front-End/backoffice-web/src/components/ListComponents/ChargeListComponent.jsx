@@ -8,6 +8,7 @@ import { useChargesStore } from "../../hooks";
 import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
 import Swal from "sweetalert2";
+import HeaderComponent from "../HeaderComponent";
 
 function ChargeListComponent() {
   const navigate = useNavigate();
@@ -84,6 +85,7 @@ function ChargeListComponent() {
 
   return (
     <>
+      <HeaderComponent />
       <div className="container-fluid">
         <div className="row">
           {/* Navbar */}
@@ -147,8 +149,8 @@ function ChargeListComponent() {
                         />
                       </td>
                       <td>{charge.name}</td>
-                      <td>%{charge.percentage}</td>
-                      <td>{charge.enabled ? "habilitado" : "deshabilitado"}</td>
+                      <td>{charge.percentage}%</td>
+                      <td>{charge.enabled ? "Habilitado" : "Deshabilitado"}</td>
                       <td>
                         <FontAwesomeIcon
                           icon={faPenToSquare}

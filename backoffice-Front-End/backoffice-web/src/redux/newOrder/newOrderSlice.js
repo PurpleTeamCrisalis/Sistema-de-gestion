@@ -37,21 +37,21 @@ export const newOrderSlice = createSlice({
       state.activeDetail = null
     },
     onUpdateQuantity: (state, { payload }) => {
-      payload.detail.type === "Product"
-        ? state.newOrder.products.forEach(product => {
-          if (product.id === payload.detail.id) product.quantity = payload.quantity
-        })
-        : state.newOrder.services.forEach(service => {
-          if (service.id === payload.detail.id) service.quantity = payload.quantity
-        })
+      state.newOrder.products.forEach(product => {
+        if (product.id === payload.detail.id) product.quantity = payload.quantity
+      })
     },
     onDeleteDetail: (state) => {
       state.activeDetail.type === "Product"
         ? state.newOrder.products = state.newOrder.products.filter(product => product.id !== state.activeDetail.id)
         : state.newOrder.services = state.newOrder.services.filter(service => service.id !== state.activeDetail.id)
       state.activeDetail = null
+    },
+    onCleanNewOrder: (state) => {
+      state.activeDetail = initialState.activeDetail
+      state.newOrder = initialState.newOrder
     }
   }
 });
 
-export const { onNewOrder, onAddClient, onAddProducts, onAddServices, onDeleteDetail, onSetActiveDetail, onPullActiveDetail, onUpdateQuantity } = newOrderSlice.actions;
+export const { onNewOrder, onAddClient, onAddProducts, onAddServices, onDeleteDetail, onSetActiveDetail, onPullActiveDetail, onUpdateQuantity, onCleanNewOrder } = newOrderSlice.actions;

@@ -1,6 +1,6 @@
 export function createOrderRequest(order) {
   return {
-    client: order.client.id,
+    clientId: order.client.id,
     products: order.products.map(product => {
       return {
         productId: product.id,
@@ -8,10 +8,6 @@ export function createOrderRequest(order) {
         warranty: 10.5
       }
     }),
-    services: order.services.map(service => {
-      return {
-        serviceId: service.id
-      }
-    })
+    services: order.services.map(service => service.id)
   }
 }

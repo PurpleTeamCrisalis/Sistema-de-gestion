@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { onAddProducts, onAddServices, onDeleteDetail, onAddClient, onSetActiveDetail, onPullActiveDetail, onUpdateQuantity } from '../redux'
+import { onAddProducts, onAddServices, onDeleteDetail, onAddClient, onSetActiveDetail, onPullActiveDetail, onUpdateQuantity, onCleanNewOrder } from '../redux'
 
 export function useNewOrderStore() {
 
@@ -33,6 +33,10 @@ export function useNewOrderStore() {
     dispatch(onUpdateQuantity(objeto))
   }
 
+  function cleanNewOrder() {
+    dispatch(onCleanNewOrder())
+  }
+
   return {
     // Atributos
     newOrder,
@@ -43,6 +47,7 @@ export function useNewOrderStore() {
     setActiveDetail,
     deleteDetail,
     updateQuantity,
-    pullActiveDetail
+    pullActiveDetail,
+    cleanNewOrder
   }
 }

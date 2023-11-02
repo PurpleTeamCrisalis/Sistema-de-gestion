@@ -1,34 +1,14 @@
-import React, { useState } from "react";
-import { useNewOrderStore } from "../../hooks";
-
-const productsDto = [
-  {
-    id: 1,
-    basePrice: 200,
-    description: "LoremLoremLoremLoremLoremLoremLoremLorem",
-    name: "Zapatilla",
-    type: "Product",
-  },
-  {
-    id: 2,
-    basePrice: 200,
-    description: "djasldjashdjasdjhkasjhkdgasjd",
-    name: "Medias",
-    type: "Product",
-  },
-  {
-    id: 3,
-    basePrice: 200,
-    description: "LoremLoremLoremLoremLoremLoremLorem",
-    name: "Pantalones",
-    type: "Product",
-  },
-];
+import React, { useEffect, useState } from "react";
+import { useNewOrderStore, useProductsStore } from "../../hooks";
 
 export const ProductModal = () => {
-  
   const { addProducts } = useNewOrderStore();
-  const [products, setProducts] = useState([]);
+  const { products, startLoadingProducts } = useProductsStore();
+  const [productsSelected, setProductsSelected] = useState([]);
+
+  useEffect(() => {
+    startLoadingProducts();
+  }, []);
 
   function checkActiveItem(event, bien) {
     let checkboxes = document.getElementsByClassName("custom-checkbox");
@@ -38,11 +18,11 @@ export const ProductModal = () => {
       if (item.id == checkbox.id) {
         if (checkbox.checked) {
           tRow.classList.add("table-active");
-          setProducts([...products, bien]);
+          setProductsSelected([...productsSelected, bien]);
         } else {
           tRow.classList.remove("table-active");
-          setProducts(
-            [...products].filter((product) => product.id !== bien.id)
+          setProductsSelected(
+            [...productsSelected].filter((product) => product.id !== bien.id)
           );
         }
       }
@@ -55,11 +35,11 @@ export const ProductModal = () => {
       item.closest("tr").classList.remove("table-active");
       item.checked = false;
     }
-    setProducts([]);
+    setProductsSelected([]);
   }
 
   function handleButtonClick() {
-    addProducts(products);
+    addProducts(productsSelected);
     cleanCheckBoxes();
   }
 
@@ -100,12 +80,12 @@ export const ProductModal = () => {
                 >
                   <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Tipo</th>
                     <th scope="col">Nombre</th>
+                    <th scope="col">Detalle</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {productsDto.map((product) => (
+                  {products.map((product) => (
                     <tr key={product.id}>
                       <td>
                         <input
@@ -119,8 +99,8 @@ export const ProductModal = () => {
                           className="custom-checkbox"
                         />
                       </td>
-                      <td>{product.type}</td>
                       <td>{product.name}</td>
+                      <td>{product.description}</td>
                     </tr>
                   ))}
                 </tbody>

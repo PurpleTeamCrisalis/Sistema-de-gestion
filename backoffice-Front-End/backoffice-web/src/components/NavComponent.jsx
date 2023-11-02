@@ -113,25 +113,6 @@ export function NavComponent() {
           Cargos
         </span>
       </Link>
-      <div className="btn-group dropup align-self-center">
-        <button
-          type="button"
-          className="btn btn-secondary dropdown-toggle "
-          data-bs-toggle="dropdown"
-          aria-haspopup="true"
-          aria-expanded="false"
-        >
-          <span className="d-sm-none">
-            <FontAwesomeIcon icon={faArrowUp} />
-          </span>
-          <span className="d-none d-sm-inline">{user.username}</span>
-        </button>
-        <div className="dropdown-menu">
-          <a className="dropdown-item" href="/" onClick={event => handleLogout(event)}>
-            Cerrar sesion
-          </a>
-        </div>
-      </div>
     </div>
   );
 }

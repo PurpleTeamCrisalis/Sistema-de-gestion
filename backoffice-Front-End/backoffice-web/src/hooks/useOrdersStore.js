@@ -1,10 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { projectApi } from '../api'
-import { onAddNewOrder, onLoadOrders, onPullActiveOrder, onSetActiveOrder } from '../redux'
+import { onAddNewOrder, onLoadOrders, onPullActiveOrder, onSetActiveOrder, onLoadOrderById } from '../redux'
 
 export function useOrdersStore() {
 
-  const { orders, activeOrder } = useSelector(state => state.orders)
+  const { orders, activeOrder, selectedOrder } = useSelector(state => state.orders)
   const dispatch = useDispatch()
 
   function setActiveOrder(order) {
@@ -13,10 +13,17 @@ export function useOrdersStore() {
   function pullActiveOrder() {
     dispatch(onPullActiveOrder())
   }
+  async function startLoadingOrderById(id) {
+    try {
+      const { data } = await projectApi.get(`/order/${id}`)
+      dispatch(onLoadOrderById(data))
+    } catch (error) {
+      console.error(error)
+    }
+  }
   async function startLoadingOrders() {
     try {
       const { data } = await projectApi.get('/order/list')
-      console.log(data)
       dispatch(onLoadOrders(data))
     } catch (error) {
       console.error(error)
@@ -36,17 +43,19 @@ export function useOrdersStore() {
       }))
     } catch (error) {
       console.error(error)
-    } 
+    }
   }
 
   return {
     // Atributos
     orders,
     activeOrder,
+    selectedOrder,
     // Metodos
     startLoadingOrders,
     startAddingOrder,
     setActiveOrder,
-    pullActiveOrder
+    pullActiveOrder,
+    startLoadingOrderById
   }
 }

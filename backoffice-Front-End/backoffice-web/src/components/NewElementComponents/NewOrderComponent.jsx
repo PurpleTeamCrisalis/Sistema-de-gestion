@@ -9,10 +9,12 @@ import HeaderComponent from "../HeaderComponent.jsx";
 import NavComponent from "../NavComponent.jsx";
 import { FaPenToSquare } from "react-icons/fa6";
 import "../../assets/styles/NewOrderStyle.css";
-import { DetailOrderTable } from "../DetailOrderTable";
 import { SelectModal } from "../Modal/SelectModal";
 import { ServiceModal } from "../Modal/ServiceModal";
 import { createOrderRequest } from "../../helpers/createOrderRequest";
+import Toastify from "toastify-js";
+import "toastify-js/src/toastify.css";
+import { useNavigate } from "react-router-dom";
 
 export const NewOrderComponent = () => {
   const {
@@ -21,14 +23,47 @@ export const NewOrderComponent = () => {
     pullActiveDetail,
     deleteDetail,
     updateQuantity,
+    cleanNewOrder,
   } = useNewOrderStore();
   const { startAddingOrder } = useOrdersStore();
+  const navigate = useNavigate()
 
   function createOrder() {
-    const orderRequest = createOrderRequest(newOrder)
-    console.log(orderRequest)
-    alert('Orden creada')
+    if (!newOrder.client.id) {
+      Toastify({
+        text: "No hay ningún cliente seleccionado",
+        duration: 2000,
+        style: {
+          background: "linear-gradient(to right, #f44336, #b71c1c)",
+        },
+      }).showToast();
+      return console.error("Error: No hay ningín cliente seleccionado");
+    }
+    if (!newOrder.products.length && !newOrder.services.length) {
+      Toastify({
+        text: "No hay ningún producto o servicio seleccionado",
+        duration: 2000,
+        style: {
+          background: "linear-gradient(to right, #f44336, #b71c1c)",
+        },
+      }).showToast();
+      return console.error(
+        "Error: No hay ningún producto o servicio seleccionado"
+      );
+    }
+    const orderRequest = createOrderRequest(newOrder);
+    startAddingOrder(orderRequest);
+    handleCleanNewOrder();
+    Toastify({
+      text: "Orden creada exitosamente!",
+      duration: 2000,
+      style: {
+        background: "linear-gradient(to right, #00b09b, #96c93d)",
+      },
+    }).showToast();
+    navigate("-1")
   }
+
   function checkActiveDetail(event, detail) {
     let checkboxes = document.getElementsByClassName("custom-checkbox");
     let checkbox = event.target;
@@ -49,6 +84,14 @@ export const NewOrderComponent = () => {
     }
   }
 
+  function handleQuantity(detail, event) {
+    updateQuantity({ detail, quantity: Number(event.target.value) });
+  }
+
+  function handleCleanNewOrder() {
+    cleanNewOrder();
+  }
+
   return (
     <>
       <HeaderComponent />
@@ -56,7 +99,7 @@ export const NewOrderComponent = () => {
         <div className="row">
           {/* Navbar */}
           <NavComponent />
-          <div className="col-md-3 col-xl-10 bgGrey">
+          <div className="col-md-9 col-xl-10 bgGrey">
             {/* Add & Remove */}
             <div>
               <section
@@ -66,7 +109,7 @@ export const NewOrderComponent = () => {
                 <div className="bg-white rounded-3 overflow-hidden d-flex align-items-center">
                   <button
                     type="button"
-                    className="btn fw-bold btn-lg "
+                    className="btn fw-bold btn-lg"
                     data-bs-toggle="modal"
                     data-bs-target="#client-modal"
                   >
@@ -75,11 +118,30 @@ export const NewOrderComponent = () => {
                   <ClientModal />
                   <div className="clientName">
                     {Object.keys(newOrder.client).length === 0
-                      ? ""
-                      : newOrder.client.isBussiness
-                      ? newOrder.client.businessName
-                      : `${newOrder.client.name} ${newOrder.client.lastName}`}
+                      ? "Seleccioná Cliente"
+                      : newOrder.client.isbussiness
+                      ? newOrder.client.bussinessname
+                      : `${newOrder.client.name} ${newOrder.client.lastname}`}
                   </div>
+
+                  <div style={{ marginLeft: "auto" }}>
+                    <button
+                      className="btn btn-primary bgAdd text-white"
+                      onClick={() => {
+                        createOrder();
+                      }}
+                    >
+                      Completar Orden
+                    </button>
+                    <button
+                      className="btn btn-primary bgRemoveLight"
+                      style={{ marginLeft: "1rem" }}
+                      onClick={handleCleanNewOrder}
+                    >
+                      Limpiar Campos
+                    </button>
+                  </div>
+
                   <div className="d-flex justify-content-center m-3 gap-2 ms-auto">
                     <button
                       type="button"
@@ -138,17 +200,36 @@ export const NewOrderComponent = () => {
                     </thead>
                     <tbody>
                       {newOrder?.products.map((detail) => (
-                        <DetailOrderTable
-                          detail={detail}
-                          key={detail.id}
-                          checkActiveDetail={checkActiveDetail}
-                          updateQuantity={updateQuantity}
-                        />
+                        <tr key={detail.id} style={{ marginBottom: "0px" }}>
+                          <td>
+                            <input
+                              type="checkbox"
+                              id={detail.id}
+                              className="custom-checkbox"
+                              onChange={(event) =>
+                                checkActiveDetail(event, detail)
+                              }
+                              style={{ color: "#000000", cursor: "pointer" }}
+                            />
+                          </td>
+                          <td>{detail.name}</td>
+                          <td>{detail.description}</td>
+                          <td>
+                            <input
+                              type="number"
+                              onChange={(event) =>
+                                handleQuantity(detail, event)
+                              }
+                              value={detail.quantity}
+                            />
+                          </td>
+                          <td>${detail.basePrice}</td>
+                        </tr>
                       ))}
                     </tbody>
                   </table>
                 </div>
-                <h1 className="fs-5">Servicios</h1>
+                <h1 className="fs-5 mt-3">Servicios</h1>
                 <div className="bg-white rounded-3 overflow-hidden d-flex align-items-center">
                   <table
                     className="table table-hover"
@@ -166,18 +247,27 @@ export const NewOrderComponent = () => {
                         <th scope="col">#</th>
                         <th scope="col">Item</th>
                         <th scope="col">Detalle</th>
-                        <th scope="col">Cantidad</th>
                         <th scope="col">Precio Unitario</th>
                       </tr>
                     </thead>
                     <tbody>
                       {newOrder?.services.map((detail) => (
-                        <DetailOrderTable
-                          detail={detail}
-                          key={detail.id}
-                          checkActiveDetail={checkActiveDetail}
-                          updateQuantity={updateQuantity}
-                        />
+                        <tr key={detail.id} style={{ marginBottom: "0px" }}>
+                          <td>
+                            <input
+                              type="checkbox"
+                              id={detail.id}
+                              className="custom-checkbox"
+                              onChange={(event) =>
+                                checkActiveDetail(event, detail)
+                              }
+                              style={{ color: "#000000", cursor: "pointer" }}
+                            />
+                          </td>
+                          <td>{detail.name}</td>
+                          <td>{detail.description}</td>
+                          <td>${detail.basePrice}</td>
+                        </tr>
                       ))}
                     </tbody>
                   </table>
