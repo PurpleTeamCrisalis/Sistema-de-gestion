@@ -21,6 +21,10 @@ import { useAuthStore } from "../hooks";
 import EditClientCompanyComponent from "../components/EditElementComponents/EditClientCompanyComponent";
 import { getLastView } from "../helpers";
 import NewClientCompanyComponent from "../components/NewElementComponents/NewClientCompanyComponent";
+import NewProductComponent from "../components/NewElementComponents/NewProductComponent";
+import EditProductComponent from "../components/EditElementComponents/EditProductComponent"
+import NewServiceComponent from "../components/NewElementComponents/NewServiceComponent";
+import EditServiceComponent from "../components/EditElementComponents/EditServiceComponent"
 
 export const AppRouter = () => {
   const { status, checkAuthToken } = useAuthStore();
@@ -52,7 +56,11 @@ export const AppRouter = () => {
           <Route path="/" element={<HomePage />}/>
           <Route path="/user" element={<UserListComponent />}></Route>
           <Route path="/service" element={<ServiceListComponent />}></Route>
+          <Route path="/service/newService" element={<NewServiceComponent />}></Route>
+          <Route path="/service/editService" element={<EditServiceComponent />}></Route>
           <Route path="/product" element={<ProductListComponent />}></Route>
+          <Route path="/product/newProduct" element={<NewProductComponent />}></Route>
+          <Route path="/product/editProduct" element={<EditProductComponent />}></Route>
           <Route path="/order" element={<OrderListComponent />}></Route>
           <Route path="/client" element={<ClientListComponent />}></Route>
           <Route path="/charge" element={<ChargeListComponent />}></Route>

@@ -5,6 +5,8 @@ export * from './useOrdersStore'
 export * from './useClientsStore'
 export * from './useNewOrderStore'
 export * from './useChargesStore'
+export * from './useProductsStore'
+export * from './useServicesStore'
 
 /*{
     "id": 2,
