@@ -1,2 +1,2 @@
 export * from './ClientModal'
-export * from './ProductServiceModal'
+export * from './ProductModal'

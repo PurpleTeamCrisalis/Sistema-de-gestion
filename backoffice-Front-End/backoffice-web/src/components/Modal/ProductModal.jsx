@@ -25,30 +25,10 @@ const productsDto = [
   },
 ];
 
-const servicesDto = [
-  {
-    id: 4,
-    basePrice: 200,
-    description: "LoremLoremLoremLoremLoremLoremLoremLoremLorem",
-    name: "Limpieza",
-    type: "Service",
-  },
-  {
-    id: 5,
-    basePrice: 200,
-    description: "LoremLoremLoremLoremLoremLoremLoremLoremLorem",
-    name: "Reparación",
-    type: "Service",
-  },
-];
-
-export const ProductServiceModal = () => {
-  const { addProducts, addServices } = useNewOrderStore();
-
-  const bienes = [...productsDto, ...servicesDto];
-
+export const ProductModal = () => {
+  
+  const { addProducts } = useNewOrderStore();
   const [products, setProducts] = useState([]);
-  const [services, setServices] = useState([]);
 
   function checkActiveItem(event, bien) {
     let checkboxes = document.getElementsByClassName("custom-checkbox");
@@ -58,18 +38,12 @@ export const ProductServiceModal = () => {
       if (item.id == checkbox.id) {
         if (checkbox.checked) {
           tRow.classList.add("table-active");
-          bien.type === "Product"
-            ? setProducts([...products, bien])
-            : setServices([...services, bien]);
+          setProducts([...products, bien]);
         } else {
           tRow.classList.remove("table-active");
-          bien.type === "Product"
-            ? setProducts(
-                [...products].filter((product) => product.id !== bien.id)
-              )
-            : setServices(
-                [...services].filter((service) => service.id !== bien.id)
-              );
+          setProducts(
+            [...products].filter((product) => product.id !== bien.id)
+          );
         }
       }
     }
@@ -82,19 +56,17 @@ export const ProductServiceModal = () => {
       item.checked = false;
     }
     setProducts([]);
-    setServices([]);
   }
 
   function handleButtonClick() {
     addProducts(products);
-    addServices(services);
     cleanCheckBoxes();
   }
 
   return (
     <div
       className="modal fade"
-      id="product-service-modal"
+      id="product-modal"
       data-bs-backdrop="static"
       data-bs-keyboard="false"
       tabIndex="-1"
@@ -105,13 +77,14 @@ export const ProductServiceModal = () => {
         <div className="modal-content">
           <div className="modal-header">
             <h1 className="modal-title fs-5" id="staticBackdropLabel">
-              Productos y Servicios
+              Productos
             </h1>
             <button
               type="button"
               className="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
+              onClick={() => cleanCheckBoxes()}
             ></button>
           </div>
           <div className="modal-body modal-dialog-scrollable">
@@ -132,22 +105,22 @@ export const ProductServiceModal = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {bienes.map((bien) => (
-                    <tr key={bien.id}>
+                  {productsDto.map((product) => (
+                    <tr key={product.id}>
                       <td>
                         <input
                           type="checkbox"
-                          id={bien.id}
+                          id={product.id}
                           style={{
                             color: "#000000",
                             cursor: "pointer",
                           }}
-                          onChange={(event) => checkActiveItem(event, bien)}
+                          onChange={(event) => checkActiveItem(event, product)}
                           className="custom-checkbox"
                         />
                       </td>
-                      <td>{bien.type}</td>
-                      <td>{bien.name}</td>
+                      <td>{product.type}</td>
+                      <td>{product.name}</td>
                     </tr>
                   ))}
                 </tbody>

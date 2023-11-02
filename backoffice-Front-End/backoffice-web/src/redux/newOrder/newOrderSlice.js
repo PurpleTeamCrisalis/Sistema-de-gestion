@@ -33,8 +33,17 @@ export const newOrderSlice = createSlice({
     onSetActiveDetail: (state, { payload }) => {
       state.activeDetail = payload
     },
+    onPullActiveDetail: (state) => {
+      state.activeDetail = null
+    },
     onUpdateQuantity: (state, { payload }) => {
-      // Para modificar la cantidad.
+      payload.detail.type === "Product"
+        ? state.newOrder.products.forEach(product => {
+          if (product.id === payload.detail.id) product.quantity = payload.quantity
+        })
+        : state.newOrder.services.forEach(service => {
+          if (service.id === payload.detail.id) service.quantity = payload.quantity
+        })
     },
     onDeleteDetail: (state) => {
       state.activeDetail.type === "Product"

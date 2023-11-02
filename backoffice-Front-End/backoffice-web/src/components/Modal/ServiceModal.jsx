@@ -1,27 +1,29 @@
 import React, { useState } from "react";
 import { useNewOrderStore } from "../../hooks";
 
-const clientsDto = [
+const servicesDto = [
   {
-    id: 1,
-    name: "Roberto",
-    lastName: "Garcia",
-    isBussiness: true,
-    businessName: "Empresa Diaz",
+    id: 4,
+    basePrice: 200,
+    description: "LoremLoremLoremLoremLoremLoremLoremLoremLorem",
+    name: "Limpieza",
+    type: "Service",
   },
   {
-    id: 2,
-    name: "Alberto",
-    lastName: "Robledo",
-    isBussiness: false,
+    id: 5,
+    basePrice: 200,
+    description: "LoremLoremLoremLoremLoremLoremLoremLoremLorem",
+    name: "Reparación",
+    type: "Service",
   },
 ];
 
-export const ClientModal = () => {
-  const { addClient } = useNewOrderStore();
-  const [client, setClient] = useState(null);
+export const ServiceModal = () => {
 
-  function checkActiveClient(event, client) {
+  const { addServices } = useNewOrderStore();
+  const [services, setServices] = useState([]);
+
+  function checkActiveItem(event, bien) {
     let checkboxes = document.getElementsByClassName("custom-checkbox");
     let checkbox = event.target;
     let tRow = checkbox.closest("tr");
@@ -29,13 +31,13 @@ export const ClientModal = () => {
       if (item.id == checkbox.id) {
         if (checkbox.checked) {
           tRow.classList.add("table-active");
-          setClient(client)
+          setServices([...services, bien]);
         } else {
           tRow.classList.remove("table-active");
+          setServices(
+            [...services].filter((service) => service.id !== bien.id)
+          );
         }
-      } else {
-        item.checked = false;
-        item.closest("tr").classList.remove("table-active");
       }
     }
   }
@@ -46,18 +48,18 @@ export const ClientModal = () => {
       item.closest("tr").classList.remove("table-active");
       item.checked = false;
     }
-    setClient(null)
+    setServices([]);
   }
 
   function handleButtonClick() {
-    addClient(client)
+    addServices(services);
     cleanCheckBoxes();
   }
 
   return (
     <div
       className="modal fade"
-      id="client-modal"
+      id="service-modal"
       data-bs-backdrop="static"
       data-bs-keyboard="false"
       tabIndex="-1"
@@ -68,13 +70,14 @@ export const ClientModal = () => {
         <div className="modal-content">
           <div className="modal-header">
             <h1 className="modal-title fs-5" id="staticBackdropLabel">
-              Clientes
+              Servicios
             </h1>
             <button
               type="button"
               className="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
+              onClick={() => cleanCheckBoxes()}
             ></button>
           </div>
           <div className="modal-body modal-dialog-scrollable">
@@ -95,26 +98,22 @@ export const ClientModal = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {clientsDto.map((client) => (
-                    <tr key={client.id}>
+                  {servicesDto.map((service) => (
+                    <tr key={service.id}>
                       <td>
                         <input
                           type="checkbox"
-                          id={client.id}
+                          id={service.id}
                           style={{
                             color: "#000000",
                             cursor: "pointer",
                           }}
-                          onChange={(event) => checkActiveClient(event, client)}
+                          onChange={(event) => checkActiveItem(event, service)}
                           className="custom-checkbox"
                         />
                       </td>
-                      <td>{client.isBussiness ? "Empresa" : "Persona Fisica"}</td>
-                      <td>
-                        {client.isBussiness
-                          ? client.businessName
-                          : `${client.name} ${client.lastName}`}
-                      </td>
+                      <td>{service.type}</td>
+                      <td>{service.name}</td>
                     </tr>
                   ))}
                 </tbody>

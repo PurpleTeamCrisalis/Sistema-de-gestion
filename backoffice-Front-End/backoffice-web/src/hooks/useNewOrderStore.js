@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { projectApi } from '../api'
-import { onAddProducts, onAddServices, onDeleteDetail, onAddClient, onSetActiveDetail } from '../redux'
+import { onAddProducts, onAddServices, onDeleteDetail, onAddClient, onSetActiveDetail, onPullActiveDetail, onUpdateQuantity } from '../redux'
 
 export function useNewOrderStore() {
 
@@ -10,6 +9,9 @@ export function useNewOrderStore() {
   function setActiveDetail(detail) {
     dispatch(onSetActiveDetail(detail))
   }
+  function pullActiveDetail() {
+    dispatch(onPullActiveDetail())
+  }
 
   function addClient(client) {
     dispatch(onAddClient(client));
@@ -18,13 +20,17 @@ export function useNewOrderStore() {
   function addProducts(products) {
     dispatch(onAddProducts(products));
   }
-  
+
   function addServices(services) {
     dispatch(onAddServices(services));
   }
-  
-  function deleteDetail () {
+
+  function deleteDetail() {
     dispatch(onDeleteDetail());
+  }
+
+  function updateQuantity(objeto) {
+    dispatch(onUpdateQuantity(objeto))
   }
 
   return {
@@ -35,6 +41,8 @@ export function useNewOrderStore() {
     addProducts,
     addClient,
     setActiveDetail,
-    deleteDetail
+    deleteDetail,
+    updateQuantity,
+    pullActiveDetail
   }
 }
