@@ -4,7 +4,7 @@ import edu.bootcamp.backoffice.model.SoftDeletable;
 import edu.bootcamp.backoffice.model.client.Client;
 import edu.bootcamp.backoffice.model.orderDetail.productDetail.ProductDetail;
 import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.ServiceDetail;
-import edu.bootcamp.backoffice.model.serviceEntity.ServiceEntity;
+import edu.bootcamp.backoffice.model.service.ServiceEntity;
 import edu.bootcamp.backoffice.model.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

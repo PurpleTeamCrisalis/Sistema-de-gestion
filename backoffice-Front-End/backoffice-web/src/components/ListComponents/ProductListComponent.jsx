@@ -37,7 +37,7 @@ function ProductListComponent() {
                         </section>
 
                         {/* Table Section */}
-                        <section className='d-flex justify-content-center rounded-3'  style={{ maxHeight: '85vh', overflowY: 'auto' }}>
+                        <section className='d-flex justify-content-center rounded-3 shadow-lg'  style={{ maxHeight: '85vh', overflowY: 'auto' }}>
                             <table className="table table-primary">
                                 <thead style={{ position: 'sticky', top: 0, borderBottom: '2px solid black' }}>
                                     <tr>

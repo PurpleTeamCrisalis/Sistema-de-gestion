@@ -159,10 +159,6 @@ public class ClientServiceImpl implements ClientService {
         List<ClientResponse> dtos = new ArrayList<>();
         for (Client client : clients)
             dtos.add(dtoFactory.createResponse(client));
-        if (dtos.isEmpty())
-            throw new EmptyTableException(
-                    "There aren't registered clients."
-            );
         return dtos;
     }
 

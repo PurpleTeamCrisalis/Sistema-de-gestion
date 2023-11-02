@@ -2,30 +2,34 @@ package edu.bootcamp.backoffice.model.product;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.*;
 
+import edu.bootcamp.backoffice.model.Tax.Tax;
+import edu.bootcamp.backoffice.model.asset.Asset;
 import edu.bootcamp.backoffice.model.orderDetail.productDetail.ProductDetail;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Data
 @Entity
-@NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "product")
-@Builder
-public class Product {
-  @Id
-  @Column(name = "id")
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+@SuperBuilder
+@Table(name = "productTable")
+@NoArgsConstructor
+public class Product extends Asset {
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-  @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
-  private List<ProductDetail> productDetails = new ArrayList<>();
+    @ManyToMany
+    @JoinTable(name = "taxesByProducts", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "tax_id"))
+    public Set<Tax> taxes;
 
-  @Column(name = "basePrice")
-  private Double basePrice;
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<ProductDetail> productDetails = new ArrayList<>();
 }

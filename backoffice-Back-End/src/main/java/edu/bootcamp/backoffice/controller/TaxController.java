@@ -1,36 +1,28 @@
 package edu.bootcamp.backoffice.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import edu.bootcamp.backoffice.model.Charge.Charge;
-import edu.bootcamp.backoffice.model.Charge.dto.ChargeRequest;
-import edu.bootcamp.backoffice.model.Charge.dto.ChargeResponse;
-import edu.bootcamp.backoffice.model.Charge.dto.UpdateChargeRequest;
-import edu.bootcamp.backoffice.model.user.dto.UpdateUserRequest;
-import edu.bootcamp.backoffice.model.user.dto.UserResponse;
-import edu.bootcamp.backoffice.repository.ChargeRepository;
-import edu.bootcamp.backoffice.service.Interface.ChargeService;
-import io.swagger.models.Response;
+import edu.bootcamp.backoffice.model.Tax.dto.ChargeRequest;
+import edu.bootcamp.backoffice.model.Tax.dto.ChargeResponse;
+import edu.bootcamp.backoffice.model.Tax.dto.UpdateChargeRequest;
+import edu.bootcamp.backoffice.service.Interface.TaxService;
 
 import java.net.URI;
 import java.util.List;
 
 
-import javax.websocket.server.PathParam;
 
 @RestController
 @RequestMapping(path="/charge")
-public class ChargeController {
-    private final ChargeService chargeService;
+public class TaxController {
+    private final TaxService taxService;
     @Autowired
-    public ChargeController(ChargeService chargeService){
-        this.chargeService = chargeService;
+    public TaxController(TaxService taxService){
+        this.taxService = taxService;
     }
 
     @PostMapping(
@@ -39,7 +31,7 @@ public class ChargeController {
         produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<ChargeResponse> createCharge(@RequestBody ChargeRequest createRequest){
-        ChargeResponse chargeDTO = chargeService.createCharge(createRequest);
+        ChargeResponse chargeDTO = taxService.createCharge(createRequest);
         
         //URI de Informacion para el cliente [Header] 
         URI location = ServletUriComponentsBuilder
@@ -57,7 +49,7 @@ public class ChargeController {
         produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<ChargeResponse> deleteCharge(@PathVariable int id){
-        ChargeResponse charge = chargeService.delete(id);
+        ChargeResponse charge = taxService.delete(id);
         return ResponseEntity.ok(charge);
     }
 
@@ -67,7 +59,7 @@ public class ChargeController {
     )
     public ResponseEntity<ChargeResponse> getCharge(@PathVariable int id)
     {
-        ChargeResponse charge = chargeService.get(id);
+        ChargeResponse charge = taxService.get(id);
         return ResponseEntity.ok(charge);
     }
 
@@ -80,7 +72,7 @@ public class ChargeController {
             @PathVariable int id,
             @RequestBody UpdateChargeRequest chargeDTO)
     {
-        ChargeResponse charge = chargeService.update(id, chargeDTO);
+        ChargeResponse charge = taxService.update(id, chargeDTO);
         return ResponseEntity.ok(charge);
     }
 
@@ -89,7 +81,7 @@ public class ChargeController {
         produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<List<ChargeResponse>> getAllCharge(){
-        List<ChargeResponse> charges = chargeService.get();
+        List<ChargeResponse> charges = taxService.get();
         return ResponseEntity.ok(charges);
     }
     

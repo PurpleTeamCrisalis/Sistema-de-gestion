@@ -4,7 +4,7 @@ import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.dto.ServiceDetail
 
 import org.springframework.stereotype.Component;
 
-import edu.bootcamp.backoffice.model.serviceEntity.ServiceEntity;
+import edu.bootcamp.backoffice.model.service.ServiceEntity;
 
 @Component
 public class ServiceDetailFactory {

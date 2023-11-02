@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 import edu.bootcamp.backoffice.model.EntitiesConstraints;
 import edu.bootcamp.backoffice.model.order.Order;
-import edu.bootcamp.backoffice.model.serviceEntity.ServiceEntity;
+import edu.bootcamp.backoffice.model.service.ServiceEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

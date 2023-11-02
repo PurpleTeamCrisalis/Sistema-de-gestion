@@ -34,6 +34,7 @@ public interface Validator
             String propertyName,
             StringBuilder errorBuilder
     );
+
     public void validateIntegerValue(
             Integer longNumber,
             Integer maxStrict,
@@ -50,13 +51,13 @@ public interface Validator
             String propertyName
     );
 
-    public void validateInterge(
+    /*public void validateInterger(
             Integer integer,
             int minLength,
             int maxLength,
             StringBuilder errors,
             String propertyName
-    );
+    );*/
 
     public Boolean isEmpty(
             String varchar,

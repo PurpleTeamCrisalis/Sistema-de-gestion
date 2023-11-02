@@ -93,7 +93,7 @@ function ChargeListComponent() {
             {/* Table and Buttons */}
             <div className="col-md-9 col-xl-10">
                 {/* Button Section */}
-                <section className="d-flex justify-content-center m-4">
+                <section className='d-flex justify-content-center m-3'>
                 <button
                     type="button"
                     className="btn btn-primary mx-3 fw-bold btn-lg"
@@ -111,12 +111,9 @@ function ChargeListComponent() {
                 </section>
 
                 {/* Table Section */}
-                <section
-                className="container bg-primary rounded-3 px-5 pt-4"
-                style={{ minHeight: "75vh", width: "90%" }}
-                >
-                <div className="bg-white rounded-3 overflow-hidden">
-                    <table className="table table-hover">
+                <section className='d-flex justify-content-center rounded-3 shadow-lg' style={{ maxHeight: '85vh', overflowY: 'auto' }}>
+                
+                    <table className="table table-primary">
                     {/* Header de la table */}
                     <thead
                         style={{
@@ -135,7 +132,7 @@ function ChargeListComponent() {
                     </thead>
                     <tbody>
                         {charges?.map((charge) => (
-                        <tr key={charge.id}>
+                        <tr key={charge.id} className='table-primary'>
                             <td>
                             <input
                                 type="checkbox"
@@ -165,7 +162,7 @@ function ChargeListComponent() {
                         ))}
                     </tbody>
                     </table>
-                </div>
+                
                 </section>
             </div>
             </div>
