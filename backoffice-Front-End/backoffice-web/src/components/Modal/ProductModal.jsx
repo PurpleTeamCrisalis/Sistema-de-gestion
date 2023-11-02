@@ -42,59 +42,59 @@ const servicesDto = [
   },
 ];
 
-export const ProductServiceModal = () => {
-  const { addProducts, addServices } = useNewOrderStore();
-
-  const bienes = [...productsDto, ...servicesDto];
+export const ProductModal = () =>
+{
+  const { addProducts } = useNewOrderStore();
 
   const [products, setProducts] = useState([]);
-  const [services, setServices] = useState([]);
 
-  function checkActiveItem(event, bien) {
-    let checkboxes = document.getElementsByClassName("custom-checkbox");
+  const productsFromAPI = [...productsDto];
+
+  function checkActiveItem(event, product)
+  {
+    let checkboxes = document.getElementsByClassName("product-checkbox");
     let checkbox = event.target;
     let tRow = checkbox.closest("tr");
-    for (const item of checkboxes) {
-      if (item.id == checkbox.id) {
-        if (checkbox.checked) {
+    for (const item of checkboxes)
+    {
+      if (item.id == checkbox.id)
+      {
+        if (checkbox.checked)
+        {
           tRow.classList.add("table-active");
-          bien.type === "Product"
-            ? setProducts([...products, bien])
-            : setServices([...services, bien]);
-        } else {
+          setProducts([...products, product])
+        } else
+        {
           tRow.classList.remove("table-active");
-          bien.type === "Product"
-            ? setProducts(
-                [...products].filter((product) => product.id !== bien.id)
-              )
-            : setServices(
-                [...services].filter((service) => service.id !== bien.id)
-              );
+          setProducts(
+            [...products].filter((p) => p.id !== product.id)
+          )
         }
       }
     }
   }
 
-  function cleanCheckBoxes() {
-    let checkboxes = document.getElementsByClassName("custom-checkbox");
-    for (const item of checkboxes) {
+  function cleanCheckBoxes()
+  {
+    let checkboxes = document.getElementsByClassName("product-checkbox");
+    for (const item of checkboxes)
+    {
       item.closest("tr").classList.remove("table-active");
       item.checked = false;
     }
     setProducts([]);
-    setServices([]);
   }
 
-  function handleButtonClick() {
+  function handleButtonClick()
+  {
     addProducts(products);
-    addServices(services);
     cleanCheckBoxes();
   }
 
   return (
     <div
       className="modal fade"
-      id="product-service-modal"
+      id="product-modal"
       data-bs-backdrop="static"
       data-bs-keyboard="false"
       tabIndex="-1"
@@ -105,7 +105,7 @@ export const ProductServiceModal = () => {
         <div className="modal-content">
           <div className="modal-header">
             <h1 className="modal-title fs-5" id="staticBackdropLabel">
-              Productos y Servicios
+              Productos
             </h1>
             <button
               type="button"
@@ -132,22 +132,22 @@ export const ProductServiceModal = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {bienes.map((bien) => (
-                    <tr key={bien.id}>
+                  {productsFromAPI.map((product) => (
+                    <tr key={product.id}>
                       <td>
                         <input
                           type="checkbox"
-                          id={bien.id}
+                          id={product.id}
                           style={{
                             color: "#000000",
                             cursor: "pointer",
                           }}
-                          onChange={(event) => checkActiveItem(event, bien)}
-                          className="custom-checkbox"
+                          onChange={(event) => checkActiveItem(event, product)}
+                          className="product-checkbox"
                         />
                       </td>
-                      <td>{bien.type}</td>
-                      <td>{bien.name}</td>
+                      <td>{product.type}</td>
+                      <td>{product.name}</td>
                     </tr>
                   ))}
                 </tbody>

@@ -1,65 +1,76 @@
 import React, { useState } from "react";
 import { useNewOrderStore } from "../../hooks";
 
-const clientsDto2 = [
+const servicesDto = [
   {
-    id: 1,
-    name: "Roberto",
-    lastname: "Garcia",
-    isbussiness: true,
-    bussinessname: "Empresa Diaz",
+    id: 4,
+    basePrice: 200,
+    description: "LoremLoremLoremLoremLoremLoremLoremLoremLorem",
+    name: "Limpieza",
+    type: "Service",
   },
   {
-    id: 2,
-    name: "Alberto",
-    lastname: "Robledo",
-    isbussiness: false,
+    id: 5,
+    basePrice: 200,
+    description: "LoremLoremLoremLoremLoremLoremLoremLoremLorem",
+    name: "Reparación",
+    type: "Service",
   },
 ];
 
-export const ClientModal = () => {
-  const { addClient } = useNewOrderStore();
-  const [client, setClient] = useState(null);
+export const ServiceModal = () =>
+{
+  const { addServices } = useNewOrderStore();
 
-  
+  const [services, setServices] = useState([]);
 
-  function checkActiveClient(event, client) {
-    let checkboxes = document.getElementsByClassName("custom-checkbox");
+  const servicesFromAPI = [...servicesDto];
+
+  function checkActiveItem(event, service)
+  {
+    let checkboxes = document.getElementsByClassName("service-checkbox");
     let checkbox = event.target;
     let tRow = checkbox.closest("tr");
-    for (const item of checkboxes) {
-      if (item.id == checkbox.id) {
-        if (checkbox.checked) {
+    for (const item of checkboxes)
+    {
+      if (item.id == checkbox.id)
+      {
+        if (checkbox.checked)
+        {
           tRow.classList.add("table-active");
-          setClient(client)
-        } else {
+          setServices([...services, service])
+        } else
+        {
           tRow.classList.remove("table-active");
+          setServices(
+            [...services].filter((p) => p.id !== service.id)
+          )
         }
-      } else {
-        item.checked = false;
-        item.closest("tr").classList.remove("table-active");
       }
     }
   }
 
-  function cleanCheckBoxes() {
-    let checkboxes = document.getElementsByClassName("custom-checkbox");
-    for (const item of checkboxes) {
+  function cleanCheckBoxes()
+  {
+    let checkboxes = document.getElementsByClassName("product-checkbox");
+    for (const item of checkboxes)
+    {
       item.closest("tr").classList.remove("table-active");
       item.checked = false;
     }
-    setClient(null)
+    setServices([]);
   }
 
-  function handleButtonClick() {
-    addClient(client)
+  function handleButtonClick()
+  {
+    addServices(services);
     cleanCheckBoxes();
   }
 
   return (
     <div
       className="modal fade"
-      id="client-modal"
+      id="service-modal"
       data-bs-backdrop="static"
       data-bs-keyboard="false"
       tabIndex="-1"
@@ -70,7 +81,7 @@ export const ClientModal = () => {
         <div className="modal-content">
           <div className="modal-header">
             <h1 className="modal-title fs-5" id="staticBackdropLabel">
-              Clientes
+              Servicios
             </h1>
             <button
               type="button"
@@ -97,26 +108,22 @@ export const ClientModal = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {clientsDto.map((client) => (
-                    <tr key={client.id}>
+                  {servicesFromAPI.map((service) => (
+                    <tr key={service.id}>
                       <td>
                         <input
                           type="checkbox"
-                          id={client.id}
+                          id={service.id}
                           style={{
                             color: "#000000",
                             cursor: "pointer",
                           }}
-                          onChange={(event) => checkActiveClient(event, client)}
-                          className="custom-checkbox"
+                          onChange={(event) => checkActiveItem(event, service)}
+                          className="service-checkbox"
                         />
                       </td>
-                      <td>{client.isbussiness ? "Empresa" : "Persona Fisica"}</td>
-                      <td>
-                        {client.isbussiness
-                          ? client.bussinessname
-                          : `${client.name} ${client.lastname}`}
-                      </td>
+                      <td>{service.type}</td>
+                      <td>{service.name}</td>
                     </tr>
                   ))}
                 </tbody>

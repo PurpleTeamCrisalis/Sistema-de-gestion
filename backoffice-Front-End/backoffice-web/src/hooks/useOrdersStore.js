@@ -24,7 +24,17 @@ export function useOrdersStore() {
   }
   async function startAddingOrder(order) {
     try {
-      const { data } = await projectApi.post('/order', order)
+      const request = {
+        clientId: order.client.id,
+        services: order.services.map(service => service.id),
+        products: order.products.map(product => ({
+          productId: product.id,
+          quantity: product.quantity,
+          warranty: 1
+        }))
+      };
+      console.log(request);
+      const { data } = await projectApi.post('/order', request)
       dispatch(onAddNewOrder({
         client: data.client,
         date: data.date,

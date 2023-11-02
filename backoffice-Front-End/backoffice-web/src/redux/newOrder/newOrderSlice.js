@@ -27,14 +27,16 @@ export const newOrderSlice = createSlice({
       payload.forEach((service) => {
         const exists = state.newOrder.services.some(s => s.id === service.id)
         if (!exists)
-          state.newOrder.services.push({ ...service, quantity: 1 });
+          state.newOrder.services.push({ ...service });
       })
     },
     onSetActiveDetail: (state, { payload }) => {
       state.activeDetail = payload
     },
-    onUpdateQuantity: (state, { payload }) => {
-      // Para modificar la cantidad.
+    onUpdateProductQuantity: (state, { payload }) => {
+      const product = state.newOrder.products.filter(product => product.id == payload.product.id)[0];
+      product.quantity = payload.quantity;
+      console.log(payload.product.id);
     },
     onDeleteDetail: (state) => {
       state.activeDetail.type === "Product"
@@ -45,4 +47,4 @@ export const newOrderSlice = createSlice({
   }
 });
 
-export const { onNewOrder, onAddClient, onAddProducts, onAddServices, onDeleteDetail, onSetActiveDetail, onPullActiveDetail, onUpdateQuantity } = newOrderSlice.actions;
+export const { onNewOrder, onAddClient, onAddProducts, onAddServices, onDeleteDetail, onSetActiveDetail, onPullActiveDetail, onUpdateProductQuantity } = newOrderSlice.actions;
