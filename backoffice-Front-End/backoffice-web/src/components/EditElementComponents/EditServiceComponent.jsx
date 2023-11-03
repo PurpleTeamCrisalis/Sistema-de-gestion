@@ -1,70 +1,51 @@
 import React from 'react'
 import NavComponent from '../NavComponent'
 import { useNavigate } from 'react-router-dom'
-import { useClientsStore } from '../../hooks/useClientsStore';
-import { useForm } from '../../hooks';
-import { formValidations } from '../../utils/FormValidations';
+import { useForm, useServicesStore } from '../../hooks';
 import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
 import HeaderComponent from "../HeaderComponent";
 
-function EditClientComponent() {
+function EditServiceComponent() {
     const navigate = useNavigate();
-    const { startUpdatingClient, activeClient, setActiveClient, clients } = useClientsStore();
-    const { name, lastname, dni, phone, adress, isbussiness, bussinessname, startdate, cuit, enabled, handleInputChange, emptyValidation } = useForm({
-        name: activeClient?.name,
-        lastname: activeClient?.lastname,
-        dni: activeClient?.dni,
-        phone: activeClient?.phone,
-        adress: activeClient?.adress,
-        isbussiness: activeClient?.isbussiness,
-        bussinessname: activeClient?.bussinessname,
-        startdate: activeClient?.startdate,
-        enabled: activeClient?.enabled,
-        cuit: activeClient?.cuit,
-        id: activeClient?.id,
+    const { startUpdatingService, activeService, setActiveService, services } = useServicesStore();
+    const { name, description, basePrice, enabled, handleInputChange, emptyValidation } = useForm({
+        name: activeService?.name,
+        description: activeService?.description,
+        basePrice: activeService?.basePrice,
+        enabled: activeService?.enabled,
+        id: activeService?.id,
     });
 
-    // Edicion de cliente
-    function editClient(event) {
+    // Edicion de servicio
+    function editService(event) {
         event.preventDefault();
 
-        // Objeto cliente
-        const clientAux = {
-            id: activeClient?.id,
+        // Objeto servicio
+        const serviceaux = {
+            id: activeService?.id,
             name,
-            lastname,
-            dni: parseInt(dni),
-            phone: parseInt(phone),
-            adress,
-            isbussiness,
-            bussinessname,
+            description,
+            basePrice: parseFloat(basePrice),
             enabled,
-            startdate,
-            cuit: parseInt(cuit),
         };
-
-        // Validaciones de los datos Editados
-        if (formValidations(clientAux)) {
-            return console.log("Campos incorrectos")
-        }
         
         // Verifica si los nuevos datos son ya existentes
-        const clienteExiste = clients?.find(client => { return client.dni === dni });
-        if ((clienteExiste) && (activeClient.dni !== dni)) {
+        const servicioExiste = services?.find(service => { return service.name === name });
+        if ((servicioExiste) && (activeService.name !== name)) {
             Toastify({
-                text: "El cliente ya existe",
+                text: "El servicio ya existe",
                 duration: 2000,
                 style: {
                     background: "linear-gradient(to right, #f44336, #b71c1c)",
                 },
             }).showToast();
-            return console.error("Error: cliente ya existe");
+            return console.error("Error: servicio ya existe");
         }
         try {
-            startUpdatingClient(clientAux)
+            startUpdatingService(serviceaux)
             Toastify({
-                text: "Usuario Actualizado",
+                text: "Servicio Actualizado",
                 duration: 2000,
                 style: {
                     background: "linear-gradient(to right, #00b09b, #96c93d)",
@@ -78,7 +59,7 @@ function EditClientComponent() {
     return (
 
         <div className="bgGrey">
-        <HeaderComponent />
+            <HeaderComponent />
             <div className="container-fluid mainContainer">
                 <div className="secondContainer">
                     {/* Navbar */}
@@ -89,7 +70,7 @@ function EditClientComponent() {
                         {/* Inputs */}
                         <section className="container bg-primary rounded-3 mt-5 mb-4" style={{ minHeight: "70vh", width: "90%" }}>
                             <div className="text-center py-4">
-                                <h3 className="fs-4">Editar Cliente</h3>
+                                <h3 className="fs-4">Editar Servicio</h3>
                                 <hr className="bg-light" />
                             </div>
 
@@ -97,7 +78,7 @@ function EditClientComponent() {
                                 {/* Persona */}
 
                                 <div className="col-sm-6">
-                                    <h2 className='text-center'>Persona</h2>
+                                    <h2 className='text-center'>Servicio</h2>
                                     <div className="row m-4">
                                         <div className="col-md-6 mb-3">
                                             <label htmlFor="name" className="form-label">Nombre</label>
@@ -108,61 +89,34 @@ function EditClientComponent() {
                                                 onChange={handleInputChange}
                                                 value={name}
                                                 className="form-control"
-                                                placeholder={"Ingresa Nombre"}
                                             />
                                         </div>
                                         <div className="col-md-6 mb-3">
-                                            <label htmlFor="lastname" className="form-label">Apellido</label>
+                                            <label htmlFor="description" className="form-label">Descripción</label>
                                             <input
                                                 type="text"
-                                                name='lastname'
-                                                id='lastname'
+                                                name='description'
+                                                id='description'
                                                 onChange={handleInputChange}
-                                                value={lastname}
+                                                value={description}
                                                 className="form-control"
-                                                placeholder={"Ingresa Apellido"}
                                             />
                                         </div>
                                         <div className="col-md-6 mb-3">
-                                            <label htmlFor="dni" className="form-label">D.N.I</label>
+                                            <label htmlFor="basePrice" className="form-label">Precio Base</label>
                                             <input
                                                 type="text"
-                                                name='dni'
-                                                id='dni'
+                                                name='basePrice'
+                                                id='basePrice'
                                                 onChange={handleInputChange}
-                                                value={dni}
+                                                value={basePrice}
                                                 className="form-control"
-                                                placeholder={"Ingresa DNI"}
-                                            />
-                                        </div>
-                                        <div className="col-md-6 mb-3">
-                                            <label htmlFor="phone" className="form-label">Teléfono</label>
-                                            <input
-                                                type="text"
-                                                name='phone'
-                                                id='phone'
-                                                onChange={handleInputChange}
-                                                value={phone}
-                                                className="form-control"
-                                                placeholder={"Ingresa Teléfono"}
-                                            />
-                                        </div>
-                                        <div className="col-12 mb-3">
-                                            <label htmlFor="adress" className="form-label">Dirección</label>
-                                            <input
-                                                type="text"
-                                                name='adress'
-                                                id='adress'
-                                                onChange={handleInputChange}
-                                                value={adress}
-                                                className="form-control"
-                                                placeholder={"Ingresa Direccion"}
                                             />
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            {/* Estado del cliente */}
+                            {/* Estado del servicio */}
                             <div className="d-flex align-items-center justify-content-center">
                                 <h5 className="mb-0 me-3">Estado</h5>
                                 <div className="d-flex align-items-center gap-3">
@@ -173,7 +127,7 @@ function EditClientComponent() {
                                             id="enabled"
                                             onChange={handleInputChange}
                                             value="true"
-                                            defaultChecked={activeClient.enabled === true}
+                                            defaultChecked={activeService.enabled === true}
                                         />
                                         <label className="mb-0 ms-2 fs-5">Habilitado</label>
                                     </div>
@@ -184,7 +138,7 @@ function EditClientComponent() {
                                             id="enabled"
                                             onChange={handleInputChange}
                                             value="false"
-                                            defaultChecked={activeClient.enabled === false}
+                                            defaultChecked={activeService.enabled === false}
                                         />
                                         <label className="mb-0 ms-2 fs-5">Deshabilitado</label>
                                     </div>
@@ -198,14 +152,14 @@ function EditClientComponent() {
                             <button
                                 type="button"
                                 className="btn btn-primary mx-3 fw-bold btn-lg"
-                                onClick={editClient}
+                                onClick={editService}
                             >
                                 Editar
                             </button>
                             <button
                                 type="button"
                                 className="btn btn-primary mx-3 fw-bold btn-lg"
-                                onClick={() => navigate("/client")}
+                                onClick={() => navigate("/service")}
                             >
                                 Volver
                             </button>
@@ -217,4 +171,4 @@ function EditClientComponent() {
     )
 }
 
-export default EditClientComponent
+export default EditServiceComponent

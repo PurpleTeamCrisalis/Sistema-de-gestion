@@ -1,68 +1,49 @@
 import React from 'react'
 import NavComponent from '../NavComponent'
 import { useNavigate } from 'react-router-dom'
-import { useForm } from '../../hooks'
-import { useClientsStore } from '../../hooks/useClientsStore'
+import { useForm, useProductsStore } from '../../hooks'
 import Toastify from 'toastify-js'
 import "toastify-js/src/toastify.css"
-import { formValidations } from '../../utils/FormValidations'
-import HeaderComponent from "../HeaderComponent";
 
 const formDTO = {
     name: "",
-    lastname: "",
-    dni: "", 
-    phone: "", 
-    adress: "",
-    isbussiness: false,
-    bussinessname: "",
-    startdate: "", 
-    cuit: "", 
+    description: "",
+    basePrice: 0
 }
 
-function NewClientComponent() {
+function NewProductComponent() {
     const navigate = useNavigate();
-    const { startAddingClients, clients } = useClientsStore();
-    const { name, lastname, dni, phone, adress, isbussiness, bussinessname, startdate, cuit, handleInputChange, clearForm } = useForm(formDTO);
+    const { startAddingProduct, products } = useProductsStore();
+    const { name, description, basePrice, handleInputChange, clearForm } = useForm(formDTO);
 
-    function addClient(event) {
+    function addProduct(event) {
         event.preventDefault();
 
-        // Objeto del cliente
-        const client = {
+        // Objeto del producto
+        const product = {
             name,
-            lastname,
-            dni: parseInt(dni),
-            phone: parseInt(phone), 
-            adress,
-            isbussiness,
-            bussinessname,
-            startdate,
-            cuit: parseInt(0), 
+            description,
+            basePrice: parseFloat(basePrice),
         };
 
-        if (formValidations(client)) {
-            return console.log("Campos erroneos o vacios")
-        }
-
-        // Comprueba existencia de Cliente
-        const clienteExiste = clients?.find(clientList => { return clientList.dni === client.dni });
-        if (clienteExiste) {
+        // Comprueba existencia de producto
+        const productoExiste = products?.find(productList => { return productList.name === product.name });
+        if (productoExiste) {
             Toastify({
-                text: "El cliente ya existe",
+                text: "El producto ya existe",
                 duration: 2000,
                 style: {
                     background: "linear-gradient(to right, #f44336, #b71c1c)",
                 },
             }).showToast();
-            return console.error("Error: El cliente ya existe");
+            return console.error("Error: El producto ya existe");
         }
 
         try {
-            startAddingClients(client);
+            startAddingProduct(product);
             clearForm();
             Toastify({
-                text: "Cliente Creado",
+                text: "Producto Creado",
                 duration: 2000,
                 style: {
                     background: "linear-gradient(to right, #00b09b, #96c93d)",
@@ -81,20 +62,18 @@ function NewClientComponent() {
     }
 
     return (
-        <div className="bgGrey">
-        
-            <HeaderComponent />
-            <div className="container-fluid mainContainer">
-                <div className="secondContainer">
+        <>
+            <div className="container-fluid">
+                <div className="row">
                     {/* Navbar */}
                     <NavComponent />
 
                     {/* Imputs and Buttons */}
-                    <div className="tablePane">
+                    <div className="col-md-9 col-xl-10">
                         {/* Inputs */}
-                        <section className="container bg-primary rounded-3 mt-5 mb-4" style={{ minHeight: "70vh", width: "90%" }}>
+                        <section className="container bg-primary rounded-3 mt-5 mb-4" style={{ minHeight: "75vh", width: "90%" }}>
                             <div className="text-center py-4">
-                                <h3 className="fs-4 text-light">Añadir Cliente</h3>
+                                <h3 className="fs-4 text-light">Añadir Producto</h3>
                                 <hr className="bg-light" />
                             </div>
 
@@ -102,7 +81,7 @@ function NewClientComponent() {
                                 {/* Persona */}
 
                                 <div className="col-sm-6">
-                                    <h2 className='text-center'>Persona</h2>
+                                    <h2 className='text-center'>Producto</h2>
                                     <div className="row m-4">
                                         <div className="col-md-6 mb-3">
                                             <label htmlFor="name" className="form-label">Nombre</label>
@@ -116,47 +95,25 @@ function NewClientComponent() {
                                             />
                                         </div>
                                         <div className="col-md-6 mb-3">
-                                            <label htmlFor="lastname" className="form-label">Apellido</label>
+                                            <label htmlFor="description" className="form-label">Descripción</label>
                                             <input
                                                 type="text"
-                                                name="lastname"
-                                                id="lastname"
+                                                name="description"
+                                                id="description"
                                                 className="form-control"
                                                 onChange={handleInputChange}
-                                                value={lastname}
+                                                value={description}
                                             />
                                         </div>
                                         <div className="col-md-6 mb-3">
-                                            <label htmlFor="dni" className="form-label">D.N.I</label>
+                                            <label htmlFor="dni" className="form-label">Precio Base</label>
                                             <input
                                                 type="text"
-                                                name="dni"
-                                                id="dni"
+                                                name="basePrice"
+                                                id="basePrice"
                                                 className="form-control"
                                                 onChange={handleInputChange}
-                                                value={dni}
-                                            />
-                                        </div>
-                                        <div className="col-md-6 mb-3">
-                                            <label htmlFor="phone" className="form-label">Teléfono</label>
-                                            <input
-                                                type="text"
-                                                name="phone"
-                                                id="phone"
-                                                className="form-control"
-                                                onChange={handleInputChange}
-                                                value={phone}
-                                            />
-                                        </div>
-                                        <div className="col-12 mb-3">
-                                            <label htmlFor="adress" className="form-label">Dirección</label>
-                                            <input
-                                                type="text"
-                                                name="adress"
-                                                id="adress"
-                                                className="form-control"
-                                                onChange={handleInputChange}
-                                                value={adress}
+                                                value={basePrice}
                                             />
                                         </div>
                                     </div>
@@ -171,14 +128,14 @@ function NewClientComponent() {
                             <button
                                 type="button"
                                 className="btn btn-primary mx-3 fw-bold btn-lg"
-                                onClick={addClient}
+                                onClick={addProduct}
                             >
                                 Añadir
                             </button>
                             <button
                                 type="button"
                                 className="btn btn-primary mx-3 fw-bold btn-lg"
-                                onClick={() => navigate("/client")}
+                                onClick={() => navigate("/product")}
                             >
                                 Volver
                             </button>
@@ -186,8 +143,8 @@ function NewClientComponent() {
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     )
 }
 
-export default NewClientComponent
+export default NewProductComponent

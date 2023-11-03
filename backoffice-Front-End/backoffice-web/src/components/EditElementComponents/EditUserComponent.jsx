@@ -4,7 +4,7 @@ import { useForm, useUsersStore } from "../../hooks";
 import { useAuthStore } from "../../hooks";
 import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
-
+import HeaderComponent from '../HeaderComponent';
 // const formDTO = {
 //   username: "",
 // };
@@ -91,17 +91,19 @@ function EditUserComponent() {
   }
 
   return (
-    <>
-      <div className="container-fluid">
-        <div className="row">
+    <div className="bgGrey">
+    
+    <HeaderComponent/>
+      <div className="container-fluid mainContainer">
+        <div className="secondContainer">
           {/* Navbar */}
           <NavComponent />
 
           {/* Table and Buttons */}
-          <div className="col-md-9 col-xl-10">
+          <div className="tablePane">
             <section
               className="container bg-primary rounded-3 mt-5 mb-3"
-              style={{ minHeight: "75vh", width: "90%" }}
+              style={{ minHeight: "70vh", width: "90%" }}
             >
               <div className="">
                 <h2 className="text-center pt-4 pb-2">Editar Usuario</h2>
@@ -181,7 +183,7 @@ function EditUserComponent() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
