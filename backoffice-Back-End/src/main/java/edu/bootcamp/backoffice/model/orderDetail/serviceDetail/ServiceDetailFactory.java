@@ -2,6 +2,8 @@ package edu.bootcamp.backoffice.model.orderDetail.serviceDetail;
 
 import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.dto.ServiceDetailResponse;
 
+import java.security.Provider.Service;
+
 import org.springframework.stereotype.Component;
 
 import edu.bootcamp.backoffice.model.service.ServiceEntity;
@@ -29,7 +31,9 @@ public class ServiceDetailFactory {
   ) {
     return ServiceDetailResponse
     .builder()
+    .name(serviceDetail.getService().getName())
     .id(serviceDetail.getId())
+    .basePrice(serviceDetail.getService().getBasePrice())
     .serviceId(serviceDetail.getService().getId())
     .subTotal(serviceDetail.getSubTotal())
     .taxesApplied(serviceDetail.getTaxesApplied())

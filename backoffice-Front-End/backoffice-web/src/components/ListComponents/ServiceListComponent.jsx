@@ -3,66 +3,83 @@ import { useNavigate } from "react-router-dom";
 import NavComponent from '../NavComponent'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
+import HeaderComponent from '../HeaderComponent';
 import { useServicesStore } from '../../hooks'
 import Toastify from 'toastify-js'
 import "toastify-js/src/toastify.css"
 import Swal from 'sweetalert2'
 import '../../assets/styles/tableStyle.css'
+import AddRemoveButtonsComponent from "../AddRemoveButtonsComponent";
 
-function ServiceListComponent() {
+function ServiceListComponent()
+{
 
     const navigate = useNavigate();
 
     const { services, startLoadingServices, setActiveService, startDeletingService, activeService } = useServicesStore();
 
-    useEffect(() => {
+    useEffect(() =>
+    {
         startLoadingServices();
     }, []);
 
-    function checkActiveService(event, service) {
+    function checkActiveService(event, service)
+    {
 
         let checkboxes = document.getElementsByClassName("custom-checkbox");
         let checkbox = event.target;
         let tRow = checkbox.closest("tr");
-        for (const item of checkboxes) {
-            if (item.id == checkbox.id) {
-                if (checkbox.checked) {
+        for (const item of checkboxes)
+        {
+            if (item.id == checkbox.id)
+            {
+                if (checkbox.checked)
+                {
                     tRow.classList.add("table-active");
                     setActiveService(service);
-                } else {
+                } else
+                {
                     tRow.classList.remove("table-active");
                     setActiveService(null);
                 }
-            } else {
+            } else
+            {
                 item.checked = false;
                 item.closest("tr").classList.remove("table-active");
             }
         }
     }
 
-    function deleteService() {
-        if (activeService) {
-            if (activeService.enabled === true) {
+    function deleteService()
+    {
+        if (activeService)
+        {
+            if (activeService.enabled === true)
+            {
                 Swal.fire({
                     title: `¿Seguro que quieres eliminar ${activeService.name}?`,
                     showCancelButton: true,
                     confirmButtonText: 'confirmar',
                     cancelButtonText: 'cancelar',
-                }).then((result) => {
+                }).then((result) =>
+                {
                     /* Read more about isConfirmed, isDenied below */
-                    if (result.isConfirmed) {
+                    if (result.isConfirmed)
+                    {
                         startDeletingService();
                         Swal.fire('Servicio Eliminado', '', 'success')
                     }
                 });
-            } else {
+            } else
+            {
                 return Swal.fire({
                     icon: "error",
                     title: "Error",
                     text: "No puede eliminar un servicio que esté deshabilitado",
                 });
             }
-        } else {
+        } else
+        {
             Toastify({
                 text: "Seleccionar un servicio para eliminar",
                 duration: 2000,
@@ -73,29 +90,32 @@ function ServiceListComponent() {
         }
     }
 
-    function editService(event, service) {
+    function editService(event, service)
+    {
         setActiveService(service);
         navigate("/service/editService");
     }
 
     return (
-        <>
-            <div className="container-fluid">
-                <div className="row">
+        <div className="bgGrey">
+            <HeaderComponent />
+            <div className="container-fluid mainContainer">
+                <div className="secondContainer">
                     {/* Navbar */}
                     <NavComponent />
 
                     {/* Table and Buttons */}
-                    <div className="col-md-9 col-xl-10  ">
+                    <div className="tablePane">
                         {/* Button Section */}
-                        <section className='d-flex justify-content-center m-3'>
-                            <button type="button" className="btn btn-primary mx-3 fw-bold btn-lg" onClick={() => navigate("/service/newService")}>Nuevo</button>
-                            <button type="button" className="btn btn-primary mx-3 fw-bold btn-lg" onClick={deleteService}>Eliminar</button>
-                        </section>
+                        <AddRemoveButtonsComponent
+                            newHandler={() => navigate("/service/newService")}
+                            removeHandler={deleteService}
+                            name=""
+                        />
 
                         {/* Table Section */}
-                        <section className='d-flex justify-content-center rounded-3 shadow-lg' style={{ maxHeight: '85vh', overflowY: 'auto' }}>
-                            <table className="table table-primary">
+                        <section className='d-flex justify-content-center rounded-3 custom-shadow tabla-container-color' style={{ maxHeight: '85vh', overflowY: 'auto' }}>
+                            <table className="table table-color">
                                 <thead style={{ position: 'sticky', top: 0, borderBottom: '2px solid black' }}>
                                     <tr>
                                         <th scope="col">#</th>
@@ -108,7 +128,7 @@ function ServiceListComponent() {
                                 </thead>
                                 <tbody>
                                     {services?.map((service) => (
-                                        <tr key={service.id} className='table-primary'>
+                                        <tr key={service.id} className=''>
                                             <td>
                                                 <input
                                                     type="checkbox"
@@ -143,7 +163,7 @@ function ServiceListComponent() {
                     </div>
                 </div>
             </div >
-        </>
+        </div>
     )
 }
 

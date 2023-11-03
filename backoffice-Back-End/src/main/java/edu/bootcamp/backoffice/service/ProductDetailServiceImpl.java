@@ -12,26 +12,27 @@ import edu.bootcamp.backoffice.model.orderDetail.productDetail.dto.ProductDetail
 import edu.bootcamp.backoffice.model.product.Product;
 import edu.bootcamp.backoffice.repository.ProductDetailRepository;
 import edu.bootcamp.backoffice.service.Interface.ProductDetailService;
+import edu.bootcamp.backoffice.service.Interface.ProductService;
 
 @Service
-public class ProductDetailServiceImpl implements ProductDetailService{
+public class ProductDetailServiceImpl implements ProductDetailService {
 
   private final ProductDetailRepository productDetailRepository;
   private final ProductDetailFactory productDetailFactory;
+  private final ProductService productService;
 
   public ProductDetailServiceImpl(
       ProductDetailRepository productDetailRepository,
-      ProductDetailFactory productDetailFactory
-  ) {
+      ProductDetailFactory productDetailFactory,
+      ProductService productService) {
     this.productDetailRepository = productDetailRepository;
     this.productDetailFactory = productDetailFactory;
-
+    this.productService = productService;
   }
 
   public void registerProductDetail(
-    List<ProductDetail> createProductRequest,
-    Order order
-  ) {
+      List<ProductDetail> createProductRequest,
+      Order order) {
     for (ProductDetail productDetail : createProductRequest) {
       // Guardo productDetail en la BD (tabla product_detail)
       productDetail.setOrder(order);
@@ -46,9 +47,7 @@ public class ProductDetailServiceImpl implements ProductDetailService{
     List<ProductDetail> products = new ArrayList<ProductDetail>();
     for (ProductDetailRequest productDetailRequest : orderProductRequests) {
       // Valido que exista product
-      Product product = new Product(); // productService.get(productDetailRequest.getId())
-      product.setId(productDetailRequest.getProductId());
-      product.setBasePrice(100.00);
+      Product product = productService.getProductById(productDetailRequest.getProductId());
       // Creo la entidad productDetail
       ProductDetail productDetail = productDetailFactory.CreateEntity(productDetailRequest, product);
       // Agrego productDetail a lista products

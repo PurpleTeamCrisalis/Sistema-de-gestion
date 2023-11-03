@@ -6,6 +6,7 @@ import { useClientsStore } from '../../hooks/useClientsStore'
 import Toastify from 'toastify-js'
 import "toastify-js/src/toastify.css"
 import { formValidations } from '../../utils/FormValidations'
+import HeaderComponent from "../HeaderComponent";
 
 const formDTO = {
     name: "",
@@ -80,16 +81,18 @@ function NewClientComponent() {
     }
 
     return (
-        <>
-            <div className="container-fluid">
-                <div className="row">
+        <div className="bgGrey">
+        
+            <HeaderComponent />
+            <div className="container-fluid mainContainer">
+                <div className="secondContainer">
                     {/* Navbar */}
                     <NavComponent />
 
                     {/* Imputs and Buttons */}
-                    <div className="col-md-9 col-xl-10">
+                    <div className="tablePane">
                         {/* Inputs */}
-                        <section className="container bg-primary rounded-3 mt-5 mb-4" style={{ minHeight: "75vh", width: "90%" }}>
+                        <section className="container bg-primary rounded-3 mt-5 mb-4" style={{ minHeight: "70vh", width: "90%" }}>
                             <div className="text-center py-4">
                                 <h3 className="fs-4 text-light">Añadir Cliente</h3>
                                 <hr className="bg-light" />
@@ -183,7 +186,7 @@ function NewClientComponent() {
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     )
 }
 

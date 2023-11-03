@@ -1,0 +1,24 @@
+body {
+  background-color: black;
+}
+
+.gradient-sky {
+  /*background: linear-gradient(180deg, #6ba3f7 0%, rgb(168, 195, 236) 99.77%);*/
+ /* background: linear-gradient(180deg, #5f9af1 0%, #79abf5 52.12%, rgba(102, 157, 240, 0.87) 65.23%, rgb(161, 199, 255) 100%);*/
+  background: linear-gradient(180deg,
+    rgb(87, 149, 242, 1) 0%,
+    #4a7cc6 25.12%, 
+    rgb(124, 167, 230, 1) 75.23%, 
+    rgb(135, 176, 238, 0.9) 100%);
+
+  width: 100%;
+}
+
+.userAccountIcon{
+  width: 2.3rem;
+  height: 2.2rem;
+}
+
+.header-shadow {
+  box-shadow: 1px 1px 5px 0.1px rgba(0,0,0,0.5);
+}

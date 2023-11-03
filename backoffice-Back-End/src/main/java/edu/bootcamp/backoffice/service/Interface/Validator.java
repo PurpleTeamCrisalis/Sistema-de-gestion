@@ -3,74 +3,38 @@ package edu.bootcamp.backoffice.service.Interface;
 import edu.bootcamp.backoffice.model.SoftDeletable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Date;
-
 public interface Validator
 {
     public  <Entity extends SoftDeletable> Entity validateSoftDeletableEntityExistence(
-            int id,
+            Integer id,
             JpaRepository<Entity, Integer> repository
     );
 
     public <Entity> Entity completeValidationForId(
-            int id,
+            Integer id,
             JpaRepository<Entity, Integer> repository
         );
 
     public <Entity> Entity validateIdExistence(
-            int id,
+            Integer id,
             JpaRepository<Entity, Integer> repository
     );
 
     public void validateIdFormat(
-            int id,
-            StringBuilder errorBuilder
-    );
-
-    public void validateLongValue(
-            Long longNumber,
-            Long maxStrict,
-            Long minStrict,
-            String propertyName,
-            StringBuilder errorBuilder
-    );
-
-    public void validateIntegerValue(
-            Integer longNumber,
-            Integer maxStrict,
-            Integer minStrict,
-            String propertyName,
+            Integer id,
             StringBuilder errorBuilder
     );
 
     public void validateVarchar(
             String varchar,
-            int minLength,
-            int maxLength,
+            Integer minLength,
+            Integer maxLength,
             StringBuilder errors,
             String propertyName
     );
-
-    /*public void validateInterger(
-            Integer integer,
-            int minLength,
-            int maxLength,
-            StringBuilder errors,
-            String propertyName
-    );*/
 
     public Boolean isEmpty(
             String varchar,
-            StringBuilder errors
-    );
-
-    public Boolean isEmpty(
-            Boolean flag,
-            StringBuilder errors
-    );
-
-    public Boolean isEmpty(
-            Date date,
             StringBuilder errors
     );
 
@@ -85,5 +49,4 @@ public interface Validator
             Integer minLength,
             StringBuilder errors
     );
-
 }
