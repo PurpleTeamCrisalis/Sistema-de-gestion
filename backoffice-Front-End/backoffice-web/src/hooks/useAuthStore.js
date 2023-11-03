@@ -29,6 +29,20 @@ export const useAuthStore = () => {
       });
     }
   }
+  async function startPassRecovery(email) {
+    try {
+      // Peticion a API para Login
+      const response = await authApi.post("/recover", { email });
+
+    } catch (error) {
+      // Ingresa al catch si el fetch no encuentra datos
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "No existe usuario registrado con ese E-mail",
+      });
+    }
+  }
 
   function startLogout() {
     // Cambia estado a deslogueado
@@ -60,7 +74,8 @@ export const useAuthStore = () => {
     startLogin,
     startLogout,
     checkAuthToken,
-    changeAuthUsername
+    changeAuthUsername,
+    startPassRecovery
 
   };
 };

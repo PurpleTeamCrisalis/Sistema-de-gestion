@@ -9,6 +9,7 @@ import Toastify from 'toastify-js'
 import "toastify-js/src/toastify.css"
 import Swal from 'sweetalert2'
 import AddRemoveButtonsComponent from "../AddRemoveButtonsComponent";
+import '../../assets/styles/tableStyle.css'
 
 function ProductListComponent()
 {
@@ -142,8 +143,8 @@ function ProductListComponent()
                                                 />
                                             </td>
                                             <td>{product.name}</td>
-                                            <td>{product.description}</td>
-                                            <td>{product.basePrice}</td>
+                                            <td className="text-overflow">{product.description}</td>
+                                            <td>{"$"+product.basePrice}</td>
                                             <td>{product.enabled ? "habilitado" : "deshabilitado"}</td>
                                             <td>
                                                 <FontAwesomeIcon

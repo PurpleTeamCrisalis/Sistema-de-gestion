@@ -71,7 +71,7 @@ public class ClientServiceImpl implements ClientService {
             );
     }
 
-    public ClientResponse update(Integer id, UpdateClientRequest clientRequest) {
+    public ClientResponse update(int id, UpdateClientRequest clientRequest) {
         validateUpdateRequest(id, clientRequest);
         Client client = validateUpdateConflicts(id, clientRequest);
         client = clientRepository.save(client);
@@ -88,7 +88,7 @@ public class ClientServiceImpl implements ClientService {
         validateErrors(errors);
     }
 
-    private Client validateUpdateConflicts(Integer id, UpdateClientRequest clientDto)
+    private Client validateUpdateConflicts(int id, UpdateClientRequest clientDto)
     {
         Client client = validator.completeValidationForId(
                 id,
@@ -142,7 +142,7 @@ public class ClientServiceImpl implements ClientService {
         return client;
     }
 
-    public ClientResponse get(Integer id) {
+    public ClientResponse get(int id) {
         Client client = validator.completeValidationForId(
                 id,
                 clientRepository
@@ -150,7 +150,7 @@ public class ClientServiceImpl implements ClientService {
         return dtoFactory.createResponse(client);
     }
 
-    public Client getClientEntity(Integer id) {
+    public Client getClientEntity(int id) {
         return validator.completeValidationForId(id, clientRepository);
     }
 
@@ -162,7 +162,7 @@ public class ClientServiceImpl implements ClientService {
         return dtos;
     }
 
-    public ClientResponse delete(Integer id) {
+    public ClientResponse delete(int id) {
         Client client = validator.validateSoftDeletableEntityExistence(
                 id,
                 clientRepository

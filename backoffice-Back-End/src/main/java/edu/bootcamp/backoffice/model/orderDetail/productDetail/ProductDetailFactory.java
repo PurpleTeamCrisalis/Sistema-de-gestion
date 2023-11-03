@@ -34,8 +34,6 @@ public class ProductDetailFactory {
     return ProductDetailResponse 
     .builder()
     .id(productDetail.getId())
-    .name(productDetail.getProduct().getName())
-    .basePrice(productDetail.getProduct().getBasePrice())
     .productId(productDetail.getProduct().getId())
     .quantity(productDetail.getQuantity())
     .subTotal(productDetail.getSubTotal())

@@ -12,23 +12,19 @@ import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.dto.ServiceDetail
 import edu.bootcamp.backoffice.model.service.ServiceEntity;
 import edu.bootcamp.backoffice.repository.ServiceDetailRepository;
 import edu.bootcamp.backoffice.service.Interface.ServiceDetailService;
-import edu.bootcamp.backoffice.service.Interface.ServiceService;
 
 @Service
 public class ServiceDetailServiceImpl implements ServiceDetailService{
 
   private final ServiceDetailRepository serviceDetailRepository;
   private final ServiceDetailFactory serviceDetailFactory;
-  private final ServiceService serviceService;
 
   public ServiceDetailServiceImpl (
     ServiceDetailFactory serviceDetailFactory,
-    ServiceDetailRepository serviceDetailRepository,
-    ServiceService serviceService
+    ServiceDetailRepository serviceDetailRepository
   ) {
     this.serviceDetailFactory = serviceDetailFactory;
     this.serviceDetailRepository = serviceDetailRepository;
-    this.serviceService = serviceService;
   }
 
   public void registerServiceDetail(
@@ -48,7 +44,9 @@ public class ServiceDetailServiceImpl implements ServiceDetailService{
     List<ServiceDetail> services = new ArrayList<ServiceDetail>();
     for (ServiceDetailRequest serviceDetailRequest : orderServiceRequests) {
       // Valido que exista Service --Por ahora lo hardcodeo jeje--
-      ServiceEntity service = serviceService.getServiceById(serviceDetailRequest.getServiceId());
+      ServiceEntity service = new ServiceEntity(); // serviceService.get(serviceDetailRequest.getId())
+      service.setId(serviceDetailRequest.getServiceId());
+      service.setBasePrice(100.00);
       // Creo la entidad serviceDetail
       ServiceDetail serviceDetail = serviceDetailFactory.CreateEntity(service);
       // Agrego serviceDetail a la orden
