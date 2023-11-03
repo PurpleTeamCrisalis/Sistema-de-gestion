@@ -45,10 +45,10 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/auth/login").permitAll()
-                .antMatchers("/h2-console").permitAll()
+                .antMatchers("/auth/recover").permitAll()
+                .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/**").authenticated()
-                .antMatchers("/**").authenticated()
-                //.antMatchers("/**").permitAll()
+//              .antMatchers("/**").permitAll()
                 .and()
                 .httpBasic();
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
