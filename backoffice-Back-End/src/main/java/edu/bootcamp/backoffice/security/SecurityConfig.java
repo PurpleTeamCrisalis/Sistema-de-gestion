@@ -8,7 +8,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,7 +32,6 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         //disabling frameOptions so h2-console can be accessed
         http.headers().frameOptions().disable();
-//        http.headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
         // turn off checking for CSRF tokens
         http.csrf().disable();
 
@@ -46,10 +44,11 @@ public class SecurityConfig {
                 .cors()
                 .and()
                 .authorizeRequests()
-                // .antMatchers("/auth/login").permitAll()
-                // .antMatchers("/h2-console/**").permitAll()
-                // .antMatchers("/**").authenticated()
-               .antMatchers("/**").permitAll()
+                .antMatchers("/auth/login").permitAll()
+                .antMatchers("/auth/recover").permitAll()
+                .antMatchers("/h2-console/**").permitAll()
+                .antMatchers("/**").authenticated()
+//              .antMatchers("/**").permitAll()
                 .and()
                 .httpBasic();
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
