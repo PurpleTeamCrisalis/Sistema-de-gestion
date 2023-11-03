@@ -9,7 +9,7 @@ function HeaderComponent() {
   const { startLogout } = useAuthStore();
 
   return (
-    <nav className="navbar navbar-expand-lg withShadow gradient-sky">
+    <nav className="navbar navbar-expand-lg header-shadow gradient-sky">
       <div className="container-fluid ">
         <img
           className="my-2"

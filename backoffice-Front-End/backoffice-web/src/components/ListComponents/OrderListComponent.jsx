@@ -46,15 +46,15 @@ function OrderListComponent() {
   }
 
   return (
-    <>
+    <div className="bgGrey">
       <HeaderComponent />
-      <div className="container-fluid">
-        <div className="row">
+      <div className="container-fluid mainContainer">
+        <div className="secondContainer">
           {/* Navbar */}
           <NavComponent />
 
           {/* Table and Buttons */}
-          <div className="col-md-9 col-xl-10 bgGrey">
+          <div className="tablePane">
             {/* Button Section */}
             {/*<section className='d-flex justify-content-center m-3 gap-2'>
                 <button type="button" className="btn fw-bold btn-lg bgAdd circle iconButton" onClick={()=>{}} data-bs-toggle="modal" data-bs-target="#staticBackdrop">
@@ -62,7 +62,7 @@ function OrderListComponent() {
                 </button>
                 {/*<button type="button" className="btn fw-bold btn-lg bgRemove circle iconButton" onClick={deleteUser}>
                   <FontAwesomeIcon className="gradientWhite" icon={faTrash} color="white"/>
-  </button>}
+        </button>}
                 <ScrollModalComponent list={orders}/>
             </section>*/}
 
@@ -82,10 +82,10 @@ function OrderListComponent() {
 
             {/* Table Section */}
             <section
-              className="d-flex justify-content-center rounded-3 shadow-lg"
+              className="d-flex justify-content-center rounded-3 custom-shadow tabla-container-color"
               style={{ maxHeight: "85vh", overflowY: "auto" }}
             >
-              <table className="table table-primary">
+              <table className="table table-color">
                 {/* Header de la table */}
                 <thead
                   style={{
@@ -147,7 +147,7 @@ function OrderListComponent() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

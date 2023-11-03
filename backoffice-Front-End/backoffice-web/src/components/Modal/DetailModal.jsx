@@ -102,7 +102,7 @@ export const DetailModal = () => {
               className="btn btn-primary"
               data-bs-dismiss="modal"
             >
-              Close
+              Cerrar
             </button>
           </div>
         </div>

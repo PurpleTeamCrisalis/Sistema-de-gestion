@@ -10,6 +10,7 @@ import "toastify-js/src/toastify.css";
 import Swal from "sweetalert2";
 import HeaderComponent from "../HeaderComponent";
 import AddRemoveButtonsComponent from "../AddRemoveButtonsComponent";
+import "../../assets/styles/navStyle.css";
 
 function UserListComponent() {
   //   const { data } = useFetch("http://localhost:8080/user");
@@ -101,15 +102,15 @@ function UserListComponent() {
   }
 
   return (
-    <>
+    <div className="bgGrey">
       <HeaderComponent />
-      <div className="container-fluid">
-        <div className="row">
+      <div className="container-fluid mainContainer">
+        <div className="secondContainer">
           {/* Navbar */}
           <NavComponent />
 
           {/* Table and Buttons */}
-          <div className="col-md-9 col-xl-10 bgGrey">
+          <div className="tablePane">
             {/* Button Section */}
             <AddRemoveButtonsComponent
               newHandler={newUser}
@@ -119,10 +120,10 @@ function UserListComponent() {
 
             {/* Table Section */}
             <section
-              className="d-flex justify-content-center rounded-3 shadow-lg"
+              className="d-flex justify-content-center rounded-3 custom-shadow tabla-container-color"
               style={{ maxHeight: "85vh", overflowY: "auto" }}
             >
-              <table className="table table-primary">
+              <table className="table table-color">
                 {/* Header de la table */}
                 <thead
                   style={{
@@ -173,7 +174,7 @@ function UserListComponent() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

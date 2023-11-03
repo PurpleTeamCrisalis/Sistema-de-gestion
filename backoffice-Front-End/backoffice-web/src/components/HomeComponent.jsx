@@ -2,67 +2,60 @@ import logoUser from "../assets/images/iconUser.png";
 import logoEmpresa from "../assets/images/logoEmpresa.png"
 import { LuFileSignature, LuFilePlus2, LuFileClock } from 'react-icons/lu';
 import '../assets/styles/homeStyle.css'
-import NavPage from "../pages/NavPage";
+import NavComponent from "../pages/NavPage";
 import { useAuthStore } from "../hooks/useAuthStore";
 import HeaderComponent from './HeaderComponent';
+import { useNavigate } from "react-router-dom";
 
-const Home = () => {
+const Home = () =>
+{
     const { user } = useAuthStore()
+    const navigate = useNavigate();
 
     const dashboard = [
         {
             id: 1,
-            title: 'historial',
-            image: <LuFileClock className="icon" />
+            title: 'Registrar Cliente',
+            image: <LuFileClock className="icon" />,
+            navigate: () => navigate("/client")
         },
         {
             id: 2,
             title: 'Generar Pedido',
-            image: <LuFilePlus2 className="icon" />
-        },
-        {
-            id: 3,
-            title: 'Gestionar Pedido',
-            image: <LuFileSignature className="icon" />
+            image: <LuFilePlus2 className="icon" />,
+            navigate: () => navigate("/order/newOrder")
         }
     ]
 
     return (
-        <>
-        <HeaderComponent/>
-        <div className="d-flex ">
-            <NavPage />
-            <section className="w-100 p-5 bgGrey">
-                <div className='d-flex justify-content-between'>
-                    <div>
-                        <div className='d-flex align-items-center'>
-                            <h1>Bienvenido/a</h1>
-                            <div>
-                                <img src={logoUser} alt='icono de usuario' />
+        <div className="bgGrey">
+            <HeaderComponent />
+            <div className="container-fluid mainContainer">
+                <div className="secondContainer">
+                    <NavComponent />
+                    <section className="mx-auto mt-5 d-flex" style={{ flexDirection: "column" }}>
+                        <h1 className="mx-auto mt-5 h2" >Bienvenido/a</h1>
+                        <p className="fw-bolder mx-auto h3">{user.username}</p>
+                        <div className="mx-auto">
+                            <div className='d-flex justify-content-around' style={{ marginTop: "-2rem" }}>
+                                {dashboard.map((item) => (
+                                <div onClick={() => item.navigate()} key={item.id} class="e-card playing mx-5">
+                                    <div className="image"></div>
+                                    <div className="wave"></div>
+                                    <div className="wave"></div>
+                                    <div className="wave"></div>
+                                    <div className="infotop" style={{ marginTop: "-3rem" }}>
+                                        {item.image}
+                                        <div style={{ marginTop: "-1rem" }}>{item.title}</div>
+                                    </div>
+                                </div>
+                                ))}
                             </div>
                         </div>
-                    </div>
-                    <div className='d-flex align-items-center'>
-                        <div>
-                            <img src={logoEmpresa} alt='Logo empresa' />
-                        </div>
-                        <h2>FINNEGANS</h2>
-                    </div>
+                    </section>
                 </div>
-                <p className="fw-bolder">{user.username}</p>
-                <div className="mt-md-5">
-                    <div className='d-flex justify-content-around'>
-                        {dashboard.map((item) => (
-                            <div key={item.id} className='contentItem d-flex flex-column align-items-center justify-content-center'>
-                                {item.image}
-                                <h3>{item.title}</h3>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
+            </div>
         </div>
-        </>
     )
 }
 

@@ -39,6 +39,8 @@ export const ClientModal = () => {
   }
 
   function handleButtonClick() {
+    if(client == null)
+      return;
     addClient(client);
     cleanCheckBoxes();
   }

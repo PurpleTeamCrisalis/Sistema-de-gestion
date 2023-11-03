@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import NavComponent from "../NavComponent";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import AddRemoveButtonsComponent from "../AddRemoveButtonsComponent";
 import { useNavigate } from "react-router-dom";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { useChargesStore } from "../../hooks";
@@ -9,6 +8,8 @@ import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
 import Swal from "sweetalert2";
 import HeaderComponent from "../HeaderComponent";
+import "../../assets/styles/navStyle.css";
+import AddRemoveButtonsComponent from "../AddRemoveButtonsComponent";
 
 function ChargeListComponent() {
   const navigate = useNavigate();
@@ -84,16 +85,16 @@ function ChargeListComponent() {
   }
 
   return (
-    <>
+    <div className="bgGrey">
       <HeaderComponent />
-      <div className="container-fluid">
-        <div className="row">
+      <div className="container-fluid mainContainer">
+        <div className="secondContainer">
           {/* Navbar */}
           <NavComponent />
 
           {/* Table and Buttons */}
-          <div className="col-md-9 col-xl-10">
-            {/* Button Section */}
+          <div className="tablePane">
+            {/* Button Section
             <section className="d-flex justify-content-center m-3">
               <button
                 type="button"
@@ -109,14 +110,19 @@ function ChargeListComponent() {
               >
                 Eliminar
               </button>
-            </section>
+            </section> */}
+            <AddRemoveButtonsComponent
+              newHandler={() => navigate("/charge/newCharge")}
+              removeHandler={deleteCharge}
+              name=""
+            />
 
             {/* Table Section */}
             <section
-              className="d-flex justify-content-center rounded-3 shadow-lg"
+              className="d-flex justify-content-center rounded-3 custom-shadow tabla-container-color"
               style={{ maxHeight: "85vh", overflowY: "auto" }}
             >
-              <table className="table table-primary">
+              <table className="table table-color">
                 {/* Header de la table */}
                 <thead
                   style={{
@@ -135,7 +141,7 @@ function ChargeListComponent() {
                 </thead>
                 <tbody>
                   {charges?.map((charge) => (
-                    <tr key={charge.id} className="table-primary">
+                    <tr key={charge.id} className="">
                       <td>
                         <input
                           type="checkbox"
@@ -169,7 +175,7 @@ function ChargeListComponent() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

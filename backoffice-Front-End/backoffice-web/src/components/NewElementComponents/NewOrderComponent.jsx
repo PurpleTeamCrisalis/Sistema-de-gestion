@@ -61,7 +61,7 @@ export const NewOrderComponent = () => {
         background: "linear-gradient(to right, #00b09b, #96c93d)",
       },
     }).showToast();
-    navigate("-1")
+    navigate("/order")
   }
 
   function checkActiveDetail(event, detail) {
@@ -93,18 +93,17 @@ export const NewOrderComponent = () => {
   }
 
   return (
-    <>
+    <div className="bgGrey">
       <HeaderComponent />
-      <div className="container-fluid">
-        <div className="row">
+      <div className="container-fluid mainContainer">
+        <div className="secondContainer">
           {/* Navbar */}
           <NavComponent />
-          <div className="col-md-9 col-xl-10 bgGrey">
+          <div className="tablePane ps-4 pe-3 mt-2">
             {/* Add & Remove */}
-            <div>
               <section
-                className="container shadow p-0 mt-3"
-                style={{ maxHeight: "85vh", overflowY: "auto" }}
+                className="container mt-3 rounded-3  custom-shadow tabla-container-color"
+                style={{ overflowY: "auto" }}
               >
                 <div className="bg-white rounded-3 overflow-hidden d-flex align-items-center">
                   <button
@@ -174,10 +173,10 @@ export const NewOrderComponent = () => {
               </section>
               <section
                 className="container p-0 mt-3"
-                style={{ maxHeight: "85vh", overflowY: "auto" }}
+                style={{ overflowY: "auto" }}
               >
-                <h1 className="fs-5">Productos</h1>
-                <div className="bg-white rounded-3 overflow-hidden d-flex align-items-center">
+                <h2 className="fs-5 mt-4">Productos</h2>
+                <div className="bg-white rounded-3 overflow-hidden d-flex align-items-center container mt-2 rounded-3  custom-shadow tabla-container-color">
                   <table
                     className="table table-hover"
                     style={{ minWidth: "100%" }}
@@ -229,7 +228,7 @@ export const NewOrderComponent = () => {
                     </tbody>
                   </table>
                 </div>
-                <h1 className="fs-5 mt-3">Servicios</h1>
+                <h2 className="fs-5 mt-5">Servicios</h2>
                 <div className="bg-white rounded-3 overflow-hidden d-flex align-items-center">
                   <table
                     className="table table-hover"
@@ -273,10 +272,9 @@ export const NewOrderComponent = () => {
                   </table>
                 </div>
               </section>
-            </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };

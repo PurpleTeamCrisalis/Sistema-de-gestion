@@ -8,9 +8,13 @@ import { useClientsStore } from "../../hooks/useClientsStore";
 import Swal from "sweetalert2";
 import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
+import "../../assets/styles/navStyle.css";
 import EmptyList from "../../utils/EmptyList";
+import AddRemoveButtonsComponent from "../AddRemoveButtonsComponent";
+import { faCirclePlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 
-function ClientListComponent() {
+function ClientListComponent()
+{
   const navigate = useNavigate();
   const [abierto, setAbierto] = useState(false);
   const {
@@ -21,82 +25,104 @@ function ClientListComponent() {
     setActiveClient,
   } = useClientsStore();
 
-  useEffect(() => {
+  useEffect(() =>
+  {
     startLoadingClient();
   }, []);
 
   // Modal de nuevo cliente
-  const abrirModal = () => {
+  const abrirModal = () =>
+  {
     setAbierto(!abierto);
   };
 
-  function checkActiveClient(event, client) {
+  function checkActiveClient(event, client)
+  {
     let checkboxes = document.getElementsByClassName("custom-checkbox");
     let checkbox = event.target;
     let tRow = checkbox.closest("tr");
-    for (const item of checkboxes) {
-      if (item.id == checkbox.id) {
-        if (checkbox.checked) {
+    for (const item of checkboxes)
+    {
+      if (item.id == checkbox.id)
+      {
+        if (checkbox.checked)
+        {
           tRow.classList.add("table-active");
           setActiveClient(client);
-        } else {
+        } else
+        {
           tRow.classList.remove("table-active");
           setActiveClient(null);
         }
-      } else {
+      } else
+      {
         item.checked = false;
         item.closest("tr").classList.remove("table-active");
       }
     }
   }
 
-  function editClient(client) {
+  function editClient(client)
+  {
     setActiveClient(client);
-    if (client.isbussiness) {
+    if (client.isbussiness)
+    {
       navigate("/client/editClientCompany");
-    } else {
+    } else
+    {
       navigate("/client/editClient");
     }
   }
 
-  function deleteClient() {
-    if (activeClient) {
-      if (activeClient.enabled === true) {
-        if (activeClient.isbussiness) {
+  function deleteClient()
+  {
+    if (activeClient)
+    {
+      if (activeClient.enabled === true)
+      {
+        if (activeClient.isbussiness)
+        {
           Swal.fire({
             title: `¿Seguro que quieres eliminar a ${activeClient.bussinessname} ?`,
             showCancelButton: true,
             confirmButtonText: "confirmar",
             cancelButtonText: "cancelar",
-          }).then((result) => {
+          }).then((result) =>
+          {
             /* Read more about isConfirmed, isDenied below */
-            if (result.isConfirmed) {
+            if (result.isConfirmed)
+            {
               startDeletingClient();
               Swal.fire("Empresa Eliminado", "", "success");
             }
           });
-        } else {
+        } else
+        {
           Swal.fire({
             title: `¿Seguro que quieres eliminar a ${activeClient.name} ${activeClient.lastname} ?`,
             showCancelButton: true,
             confirmButtonText: "confirmar",
             cancelButtonText: "cancelar",
-          }).then((result) => {
+          }).then((result) =>
+          {
             /* Read more about isConfirmed, isDenied below */
-            if (result.isConfirmed) {
+            if (result.isConfirmed)
+            {
               startDeletingClient();
               Swal.fire("Cliente Eliminado", "", "success");
             }
           });
         }
-      } else {
+      } else
+      {
         return Swal.fire({
           icon: "error",
           title: "Error",
           text: "No puede eliminar un cliente que esté deshabilitado",
         });
       }
-    } else {
+    } else
+    {
       Toastify({
         text: "Seleccionar un Cliente para eliminar",
         duration: 2000,
@@ -107,20 +133,20 @@ function ClientListComponent() {
     }
   }
   return (
-    <>
+    <div className="bgGrey">
       <HeaderComponent />
-      <div className="container-fluid">
-        <div className="row">
+      <div className="container-fluid mainContainer">
+        <div className="secondContainer">
           {/* Navbar */}
           <NavComponent />
 
           {/* Table and Buttons */}
-          <div className="col-md-9 col-xl-10  bgGrey">
-            {/* Button Section */}
-            <section className="d-flex justify-content-center m-3">
+          <div className="tablePane">
+            {/* Button Section 
+            <section className="d-flex justify-content-center m-3 ">
               <button
                 type="button"
-                className="btn btn-primary mx-3 fw-bold btn-lg shadow-sm"
+                className="btn btn-primary mx-3 fw-bold btn-lg"
                 data-bs-toggle="modal"
                 data-bs-target="#chooseClientModal"
                 onClick={abrirModal}
@@ -134,15 +160,29 @@ function ClientListComponent() {
               >
                 Eliminar
               </button>
+            </section>*/}
+            <section className='d-flex justify-content-center m-3 gap-4'>
+              <button 
+                type="button" 
+                className="btn fw-bold btn-lg bgAdd circle" 
+                onClick={abrirModal}
+                data-bs-toggle="modal"
+                data-bs-target="#chooseClientModal"
+                >
+                <FontAwesomeIcon icon={faCirclePlus} color="white" />
+              </button>
+              <button type="button" className="btn fw-bold btn-lg bgRemove circle" onClick={deleteClient}>
+                <FontAwesomeIcon icon={faTrash} color="white" />
+              </button>
             </section>
 
             {/* Table Section */}
             {clients.length != 0 && (
               <section
-                className="d-flex justify-content-center rounded-3 shadow-lg"
+                className="d-flex justify-content-center rounded-3 custom-shadow tabla-container-color"
                 style={{ maxHeight: "85vh", overflowY: "auto" }}
               >
-                <table className="table table-primary">
+                <table className="table table-color">
                   <thead
                     style={{
                       position: "sticky",
@@ -251,7 +291,8 @@ function ClientListComponent() {
                   type="button"
                   data-bs-dismiss="modal"
                   className="btn btn-primary btn-lg fw-bold"
-                  onClick={() => {
+                  onClick={() =>
+                  {
                     navigate("/client/newClient");
                   }}
                 >
@@ -261,7 +302,8 @@ function ClientListComponent() {
                   type="button"
                   data-bs-dismiss="modal"
                   className="btn btn-primary btn-lg fw-bold"
-                  onClick={() => {
+                  onClick={() =>
+                  {
                     navigate("/client/newCompanyClient");
                   }}
                 >
@@ -272,7 +314,7 @@ function ClientListComponent() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
