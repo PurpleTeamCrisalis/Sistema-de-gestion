@@ -7,7 +7,7 @@ export const ClientModal = () => {
   const [client, setClient] = useState(null);
 
   useEffect(() => {
-    startLoadingClient();
+    if(clients.length === 0)startLoadingClient();
   }, []);
 
   function checkActiveClient(event, client) {

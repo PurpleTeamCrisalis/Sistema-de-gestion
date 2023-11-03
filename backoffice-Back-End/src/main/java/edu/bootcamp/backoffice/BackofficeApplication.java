@@ -23,7 +23,7 @@ public class BackofficeApplication {
 				User user = factory.CreateUserEntity(
 						"admin",
 //						"admin@finnegans.com",
-						"oscarschwerdt@gmail.com",
+						"lucianomalleret8@gmail.com",
 						passwordEncoder.encode("admin")
 				);
 				userRepository.save(user);

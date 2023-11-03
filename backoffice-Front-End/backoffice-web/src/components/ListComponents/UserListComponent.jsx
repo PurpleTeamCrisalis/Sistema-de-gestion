@@ -22,13 +22,13 @@ function UserListComponent() {
 
   const [filteredList, setFilteredList] = useState(users);
 
-  
+
 
 
   // CUANDO SE USE EL COMPONENTE, SE VA TRAER LA LISTA DE USUARIOS
 
   useEffect(() => {
-    startLoadingUsers();
+    if(users.length === 0)startLoadingUsers();
   }, []);
 
   function checkActiveUser(event, user) {
@@ -117,12 +117,13 @@ function UserListComponent() {
               removeHandler={deleteUser}
               name=""
             />
-
+            <SearchBar rawList={users} setFilteredList={setFilteredList} compareTag={"username"}/>
             {/* Table Section */}
             <section
               className="d-flex justify-content-center rounded-3 custom-shadow tabla-container-color"
               style={{ maxHeight: "85vh", overflowY: "auto" }}
             >
+
               <table className="table table-color">
                 {/* Header de la table */}
                 <thead

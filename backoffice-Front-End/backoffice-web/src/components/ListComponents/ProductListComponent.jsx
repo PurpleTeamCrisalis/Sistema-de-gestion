@@ -20,7 +20,7 @@ function ProductListComponent()
 
     useEffect(() =>
     {
-        startLoadingProducts();
+        if(products.length === 0)startLoadingProducts();
     }, []);
 
     function checkActiveProduct(event, product)

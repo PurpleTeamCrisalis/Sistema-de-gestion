@@ -29,4 +29,10 @@ public class ProductDetailResponse {
 
   @JsonProperty("taxCharges")
   private Double taxCharges;
+
+  @JsonProperty("name")
+  private String name;
+
+  @JsonProperty("basePrice")
+  private Double basePrice;
 }

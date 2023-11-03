@@ -3,6 +3,7 @@ import { useOrdersStore } from "../../hooks";
 
 export const DetailModal = () => {
   const { selectedOrder } = useOrdersStore();
+  console.log(selectedOrder);
   return (
     <div
       className="modal fade"

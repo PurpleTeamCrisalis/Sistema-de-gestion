@@ -31,6 +31,7 @@ export function useClientsStore() {
 
   async function startAddingClients(client) {
     try {
+      
       const response = await projectApi.post("/client/", client);
 
       if (response && response.data) {
@@ -46,7 +47,7 @@ export function useClientsStore() {
             isbussiness: data.isbussiness,
             startdate: data.startdate,
             cuit: data.cuit,
-            enables: data.enabled,
+            enabled: data.enabled,
             id: data.id,
           })
         );

@@ -7,7 +7,7 @@ export const ServiceModal = () => {
   const [servicesSelected, setServicesSelected] = useState([]);
 
   useEffect(() => {
-    startLoadingServices();
+    if(services.length === 0)startLoadingServices();
   }, []);
 
   function checkActiveItem(event, bien) {

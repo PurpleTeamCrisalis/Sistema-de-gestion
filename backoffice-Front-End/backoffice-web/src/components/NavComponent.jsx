@@ -41,7 +41,8 @@ export function NavComponent() {
 
 
   return (
-    <div className="col-auto me-2 px-0 min-vh-100 d-flex flex-column align-items-center align-items-sm-start custom-shadow bg-white">{/*col-md-3 col-xl-2*/}
+    <div className="col-auto me-2 px-0 d-flex flex-column align-items-center align-items-sm-start custom-shadow bg-white"
+    style={{minHeight:"89vh"}}>{/*col-md-3 col-xl-2*/}
       
       <hr className="mb-5" />
       <Link to="/" className="ps-4 py-2 bg-hover container">

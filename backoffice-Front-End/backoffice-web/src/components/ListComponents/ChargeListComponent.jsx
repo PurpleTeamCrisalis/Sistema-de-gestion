@@ -23,7 +23,7 @@ function ChargeListComponent() {
   } = useChargesStore();
 
   useEffect(() => {
-    startLoadingCharges();
+    if(charges.length === 0) startLoadingCharges();
   }, []);
 
   function checkActiveCharge(event, charge) {

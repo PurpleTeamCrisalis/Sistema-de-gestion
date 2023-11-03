@@ -20,7 +20,7 @@ function ServiceListComponent()
 
     useEffect(() =>
     {
-        startLoadingServices();
+        if(services.length === 0)startLoadingServices();
     }, []);
 
     function checkActiveService(event, service)

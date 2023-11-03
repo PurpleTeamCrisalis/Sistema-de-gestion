@@ -52,5 +52,3 @@
 /backoffice-Front-End/backoffice-web/npm-debug.log*
 /backoffice-Front-End/backoffice-web/yarn-debug.log*
 /backoffice-Front-End/backoffice-web/yarn-error.log*
-
-/backoffice-Back-End/src/main/resources/application-local.properties

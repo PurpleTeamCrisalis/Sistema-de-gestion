@@ -39,6 +39,8 @@ public class ProductDetailFactory {
     .subTotal(productDetail.getSubTotal())
     .taxCharges(productDetail.getTaxCharges())
     .taxesApplied(productDetail.getTaxesApplied())
+            .name(productDetail.getProduct().getName())
+            .basePrice(productDetail.getProduct().getBasePrice())
     .build();
   }
 }

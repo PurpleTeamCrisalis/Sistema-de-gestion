@@ -27,7 +27,7 @@ function ClientListComponent()
 
   useEffect(() =>
   {
-    startLoadingClient();
+    if(clients.length === 0)startLoadingClient();
   }, []);
 
   // Modal de nuevo cliente

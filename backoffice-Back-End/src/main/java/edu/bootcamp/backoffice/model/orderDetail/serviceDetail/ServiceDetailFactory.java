@@ -34,6 +34,8 @@ public class ServiceDetailFactory {
     .subTotal(serviceDetail.getSubTotal())
     .taxesApplied(serviceDetail.getTaxesApplied())
     .taxCharges(serviceDetail.getTaxCharges())
+            .name(serviceDetail.getService().getName())
+            .basePrice(serviceDetail.getService().getBasePrice())
     .build();
   }
 }

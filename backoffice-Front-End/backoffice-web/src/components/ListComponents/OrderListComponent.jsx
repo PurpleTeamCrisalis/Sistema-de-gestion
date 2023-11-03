@@ -16,7 +16,7 @@ function OrderListComponent() {
     useOrdersStore();
 
   useEffect(() => {
-    startLoadingOrders();
+    if(orders.length === 0)startLoadingOrders();
   }, []);
 
   function checkActiveOrder(event, user) {
