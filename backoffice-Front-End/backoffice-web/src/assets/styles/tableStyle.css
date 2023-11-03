@@ -4,3 +4,13 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+.custom-shadow {
+    box-shadow: 1px 3px 5px 0.2px rgba(0,0,0,0.3);
+}
+
+.table-color,
+.tabla-container-color {
+    background-color: white;
+    margin: 0 1rem;
+}

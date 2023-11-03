@@ -52,7 +52,7 @@ export const LoginComponent = () => {
         </span>
       </div>
       <div
-        className="container d-flex flex-column align-item-center justify-content-center bg-primary rounded-4 mt-5"
+        className="container d-flex flex-column align-item-center justify-content-center bg-primary rounded-4 mt-5 shadow-lg"
         style={{ width: "380px", height: "330px" }}
       >
         <div className="container d-flex justify-content-center">

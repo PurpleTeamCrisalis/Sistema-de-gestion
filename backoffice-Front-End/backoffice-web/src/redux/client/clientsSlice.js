@@ -39,7 +39,6 @@ export const clientsSlice = createSlice({
           [key]: payload[key],
         };
       }
-      state.activeClient = null
     },
     onDeleteClient: (state) => {
       state.clients = state.clients.filter(

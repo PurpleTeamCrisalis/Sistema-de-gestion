@@ -1,14 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { projectApi } from "../api";
 import {
-  onLoadUsers,
-  onAddNewUser,
-  onSetActiveUser,
-  onDeleteUser,
-  onPullActiveUser,
-  onUpdateUser,
-} from "../redux";
-import {
   onAddNewClient,
   onLoadClients,
   onUpdateClient,

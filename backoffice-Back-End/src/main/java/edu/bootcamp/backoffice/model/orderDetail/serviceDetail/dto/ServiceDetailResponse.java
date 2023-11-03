@@ -14,9 +14,15 @@ import lombok.Setter;
 public class ServiceDetailResponse {
   @JsonProperty("id")
   private Integer id;
-  
+
   @JsonProperty("serviceId")
   private Integer serviceId;
+
+  @JsonProperty("name")
+  private String name;
+
+  @JsonProperty("basePrice")
+  private Double basePrice;
 
   @JsonProperty("subTotal")
   private Double subTotal;
