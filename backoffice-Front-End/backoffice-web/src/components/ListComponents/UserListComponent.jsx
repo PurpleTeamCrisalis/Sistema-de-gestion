@@ -1,14 +1,17 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NavComponent from "../NavComponent";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
-// import { useFetch } from "../../hooks/useFetch";
 import { useUsersStore } from "../../hooks";
 import { useAuthStore } from "../../hooks";
-import Toastify from 'toastify-js'
-import "toastify-js/src/toastify.css"
-import Swal from 'sweetalert2'
+import Toastify from "toastify-js";
+import "toastify-js/src/toastify.css";
+import Swal from "sweetalert2";
+import HeaderComponent from "../HeaderComponent";
+import AddRemoveButtonsComponent from "../AddRemoveButtonsComponent";
+import "../../assets/styles/navStyle.css";
+import SearchBar from "../Utils/SearchBar";
 
 function UserListComponent() {
   //   const { data } = useFetch("http://localhost:8080/user");
@@ -17,6 +20,10 @@ function UserListComponent() {
   const { users, startLoadingUsers, setActiveUser, startDeletingUser, activeUser } = useUsersStore();
   const { user } = useAuthStore()
 
+  const [filteredList, setFilteredList] = useState(users);
+
+  
+
 
   // CUANDO SE USE EL COMPONENTE, SE VA TRAER LA LISTA DE USUARIOS
 
@@ -24,9 +31,7 @@ function UserListComponent() {
     startLoadingUsers();
   }, []);
 
-
   function checkActiveUser(event, user) {
-
     let checkboxes = document.getElementsByClassName("custom-checkbox");
     let checkbox = event.target;
     let tRow = checkbox.closest("tr");
@@ -53,13 +58,13 @@ function UserListComponent() {
           Swal.fire({
             title: `¿Seguro que quieres eliminar a ${activeUser.username}?`,
             showCancelButton: true,
-            confirmButtonText: 'confirmar',
-            cancelButtonText: 'cancelar',
+            confirmButtonText: "confirmar",
+            cancelButtonText: "cancelar",
           }).then((result) => {
             /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
               startDeletingUser();
-              Swal.fire('Usuario Eliminado', '', 'success')
+              Swal.fire("Usuario Eliminado", "", "success");
             }
           });
         } else {
@@ -76,7 +81,6 @@ function UserListComponent() {
           text: "No puede eliminar el usuario con el que está logeado",
         });
       }
-
     } else {
       Toastify({
         text: "Seleccionar un usuario para eliminar",
@@ -88,90 +92,89 @@ function UserListComponent() {
     }
   }
 
-  function editUser(event, user) {
+  function editUser(user) {
     setActiveUser(user);
     navigate("/user/editUser");
   }
 
+  function newUser() {
+    navigate("/user/newUser");
+  }
+
   return (
-    <>
-      <div className="container-fluid">
-        <div className="row">
+    <div className="bgGrey">
+      <HeaderComponent />
+      <div className="container-fluid mainContainer">
+        <div className="secondContainer">
           {/* Navbar */}
           <NavComponent />
 
           {/* Table and Buttons */}
-          <div className="col-md-9 col-xl-10">
+          <div className="tablePane">
             {/* Button Section */}
-            <section className='d-flex justify-content-center m-3'>
-              <button type="button" className="btn btn-primary mx-3 fw-bold btn-lg"
-                onClick={() => navigate("/user/newUser")}
-              >
-                Nuevo
-              </button>
-              <button type="button" className="btn btn-primary mx-3 fw-bold btn-lg"
-                onClick={deleteUser}
-              >
-                Eliminar
-              </button>
-            </section>
+            <AddRemoveButtonsComponent
+              newHandler={newUser}
+              removeHandler={deleteUser}
+              name=""
+            />
 
             {/* Table Section */}
             <section
-              className='d-flex justify-content-center rounded-3 shadow-lg'  style={{ maxHeight: '85vh', overflowY: 'auto' }}
+              className="d-flex justify-content-center rounded-3 custom-shadow tabla-container-color"
+              style={{ maxHeight: "85vh", overflowY: "auto" }}
             >
-              <table className="table table-primary">
-                  {/* Header de la table */}
-                  <thead
-                    style={{
-                      position: "sticky",
-                      top: 0,
-                      borderBottom: "2px solid black",
-                    }}
-                  >
-                    <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">Nombre Usuario</th>
-                      <th scope="col">Estado</th>
-                      <th scope="col">#</th>
+              <table className="table table-color">
+                {/* Header de la table */}
+                <thead
+                  style={{
+                    position: "sticky",
+                    top: 0,
+                    borderBottom: "2px solid black",
+                  }}
+                >
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Nombre Usuario</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">#</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredList?.map((user) => (
+                    <tr key={user.id} style={{ marginBottom: "0px" }}>
+                      <td>
+                        <input
+                          type="checkbox"
+                          id={user.id}
+                          style={{
+                            color: "#000000",
+                            cursor: "pointer",
+                          }}
+                          onChange={(event) => checkActiveUser(event, user)}
+                          className="custom-checkbox"
+                        />
+                      </td>
+                      <td>{user.username}</td>
+                      <td>{user.enabled ? "Habilitado" : "Deshabilitado"}</td>
+                      <td>
+                        <FontAwesomeIcon
+                          icon={faPenToSquare}
+                          style={{
+                            color: "#000000",
+                            cursor: "pointer",
+                          }}
+                          onClick={() => editUser(user)}
+                        />
+                      </td>
                     </tr>
-                  </thead>
-                  <tbody>
-                    {users?.map((user) => (
-                      <tr key={user.id} className='table-primary'>
-                        <td>
-                          <input
-                            type="checkbox"
-                            id={user.id}
-                            style={{
-                              color: "#000000",
-                              cursor: "pointer",
-                            }}
-                            onChange={(event) => checkActiveUser(event, user)}
-                            className="custom-checkbox"
-                          />
-                        </td>
-                        <td>{user.username}</td>
-                        <td>{user.enabled ? "habilitado" : "deshabilitado"}</td>
-                        <td>
-                          <FontAwesomeIcon
-                            icon={faPenToSquare}
-                            style={{
-                              color: "#000000",
-                              cursor: "pointer",
-                            }}
-                            onClick={(event) => editUser(event, user)}
-                          />
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                  ))}
+                </tbody>
+              </table>
             </section>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

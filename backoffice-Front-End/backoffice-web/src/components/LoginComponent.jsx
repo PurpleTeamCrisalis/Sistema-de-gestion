@@ -12,7 +12,7 @@ const loginDTO = {
 
 export const LoginComponent = () => {
 
-  const { startLogin } = useAuthStore()
+  const { startLogin, startPassRecovery } = useAuthStore()
 
   const { username, password, handleInputChange, clearForm, emptyValidation } =
     useForm(loginDTO);
@@ -33,6 +33,16 @@ export const LoginComponent = () => {
 
     clearForm();
   }
+  const handlePassRecovery= async () =>{
+    const { value: email } = await Swal.fire({
+      title: 'Ingresa un E-mail registrado',
+      input: 'email',
+      inputLabel: 'Tu dirección de correo electrónico',
+      inputPlaceholder: 'Ingresa el E-mail'
+    })
+    
+    startPassRecovery(email)
+  }
 
   return (
     <div
@@ -52,7 +62,7 @@ export const LoginComponent = () => {
         </span>
       </div>
       <div
-        className="container d-flex flex-column align-item-center justify-content-center bg-primary rounded-4 mt-5"
+        className="container d-flex flex-column align-item-center justify-content-center bg-primary rounded-4 mt-5 shadow-lg"
         style={{ width: "380px", height: "330px" }}
       >
         <div className="container d-flex justify-content-center">
@@ -124,7 +134,9 @@ export const LoginComponent = () => {
                 </div>
               </div>
               <div className="d-flex justify-content-end mt-1">
-                <span style={{ fontSize: "14px", cursor: "pointer" }}>
+                <span 
+                style={{ fontSize: "14px", cursor: "pointer" }}
+                onClick={handlePassRecovery}>
                   Recuperar contraseña
                 </span>
               </div>

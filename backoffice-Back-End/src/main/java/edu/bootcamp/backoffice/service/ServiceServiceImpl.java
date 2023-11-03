@@ -59,7 +59,7 @@ public class ServiceServiceImpl implements ServiceService {
 		validator.validateLongValue(
 				(long)serviceRequest.getBasePrice(),
 				Long.MAX_VALUE,
-				1L,
+				0L,
 				"Base price",
 				errors
 		);

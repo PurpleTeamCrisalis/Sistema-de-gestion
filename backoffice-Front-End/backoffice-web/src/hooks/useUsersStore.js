@@ -26,6 +26,7 @@ export function useUsersStore() {
       const { data } = await projectApi.post('/user/create', user)
       dispatch(onAddNewUser({
         username: data.username,
+        email: data.email,
         enabled: data.enabled,
         id: data.id
       }))

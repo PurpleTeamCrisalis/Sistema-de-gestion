@@ -60,7 +60,7 @@ public class ProductServiceImpl implements ProductService {
 		validator.validateLongValue(
 				(long)productRequest.getBasePrice(),
 				Long.MAX_VALUE,
-				1L,
+				0L,
 				"Base price",
 				errors
 				);
