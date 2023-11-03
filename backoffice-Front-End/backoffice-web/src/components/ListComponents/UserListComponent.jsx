@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NavComponent from "../NavComponent";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,6 +8,7 @@ import { useAuthStore } from "../../hooks";
 import Toastify from 'toastify-js'
 import "toastify-js/src/toastify.css"
 import Swal from 'sweetalert2'
+import SearchBar from "../Utils/SearchBar";
 
 function UserListComponent() {
   //   const { data } = useFetch("http://localhost:8080/user");
@@ -15,6 +16,10 @@ function UserListComponent() {
 
   const { users, startLoadingUsers, setActiveUser, startDeletingUser, activeUser } = useUsersStore();
   const { user } = useAuthStore()
+
+  const [filteredList, setFilteredList] = useState(users);
+
+  
 
 
   // CUANDO SE USE EL COMPONENTE, SE VA TRAER LA LISTA DE USUARIOS
@@ -91,7 +96,7 @@ function UserListComponent() {
     setActiveUser(user);
     navigate("/user/editUser");
   }
-
+console.log(filteredList)
   return (
     <>
       <div className="container-fluid">
@@ -119,7 +124,9 @@ function UserListComponent() {
             <section
               className='d-flex justify-content-center rounded-3 shadow-lg'  style={{ maxHeight: '85vh', overflowY: 'auto' }}
             >
-              <table className="table table-primary">
+              <SearchBar rawList={users} setFilteredList={setFilteredList} compareTag="username"/>
+              <div className="bg-white rounded-3 overflow-hidden">
+                <table className="table table-hover">
                   {/* Header de la table */}
                   <thead
                     style={{
@@ -136,8 +143,8 @@ function UserListComponent() {
                     </tr>
                   </thead>
                   <tbody>
-                    {users?.map((user) => (
-                      <tr key={user.id} className='table-primary'>
+                    {filteredList?.map((user) => (
+                      <tr key={user.id}>
                         <td>
                           <input
                             type="checkbox"

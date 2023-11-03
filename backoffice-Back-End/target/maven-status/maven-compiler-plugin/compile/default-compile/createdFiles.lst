@@ -17,6 +17,10 @@ edu\bootcamp\backoffice\config\WebConfig$1.class
 edu\bootcamp\backoffice\model\user\User.class
 edu\bootcamp\backoffice\model\user\dto\UserResponse.class
 edu\bootcamp\backoffice\security\SecurityConfig.class
+edu\bootcamp\backoffice\model\Charge\dto\UpdateChargeRequest.class
+edu\bootcamp\backoffice\model\user\User.class
+edu\bootcamp\backoffice\model\user\dto\UserResponse.class
+edu\bootcamp\backoffice\security\SecurityConfig.class
 edu\bootcamp\backoffice\exception\custom\EmptyElementException.class
 edu\bootcamp\backoffice\model\user\User$UserBuilder.class
 edu\bootcamp\backoffice\model\order\dto\UpdateOrderRequest.class
@@ -37,6 +41,7 @@ edu\bootcamp\backoffice\controller\AuthController.class
 edu\bootcamp\backoffice\service\validators\ValidatorImpl.class
 edu\bootcamp\backoffice\model\order\Order$OrderBuilder.class
 edu\bootcamp\backoffice\exception\ErrorMessage.class
+edu\bootcamp\backoffice\security\JwtAuthEntryPoint.class
 edu\bootcamp\backoffice\service\UserServiceImpl.class
 edu\bootcamp\backoffice\security\JwtAuthEntryPoint.class
 edu\bootcamp\backoffice\model\user\dto\UpdateUserRequest$UpdateUserRequestBuilder.class
