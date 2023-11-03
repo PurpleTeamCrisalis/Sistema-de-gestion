@@ -7,13 +7,14 @@ import edu.bootcamp.backoffice.service.Interface.Validator;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.Optional;
 
 @Component
 public class ValidatorImpl implements Validator
 {
     public <Entity extends SoftDeletable> Entity validateSoftDeletableEntityExistence(
-            int id,
+            Integer id,
             JpaRepository<Entity, Integer> repository
         )
     {
@@ -25,7 +26,7 @@ public class ValidatorImpl implements Validator
     }
 
     public <Entity> Entity completeValidationForId(
-            int id,
+            Integer id,
             JpaRepository<Entity, Integer> repository
         )
     {
@@ -37,7 +38,7 @@ public class ValidatorImpl implements Validator
     }
 
     public <Entity> Entity validateIdExistence(
-            int id,
+            Integer id,
             JpaRepository<Entity, Integer> repository
         )
     {
@@ -48,20 +49,118 @@ public class ValidatorImpl implements Validator
     }
 
     public void validateIdFormat(
-            int id,
+            Integer id,
             StringBuilder errorBuilder
         )
     {
-        if(id<1)
+        if(id == null || id<1)
             errorBuilder.append(
                     " The id must be grater than 0."
+            );
+    }
+/*
+    public void validateInterger(
+        Integer integer,
+        int minLength,
+        int maxLength,
+        StringBuilder errors,
+        String propertyName
+    ){
+        StringBuilder newErrors = new StringBuilder();
+        if( ! isValueMax(integer, maxLength, newErrors))            
+            if(isValueMin(integer, minLength, newErrors));
+            
+        if(newErrors.length() != 0)
+            errors
+                    .append("| ")
+                    .append(propertyName)
+                    .append(" :")
+                    .append(newErrors);
+    }
+    
+    public Boolean isValueMax(
+            Integer integer,
+            Integer maxLength,
+            StringBuilder errors
+        )
+    {
+        if (integer > maxLength)
+        {
+            errors
+                    .append(" Exceeds ")
+                    .append(maxLength)
+                    .append(" value.");
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
+    }
+
+    public Boolean isValueMin(
+            Integer integer,
+            Integer minLength,
+            StringBuilder errors
+        )
+    {
+        if (integer < minLength)
+        {
+            errors
+                    .append(" Exceeds ")
+                    .append(minLength)
+                    .append(" value.");
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
+    }
+    */
+
+    public void validateLongValue(
+            Long longNumber,
+            Long maxStrict,
+            Long minStrict,
+            String propertyName,
+            StringBuilder errorBuilder
+    )
+    {
+        if(longNumber == null)
+            errorBuilder.append(
+                    " Debe proveerse un valor a " + propertyName + "."
+            );
+        else if(longNumber>maxStrict )
+            errorBuilder.append(
+                    " The " + propertyName + " must be smaller than " + maxStrict +  "."
+            );
+        else if(longNumber<minStrict)
+            errorBuilder.append(
+                    " The " + propertyName + " must be grater than " + minStrict +  "."
+            );
+    }
+
+    public void validateIntegerValue(
+            Integer integerNumber,
+            Integer maxStrict,
+            Integer minStrict,
+            String propertyName,
+            StringBuilder errorBuilder
+    )
+    {
+        if(integerNumber == null)
+            errorBuilder.append(
+                    " There is no value for " + propertyName + "."
+            );
+        else if(integerNumber<minStrict )
+            errorBuilder.append(
+                    " The " + propertyName + " must be greater than " + minStrict +  "."
+            );
+        else if(integerNumber>maxStrict)
+            errorBuilder.append(
+                    " The " + propertyName + " must be smaller than " + maxStrict +  "."
             );
     }
 
     public void validateVarchar(
             String varchar,
-            int minLength,
-            int maxLength,
+            Integer minLength,
+            Integer maxLength,
             StringBuilder errors,
             String propertyName
         )
@@ -84,6 +183,32 @@ public class ValidatorImpl implements Validator
         )
     {
         if (varchar == null || varchar.isEmpty())
+        {
+            errors.append(" It has no content.");
+            return Boolean.TRUE;
+        }
+        return  Boolean.FALSE;
+    }
+
+    @Override
+    public Boolean isEmpty(
+            Boolean flag,
+            StringBuilder errors)
+    {
+        if (flag == null)
+        {
+            errors.append(" It has no content.");
+            return Boolean.TRUE;
+        }
+        return  Boolean.FALSE;
+    }
+
+    @Override
+    public Boolean isEmpty(
+            Date date,
+            StringBuilder errors)
+    {
+        if (date == null)
         {
             errors.append(" It has no content.");
             return Boolean.TRUE;
@@ -117,11 +242,12 @@ public class ValidatorImpl implements Validator
         if (varchar.length() < minLength)
         {
             errors
-                    .append(" Is less than ")
+                    .append(" Must be greater than ")
                     .append(minLength)
                     .append(" characters.");
             return Boolean.TRUE;
         }
         return Boolean.FALSE;
     }
+
 }
