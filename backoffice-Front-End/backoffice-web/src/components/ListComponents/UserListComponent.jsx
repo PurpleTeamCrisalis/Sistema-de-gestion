@@ -138,6 +138,7 @@ console.log(filteredList)
                     <tr>
                       <th scope="col">#</th>
                       <th scope="col">Nombre Usuario</th>
+                      <th scope="col">E-Mail</th>
                       <th scope="col">Estado</th>
                       <th scope="col">#</th>
                     </tr>
@@ -158,6 +159,7 @@ console.log(filteredList)
                           />
                         </td>
                         <td>{user.username}</td>
+                        <td>{user.email}</td>
                         <td>{user.enabled ? "habilitado" : "deshabilitado"}</td>
                         <td>
                           <FontAwesomeIcon

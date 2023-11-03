@@ -43,6 +43,12 @@ public class User implements SoftDeletable
     private String password;
 
     @Column(
+            name = "email",
+            nullable = false
+    )
+    private String email;
+
+    @Column(
             name="enabled",
             nullable = false
     )
