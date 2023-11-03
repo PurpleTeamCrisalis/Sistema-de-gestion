@@ -17,7 +17,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "clientTable")
+@Table(name = "client")
 @Builder
 public class Client implements SoftDeletable {
     @Id

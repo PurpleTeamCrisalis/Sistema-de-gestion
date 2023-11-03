@@ -3,28 +3,112 @@ import NavComponent from '../NavComponent'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from 'react-router-dom'
+import { useClientsStore } from '../../hooks/useClientsStore'
+import Swal from 'sweetalert2'
+import Toastify from "toastify-js";
+import "toastify-js/src/toastify.css";
+import EmptyList from '../../utils/EmptyList'
 
-// navigate("/user/newClient")
-// navigate("/user/editClient")
 
 function ClientListComponent() {
     const navigate = useNavigate();
-    const [clients, setClients] = useState([])
     const [abierto, setAbierto] = useState(false);
+    const { clients, startLoadingClient, startDeletingClient, activeClient, setActiveClient } = useClientsStore();
 
+    useEffect(() => {
+        if (clients.length == 0) {
+            // Parte cuando la lista está vacía
+            console.log("Vacio")
+        } else {
+            startLoadingClient()
+        }
+    }, []);
+
+    // Modal de nuevo cliente
     const abrirModal = () => {
         setAbierto(!abierto);
     };
 
-    function editClient(client) {
-        console.log("edit")
-    }
-    function deleteClient() {
-        console.log("delete")
+    function checkActiveClient(event, client) {
+
+        let checkboxes = document.getElementsByClassName("custom-checkbox");
+        let checkbox = event.target;
+        let tRow = checkbox.closest("tr");
+        for (const item of checkboxes) {
+            if (item.id == checkbox.id) {
+                if (checkbox.checked) {
+                    tRow.classList.add("table-active");
+                    setActiveClient(client);
+                } else {
+                    tRow.classList.remove("table-active");
+                    setActiveClient(null);
+                }
+            } else {
+                item.checked = false;
+                item.closest("tr").classList.remove("table-active");
+            }
+        }
     }
 
+    function editClient(client) {
+        setActiveClient(client);
+        if (client.isbussiness) {
+            navigate("/client/editClientCompany");
+        } else {
+            navigate("/client/editClient");
+        }
+    }
+
+    function deleteClient() {
+        if (activeClient) {
+            if (activeClient.enabled === true) {
+                if (activeClient.isbussiness) {
+                    Swal.fire({
+                        title: `¿Seguro que quieres eliminar a ${activeClient.bussinessname} ?`,
+                        showCancelButton: true,
+                        confirmButtonText: 'confirmar',
+                        cancelButtonText: 'cancelar',
+                    }).then((result) => {
+                        /* Read more about isConfirmed, isDenied below */
+                        if (result.isConfirmed) {
+                            startDeletingClient();
+                            Swal.fire('Empresa Eliminado', '', 'success')
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        title: `¿Seguro que quieres eliminar a ${activeClient.name} ${activeClient.lastname} ?`,
+                        showCancelButton: true,
+                        confirmButtonText: 'confirmar',
+                        cancelButtonText: 'cancelar',
+                    }).then((result) => {
+                        /* Read more about isConfirmed, isDenied below */
+                        if (result.isConfirmed) {
+                            startDeletingClient();
+                            Swal.fire('Cliente Eliminado', '', 'success')
+                        }
+                    });
+                }
+            } else {
+                return Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "No puede eliminar un cliente que esté deshabilitado",
+                });
+            }
+        } else {
+            Toastify({
+                text: "Seleccionar un Cliente para eliminar",
+                duration: 2000,
+                style: {
+                    background: "linear-gradient(to right, #f44336, #b71c1c)",
+                },
+            }).showToast();
+        }
+    }
     return (
         <>
+
             <div className="container-fluid">
                 <div className="row">
                     {/* Navbar */}
@@ -34,6 +118,7 @@ function ClientListComponent() {
                     <div className="col-md-9 col-xl-10  ">
                         {/* Button Section */}
                         <section className='d-flex justify-content-center m-3'>
+
                             <button
                                 type="button"
                                 className="btn btn-primary mx-3 fw-bold btn-lg"
@@ -53,44 +138,73 @@ function ClientListComponent() {
                         </section>
 
                         {/* Table Section */}
-                        <section className='d-flex justify-content-center rounded-3 shadow-lg' style={{ maxHeight: '85vh', overflowY: 'auto' }}>
-                            <table className="table table-primary ">
-                                <thead style={{ position: 'sticky', top: 0, borderBottom: '2px solid black' }}>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Nombre Cliente</th>
-                                        <th scope="col">Descripción</th>
-                                        <th scope="col">Estado</th>
-                                        <th scope="col">#</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {/* Acá se va a recorrer la lista de la entidad */}
-                                    <tr className='table-primary'>
-                                        <td>
-                                            <input type="checkbox" className="custom-checkbox" />
-                                        </td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>
-                                            {/* Icono */}
-                                            <FontAwesomeIcon
-                                                icon={faPenToSquare}
-                                                style={{ color: "#000000", }}
-                                                onClick={() => {
-                                                    navigate("/client/editClientCompany")
-                                                    // navigate("/client/editClient")
-                                                    // Ternario para verficar si es empresa o no.
-                                                }
-                                                }
-                                            />
+                        {clients.length != 0 &&
+                            <section className='d-flex justify-content-center rounded-3 shadow-lg' style={{ maxHeight: '85vh', overflowY: 'auto' }}>
+                                <table className="table table-primary ">
+                                    <thead style={{ position: 'sticky', top: 0, borderBottom: '2px solid black' }}>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Nombre</th>
+                                            <th scope="col">Tipo de Cliente</th>
+                                            <th scope="col">DNI/CUIT</th>
+                                            <th scope="col">Estado</th>
+                                            <th scope='col'>#</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {/* Acá se va a recorrer la lista de la entidad */}
+                                        {clients?.map((client) => (
 
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </section>
+                                            <tr key={client.id}>
+                                                {/* Checkbox */}
+                                                <td>
+                                                    <input
+                                                        type="checkbox"
+                                                        id={client.id}
+                                                        style={{
+                                                            color: "#000000",
+                                                            cursor: "pointer",
+                                                        }}
+                                                        onChange={(event) => checkActiveClient(event, client)}
+                                                        className="custom-checkbox"
+                                                    />
+                                                </td>
+
+                                                <td>
+                                                    {client.isbussiness ? client.bussinessname : client.name}
+                                                </td>
+
+                                                <td>
+                                                    {client.isbussiness ? "Empresa" : "Persona"}
+                                                </td>
+
+                                                <td>
+                                                    {client.isbussiness ? client.cuit : client.dni}
+                                                </td>
+
+                                                <td>
+                                                    {client.enabled ? "Habilitado" : "Deshabilitado"}
+                                                </td>
+
+                                                {/* Editar Cliente */}
+                                                <td>
+                                                    <FontAwesomeIcon
+                                                        icon={faPenToSquare}
+                                                        style={{
+                                                            color: "#000000",
+                                                            cursor: "pointer",
+                                                        }}
+                                                        onClick={(event) => editClient(client)}
+                                                    />
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+
+                                </table>
+                            </section>
+                        }
+                        {clients.length == 0 && <EmptyList name={"Clientes"} />}
                     </div>
                 </div>
             </div >
@@ -132,8 +246,6 @@ function ClientListComponent() {
                     </div>
                 </div>
             </div>
-
-
 
         </>
     )

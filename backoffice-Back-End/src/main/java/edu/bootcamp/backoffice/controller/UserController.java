@@ -20,20 +20,13 @@ public class UserController {
     private final UserService userService;
 
     @Autowired
-    public UserController(UserService userService)
-    {
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
-    @PostMapping(
-            path = "/create",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
+    @PostMapping(path = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserResponse> registerUser(
-            @RequestBody UserRequest createRequest
-        )
-    {
+            @RequestBody UserRequest createRequest) {
         UserResponse userDto = userService.registerUser(createRequest);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -43,45 +36,28 @@ public class UserController {
         return ResponseEntity.created(location).body(userDto);
     }
 
-    @GetMapping(
-            value = "/{id}",
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public ResponseEntity<UserResponse> getUser(@PathVariable int id)
-    {
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserResponse> getUser(@PathVariable int id) {
         UserResponse user = userService.get(id);
         return ResponseEntity.ok(user);
     }
 
-    @GetMapping(
-            path = "/list",
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public ResponseEntity<List<UserResponse>> getAllUsers()
-    {
+    @GetMapping(path = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<UserResponse>> getAllUsers() {
         List<UserResponse> users = userService.get();
         return ResponseEntity.ok(users);
     }
 
-    @PatchMapping(
-            path = "update/{id}",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
+    @PatchMapping(path = "update/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserResponse> updateUser(
             @PathVariable int id,
-            @RequestBody UpdateUserRequest userDTO)
-    {
+            @RequestBody UpdateUserRequest userDTO) {
         UserResponse user = userService.update(id, userDTO);
         return ResponseEntity.ok(user);
     }
 
-    @DeleteMapping(
-            value = "delete/{id}",
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public ResponseEntity<UserResponse> deleteUser(@PathVariable int id)
-    {
+    @DeleteMapping(value = "delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserResponse> deleteUser(@PathVariable int id) {
         UserResponse user = userService.delete(id);
         return ResponseEntity.ok(user);
     }

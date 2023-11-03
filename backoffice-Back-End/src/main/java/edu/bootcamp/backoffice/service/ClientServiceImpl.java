@@ -150,15 +150,15 @@ public class ClientServiceImpl implements ClientService {
         return dtoFactory.createResponse(client);
     }
 
+    public Client getClientEntity(int id) {
+        return validator.completeValidationForId(id, clientRepository);
+    }
+
     public List<ClientResponse> get() {
         List<Client> clients = clientRepository.findAll();
         List<ClientResponse> dtos = new ArrayList<>();
         for (Client client : clients)
             dtos.add(dtoFactory.createResponse(client));
-        if (dtos.isEmpty())
-            throw new EmptyTableException(
-                    "There aren't registered clients."
-            );
         return dtos;
     }
 

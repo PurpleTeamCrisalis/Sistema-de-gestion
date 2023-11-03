@@ -10,14 +10,13 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class ClientResponse {
-
     @JsonProperty("id")
     private Integer id;
 
     @JsonProperty("name")
     private String name;
 
-    @JsonProperty("lastName")
+    @JsonProperty("lastname")
     private String lastname;
 
     @JsonProperty("dni")
@@ -29,20 +28,18 @@ public class ClientResponse {
     @JsonProperty("adress")
     private String adress;
 
-    @JsonProperty("startDate")
+    @JsonProperty("startdate")
     private Date startdate;
 
     @JsonProperty("enabled")
     private Boolean enabled;
 
-    @JsonProperty("isBussiness")
+    @JsonProperty("isbussiness")
     private Boolean isbussiness;
 
-    @JsonProperty("bussinessName")
+    @JsonProperty("bussinessname")
     private String bussinessname;
 
     @JsonProperty("cuit")
     private Long cuit;
-
-
 }
