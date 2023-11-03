@@ -40,7 +40,6 @@ public class OrderController {
     String token = request.getHeader("Authorization");
     String username = JWTGenerator.getUsernameFromJWT(
             token.replace("Bearer ", ""));
-    //String username = "admin";
     OrderResponse orderDto = orderService.registerOrder(createRequest, username);
     URI location = ServletUriComponentsBuilder
         .fromCurrentRequest()
