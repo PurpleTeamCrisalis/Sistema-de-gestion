@@ -5,7 +5,6 @@ import { useForm, useProductsStore } from '../../hooks';
 import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
 import HeaderComponent from "../HeaderComponent";
-import "../../assets/styles/inputStyle.css"
 
 function EditProductComponent() {
     const navigate = useNavigate();
@@ -31,50 +30,6 @@ function EditProductComponent() {
             enabled,
         };
         
-        if (!emptyValidation()) {
-            Toastify({
-                text: "Hay campos vacíos",
-                duration: 2000,
-                style: {
-                    background: "linear-gradient(to right, #f44336, #b71c1c)",
-                },
-            }).showToast();
-            return console.error("Error: Campos vacíos");
-        }
-
-        if (name.length < 1 || name.length > 50) {
-            Toastify({
-                text: "El nombre debe tener entre 1 y 50 caracteres",
-                duration: 2000,
-                style: {
-                    background: "linear-gradient(to right, #f44336, #b71c1c)",
-                },
-            }).showToast();
-            return console.error("Error: Nombre menor a 1 o mayor a 50 caracteres");
-        }
-
-        if (description.length < 1 || description.length > 200) {
-            Toastify({
-                text: "La descripción debe tener entre 1 a 200 caracteres",
-                duration: 2000,
-                style: {
-                    background: "linear-gradient(to right, #f44336, #b71c1c)",
-                },
-            }).showToast();
-            return console.error("Error: descripción menor a 1 o mayor a 200 caracteres");
-        }
-
-        if (basePrice < 0) {
-            Toastify({
-                text: "El precio no puede ser negativo",
-                duration: 2000,
-                style: {
-                    background: "linear-gradient(to right, #f44336, #b71c1c)",
-                },
-            }).showToast();
-            return console.error("Error: precio negativo");
-        }
-
         // Verifica si los nuevos datos son ya existentes
         const productoExiste = products?.find(product => { return product.name === name });
         if ((productoExiste) && (activeProduct.name !== name)) {
@@ -125,47 +80,38 @@ function EditProductComponent() {
                                 <div className="col-sm-6">
                                     <h2 className='text-center'>Producto</h2>
                                     <div className="row m-4">
-                                    <div className="col-md-6 mb-3">
+                                        <div className="col-md-6 mb-3">
                                             <label htmlFor="name" className="form-label">Nombre</label>
                                             <input
                                                 type="text"
-                                                name="name"
-                                                id="name"
-                                                className="form-control"
+                                                name='name'
+                                                id='name'
                                                 onChange={handleInputChange}
                                                 value={name}
-                                                required
+                                                className="form-control"
+                                            />
+                                        </div>
+                                        <div className="col-md-6 mb-3">
+                                            <label htmlFor="description" className="form-label">Descripción</label>
+                                            <input
+                                                type="text"
+                                                name='description'
+                                                id='description'
+                                                onChange={handleInputChange}
+                                                value={description}
+                                                className="form-control"
                                             />
                                         </div>
                                         <div className="col-md-6 mb-3">
                                             <label htmlFor="basePrice" className="form-label">Precio Base</label>
                                             <input
-                                                type="number"
-                                                name="basePrice"
-                                                id="basePrice"
-                                                className="form-control"
-                                                min={0}
+                                                type="text"
+                                                name='basePrice'
+                                                id='basePrice'
                                                 onChange={handleInputChange}
                                                 value={basePrice}
-                                                required
-                                            />
-                                        </div>
-                                        <div className="">
-                                            <label htmlFor="description" className="form-label">Descripción</label>
-                                            <textarea
-                                                name="description"
-                                                id="description"
                                                 className="form-control"
-                                                rows="4"
-                                                cols="2"
-                                                required
-                                                minLength={1}
-                                                maxLength={200}
-                                                onChange={handleInputChange}
-                                                value={description}
-                                                style={{resize:"none"}}
-                                            >
-                                            </textarea>
+                                            />
                                         </div>
                                     </div>
                                 </div>

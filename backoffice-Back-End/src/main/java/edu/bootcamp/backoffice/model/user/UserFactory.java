@@ -11,14 +11,12 @@ public class UserFactory
 {
     public User CreateUserEntity(
             String username,
-            String email,
             String password
         )
     {
         return User
                 .builder()
                 .username(username)
-                .email(email)
                 .password(password)
                 .enabled(true)
                 .build();
@@ -28,7 +26,6 @@ public class UserFactory
         return User
                 .builder()
                 .username(userDTO.getUsername())
-                .email(userDTO.getEmail())
                 .password(userDTO.getPassword())
                 .enabled(true)
                 .build();
@@ -38,7 +35,6 @@ public class UserFactory
         return UserResponse
             .builder()
             .username(user.getUsername())
-            .email(user.getEmail())
             .enabled(user.isEnabled())
             .id(user.getId())
             .build();

@@ -8,14 +8,13 @@ import HeaderComponent from '../HeaderComponent';
 const formDTO = {
   username: "",
   password: "",
-  email: ""
 };
 
 function NewUserComponent()
 {
   const navigate = useNavigate();
 
-  const { username, password, email, handleInputChange, clearForm, emptyValidation } =
+  const { username, password, handleInputChange, clearForm, emptyValidation } =
     useForm(formDTO);
 
   const { startAddingUser, users } = useUsersStore();
@@ -72,7 +71,7 @@ function NewUserComponent()
       }).showToast();
       return console.error("Error: Nombre de usuario ya existe");
     }
-    const user = { username, email ,password };
+    const user = { username, password };
 
     startAddingUser(user);
     clearForm();
@@ -126,7 +125,7 @@ function NewUserComponent()
                       style={{ width: "350px", height: "50px" }}
                     />
                   </div>
-                  <div className="mb-5">
+                  <div>
                     <span
                       className="d-inline-block fs-2"
                       style={{ width: "350px" }}
@@ -140,23 +139,6 @@ function NewUserComponent()
                       onChange={handleInputChange}
                       value={password}
                       placeholder="Ingresar contraseña"
-                      style={{ width: "350px", height: "50px" }}
-                    />
-                  </div>
-                  <div>
-                    <span
-                      className="d-inline-block fs-2"
-                      style={{ width: "350px" }}
-                    >
-                      E-Mail
-                    </span>
-                    <input
-                      type="email"
-                      name="email"
-                      id="email"
-                      onChange={handleInputChange}
-                      value={email}
-                      placeholder="Ingresar el email"
                       style={{ width: "350px", height: "50px" }}
                     />
                   </div>

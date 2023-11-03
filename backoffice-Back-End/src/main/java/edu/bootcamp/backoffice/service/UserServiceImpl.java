@@ -12,7 +12,6 @@ import edu.bootcamp.backoffice.model.user.dto.UserResponse;
 import edu.bootcamp.backoffice.repository.UserRepository;
 import edu.bootcamp.backoffice.service.Interface.UserService;
 import edu.bootcamp.backoffice.service.Interface.Validator;
-import edu.bootcamp.backoffice.utils.PasswordGenerator;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -26,31 +25,19 @@ public class UserServiceImpl implements UserService
     private final UserRepository userRepository;
     private final UserFactory dtoFactory;
     private final Validator validator;
-    private  final PasswordEncoder encoder;
-    private final EmailService emailService;
+    private final PasswordEncoder encoder;
 
     public UserServiceImpl(
             UserRepository userRepository,
             UserFactory dtoFactory,
             Validator validator,
-            PasswordEncoder encoder,
-            EmailService emailService
+            PasswordEncoder encoder
         )
     {
         this.userRepository = userRepository;
         this.dtoFactory = dtoFactory;
         this.validator = validator;
         this.encoder = encoder;
-        this.emailService = emailService;
-    }
-
-    @Override
-    public void changePasswordByEmail(String email) {
-        User user = userRepository.findByEmail(email);
-        String newPass = PasswordGenerator.generateRandomPassword(8);
-        user.setPassword(encoder.encode(newPass));
-        userRepository.save(user);
-        emailService.sendNewPassword(newPass,email);
     }
 
     public boolean isUserPresent(UserRequest userDto){
@@ -64,9 +51,7 @@ public class UserServiceImpl implements UserService
             return ! result.get().isDeleted();
         return false;
     }
-    public boolean isUserPresent(String email){
-        return userRepository.existsByEmail(email);
-    }
+
     public UserResponse registerUser(UserRequest userRequest)
     {
         validateNewUserRequest(userRequest);
@@ -136,7 +121,6 @@ public class UserServiceImpl implements UserService
             user = validateEnabledUserSearchResult(result, id);
         modified |= mergeEnabled(userDto, user);
         modified |= mergePassword(userDto, user);
-        modified |= mergeEmail(userDto, user);
         if( ! modified )
             throw new AlreadyUpdatedException(
                     "Not modified database."
@@ -191,18 +175,6 @@ public class UserServiceImpl implements UserService
         if(dtoEnabled != null && !userEnabled.equals(dtoEnabled))
         {
             user.setEnabled(userDto.getEnabled());
-            return true;
-        }
-        return false;
-    }
-
-    private boolean mergeEmail(UpdateUserRequest userDto, User user)
-    {
-        String dtoEmail = userDto.getEmail();
-        String userEmail = user.getEmail();
-        if(!dtoEmail.isBlank() && !userEmail.equalsIgnoreCase(dtoEmail))
-        {
-            user.setEmail(userDto.getEmail());
             return true;
         }
         return false;

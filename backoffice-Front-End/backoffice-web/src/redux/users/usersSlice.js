@@ -6,7 +6,7 @@ const initialState = {
   activeUser: null
 }
 
-export const userSlice = createSlice({
+export const usersSlice = createSlice({
   name: 'users',
   initialState,
   reducers: {
@@ -45,4 +45,4 @@ export const userSlice = createSlice({
 });
 
 // Action creators are generated for each case redicer function
-export const { onLoadUsers, onAddNewUser, onSetActiveUser, onDeleteUser, onPullActiveUser, onUpdateUser } = userSlice.actions;
+export const { onLoadUsers, onAddNewUser, onSetActiveUser, onDeleteUser, onPullActiveUser, onUpdateUser } = usersSlice.actions;

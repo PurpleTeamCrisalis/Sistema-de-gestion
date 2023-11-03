@@ -29,7 +29,4 @@ public interface UserService {
     // For Login
 
     public boolean isUserPresent(UserRequest userDTO);
-    public boolean isUserPresent(String email);
-
-    void changePasswordByEmail(String email);
 }

@@ -12,9 +12,8 @@ import HeaderComponent from '../HeaderComponent';
 function EditUserComponent() {
   const navigate = useNavigate();
   const { startUpdatingUser, activeUser, setActiveUser, users } = useUsersStore();
-  const { username,email, enabled, handleInputChange, emptyValidation } = useForm({
+  const { username, enabled, handleInputChange, emptyValidation } = useForm({
     username: activeUser?.username,
-    email: activeUser?.email,
     enabled: activeUser?.enabled,
   });
   const { user, changeAuthUsername } = useAuthStore()
@@ -58,7 +57,6 @@ function EditUserComponent() {
 
     const userAux = {
       username,
-      email,
       id: activeUser.id,
       enabled
     };
@@ -129,23 +127,6 @@ function EditUserComponent() {
                     onChange={handleInputChange}
                     value={username}
                     placeholder="Ingresar nombre de usuario"
-                    style={{ width: "350px", height: "50px" }}
-                  />
-                </div>
-                <div className="d-flex">
-                  <span
-                    className="d-inline-block fs-2"
-                    style={{ width: "500px" }}
-                  >
-                    E-Mail
-                  </span>
-                  <input
-                    type="email"
-                    name="email"
-                    id="email"
-                    onChange={handleInputChange}
-                    value={email}
-                    placeholder="Ingresar email"
                     style={{ width: "350px", height: "50px" }}
                   />
                 </div>

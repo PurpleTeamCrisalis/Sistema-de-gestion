@@ -143,7 +143,7 @@ function ServiceListComponent()
                                             </td>
                                             <td>{service.name}</td>
                                             <td className="text-overflow">{service.description}</td>
-                                            <td>{"$"+service.basePrice}</td>
+                                            <td>{service.basePrice}</td>
                                             <td>{service.enabled ? "habilitado" : "deshabilitado"}</td>
                                             <td>
                                                 <FontAwesomeIcon

@@ -13,6 +13,7 @@ import edu.bootcamp.backoffice.exception.custom.dbValidation.EmptyTableException
 import edu.bootcamp.backoffice.exception.custom.parameterValidation.InvalidArgumentsFormatException;
 import edu.bootcamp.backoffice.exception.custom.parameterValidation.InvalidIdFormatException;
 import edu.bootcamp.backoffice.model.EntitiesConstraints;
+import edu.bootcamp.backoffice.model.product.Product;
 import edu.bootcamp.backoffice.model.service.ServiceFactory;
 import edu.bootcamp.backoffice.model.service.dto.ServiceRequest;
 import edu.bootcamp.backoffice.model.service.dto.ServiceResponse;
@@ -58,7 +59,7 @@ public class ServiceServiceImpl implements ServiceService {
 		validator.validateLongValue(
 				(long)serviceRequest.getBasePrice(),
 				Long.MAX_VALUE,
-				0L,
+				1L,
 				"Base price",
 				errors
 		);
@@ -191,6 +192,10 @@ public class ServiceServiceImpl implements ServiceService {
 	public ServiceResponse get(int id) {
 		ServiceEntity serviceEntity = validator.completeValidationForId(id, serviceRepository);
 		return dtoFactory.createResponse(serviceEntity);
+	}
+
+	public ServiceEntity getServiceById(Integer id) {
+		return validator.completeValidationForId(id, serviceRepository);
 	}
 
 	@Override

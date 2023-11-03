@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import NavComponent from "../NavComponent";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,19 +11,19 @@ import Swal from "sweetalert2";
 import HeaderComponent from "../HeaderComponent";
 import AddRemoveButtonsComponent from "../AddRemoveButtonsComponent";
 import "../../assets/styles/navStyle.css";
-import SearchBar from "../Utils/SearchBar";
 
 function UserListComponent() {
   //   const { data } = useFetch("http://localhost:8080/user");
   const navigate = useNavigate();
 
-  const { users, startLoadingUsers, setActiveUser, startDeletingUser, activeUser } = useUsersStore();
-  const { user } = useAuthStore()
-
-  const [filteredList, setFilteredList] = useState(users);
-
-  
-
+  const {
+    users,
+    startLoadingUsers,
+    setActiveUser,
+    startDeletingUser,
+    activeUser,
+  } = useUsersStore();
+  const { user } = useAuthStore();
 
   // CUANDO SE USE EL COMPONENTE, SE VA TRAER LA LISTA DE USUARIOS
 
@@ -140,7 +140,7 @@ function UserListComponent() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredList?.map((user) => (
+                  {users?.map((user) => (
                     <tr key={user.id} style={{ marginBottom: "0px" }}>
                       <td>
                         <input
