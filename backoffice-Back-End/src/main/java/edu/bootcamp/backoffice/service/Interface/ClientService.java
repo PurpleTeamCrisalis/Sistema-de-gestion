@@ -11,17 +11,17 @@ public interface ClientService {
 
     public ClientResponse registerClient(ClientRequest clientDto);
 
-    public ClientResponse get(int id);
+    public ClientResponse get(Integer id);
 
-    public Client getClientEntity(int id); 
+    public Client getClientEntity(Integer id); 
 
     public List<ClientResponse> get()
             throws InvalidIdFormatException;
 
-    public ClientResponse update(int id, UpdateClientRequest clientDto)
+    public ClientResponse update(Integer id, UpdateClientRequest clientDto)
             throws InvalidIdFormatException;
 
-    public ClientResponse delete(int id)
+    public ClientResponse delete(Integer id)
             throws InvalidIdFormatException;
 
 }

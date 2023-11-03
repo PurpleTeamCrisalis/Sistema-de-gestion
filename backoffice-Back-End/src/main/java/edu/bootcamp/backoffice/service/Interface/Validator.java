@@ -6,29 +6,29 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface Validator
 {
     public  <Entity extends SoftDeletable> Entity validateSoftDeletableEntityExistence(
-            int id,
+            Integer id,
             JpaRepository<Entity, Integer> repository
     );
 
     public <Entity> Entity completeValidationForId(
-            int id,
+            Integer id,
             JpaRepository<Entity, Integer> repository
         );
 
     public <Entity> Entity validateIdExistence(
-            int id,
+            Integer id,
             JpaRepository<Entity, Integer> repository
     );
 
     public void validateIdFormat(
-            int id,
+            Integer id,
             StringBuilder errorBuilder
     );
 
     public void validateVarchar(
             String varchar,
-            int minLength,
-            int maxLength,
+            Integer minLength,
+            Integer maxLength,
             StringBuilder errors,
             String propertyName
     );

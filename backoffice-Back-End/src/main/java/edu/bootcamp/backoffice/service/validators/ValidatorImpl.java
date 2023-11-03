@@ -13,7 +13,7 @@ import java.util.Optional;
 public class ValidatorImpl implements Validator
 {
     public <Entity extends SoftDeletable> Entity validateSoftDeletableEntityExistence(
-            int id,
+            Integer id,
             JpaRepository<Entity, Integer> repository
         )
     {
@@ -25,7 +25,7 @@ public class ValidatorImpl implements Validator
     }
 
     public <Entity> Entity completeValidationForId(
-            int id,
+            Integer id,
             JpaRepository<Entity, Integer> repository
         )
     {
@@ -37,7 +37,7 @@ public class ValidatorImpl implements Validator
     }
 
     public <Entity> Entity validateIdExistence(
-            int id,
+            Integer id,
             JpaRepository<Entity, Integer> repository
         )
     {
@@ -48,11 +48,11 @@ public class ValidatorImpl implements Validator
     }
 
     public void validateIdFormat(
-            int id,
+            Integer id,
             StringBuilder errorBuilder
         )
     {
-        if(id<1)
+        if(id == null || id<1)
             errorBuilder.append(
                     " The id must be grater than 0."
             );
@@ -60,8 +60,8 @@ public class ValidatorImpl implements Validator
 
     public void validateVarchar(
             String varchar,
-            int minLength,
-            int maxLength,
+            Integer minLength,
+            Integer maxLength,
             StringBuilder errors,
             String propertyName
         )
