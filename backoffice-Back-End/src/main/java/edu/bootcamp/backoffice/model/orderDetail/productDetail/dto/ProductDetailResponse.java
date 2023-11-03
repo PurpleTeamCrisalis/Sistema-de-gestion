@@ -18,12 +18,6 @@ public class ProductDetailResponse {
   @JsonProperty("id")
   private Integer id;
 
-  @JsonProperty("name")
-  private String name;
-
-  @JsonProperty("basePrice")
-  private Double basePrice;
-
   @JsonProperty("quantity")
   private Integer quantity;
 
