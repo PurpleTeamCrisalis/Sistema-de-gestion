@@ -11,6 +11,7 @@ import { faList } from "@fortawesome/free-solid-svg-icons";
 import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import "../../node_modules/bootstrap/dist/js/bootstrap.bundle";
 import "../assets/styles/navStyle.css";
+import "../assets/styles/tableStyle.css";
 import { useAuthStore } from "../hooks/useAuthStore";
 import Swal from 'sweetalert2';
 
@@ -40,117 +41,79 @@ export function NavComponent() {
 
 
   return (
-    <div className="col-auto col-md-3 col-xl-2 px-0 bg-primary min-vh-100 d-flex flex-column align-items-center align-items-sm-start">
-      <div
-        href="/"
-        className="mt-4 container d-flex align-items-center justify-content-center p-0"
-      >
-        <img
-          src={imageLogoFinnegans}
-          alt="Logo Finnegans"
-          width="70"
-          height="60"
-        />
-        <span className="fs-3 d-none d-sm-inline text-dark fw-bold">
-          Finnegans
-        </span>
-      </div>
-      <span
-        className="d-none d-sm-inline mx-auto text-dark fw-normal fs-5"
-        style={{ letterSpacing: ".3rem" }}
-      >
-        BACKOFFICE
-      </span>
+    <div className="col-auto me-2 px-0 min-vh-100 d-flex flex-column align-items-center align-items-sm-start custom-shadow bg-white">{/*col-md-3 col-xl-2*/}
+      
       <hr className="mb-5" />
-      <Link to="/" className="mb-3 ps-4 py-2 bg-hover container">
+      <Link to="/" className="ps-4 py-2 bg-hover container">
         <FontAwesomeIcon
           icon={faHouse}
           size="xl"
           style={{ color: "#000000", width: "30px" }}
         />
-        <span className="ms-3 d-none d-sm-inline text-dark fw-normal fs-5 align-middle">
+        <span className="d-none d-sm-inline text-dark fw-normal fs-5 align-middle">
           Inicio
         </span>
       </Link>
-      <Link to="/user" className="mb-3 ps-4 py-2 bg-hover container">
+      <Link to="/user" className="ps-4 py-2 bg-hover container">
         <FontAwesomeIcon
           icon={faUser}
           size="xl"
           style={{ color: "#000000", width: "30px" }}
         />
-        <span className="ms-3 d-none d-sm-inline text-dark fw-normal fs-5 align-middle">
+        <span className="d-none d-sm-inline text-dark fw-normal fs-5 align-middle">
           Usuarios
         </span>
       </Link>
-      <Link to="/client" className="mb-3 ps-4 py-2 bg-hover container">
+      <Link to="/client" className="ps-4 py-2 bg-hover container">
         <FontAwesomeIcon
           icon={faUsers}
           size="xl"
           style={{ color: "#000000", width: "30px" }}
         />
-        <span className="ms-3 d-none d-sm-inline text-dark fw-normal fs-5 align-middle">
+        <span className="d-none d-sm-inline text-dark fw-normal fs-5 align-middle">
           Clientes
         </span>
       </Link>
-      <Link to="/order" className="mb-3 ps-4 py-2 bg-hover container">
+      <Link to="/order" className="ps-4 py-2 bg-hover container">
         <FontAwesomeIcon
           icon={faList}
           size="xl"
           style={{ color: "#000000", width: "30px" }}
         />
-        <span className="ms-3 d-none d-sm-inline text-dark fw-normal fs-5 align-middle">
+        <span className="d-none d-sm-inline text-dark fw-normal fs-5 align-middle">
           Pedidos
         </span>
       </Link>
-      <Link to="/product" className="mb-3 ps-4 py-2 bg-hover container">
+      <Link to="/product" className="ps-4 py-2 bg-hover container">
         <FontAwesomeIcon
           icon={faBox}
           size="xl"
           style={{ color: "#000000", width: "30px" }}
         />
-        <span className="ms-3 d-none d-sm-inline text-dark fw-normal fs-5 align-middle">
+        <span className="d-none d-sm-inline text-dark fw-normal fs-5 align-middle">
           Productos
         </span>
       </Link>
-      <Link to="/service" className="mb-3 ps-4 py-2 bg-hover container">
+      <Link to="/service" className="ps-4 py-2 bg-hover container">
         <FontAwesomeIcon
           icon={faBellConcierge}
           size="xl"
           style={{ color: "#000000", width: "30px" }}
         />
-        <span className="ms-3 d-none d-sm-inline text-dark fw-normal fs-5 align-middle">
+        <span className="d-none d-sm-inline text-dark fw-normal fs-5 align-middle">
           Servicios
         </span>
       </Link>
-      <Link to="/charge" className="mb-3 ps-4 py-2 bg-hover container">
+      <Link to="/charge" className="ps-4 py-2 bg-hover container">
         <FontAwesomeIcon
           icon={faFileInvoiceDollar}
           size="xl"
           style={{ color: "#000000", width: "30px" }}
         />
-        <span className="ms-3 d-none d-sm-inline text-dark fw-normal fs-5 align-middle">
+        <span className="d-none d-sm-inline text-dark fw-normal fs-5 align-middle">
           Cargos
         </span>
       </Link>
-      <div className="btn-group dropup align-self-center">
-        <button
-          type="button"
-          className="btn btn-secondary dropdown-toggle "
-          data-bs-toggle="dropdown"
-          aria-haspopup="true"
-          aria-expanded="false"
-        >
-          <span className="d-sm-none">
-            <FontAwesomeIcon icon={faArrowUp} />
-          </span>
-          <span className="d-none d-sm-inline">{user.username}</span>
-        </button>
-        <div className="dropdown-menu">
-          <a className="dropdown-item" href="/" onClick={event => handleLogout(event)}>
-            Cerrar sesion
-          </a>
-        </div>
-      </div>
     </div>
   );
 }

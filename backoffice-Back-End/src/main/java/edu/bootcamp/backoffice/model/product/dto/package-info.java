@@ -1,1 +1,0 @@
-package edu.bootcamp.backoffice.model.product.dto;
