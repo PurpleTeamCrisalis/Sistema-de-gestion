@@ -29,7 +29,8 @@ function UserListComponent() {
 
   useEffect(() => {
     if(users.length === 0)startLoadingUsers();
-  }, []);
+    setFilteredList([...users])
+  }, [users]);
 
   function checkActiveUser(event, user) {
     let checkboxes = document.getElementsByClassName("custom-checkbox");
