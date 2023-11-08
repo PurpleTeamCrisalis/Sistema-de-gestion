@@ -29,7 +29,9 @@ export function useServicesStore() {
         description: data.description,
         basePrice: data.basePrice,
         enabled: data.enabled,
-        id: data.id
+        id: data.id,
+        isSpecial: data.isSpecial,
+        suportCharge: data.suportCharge
       }))
     } catch (error) {
       console.error(error)
