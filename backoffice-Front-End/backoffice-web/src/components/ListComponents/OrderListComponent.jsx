@@ -9,6 +9,9 @@ import HeaderComponent from "../HeaderComponent";
 import { faCirclePlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import "../../assets/styles/AddRemoveButtonsStyle.css";
 import { DetailModal } from "../Modal/DetailModal";
+import EmptyList from "../../utils/EmptyList";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function OrderListComponent() {
   const navigate = useNavigate();
@@ -16,7 +19,7 @@ function OrderListComponent() {
     useOrdersStore();
 
   useEffect(() => {
-    if(orders.length === 0)startLoadingOrders();
+    if (orders.length === 0) startLoadingOrders();
   }, []);
 
   function checkActiveOrder(event, user) {
@@ -47,6 +50,7 @@ function OrderListComponent() {
 
   return (
     <div className="bgGrey">
+      <ToastContainer />
       <HeaderComponent />
       <div className="container-fluid mainContainer">
         <div className="secondContainer">
@@ -81,69 +85,73 @@ function OrderListComponent() {
             </section>
 
             {/* Table Section */}
-            <section
-              className="d-flex justify-content-center rounded-3 custom-shadow tabla-container-color"
-              style={{ maxHeight: "85vh", overflowY: "auto" }}
-            >
-              <table className="table table-color">
-                {/* Header de la table */}
-                <thead
-                  style={{
-                    position: "sticky",
-                    top: 0,
-                    borderBottom: "2px solid black",
-                  }}
-                >
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">N°</th>
-                    <th scope="col">Cliente</th>
-                    <th scope="col">Total</th>
-                    <th scope="col">Fecha</th>
-                    <th scope="col">#</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {orders?.map((order) => (
-                    <tr key={order.id} style={{ marginBottom: "0px" }}>
-                      <td>
-                        <input
-                          type="checkbox"
-                          id={order.id}
-                          style={{
-                            color: "#000000",
-                            cursor: "pointer",
-                          }}
-                          onChange={(event) => checkActiveOrder(event, order)}
-                          className="custom-checkbox"
-                        />
-                      </td>
-                      <td>{order.id}</td>
-                      <td>
-                        {order.client.isbussiness
-                          ? order.client.bussinessname
-                          : `${order.client.name} ${order.client.lastname}`}
-                      </td>
-                      <td>${order.total}</td>
-                      <td>{order.date}</td>
-                      <td>
-                        <FontAwesomeIcon
-                          icon={faEye}
-                          style={{
-                            color: "#000000",
-                            cursor: "pointer",
-                          }}
-                          data-bs-toggle="modal"
-                          data-bs-target="#detail-modal"
-                          onClick={() => showDetails(order)}
-                        />
-                      </td>
+            {orders.length === 0 ? (
+              <EmptyList name={"Ordenes"} />
+            ) : (
+              <section
+                className="d-flex justify-content-center rounded-3 custom-shadow tabla-container-color"
+                style={{ maxHeight: "85vh", overflowY: "auto" }}
+              >
+                <table className="table table-color">
+                  {/* Header de la table */}
+                  <thead
+                    style={{
+                      position: "sticky",
+                      top: 0,
+                      borderBottom: "2px solid black",
+                    }}
+                  >
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">N°</th>
+                      <th scope="col">Cliente</th>
+                      <th scope="col">Total</th>
+                      <th scope="col">Fecha</th>
+                      <th scope="col">#</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-              <DetailModal />
-            </section>
+                  </thead>
+                  <tbody>
+                    {orders?.map((order) => (
+                      <tr key={order.id} style={{ marginBottom: "0px" }}>
+                        <td>
+                          <input
+                            type="checkbox"
+                            id={order.id}
+                            style={{
+                              color: "#000000",
+                              cursor: "pointer",
+                            }}
+                            onChange={(event) => checkActiveOrder(event, order)}
+                            className="custom-checkbox"
+                          />
+                        </td>
+                        <td>{order.id}</td>
+                        <td>
+                          {order.client.isbussiness
+                            ? order.client.bussinessname
+                            : `${order.client.name} ${order.client.lastname}`}
+                        </td>
+                        <td>${order.total}</td>
+                        <td>{order.date}</td>
+                        <td>
+                          <FontAwesomeIcon
+                            icon={faEye}
+                            style={{
+                              color: "#000000",
+                              cursor: "pointer",
+                            }}
+                            data-bs-toggle="modal"
+                            data-bs-target="#detail-modal"
+                            onClick={() => showDetails(order)}
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                <DetailModal />
+              </section>
+            )}
           </div>
         </div>
       </div>
