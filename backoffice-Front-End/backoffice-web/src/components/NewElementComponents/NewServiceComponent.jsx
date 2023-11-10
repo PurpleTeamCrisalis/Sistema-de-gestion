@@ -75,19 +75,9 @@ function NewServiceComponent() {
             }).showToast();
             return console.error("Error: precio negativo");
         }
-        if (suportCharge < 0) {
+        if (isSpecial && suportCharge <= 0) {
             Toastify({
-                text: "El precio de soporte no puede ser negativo",
-                duration: 2000,
-                style: {
-                    background: "linear-gradient(to right, #f44336, #b71c1c)",
-                },
-            }).showToast();
-            return console.error("Error: precio de soporte negativo");
-        }
-        if (isSpecial && suportCharge == 0) {
-            Toastify({
-                text: "El precio de soporte debe ser válido",
+                text: "El precio de soporte debe ser mayor a cero",
                 duration: 2000,
                 style: {
                     background: "linear-gradient(to right, #f44336, #b71c1c)",
@@ -110,6 +100,7 @@ function NewServiceComponent() {
         }
 
         try {
+            //Si no es especial se manda un cero, para evitar que viaje un número cuando no debería
             startAddingService({...service,
             suportCharge: isSpecial?suportCharge:0});
             clearForm();

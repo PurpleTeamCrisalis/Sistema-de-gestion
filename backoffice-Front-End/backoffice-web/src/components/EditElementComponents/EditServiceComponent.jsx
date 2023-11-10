@@ -78,19 +78,9 @@ function EditServiceComponent() {
             }).showToast();
             return console.error("Error: precio negativo");
         }
-        if (suportCharge < 0) {
+        if (isSpecial && suportCharge <= 0) {
             Toastify({
-                text: "El precio de soporte no puede ser negativo",
-                duration: 2000,
-                style: {
-                    background: "linear-gradient(to right, #f44336, #b71c1c)",
-                },
-            }).showToast();
-            return console.error("Error: precio de soporte negativo");
-        }
-        if (isSpecial && suportCharge == 0) {
-            Toastify({
-                text: "El precio de soporte debe ser válido",
+                text: "El precio de soporte debe ser mayor a cero",
                 duration: 2000,
                 style: {
                     background: "linear-gradient(to right, #f44336, #b71c1c)",
@@ -112,6 +102,7 @@ function EditServiceComponent() {
             return console.error("Error: servicio ya existe");
         }
         try {
+            //Si no es especial se manda un cero, para evitar que viaje un número cuando no debería
             startUpdatingService({...serviceaux,
             suportCharge: isSpecial?suportCharge:0})
             Toastify({
@@ -175,8 +166,7 @@ function EditServiceComponent() {
                                                 required
                                             />
                                         </div>
-                                        <div className="col-md-6 mb-3">
-                                            <label htmlFor="isSpecial" className="form-label">Servicio Especial</label>
+                                        <div className="col-md-6 mb-3 d-flex align-items-end">
                                             <input
                                                 type="checkbox"
                                                 name="isSpecial"
@@ -184,7 +174,9 @@ function EditServiceComponent() {
                                                 // className="form-control"
                                                 onChange={(event)=>setIsSpecial(event.target.checked)}
                                                 value={isSpecial}
+                                                className='btn-check'
                                             />
+                                            <label htmlFor="isSpecial" className="btn checkbox-btn w-100">Servicio Especial</label>
                                         </div>
                                         {isSpecial && 
                                         <div className="col-md-6 mb-3">
