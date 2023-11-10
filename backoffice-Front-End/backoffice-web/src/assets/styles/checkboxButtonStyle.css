@@ -3,11 +3,16 @@
     font-weight: bolder !important;
     color: #fff !important;
     background: linear-gradient(180deg, rgba(135, 176, 238, 0.60) 0%, #648bc6 52.12%, rgba(113, 152, 209, 0.87) 67.23%, rgba(135, 176, 238, 0.60) 100%) !important;
-    transition: all 1s linear;
+    opacity: .5;
+    transition: all .1s !important;
 }
 
 
 .btn-check:checked + .checkbox-btn{
+    opacity: 1;
+}
+
+/* .btn-check:checked + .checkbox-btn{
     background: linear-gradient(180deg, #648bc6 0%, rgba(135, 176, 238, 0.60) 52.12%, rgba(135, 176, 238, 0.60) 67.23%, #648bc6 100%) !important;
     color: #000 !important;
-}
+} */

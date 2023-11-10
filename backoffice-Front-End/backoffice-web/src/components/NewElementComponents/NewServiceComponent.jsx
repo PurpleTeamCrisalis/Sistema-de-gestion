@@ -171,7 +171,9 @@ function NewServiceComponent() {
                                                 required
                                             />
                                         </div>
-                                        <div className="col-md-6 mb-3 d-flex align-items-end">
+                                        <div className="col-md-6 mb-3">
+                                            <p className="form-label">Servicio Especial</p>
+                                            <div className='d-flex align-items-end'>
                                             <input
                                                 type="checkbox"
                                                 name="isSpecial"
@@ -180,8 +182,10 @@ function NewServiceComponent() {
                                                 onChange={(event)=>setIsSpecial(event.target.checked)}
                                                 value={isSpecial}
                                                 className='btn-check'
+                                                defaultChecked={isSpecial}
                                             />
-                                            <label htmlFor="isSpecial" className="btn checkbox-btn w-100">Servicio Especial</label>
+                                            <label htmlFor="isSpecial" className="btn checkbox-btn w-100">{`${isSpecial?"Habilitado":"Deshabilitado"}`}</label>
+                                            </div>
                                         </div>
                                         {isSpecial && 
                                         <div className="col-md-6 mb-3">
