@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useForm, useServicesStore } from '../../hooks'
 import Toastify from 'toastify-js'
 import "toastify-js/src/toastify.css"
+import "../../assets/styles/checkboxButtonStyle.css"
 import "../../assets/styles/inputStyle.css"
 import HeaderComponent from "../HeaderComponent";
 
@@ -179,8 +180,7 @@ function NewServiceComponent() {
                                                 required
                                             />
                                         </div>
-                                        <div className="col-md-6 mb-3">
-                                            <label htmlFor="isSpecial" className="form-label">Servicio Especial</label>
+                                        <div className="col-md-6 mb-3 d-flex align-items-end">
                                             <input
                                                 type="checkbox"
                                                 name="isSpecial"
@@ -188,7 +188,9 @@ function NewServiceComponent() {
                                                 // className="form-control"
                                                 onChange={(event)=>setIsSpecial(event.target.checked)}
                                                 value={isSpecial}
+                                                className='btn-check'
                                             />
+                                            <label htmlFor="isSpecial" className="btn checkbox-btn">Servicio Especial</label>
                                         </div>
                                         {isSpecial && 
                                         <div className="col-md-6 mb-3">
