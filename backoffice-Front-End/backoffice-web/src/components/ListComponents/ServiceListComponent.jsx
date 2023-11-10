@@ -120,18 +120,34 @@ function ServiceListComponent() {
                       borderBottom: "2px solid black",
                     }}
                   >
-                    <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">Nombre Servicio</th>
-                      <th scope="col">Descripción</th>
-                      <th scope="col">Precio Base</th>
-                      <th scope="col">Estado</th>
-                      <th scope="col">#</th>
+                    <tr style={{ textAlign: "center" }}>
+                      <th scope="col" width="5%">
+                        #
+                      </th>
+                      <th scope="col" width="12%">
+                        Nombre Servicio
+                      </th>
+                      <th scope="col" width="50%">
+                        Descripción
+                      </th>
+                      <th scope="col" width="10%">
+                        Precio Base
+                      </th>
+                      <th scope="col" width="10%">
+                        Estado
+                      </th>
+                      <th scope="col" width="5%">
+                        #
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {services?.map((service) => (
-                      <tr key={service.id} className="">
+                      <tr
+                        key={service.id}
+                        className=""
+                        style={{ textAlign: "center" }}
+                      >
                         <td>
                           <input
                             type="checkbox"
@@ -151,7 +167,7 @@ function ServiceListComponent() {
                         <td>{"$" + service.basePrice}</td>
                         <td
                           style={{
-                            color: service.enabled ? "green" : "red",
+                            color: service.enabled ? "#198754" : "red",
                           }}
                         >
                           {service.enabled ? "Habilitado" : "Deshabilitado"}
