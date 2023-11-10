@@ -26,7 +26,7 @@ export function useChargesStore() {
         try {
         const { data } = await projectApi.post('/charge/create', charge)
         dispatch(onAddNewCharge({
-            name: data.username,
+            name: data.name,
             percentage: data.percentage,
             enabled: data.enabled,
             id: data.id

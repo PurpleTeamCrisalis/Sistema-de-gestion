@@ -1,0 +1,27 @@
+.modal{
+    top: 20% !important;
+    left: 5% !important;
+}
+
+.modal-body{
+    height: 300px !important;
+}
+
+.listTax{
+    width: 400px;
+    height: 100% !important;
+}
+
+.scroll {
+    height: 5em;
+    line-height: 1em;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.boxTax{
+    width: auto; 
+    height: 130px; 
+    background: #fff;
+    border-radius: 8px;
+}

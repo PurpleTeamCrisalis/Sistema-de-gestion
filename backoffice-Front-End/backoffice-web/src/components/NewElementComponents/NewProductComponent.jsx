@@ -6,6 +6,8 @@ import Toastify from 'toastify-js'
 import "toastify-js/src/toastify.css"
 import "../../assets/styles/inputStyle.css"
 import HeaderComponent from "../HeaderComponent";
+import TaxModal from '../Modal/TaxModal'
+
 
 const formDTO = {
     name: "",
@@ -173,6 +175,7 @@ function NewProductComponent() {
                                             >
                                             </textarea>
                                         </div>
+                                        <TaxModal/>
                                     </div>
                                 </div>
                             </div>
