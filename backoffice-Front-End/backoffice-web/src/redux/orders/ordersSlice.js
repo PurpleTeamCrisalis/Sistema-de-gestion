@@ -10,7 +10,7 @@ const initialState = {
 export const ordersSlice = createSlice({
   name: 'orders',
   initialState,
-  reducers: {   
+  reducers: {
     onLoadOrders: (state, { payload = [] }) => {
       state.isLoadingOrders = false;
       payload.forEach(order => {
@@ -18,13 +18,12 @@ export const ordersSlice = createSlice({
         if (!exists) state.orders.push(order)
       })
     },
-    onLoadOrderById: (state, {payload}) => {
+    onLoadOrderById: (state, { payload }) => {
       state.selectedOrder = payload
     },
     onAddNewOrder: (state, { payload }) => {
       const exists = state.orders.some(dbOrder => dbOrder.id === payload.id)
-      if (!exists) 
-      {
+      if (!exists) {
         state.orders.push(payload)
         state.activeOrder = null
       }
@@ -34,8 +33,11 @@ export const ordersSlice = createSlice({
     },
     onPullActiveOrder: (state) => {
       state.activeOrder = null
+    },
+    onChangeOrderState: (state, { payload }) => {
+      state.orders = state.orders.map(order => order.id === payload.id ? payload : order)
     }
   }
 });
 
-export const { onLoadOrders, onAddNewOrder, onSetActiveOrder, onPullActiveOrder, onUpdateOrder, onLoadOrderById } = ordersSlice.actions;
+export const { onLoadOrders, onAddNewOrder, onSetActiveOrder, onPullActiveOrder, onUpdateOrder, onLoadOrderById, onChangeOrderState } = ordersSlice.actions;
