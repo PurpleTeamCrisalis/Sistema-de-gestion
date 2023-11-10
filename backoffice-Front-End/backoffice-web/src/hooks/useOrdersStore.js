@@ -31,7 +31,7 @@ export function useOrdersStore() {
       dispatch(onLoadOrders(data))
       getSuccessResponse("Ordenes cargadas!")
     } catch (error) {
-      getErrorResponse(error)
+      getErrorResponse(error, "ordenes")
     }
   }
   async function startAddingOrder(order) {
