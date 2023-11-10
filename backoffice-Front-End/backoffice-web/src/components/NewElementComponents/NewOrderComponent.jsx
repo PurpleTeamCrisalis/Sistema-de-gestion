@@ -16,6 +16,7 @@ import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import { NewOrderProductTable, NewOrderServiceTable } from "../";
 
 export const NewOrderComponent = () => {
   const {
@@ -24,6 +25,7 @@ export const NewOrderComponent = () => {
     pullActiveDetail,
     deleteDetail,
     updateQuantity,
+    updateWarranty,
     cleanNewOrder,
   } = useNewOrderStore();
   const { startAddingOrder } = useOrdersStore();
@@ -62,7 +64,10 @@ export const NewOrderComponent = () => {
         background: "linear-gradient(to right, #00b09b, #96c93d)",
       },
     }).showToast();
-    navigate("/order");
+
+    setTimeout(() => {
+      navigate("/order");
+    }, 500);
   }
 
   function checkActiveDetail(event, detail) {
@@ -87,6 +92,10 @@ export const NewOrderComponent = () => {
 
   function handleQuantity(detail, event) {
     updateQuantity({ detail, quantity: Number(event.target.value) });
+  }
+
+  function handleWarranty(detail, event) {
+    updateWarranty({ detail, warranty: Number(event.target.value) });
   }
 
   function handleCleanNewOrder() {
@@ -177,100 +186,34 @@ export const NewOrderComponent = () => {
               className="container p-0 mt-3"
               style={{ overflowY: "auto" }}
             >
-              <h2 className="fs-5 mt-4">Productos</h2>
-              <div className="bg-white rounded-3 overflow-hidden d-flex align-items-center container mt-2 rounded-3  custom-shadow tabla-container-color">
-                <table
-                  className="table table-hover"
-                  style={{ minWidth: "100%" }}
-                >
-                  {/* Header de la table */}
-                  <thead
-                    style={{
-                      position: "sticky",
-                      top: 0,
-                      borderBottom: "2px solid black",
-                    }}
-                  >
-                    <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">Item</th>
-                      <th scope="col">Detalle</th>
-                      <th scope="col">Cantidad</th>
-                      <th scope="col">Precio Unitario</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {newOrder?.products.map((detail) => (
-                      <tr key={detail.id} style={{ marginBottom: "0px" }}>
-                        <td>
-                          <input
-                            type="checkbox"
-                            id={detail.id}
-                            className="custom-checkbox"
-                            onChange={(event) =>
-                              checkActiveDetail(event, detail)
-                            }
-                            style={{ color: "#000000", cursor: "pointer" }}
-                          />
-                        </td>
-                        <td>{detail.name}</td>
-                        <td>{detail.description}</td>
-                        <td>
-                          <input
-                            type="number"
-                            onChange={(event) => handleQuantity(detail, event)}
-                            value={detail.quantity}
-                          />
-                        </td>
-                        <td>${detail.basePrice}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              <h2 className="fs-5 mt-5">Servicios</h2>
-              <div className="bg-white rounded-3 overflow-hidden d-flex align-items-center">
-                <table
-                  className="table table-hover"
-                  style={{ minWidth: "100%" }}
-                >
-                  {/* Header de la table */}
-                  <thead
-                    style={{
-                      position: "sticky",
-                      top: 0,
-                      borderBottom: "2px solid black",
-                    }}
-                  >
-                    <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">Item</th>
-                      <th scope="col">Detalle</th>
-                      <th scope="col">Precio Unitario</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {newOrder?.services.map((detail) => (
-                      <tr key={detail.id} style={{ marginBottom: "0px" }}>
-                        <td>
-                          <input
-                            type="checkbox"
-                            id={detail.id}
-                            className="custom-checkbox"
-                            onChange={(event) =>
-                              checkActiveDetail(event, detail)
-                            }
-                            style={{ color: "#000000", cursor: "pointer" }}
-                          />
-                        </td>
-                        <td>{detail.name}</td>
-                        <td>{detail.description}</td>
-                        <td>${detail.basePrice}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              {newOrder?.products.length !== 0 ? (
+                <div>
+                  <h2 className="fs-5 mt-4">Productos</h2>
+                  <div className="bg-white rounded-3 overflow-hidden d-flex align-items-center container mt-2 rounded-3 custom-shadow tabla-container-color">
+                    <NewOrderProductTable
+                      items={newOrder.products}
+                      handleWarranty={handleWarranty}
+                      handleQuantity={handleQuantity}
+                      checkActiveDetail={checkActiveDetail}
+                    />
+                  </div>
+                </div>
+              ) : (
+                ""
+              )}
+              {newOrder.services.length !== 0 ? (
+                <div>
+                  <h2 className="fs-5 mt-4">Servicios</h2>
+                  <div className="bg-white rounded-3 overflow-hidden d-flex align-items-center container mt-2 rounded-3 custom-shadow">
+                    <NewOrderServiceTable
+                      items={newOrder.services}
+                      checkActiveDetail={checkActiveDetail}
+                    />
+                  </div>
+                </div>
+              ) : (
+                ""
+              )}
             </section>
           </div>
         </div>
