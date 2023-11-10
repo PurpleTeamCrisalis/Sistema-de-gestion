@@ -190,7 +190,7 @@ function NewServiceComponent() {
                                                 value={isSpecial}
                                                 className='btn-check'
                                             />
-                                            <label htmlFor="isSpecial" className="btn checkbox-btn">Servicio Especial</label>
+                                            <label htmlFor="isSpecial" className="btn checkbox-btn w-100">Servicio Especial</label>
                                         </div>
                                         {isSpecial && 
                                         <div className="col-md-6 mb-3">
