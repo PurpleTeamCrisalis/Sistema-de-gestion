@@ -4,6 +4,7 @@ import edu.bootcamp.backoffice.exception.custom.dbValidation.AlreadyRegisteredEx
 import edu.bootcamp.backoffice.exception.custom.parameterValidation.EmptyElementException;
 import edu.bootcamp.backoffice.exception.custom.parameterValidation.InvalidArgumentsFormatException;
 import edu.bootcamp.backoffice.model.EntitiesConstraints;
+import edu.bootcamp.backoffice.model.Subscription.Subscription;
 import edu.bootcamp.backoffice.model.Subscription.dto.SubscriptionResponse;
 import edu.bootcamp.backoffice.model.client.Client;
 import edu.bootcamp.backoffice.model.client.ClientFactory;
@@ -13,6 +14,7 @@ import edu.bootcamp.backoffice.model.client.dto.UpdateClientRequest;
 import edu.bootcamp.backoffice.model.order.Order;
 import edu.bootcamp.backoffice.model.service.ServiceEntity;
 import edu.bootcamp.backoffice.repository.ClientRepository;
+import edu.bootcamp.backoffice.repository.SubscriptionRepository;
 import edu.bootcamp.backoffice.service.Interface.ClientService;
 import edu.bootcamp.backoffice.service.Interface.Validator;
 import org.springframework.stereotype.Service;
@@ -26,15 +28,18 @@ import java.util.Optional;
 public class ClientServiceImpl implements ClientService {
     private final ClientRepository clientRepository;
     private final ClientFactory dtoFactory;
+    private final SubscriptionRepository subscriptionRepository;
     private final Validator validator;
+
 
     public ClientServiceImpl(
             ClientRepository clientRepository,
             ClientFactory dtoFactory,
-            Validator validator
+            SubscriptionRepository subscriptionRepository, Validator validator
     ) {
         this.clientRepository = clientRepository;
         this.dtoFactory = dtoFactory;
+        this.subscriptionRepository = subscriptionRepository;
         this.validator = validator;
     }
 
@@ -94,9 +99,13 @@ public class ClientServiceImpl implements ClientService {
                 id,
                 clientRepository
         );
-        if(clientDto.getSubscriptionId() != null){
+        if (clientDto.getSubscriptionId() != null) {
             // Buscar la subscripcion por id y setear false al enabled
-
+            for(Subscription subs : client.getClientSubscriptions()){
+                if(subs.getId().equals(clientDto.getSubscriptionId())){
+                    subs.setEnabled(false);
+                }
+            }
         }
         if (clientDto.getName() != null)
             client.setName(clientDto.getName());
@@ -320,25 +329,45 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public void registerSubscriptions(Client client, List<ServiceEntity> services) {
-        //Guardo el client id
-        //Guardo los service id
-        //enabled true por defecto
+        Subscription subscription = new Subscription();
+        subscription.setClient(client);
+        subscription.setEnabled(true);
+        for (ServiceEntity service : services) {
+            subscription.setService(service);
+            subscriptionRepository.save(subscription);
+        }
     }
 
     @Override
     public ServiceEntity getDiscountService(Client client) {
         // Buscar las subscripciones que posee el cliente y mandar una subscripcion que este activa
+        for (Subscription subscriptions : client.getClientSubscriptions()) {
+            if (subscriptions.isEnabled()) {
+                return subscriptions.getService();
+            } else {
+                continue;
+            }
+        }
         return null;
     }
 
     @Override
     public List<SubscriptionResponse> getClientSubscriptions(Integer clientId) {
-        // Buscar las subscripciones que contiene el cliente
-        // Check id valido
-            // validateSoftDeletableEntityExistence(clientId,clientRepository)
-        // FindById para el client
-        //Recorrer lista de subscription de cliente metiendola en una nueva lista
-        // pero ya convertida en Subscription Response
-        return null;
+
+        Client client = validator.validateSoftDeletableEntityExistence(clientId, clientRepository);
+
+        List<SubscriptionResponse> subscriptionsNew = new ArrayList<>();
+
+        for (Subscription subscriptions : client.getClientSubscriptions()) {
+            SubscriptionResponse subsResponse = new SubscriptionResponse();
+            subsResponse.setId(subscriptions.getId());
+            subsResponse.setServiceName(subscriptions.getService().getName());
+            subsResponse.setEnabled(subscriptions.isEnabled());
+
+            subscriptionsNew.add(subsResponse);
+        }
+
+
+        return subscriptionsNew;
     }
 }

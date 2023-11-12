@@ -4,6 +4,7 @@ import edu.bootcamp.backoffice.model.Subscription.dto.SubscriptionResponse;
 import edu.bootcamp.backoffice.model.client.dto.ClientRequest;
 import edu.bootcamp.backoffice.model.client.dto.ClientResponse;
 import edu.bootcamp.backoffice.model.client.dto.UpdateClientRequest;
+import edu.bootcamp.backoffice.service.Interface.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

@@ -35,7 +35,7 @@ public class ServiceFactory {
     }
 
     public ServiceResponse createResponse(ServiceEntity serviceEntity) {
-        List<SubscriptionResponse> subscriptionResponses = createSubscriptionsResponses((List<Subscription>) serviceEntity.getServiceSubscription());
+        List<SubscriptionResponse> subscriptionResponses = createSubscriptionsResponses(serviceEntity.getServiceSubscriptions());
         return ServiceResponse.builder().id(serviceEntity.getId()).name(serviceEntity.getName()).description(serviceEntity.getDescription())
                 .basePrice(serviceEntity.getBasePrice())/*.isSpecial(serviceEntity.isSpecial())
 				.suportCharge(serviceEntity.getSuportCharge())*/
@@ -45,10 +45,14 @@ public class ServiceFactory {
 
     public List<SubscriptionResponse> createSubscriptionsResponses(List<Subscription> subscription) {
         List<SubscriptionResponse> subscriptionResponses = new ArrayList<SubscriptionResponse>();
+        SubscriptionResponse subsResponse = new SubscriptionResponse();
         for (Subscription s : subscription) {
-            SubscriptionResponse subscriptionResponse = SubscriptionFactory.createResponse(s);
 
-            subscriptionResponses.add(subscriptionResponse);
+            subsResponse.setEnabled(s.isEnabled());
+            subsResponse.setServiceName(s.getService().getName());
+            subsResponse.setId(s.getId());
+
+            subscriptionResponses.add(subsResponse);
         }
         return subscriptionResponses;
     }

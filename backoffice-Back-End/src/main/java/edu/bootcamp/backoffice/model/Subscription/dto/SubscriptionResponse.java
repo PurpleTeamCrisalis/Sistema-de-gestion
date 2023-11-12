@@ -1,14 +1,12 @@
 package edu.bootcamp.backoffice.model.Subscription.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class SubscriptionResponse {
 
@@ -17,4 +15,9 @@ public class SubscriptionResponse {
 
     @JsonProperty("id")
     private Integer id;
+
+    //Revisar lo de abajo
+    @JsonProperty("serviceName")
+    private String serviceName;
+
 }
