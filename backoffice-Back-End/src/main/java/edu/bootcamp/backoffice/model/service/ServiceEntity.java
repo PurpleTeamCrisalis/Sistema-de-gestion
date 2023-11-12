@@ -1,7 +1,6 @@
 package edu.bootcamp.backoffice.model.service;
 
-import javax.persistence.*;
-
+import edu.bootcamp.backoffice.model.Subscription.Subscription;
 import edu.bootcamp.backoffice.model.Tax.Tax;
 import edu.bootcamp.backoffice.model.asset.Asset;
 import edu.bootcamp.backoffice.model.order.Order;
@@ -11,9 +10,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.util.Set;
-import java.util.List;
+import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -42,6 +42,12 @@ public class ServiceEntity extends Asset {
 
 	@OneToMany(mappedBy = "service", fetch = FetchType.LAZY)
 	private List<ServiceDetail> serviceDetails = new ArrayList<>();
+
+	@OneToMany(
+			mappedBy = "service",
+			fetch = FetchType.LAZY
+	)
+	private List<Subscription> serviceSubscriptions = new ArrayList<>();
 
 	/*
 	 * public double suportCharge() {

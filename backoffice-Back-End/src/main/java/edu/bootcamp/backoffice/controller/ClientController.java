@@ -1,9 +1,9 @@
 package edu.bootcamp.backoffice.controller;
 
-import edu.bootcamp.backoffice.model.client.dto.UpdateClientRequest;
+import edu.bootcamp.backoffice.model.Subscription.dto.SubscriptionResponse;
 import edu.bootcamp.backoffice.model.client.dto.ClientRequest;
 import edu.bootcamp.backoffice.model.client.dto.ClientResponse;
-import edu.bootcamp.backoffice.service.Interface.ClientService;
+import edu.bootcamp.backoffice.model.client.dto.UpdateClientRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -82,4 +82,10 @@ public class ClientController {
         return ResponseEntity.ok(client);
     }
 
+    @GetMapping(value = "list/{clientId}/subscriptions", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<SubscriptionResponse>> getClientSubscriptions(@PathVariable int clientId) {
+        //List<SubscriptionResponse> subscription = clientService.getClientSubscriptions(clientId);
+        // return ResponseEntity.ok(subscription);
+        return null;
+    }
 }

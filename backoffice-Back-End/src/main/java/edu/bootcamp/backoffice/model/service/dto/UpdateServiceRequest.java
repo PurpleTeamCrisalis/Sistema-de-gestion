@@ -1,8 +1,6 @@
 package edu.bootcamp.backoffice.model.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import edu.bootcamp.backoffice.model.product.dto.UpdateProductRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

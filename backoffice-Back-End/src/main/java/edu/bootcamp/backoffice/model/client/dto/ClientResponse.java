@@ -1,9 +1,11 @@
 package edu.bootcamp.backoffice.model.client.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import edu.bootcamp.backoffice.model.Subscription.dto.SubscriptionResponse;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -42,4 +44,8 @@ public class ClientResponse {
 
     @JsonProperty("cuit")
     private Long cuit;
+
+    @JsonProperty("subscriptionsByServices")
+    @Singular
+    private List<SubscriptionResponse> subscriptions;
 }

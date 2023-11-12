@@ -1,15 +1,17 @@
 package edu.bootcamp.backoffice.service;
 
-import edu.bootcamp.backoffice.exception.custom.dbValidation.*;
+import edu.bootcamp.backoffice.exception.custom.dbValidation.AlreadyRegisteredException;
 import edu.bootcamp.backoffice.exception.custom.parameterValidation.EmptyElementException;
 import edu.bootcamp.backoffice.exception.custom.parameterValidation.InvalidArgumentsFormatException;
-import edu.bootcamp.backoffice.model.order.Order;
-import edu.bootcamp.backoffice.model.client.Client;
 import edu.bootcamp.backoffice.model.EntitiesConstraints;
+import edu.bootcamp.backoffice.model.Subscription.dto.SubscriptionResponse;
+import edu.bootcamp.backoffice.model.client.Client;
 import edu.bootcamp.backoffice.model.client.ClientFactory;
-import edu.bootcamp.backoffice.model.client.dto.UpdateClientRequest;
 import edu.bootcamp.backoffice.model.client.dto.ClientRequest;
 import edu.bootcamp.backoffice.model.client.dto.ClientResponse;
+import edu.bootcamp.backoffice.model.client.dto.UpdateClientRequest;
+import edu.bootcamp.backoffice.model.order.Order;
+import edu.bootcamp.backoffice.model.service.ServiceEntity;
 import edu.bootcamp.backoffice.repository.ClientRepository;
 import edu.bootcamp.backoffice.service.Interface.ClientService;
 import edu.bootcamp.backoffice.service.Interface.Validator;
@@ -35,7 +37,6 @@ public class ClientServiceImpl implements ClientService {
         this.dtoFactory = dtoFactory;
         this.validator = validator;
     }
-
 
 
     public ClientResponse registerClient(ClientRequest clientRequest) {
@@ -88,27 +89,29 @@ public class ClientServiceImpl implements ClientService {
         validateErrors(errors);
     }
 
-    private Client validateUpdateConflicts(Integer id, UpdateClientRequest clientDto)
-    {
+    private Client validateUpdateConflicts(Integer id, UpdateClientRequest clientDto) {
         Client client = validator.completeValidationForId(
                 id,
                 clientRepository
         );
-        if(clientDto.getName()!=null)
+        if(clientDto.getSubscriptionId() != null){
+            // Buscar la subscripcion por id y setear false al enabled
+
+        }
+        if (clientDto.getName() != null)
             client.setName(clientDto.getName());
-        if(clientDto.getLastname()!=null)
+        if (clientDto.getLastname() != null)
             client.setLastName(clientDto.getLastname());
-        if(clientDto.getDni()!=null)
+        if (clientDto.getDni() != null)
             client.setDni(clientDto.getDni());
-        if(clientDto.getPhone()!=null)
+        if (clientDto.getPhone() != null)
             client.setPhone(clientDto.getPhone());
-        if(clientDto.getAdress()!=null)
+        if (clientDto.getAdress() != null)
             client.setAdress(clientDto.getAdress());
         if (clientDto.getStartdate() != null)
             client.setStartDate(clientDto.getStartdate());
-        if(clientDto.getIsbussiness()!=null)
-        {
-            if(clientDto.getIsbussiness()) {
+        if (clientDto.getIsbussiness() != null) {
+            if (clientDto.getIsbussiness()) {
                 if (client.getIsBussiness()) {
                     if (clientDto.getBussinessname() != null)
                         client.setBussinessName(clientDto.getBussinessname());
@@ -116,7 +119,7 @@ public class ClientServiceImpl implements ClientService {
                         client.setCuit(clientDto.getCuit());
                 } else {
                     StringBuilder errorBuilder = new StringBuilder(
-                        "Intentando actualizar el usuario Persona a usuario Empresa: "
+                            "Intentando actualizar el usuario Persona a usuario Empresa: "
                     );
                     int count = errorBuilder.length();
                     if (clientDto.getBussinessname() == null)
@@ -129,15 +132,13 @@ public class ClientServiceImpl implements ClientService {
                     client.setCuit(clientDto.getCuit());
                     client.setIsBussiness(true);
                 }
-            }
-            else
-            {
+            } else {
                 client.setBussinessName(null);
                 client.setCuit(null);
                 client.setIsBussiness(false);
             }
         }
-        if(clientDto.getEnabled()!=null)
+        if (clientDto.getEnabled() != null)
             client.setEnabled(clientDto.getEnabled());
         return client;
     }
@@ -203,11 +204,11 @@ public class ClientServiceImpl implements ClientService {
         );
         validator.validateIntegerValue
                 (clientRequest.getDni(),
-                EntitiesConstraints.CLIENTDNI_MAX,
-                EntitiesConstraints.CLIENTDNI_MIN,
-                "Client dni",
-                errorBuilder
-        );
+                        EntitiesConstraints.CLIENTDNI_MAX,
+                        EntitiesConstraints.CLIENTDNI_MIN,
+                        "Client dni",
+                        errorBuilder
+                );
         validator.validateLongValue(
                 clientRequest.getPhone(),
                 EntitiesConstraints.CLIENTPHONE_MAX,
@@ -226,7 +227,7 @@ public class ClientServiceImpl implements ClientService {
                 clientRequest.getIsbussiness(),
                 errorBuilder
         );
-        if(clientRequest.getIsbussiness()){
+        if (clientRequest.getIsbussiness()) {
             validator.validateVarchar(
                     clientRequest.getBussinessname(),
                     EntitiesConstraints.CLIENT_BUSSINESSNAME_MIN_LENGTH,
@@ -267,9 +268,9 @@ public class ClientServiceImpl implements ClientService {
                 "Client lastname"
         );
         validator.validateLongValue(
-                (long)clientRequest.getDni(),
-                (long)EntitiesConstraints.CLIENTDNI_MAX,
-                (long)EntitiesConstraints.CLIENTDNI_MIN,
+                (long) clientRequest.getDni(),
+                (long) EntitiesConstraints.CLIENTDNI_MAX,
+                (long) EntitiesConstraints.CLIENTDNI_MIN,
                 "Client dni",
                 errorBuilder
         );
@@ -287,11 +288,11 @@ public class ClientServiceImpl implements ClientService {
                 errorBuilder,
                 "Client adress"
         );
-       if(validator.isEmpty(
+        if (validator.isEmpty(
                 clientRequest.getIsbussiness(),
                 errorBuilder
-        ))return;
-       if(clientRequest.getIsbussiness()){
+        )) return;
+        if (clientRequest.getIsbussiness()) {
             validator.validateVarchar(
                     clientRequest.getBussinessname(),
                     EntitiesConstraints.CLIENTNAME_MIN_LENGTH,
@@ -310,10 +311,34 @@ public class ClientServiceImpl implements ClientService {
                     "Client cuit",
                     errorBuilder
             );
-       }
-       validator.isEmpty(
-               clientRequest.getEnabled(),
-               errorBuilder
-       );
+        }
+        validator.isEmpty(
+                clientRequest.getEnabled(),
+                errorBuilder
+        );
+    }
+
+    @Override
+    public void registerSubscriptions(Client client, List<ServiceEntity> services) {
+        //Guardo el client id
+        //Guardo los service id
+        //enabled true por defecto
+    }
+
+    @Override
+    public ServiceEntity getDiscountService(Client client) {
+        // Buscar las subscripciones que posee el cliente y mandar una subscripcion que este activa
+        return null;
+    }
+
+    @Override
+    public List<SubscriptionResponse> getClientSubscriptions(Integer clientId) {
+        // Buscar las subscripciones que contiene el cliente
+        // Check id valido
+            // validateSoftDeletableEntityExistence(clientId,clientRepository)
+        // FindById para el client
+        //Recorrer lista de subscription de cliente metiendola en una nueva lista
+        // pero ya convertida en Subscription Response
+        return null;
     }
 }

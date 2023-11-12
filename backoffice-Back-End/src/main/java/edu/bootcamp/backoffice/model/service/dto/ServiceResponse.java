@@ -1,12 +1,10 @@
 package edu.bootcamp.backoffice.model.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import edu.bootcamp.backoffice.model.Subscription.dto.SubscriptionResponse;
+import lombok.*;
 
-import edu.bootcamp.backoffice.model.product.dto.ProductResponse;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import java.util.List;
 
 @Getter
 @Setter
@@ -33,5 +31,9 @@ public class ServiceResponse {
 */
 	@JsonProperty("enabled")
 	private Boolean enabled;
+
+	@JsonProperty("subscriptionsByServices")
+	@Singular
+	private List<SubscriptionResponse> subscriptions;
 
 }
