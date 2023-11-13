@@ -14,9 +14,9 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const orderState = {
-  Pendiente: "grey",
+  Pendiente: "#617474",
   Pagado: "#198754",
-  Cancelada: "red",
+  Cancelada: "#a32525",
 };
 
 function OrderListComponent() {
@@ -142,7 +142,7 @@ function OrderListComponent() {
                             ? order.client.bussinessname
                             : `${order.client.name} ${order.client.lastname}`}
                         </td>
-                        <td>${order.total}</td>
+                        <td>${order.total.toFixed(2)}</td>
                         <td
                           style={{
                             color: "#198754",

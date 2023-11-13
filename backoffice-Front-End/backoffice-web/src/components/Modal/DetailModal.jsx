@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useOrdersStore } from "../../hooks";
 
 export const DetailModal = () => {
-  const { selectedOrder } = useOrdersStore();
+  const { selectedOrder, pullSelectedOrder } = useOrdersStore();
   return (
     <div
       className="modal fade"
@@ -13,7 +13,7 @@ export const DetailModal = () => {
       aria-labelledby="staticBackdropLabel"
       aria-hidden="true"
     >
-      <div className="modal-dialog modal-lg">
+      <div className="modal-dialog modal-xl">
         <div className="modal-content">
           <div className="modal-header">
             <h1 className="modal-title fs-5" id="staticBackdropLabel">
@@ -24,6 +24,7 @@ export const DetailModal = () => {
               className="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
+              onClick={pullSelectedOrder}
             ></button>
           </div>
           <div className="modal-body modal-dialog-scrollable">
@@ -41,22 +42,25 @@ export const DetailModal = () => {
                       }}
                     >
                       <tr style={{ textAlign: "center" }}>
-                        <th scope="col" width="20%">
+                        <th scope="col" width="10%">
                           Nombre
                         </th>
-                        <th scope="col" width="10%">
+                        <th scope="col" width="5%">
                           Cantidad
                         </th>
-                        <th scope="col" width="20%">
+                        <th scope="col" width="15%">
                           Precio Unitario
                         </th>
-                        <th scope="col" width="25%">
-                          Impuestos
-                        </th>
                         <th scope="col" width="10%">
-                          %
+                          Subtotal A/I
                         </th>
                         <th scope="col" width="20%">
+                          Impuestos
+                        </th>
+                        <th scope="col" width="5%">
+                          %
+                        </th>
+                        <th scope="col" width="15%">
                           Subtotal
                         </th>
                       </tr>
@@ -66,10 +70,11 @@ export const DetailModal = () => {
                         <tr key={product.id} style={{ textAlign: "center" }}>
                           <td>{product.name}</td>
                           <td>{product.quantity}</td>
-                          <td>${product.basePrice}</td>
+                          <td>${product.basePrice.toFixed(2)}</td>
+                          <td>${(product.quantity * product.basePrice).toFixed(2)}</td>
                           <td>{product.taxesApplied}</td>
-                          <td>{product.taxCharges}%</td>
-                          <td>${product.subTotal}</td>
+                          <td>{product.taxCharges.toFixed(2)}%</td>
+                          <td>${product.subTotal.toFixed(2)}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -91,19 +96,22 @@ export const DetailModal = () => {
                       }}
                     >
                       <tr style={{ textAlign: "center" }}>
-                        <th scope="col" width="20%">
+                        <th scope="col" width="10%">
                           Nombre
                         </th>
-                        <th scope="col" width="25%">
+                        <th scope="col" width="22%">
                           Precio Unitario
                         </th>
-                        <th scope="col" width="30%">
-                          Impuestos
-                        </th>
                         <th scope="col" width="10%">
-                          %
+                          Subtotal A/I
                         </th>
                         <th scope="col" width="20%">
+                          Impuestos
+                        </th>
+                        <th scope="col" width="5%">
+                          %
+                        </th>
+                        <th scope="col" width="15%">
                           Subtotal
                         </th>
                       </tr>
@@ -112,10 +120,11 @@ export const DetailModal = () => {
                       {selectedOrder?.services.map((service) => (
                         <tr key={service.id} style={{ textAlign: "center" }}>
                           <td>{service.name}</td>
-                          <td>${service.basePrice}</td>
+                          <td>${service.basePrice.toFixed(2)}</td>
+                          <td>${service.basePrice.toFixed(2)}</td>
                           <td>{service.taxesApplied}</td>
-                          <td>{service.taxCharges}%</td>
-                          <td>${service.subTotal}</td>
+                          <td>{service.taxCharges.toFixed(2)}%</td>
+                          <td>${service.subTotal.toFixed(2)}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -137,7 +146,9 @@ export const DetailModal = () => {
               type="button"
               className="btn btn-danger"
               // data-bs-dismiss="modal"
-              onClick={() => {alert('Orden cancelada')}} // Llamar a la funcion para que cambie el estado de la orden a cancelado.
+              onClick={() => {
+                alert("Orden cancelada");
+              }} // Llamar a la funcion para que cambie el estado de la orden a cancelado.
             >
               Cancelar orden
             </button>
@@ -145,7 +156,9 @@ export const DetailModal = () => {
               type="button"
               className="btn btn-primary"
               // data-bs-dismiss="modal"
-              onClick={() => {alert('Orden pagada')}} // Llamar a la funcion para que cambie el estado de la orden a pagado.
+              onClick={() => {
+                alert("Orden pagada");
+              }} // Llamar a la funcion para que cambie el estado de la orden a pagado.
             >
               Pagar orden
             </button>

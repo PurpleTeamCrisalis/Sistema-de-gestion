@@ -164,7 +164,7 @@ function ServiceListComponent() {
                         </td>
                         <td>{service.name}</td>
                         <td className="text-overflow">{service.description}</td>
-                        <td>{"$" + service.basePrice}</td>
+                        <td>{"$" + service.basePrice.toFixed(2)}</td>
                         <td
                           style={{
                             color: service.enabled ? "#198754" : "red",

@@ -164,7 +164,7 @@ function ProductListComponent() {
                         </td>
                         <td>{product.name}</td>
                         <td className="text-overflow">{product.description}</td>
-                        <td>{"$" + product.basePrice}</td>
+                        <td>{"$" + product.basePrice.toFixed(2)}</td>
                         <td
                           style={{
                             color: product.enabled ? "#198754" : "red",
