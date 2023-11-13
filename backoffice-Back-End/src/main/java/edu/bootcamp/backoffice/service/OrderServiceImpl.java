@@ -3,26 +3,27 @@ package edu.bootcamp.backoffice.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.bootcamp.backoffice.model.Tax.Tax;
 import edu.bootcamp.backoffice.model.client.Client;
 import edu.bootcamp.backoffice.model.order.Order;
+import edu.bootcamp.backoffice.model.orderDetail.OrderDetail.OrderDetail;
+import edu.bootcamp.backoffice.model.product.Product;
+import edu.bootcamp.backoffice.model.service.ServiceEntity;
 import edu.bootcamp.backoffice.service.Interface.ClientService;
 import edu.bootcamp.backoffice.service.Interface.UserService;
 import org.springframework.stereotype.Service;
 
 import edu.bootcamp.backoffice.exception.custom.dbValidation.EmptyTableException;
-import edu.bootcamp.backoffice.exception.custom.parameterValidation.EmptyElementException;
 import edu.bootcamp.backoffice.model.order.OrderFactory;
 import edu.bootcamp.backoffice.model.order.dto.OrderRequest;
 import edu.bootcamp.backoffice.model.order.dto.OrderResponse;
 import edu.bootcamp.backoffice.model.orderDetail.productDetail.ProductDetail;
-import edu.bootcamp.backoffice.model.orderDetail.productDetail.ProductDetailFactory;
 import edu.bootcamp.backoffice.repository.OrderRepository;
 import edu.bootcamp.backoffice.service.Interface.OrderService;
 import edu.bootcamp.backoffice.service.Interface.ProductDetailService;
 import edu.bootcamp.backoffice.service.Interface.ServiceDetailService;
 import edu.bootcamp.backoffice.service.Interface.Validator;
 import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.ServiceDetail;
-import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.ServiceDetailFactory;
 import edu.bootcamp.backoffice.model.user.User;
 
 @Service
@@ -42,12 +43,11 @@ public class OrderServiceImpl implements OrderService {
       ServiceDetailService serviceDetailService,
       OrderFactory         orderFactory,
       OrderRepository      orderRepository,
-      ServiceDetailFactory serviceDetailFactory,
-      ProductDetailFactory productDetailFactory,
       UserService          userService,
       ClientService        clientService,
       Validator            validator
-  ) {
+    )
+  {
     this.userService          = userService;
     this.clientService        = clientService;
     this.orderFactory         = orderFactory;
@@ -60,32 +60,169 @@ public class OrderServiceImpl implements OrderService {
   public OrderResponse registerOrder(
     OrderRequest orderDto,
     String username
-  ) {
-    // Validaciones
-    validateOrderDetails(orderDto);
-    User user = userService.getUserByUsername(username); // Validacion username.
-    Client client = clientService.getClientEntity(orderDto.getClientId()); // Validacion cliente.
-    List<ServiceDetail> servicesDetails = serviceDetailService.getServicesDetails(orderDto.getServices()); // Validacion productos. 
-    List<ProductDetail> productsDetails = productDetailService.getProductsDetails(orderDto.getProducts()); // Validacion servicios.
-
-    // Creo la ordenEntity
-    Order order = orderFactory.CreateOrderEntityForInsertNewRecord(); 
+    )
+  {
+    User user = userService.getUserByUsername(username);
+    StringBuilder errorBuilder = new StringBuilder();
+    validateOrderDetails(orderDto, errorBuilder);
+    Order order = orderFactory.CreateOrderEntityForInsertNewRecord();
+    validateAndMergeClient(order, orderDto, errorBuilder);
+    validateAndMergeProducts(order, orderDto, errorBuilder);
+    validateAndMergeServices(order, orderDto, errorBuilder);
+    if (errorBuilder.length() > 0)
+      throw new IllegalArgumentException(errorBuilder.toString());
     order.setUser(user);
-    order.setClient(client);
-    order.setServices(servicesDetails);
-    order.setProducts(productsDetails);
-    order.calculateTotal();
-    
-    // BEGIN TRANSACTIONS
-    // Guardo la orden en BD (tabla order_table)
+    completeOrderTotals(order);
     order = orderRepository.save(order);
-    // Guardo serviceDetails y productDetails en BD (tablas service_detail y product_detail)
-    serviceDetailService.registerServiceDetail(servicesDetails, order);
-    productDetailService.registerProductDetail(productsDetails, order);
-    
-    // Creo y estructuro la OrderResponse
-    return orderFactory.createOrderResponse(order); // Return OrderResponse
-    // END TRANSACTION
+    return orderFactory.createOrderResponse(order);
+  }
+
+  private void completeOrderTotals(Order order)
+  {
+
+    double total = 0.00;;
+    double acumDiscount = 0.0;
+    for(ServiceDetail serviceDetail : order.getServices())
+      total = total + completeDetailSubtotal(
+              serviceDetail,
+              setPriceWithoutTaxes(serviceDetail)
+      );
+    Double discount = getOrderDiscount(order);
+    for(ProductDetail productDetail : order.getProducts()) {
+      Double subtotal = completeDetailSubtotal(
+              productDetail,
+              setPriceWithoutTaxes(productDetail)
+      );
+      acumDiscount = acumDiscount + subtotal * discount;
+      total = total + subtotal * ( 1 - discount);
+    }
+    order.setDiscount(acumDiscount);
+    order.setTotal(total - order.getDiscount());
+  }
+
+  private Double setPriceWithoutTaxes(
+          ServiceDetail serviceDetail
+    )
+  {
+    ServiceEntity service = serviceDetail.getService();
+    double subtotal = service.getBasePrice();
+    if(service.isSpecial())
+      subtotal = subtotal + service.getSuportCharge();
+    serviceDetail.setPriceWithoutTaxes(subtotal);
+    return subtotal;
+  }
+
+  private Double setPriceWithoutTaxes(
+          ProductDetail productDetail
+    )
+  {
+    Product product = productDetail.getProduct();
+    double subtotal = product.getBasePrice();
+    if(productDetail.getWarranty() != null)
+      subtotal = subtotal * ( 1 + (productDetail.getWarranty() * 0.02));
+    productDetail.setPriceWithoutTaxes(subtotal);
+    return subtotal * productDetail.getQuantity();
+  }
+
+  private Double completeDetailSubtotal(
+          OrderDetail orderDetail,
+          Double subtotal
+    )
+  {
+    Double percentage = completeDetailTaxFields(orderDetail);
+    orderDetail.setSubTotal(subtotal * percentage);
+    return orderDetail.getSubTotal();
+  }
+
+  private Double completeDetailTaxFields(
+          OrderDetail orderDetail
+    )
+  {
+    StringBuilder chargesApplied = new StringBuilder();
+    double percentage = 1.00;
+    for (Tax tax : orderDetail.getAsset().getAllTaxes())
+    {
+      percentage = percentage + (tax.getPercentage() / 100.0);
+      chargesApplied
+              .append(" ")
+              .append(tax.getName());
+    }
+    orderDetail.setTaxesApplied(
+            chargesApplied.toString()
+    );
+    orderDetail.setTaxCharges(percentage*100-100);
+    return percentage;
+  }
+
+  private Double getOrderDiscount(Order order)
+  {
+    List<ServiceDetail> serviceDetails = order.getServices();
+    if(serviceDetails.isEmpty())
+      order.setDiscountService(
+        order.getServices().get(0).getService()
+      );
+    else
+    {/*
+      order.setDiscountService(
+        clientService.getDiscountService(client)
+      );*/
+    }
+    if(order.getDiscountService() != null)
+      return 0.1; // GET DISCOUNT
+    return 0.0;
+  }
+
+  private void validateAndMergeClient(
+          Order order,
+          OrderRequest orderDto,
+          StringBuilder errorBuilder
+  )
+  {
+    StringBuilder niceError = new StringBuilder(" Client:");
+    int initLength = niceError.length();
+    Client client = clientService.getClientEntity(
+            orderDto.getClientId(),
+            niceError
+    );
+    if(niceError.length() > initLength)
+      errorBuilder.append(niceError);
+    order.setClient(client);
+  }
+
+  private void validateAndMergeProducts(
+          Order order,
+          OrderRequest orderDto,
+          StringBuilder errorBuilder
+  )
+  {
+    StringBuilder niceError = new StringBuilder(" Products:");
+    int initLength = niceError.length();
+    List<ProductDetail> productsDetails = productDetailService.getProductsDetails(
+            orderDto.getProducts(),
+            niceError,
+            order
+    );
+    if(niceError.length() > initLength)
+      errorBuilder.append(niceError);
+    order.setProducts(productsDetails);
+  }
+
+  private void validateAndMergeServices(
+          Order order,
+          OrderRequest orderDto,
+          StringBuilder errorBuilder
+  )
+  {
+    StringBuilder niceError = new StringBuilder(" Services:");
+    int initLength = niceError.length();
+    List<ServiceDetail> servicesDetails = serviceDetailService.getServicesDetails(
+            orderDto.getServices(),
+            niceError,
+            order
+    );
+    if(niceError.length() > initLength)
+      errorBuilder.append(niceError);
+    order.setServices(servicesDetails);
   }
 
   public OrderResponse get(int id) {
@@ -114,10 +251,14 @@ public class OrderServiceImpl implements OrderService {
     return orderFactory.createOrderResponse(order);
   }
 
-  private void validateOrderDetails (OrderRequest orderDto) {
-    if ((orderDto.getProducts() == null || orderDto.getProducts().size() == 0) && 
-        (orderDto.getServices() == null || orderDto.getServices().size() == 0)
+  private void validateOrderDetails (
+          OrderRequest orderDto,
+          StringBuilder errorBuilder
     )
-      throw new EmptyElementException("No se recibieron ni productos ni servicios.");
+  {
+    if ((orderDto.getProducts() == null || orderDto.getProducts().isEmpty()) &&
+        (orderDto.getServices() == null || orderDto.getServices().isEmpty())
+    )
+      errorBuilder.append("No se recibieron ni productos ni servicios.");
   }
 }

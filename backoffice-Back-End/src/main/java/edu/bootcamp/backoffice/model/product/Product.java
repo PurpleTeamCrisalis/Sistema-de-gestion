@@ -27,9 +27,18 @@ public class Product extends Asset {
     private Integer id;
 
     @ManyToMany
-    @JoinTable(name = "taxesByProducts", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "tax_id"))
-    public Set<Tax> taxes;
+    @JoinTable(
+            name = "taxesByProducts",
+            joinColumns = @JoinColumn(name = "id"),
+            inverseJoinColumns = @JoinColumn(name = "tax_id")
+    )
+    private List<Tax> taxes;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<ProductDetail> productDetails = new ArrayList<>();
+
+    @Override
+    public List<Tax> getAllTaxes() {
+        return taxes;
+    }
 }

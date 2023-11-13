@@ -14,17 +14,13 @@ public interface UserService {
 
     public UserResponse get(int id);
 
-    public List<UserResponse> get()
-            throws InvalidIdFormatException;
+    public List<UserResponse> get();
 
-    public UserResponse update(int id, UpdateUserRequest userDto)
-            throws InvalidIdFormatException;
+    public UserResponse update(int id, UpdateUserRequest userDto);
 
-    public UserResponse delete(int id)
-            throws InvalidIdFormatException;
+    public UserResponse delete(int id);
 
-    public User getUserByUsername(String username)
-            throws InvalidIdFormatException;
+    public User getUserByUsername(String username);
 
     // For Login
 

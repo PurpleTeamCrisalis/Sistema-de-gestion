@@ -169,8 +169,15 @@ public class ProductServiceImpl implements ProductService {
 		return dtoFactory.createResponse(product);
 	}
 
-	public Product getProductById(Integer id) {
-		return validator.completeValidationForId(id, productRepository);
+	public Product getProductById(
+			Integer id,
+			StringBuilder errorBuilder
+	) {
+		return validator.validateFkExistence(
+				id,
+				productRepository,
+				errorBuilder
+		);
 	}
 
 	@Override

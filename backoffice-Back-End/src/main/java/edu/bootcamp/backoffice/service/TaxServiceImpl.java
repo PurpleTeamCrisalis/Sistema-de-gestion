@@ -99,7 +99,7 @@ public class TaxServiceImpl implements TaxService{
         //     taxRepository.save(charge);
         // }
         // else{
-            charge.getProducts().clear();
+            //charge.getProducts().clear();
             taxRepository.delete(charge);
         // }
         

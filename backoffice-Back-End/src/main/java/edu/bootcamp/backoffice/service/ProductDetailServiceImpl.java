@@ -29,7 +29,7 @@ public class ProductDetailServiceImpl implements ProductDetailService {
     this.productDetailFactory = productDetailFactory;
     this.productService = productService;
   }
-
+/*
   public void registerProductDetail(
       List<ProductDetail> createProductRequest,
       Order order) {
@@ -38,22 +38,29 @@ public class ProductDetailServiceImpl implements ProductDetailService {
       productDetail.setOrder(order);
       productDetailRepository.save(productDetail);
     }
-  }
+  }*/
 
   public List<ProductDetail> getProductsDetails(
-    List<ProductDetailRequest> orderProductRequests
+    List<ProductDetailRequest> orderProductRequests,
+    StringBuilder errorBuilder,
+    Order order
   ) {
-    // Creo la lista de products donde almaceno los ProductDetail
     List<ProductDetail> products = new ArrayList<ProductDetail>();
     for (ProductDetailRequest productDetailRequest : orderProductRequests) {
-      // Valido que exista product
-      Product product = productService.getProductById(productDetailRequest.getProductId());
-      // Creo la entidad productDetail
-      ProductDetail productDetail = productDetailFactory.CreateEntity(productDetailRequest, product);
-      // Agrego productDetail a lista products
-      products.add(productDetail);
+      Product product = productService.getProductById(
+              productDetailRequest.getProductId(),
+              errorBuilder
+              );
+      if (product != null)
+      {
+        ProductDetail productDetail = productDetailFactory.CreateEntity(
+                productDetailRequest,
+                product,
+                order
+        );
+        products.add(productDetail);
+      }
     }
-    // Retorno la lista de ProductDetail
     return products;
   }
 }

@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.List;
 import java.util.ArrayList;
@@ -34,14 +35,23 @@ public class ServiceEntity extends Asset {
 	private double suportCharge;
 
 	@ManyToMany
-	@JoinTable(name = "taxesByServices", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "tax_id"))
-	public Set<Tax> taxes;
+	@JoinTable(
+			name = "taxesByServices",
+			joinColumns = @JoinColumn(name = "id"),
+			inverseJoinColumns = @JoinColumn(name = "tax_id")
+	)
+	public List<Tax> taxes = new ArrayList<>();
 
 	@OneToMany(mappedBy = "discountService", fetch = FetchType.LAZY)
 	private List<Order> ordersWithDiscount = new ArrayList<>();
 
 	@OneToMany(mappedBy = "service", fetch = FetchType.LAZY)
 	private List<ServiceDetail> serviceDetails = new ArrayList<>();
+
+	@Override
+	public List<Tax> getAllTaxes() {
+		return taxes;
+	}
 
 	/*
 	 * public double suportCharge() {

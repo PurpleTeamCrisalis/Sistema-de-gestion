@@ -150,8 +150,16 @@ public class ClientServiceImpl implements ClientService {
         return dtoFactory.createResponse(client);
     }
 
-    public Client getClientEntity(Integer id) {
-        return validator.completeValidationForId(id, clientRepository);
+    public Client getClientEntity(
+            Integer id,
+            StringBuilder errorBuilder
+            )
+    {
+        return validator.validateFkExistence(
+                id,
+                clientRepository,
+                errorBuilder
+        );
     }
 
     public List<ClientResponse> get() {
@@ -222,21 +230,23 @@ public class ClientServiceImpl implements ClientService {
                 errorBuilder,
                 "Client adress"
         );
-        validator.isEmpty(
+        var isBussinesNotNull = ! validator.isNull(
                 clientRequest.getIsbussiness(),
-                errorBuilder
+                errorBuilder,
+                "isbussiness"
         );
-        if(clientRequest.getIsbussiness()){
+        if(isBussinesNotNull && clientRequest.getIsbussiness()){
             validator.validateVarchar(
                     clientRequest.getBussinessname(),
                     EntitiesConstraints.CLIENT_BUSSINESSNAME_MIN_LENGTH,
                     EntitiesConstraints.CLIENT_BUSSINESSNAME_MAX_LENGTH,
                     errorBuilder,
-                    "Client bussiness name"
+                    "Client bussinessname"
             );
-            validator.isEmpty(
+            validator.isNull(
                     clientRequest.getStartdate(),
-                    errorBuilder
+                    errorBuilder,
+                    "startsate"
             );
             validator.validateLongValue(
                     clientRequest.getCuit(),
@@ -287,9 +297,10 @@ public class ClientServiceImpl implements ClientService {
                 errorBuilder,
                 "Client adress"
         );
-       if(validator.isEmpty(
+       if(validator.isNull(
                 clientRequest.getIsbussiness(),
-                errorBuilder
+                errorBuilder,
+               "isbussiness"
         ))return;
        if(clientRequest.getIsbussiness()){
             validator.validateVarchar(
@@ -297,11 +308,12 @@ public class ClientServiceImpl implements ClientService {
                     EntitiesConstraints.CLIENTNAME_MIN_LENGTH,
                     EntitiesConstraints.CLIENTNAME_MAX_LENGTH,
                     errorBuilder,
-                    "Client bussiness name"
+                    "Client bussinessname"
             );
-            validator.isEmpty(
+            validator.isNull(
                     clientRequest.getStartdate(),
-                    errorBuilder
+                    errorBuilder,
+                    "startdate"
             );
             validator.validateLongValue(
                     clientRequest.getCuit(),
@@ -311,9 +323,10 @@ public class ClientServiceImpl implements ClientService {
                     errorBuilder
             );
        }
-       validator.isEmpty(
+       validator.isNull(
                clientRequest.getEnabled(),
-               errorBuilder
+               errorBuilder,
+               "enabled"
        );
     }
 }
