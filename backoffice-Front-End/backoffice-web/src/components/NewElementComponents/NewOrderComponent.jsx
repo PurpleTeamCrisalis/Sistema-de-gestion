@@ -91,10 +91,12 @@ export const NewOrderComponent = () => {
   }
 
   function handleQuantity(detail, event) {
+    if (event.target.value <= 0) return;
     updateQuantity({ detail, quantity: Number(event.target.value) });
   }
 
   function handleWarranty(detail, event) {
+    if (event.target.value < 0) return;
     updateWarranty({ detail, warranty: Number(event.target.value) });
   }
 
