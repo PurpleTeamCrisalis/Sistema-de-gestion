@@ -79,7 +79,6 @@ public class OrderServiceImpl implements OrderService {
 
   private void completeOrderTotals(Order order)
   {
-
     double total = 0.00;;
     double acumDiscount = 0.0;
     for(ServiceDetail serviceDetail : order.getServices())
@@ -93,7 +92,14 @@ public class OrderServiceImpl implements OrderService {
               productDetail,
               setPriceWithoutTaxes(productDetail)
       );
-      acumDiscount = acumDiscount + subtotal * discount;
+      double productDiscount = subtotal * discount;
+      double maxDiscount = getMaxDisccount();
+      if(productDiscount > maxDiscount)
+      {
+        productDiscount = maxDiscount;
+        discount = productDiscount / subtotal;
+      }
+      acumDiscount = acumDiscount + productDiscount;
       total = total + subtotal * ( 1 - discount);
     }
     order.setDiscount(acumDiscount);
@@ -157,7 +163,7 @@ public class OrderServiceImpl implements OrderService {
   private Double getOrderDiscount(Order order)
   {
     List<ServiceDetail> serviceDetails = order.getServices();
-    if(serviceDetails.isEmpty())
+    if(!serviceDetails.isEmpty())
       order.setDiscountService(
         order.getServices().get(0).getService()
       );
@@ -168,8 +174,18 @@ public class OrderServiceImpl implements OrderService {
       );*/
     }
     if(order.getDiscountService() != null)
-      return 0.1; // GET DISCOUNT
+      return getDiscount(); // GET DISCOUNT
     return 0.0;
+  }
+
+  private Double getMaxDisccount()
+  {
+    return 2500.0;
+  }
+
+  private Double getDiscount()
+  {
+    return 0.1;
   }
 
   private void validateAndMergeClient(
