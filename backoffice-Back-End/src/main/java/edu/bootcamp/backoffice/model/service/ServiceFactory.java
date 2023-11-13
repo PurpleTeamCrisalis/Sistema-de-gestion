@@ -18,16 +18,21 @@ public class ServiceFactory {
 	public ServiceEntity CreateEntityForInsertNewRecord(ServiceRequest servicetDto) {
 
 		return ServiceEntity.builder().name(servicetDto.getName()).description(servicetDto.getDescription())
-				.basePrice(servicetDto.getBasePrice())/*.isSpecial(servicetDto.isSpecial())
-				.suportCharge(servicetDto.getSuportCharge())*/.enabled(true).build();
+				.basePrice(servicetDto.getBasePrice())
+				.isSpecial(servicetDto.isSpecial())
+				.suportCharge(servicetDto.getSuportCharge())
+				.enabled(true).build();
 
 	}
 
 	public ServiceResponse createResponse(ServiceEntity serviceEntity) {
 
 		return ServiceResponse.builder().id(serviceEntity.getId()).name(serviceEntity.getName()).description(serviceEntity.getDescription())
-				.basePrice(serviceEntity.getBasePrice())/*.isSpecial(serviceEntity.isSpecial())
-				.suportCharge(serviceEntity.getSuportCharge())*/.enabled(serviceEntity.isEnabled()).build();
+				.basePrice(serviceEntity.getBasePrice())
+				.isSpecial(serviceEntity.isSpecial())
+				.suportCharge(serviceEntity.getSuportCharge())
+				.enabled(serviceEntity.isEnabled())
+				.build();
 	}
 
 }

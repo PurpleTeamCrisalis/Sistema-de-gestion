@@ -103,7 +103,6 @@ function ServiceListComponent() {
               removeHandler={deleteService}
               name=""
             />
-
             {/* Table Section */}
             {services.length === 0 ? (
               <EmptyList name={"Servicios"} />
@@ -125,6 +124,7 @@ function ServiceListComponent() {
                       <th scope="col">Nombre Servicio</th>
                       <th scope="col">Descripción</th>
                       <th scope="col">Precio Base</th>
+                      <th scope="col">Precio Soporte</th>
                       <th scope="col">Estado</th>
                       <th scope="col">#</th>
                     </tr>
@@ -149,6 +149,7 @@ function ServiceListComponent() {
                         <td>{service.name}</td>
                         <td className="text-overflow">{service.description}</td>
                         <td>{"$" + service.basePrice}</td>
+                        <td>{service.isSpecial ? `$${service.suportCharge}` : "----" }</td>
                         <td
                           style={{
                             color: service.enabled ? "green" : "red",
