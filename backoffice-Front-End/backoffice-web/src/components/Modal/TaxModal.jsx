@@ -7,10 +7,12 @@ import { useChargesStore } from '../../hooks';
 import { useEffect, useState } from 'react';
 import { FaX } from "react-icons/fa6";
 
-function TaxModal() {
+function TaxModal({props}) {
     const { charges, startLoadingCharges } = useChargesStore();
     const [filteredList, setFilteredList] = useState(charges);
-    const [tax, setTax] = useState([]); //Guarda los impuestos seleccionados por id
+
+    let {tax, setTax} = props
+    // const [tax, setTax] = useState([]); //Guarda los impuestos seleccionados por id
 
     useEffect(() => {
         if (charges.length === 0) startLoadingCharges();

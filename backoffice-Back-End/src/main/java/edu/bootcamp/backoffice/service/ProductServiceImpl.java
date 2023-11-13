@@ -124,7 +124,7 @@ public class ProductServiceImpl implements ProductService {
 		List<Product> products = productRepository.findAll();
 		List<ProductResponse> dtos = new ArrayList<>();
 		for (Product p : products)
-			dtos.add(dtoFactory.createResponse(p));
+			dtos.add(dtoFactory.createProductResponse(p));
 		if (dtos.isEmpty())
 			throw new EmptyTableException("There aren't registered products.");
 		return dtos;
@@ -160,13 +160,13 @@ public class ProductServiceImpl implements ProductService {
 		validateNewProductDbConflicts(productDto);
 		Product product = dtoFactory.CreateEntityForInsertNewRecord(productDto);
 		product = productRepository.save(product);
-		return dtoFactory.createResponse(product);
+		return dtoFactory.createProductResponse(product);
 	}
 
 	@Override
 	public ProductResponse get(int id) {
 		Product product = validator.completeValidationForId(id, productRepository);
-		return dtoFactory.createResponse(product);
+		return dtoFactory.createProductResponse(product);
 	}
 
 	public Product getProductById(Integer id) {
@@ -177,7 +177,7 @@ public class ProductServiceImpl implements ProductService {
 	public ProductResponse update(int id, UpdateProductRequest productDto) {
 		Product product = validateUpdateRequest(id, productDto);
 		product = productRepository.save(product);
-		return dtoFactory.createResponse(product);
+		return dtoFactory.createProductResponse(product);
 	}
 
 	@Override
@@ -193,7 +193,7 @@ public class ProductServiceImpl implements ProductService {
 		// 	productRepository.save(product);
 		// } else
 		productRepository.delete(product);
-		return dtoFactory.createResponse(product);
+		return dtoFactory.createProductResponse(product);
 	}
 
 	@Override
@@ -201,7 +201,7 @@ public class ProductServiceImpl implements ProductService {
 		List<Product> products = productRepository.findAll();
 		List<ProductResponse> dtos = new ArrayList<>();
 		for (Product p : products)
-			dtos.add(dtoFactory.createResponse(p));
+			dtos.add(dtoFactory.createProductResponse(p));
 		if (dtos.isEmpty())
 			throw new EmptyTableException("There aren't registered products.");
 		return dtos;

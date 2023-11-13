@@ -35,7 +35,7 @@ public class ServiceEntity extends Asset {
 
 	@ManyToMany
 	@JoinTable(name = "taxesByServices", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "tax_id"))
-	public Set<Tax> taxes;
+	public List<Tax> taxes=new ArrayList<>();
 
 	@OneToMany(mappedBy = "discountService", fetch = FetchType.LAZY)
 	private List<Order> ordersWithDiscount = new ArrayList<>();
@@ -43,17 +43,4 @@ public class ServiceEntity extends Asset {
 	@OneToMany(mappedBy = "service", fetch = FetchType.LAZY)
 	private List<ServiceDetail> serviceDetails = new ArrayList<>();
 
-	/*
-	 * public double suportCharge() {
-	 * 
-	 * double suport = 0;
-	 * 
-	 * if (isSpecial == true) {
-	 * 
-	 * suport += super.getBasePrice();
-	 * }
-	 * 
-	 * return suport;
-	 * }
-	 */
 }

@@ -1,12 +1,16 @@
 package edu.bootcamp.backoffice.model.service.dto;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import edu.bootcamp.backoffice.model.product.dto.ProductRequest;
+import edu.bootcamp.backoffice.model.Tax.dto.ChargeRequest;
+
 import lombok.AllArgsConstructor;
-import lombok.Builder;
+
 import lombok.Getter;
 import lombok.Setter;
+import lombok.Singular;
 import lombok.experimental.SuperBuilder;
 
 @Getter
@@ -23,11 +27,15 @@ public class ServiceRequest {
 
 	@JsonProperty("basePrice")
 	private double basePrice;
-/*
+
 	@JsonProperty("isSpecial")
 	private boolean isSpecial;
 
 	@JsonProperty("suportCharge")
 	private double suportCharge;
-*/
+	
+	@JsonProperty("taxes")
+	@Singular
+	private List<ChargeRequest> taxes;
+
 }

@@ -2,6 +2,7 @@ package edu.bootcamp.backoffice.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import edu.bootcamp.backoffice.model.service.ServiceEntity;
@@ -93,6 +94,23 @@ public class ServiceServiceImpl implements ServiceService {
 			);
 		if(serviceRequest.getEnabled() != null)
 			service.setEnabled(serviceRequest.getEnabled());
+		if(serviceRequest.getIsSpecial() != null){
+			service.setSpecial(serviceRequest.getIsSpecial());
+			if (serviceRequest.getIsSpecial()){
+				if(serviceRequest.getBasePrice() > 0)
+					service.setSuportCharge(serviceRequest.getSuportCharge());
+				else
+					validator.validateLongValue(
+							(long)serviceRequest.getSuportCharge(),
+							Long.MAX_VALUE,
+							0L,
+							"Support Charge",
+							errors
+					);
+			}else{
+				service.setSuportCharge(0.0);
+			}
+		}
 		validateErrors(errors);
 		return service;
 
@@ -146,7 +164,7 @@ public class ServiceServiceImpl implements ServiceService {
 		List<ServiceEntity> serviceEntities = serviceRepository.findAll();
 		List<ServiceResponse> dtos = new ArrayList<>();
 		for (ServiceEntity s : serviceEntities)
-			dtos.add(dtoFactory.createResponse(s));
+			dtos.add(dtoFactory.createServiceResponse(s));
 		if (dtos.isEmpty())
 			throw new EmptyTableException("There aren't registered services.");
 		return dtos;
@@ -185,13 +203,13 @@ public class ServiceServiceImpl implements ServiceService {
 		validateNewServiceDbConflicts(serviceDto);
 		ServiceEntity serviceEntity = dtoFactory.CreateEntityForInsertNewRecord(serviceDto);
 		serviceEntity = serviceRepository.save(serviceEntity);
-		return dtoFactory.createResponse(serviceEntity);
+		return dtoFactory.createServiceResponse(serviceEntity);
 	}
 
 	@Override
 	public ServiceResponse get(int id) {
 		ServiceEntity serviceEntity = validator.completeValidationForId(id, serviceRepository);
-		return dtoFactory.createResponse(serviceEntity);
+		return dtoFactory.createServiceResponse(serviceEntity);
 	}
 
 	public ServiceEntity getServiceById(Integer id) {
@@ -202,7 +220,7 @@ public class ServiceServiceImpl implements ServiceService {
 	public ServiceResponse update(int id, UpdateServiceRequest serviceDto) throws InvalidIdFormatException {
 		ServiceEntity serviceEntity = validateUpdateRequest(id, serviceDto);
 		serviceEntity = serviceRepository.save(serviceEntity);
-		return dtoFactory.createResponse(serviceEntity);
+		return dtoFactory.createServiceResponse(serviceEntity);
 	}
 
 	@Override
@@ -215,7 +233,7 @@ public class ServiceServiceImpl implements ServiceService {
 		// 	serviceRepository.save(service);
 		// } else
 			serviceRepository.delete(serviceEntity);
-		return dtoFactory.createResponse(serviceEntity);
+		return dtoFactory.createServiceResponse(serviceEntity);
 	}
 
 	@Override
@@ -223,7 +241,7 @@ public class ServiceServiceImpl implements ServiceService {
 		List<ServiceEntity> serviceEntities = serviceRepository.findAll();
 		List<ServiceResponse> dtos = new ArrayList<>();
 		for (ServiceEntity s : serviceEntities)
-			dtos.add(dtoFactory.createResponse(s));
+			dtos.add(dtoFactory.createServiceResponse(s));
 		if (dtos.isEmpty())
 			throw new EmptyTableException("There aren't registered services.");
 		return dtos;

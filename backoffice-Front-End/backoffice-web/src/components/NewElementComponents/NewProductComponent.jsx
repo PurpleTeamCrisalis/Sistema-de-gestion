@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import NavComponent from '../NavComponent'
 import { useNavigate } from 'react-router-dom'
 import { useForm, useProductsStore } from '../../hooks'
@@ -19,6 +19,9 @@ function NewProductComponent() {
     const navigate = useNavigate();
     const { startAddingProduct, products } = useProductsStore();
     const { name, description, basePrice, handleInputChange, clearForm, emptyValidation } = useForm(formDTO);
+
+    const [tax, setTax] = useState([]); //Guarda los impuestos seleccionados por id
+
 
     function addProduct(event) {
         event.preventDefault();
@@ -89,6 +92,7 @@ function NewProductComponent() {
 
         try {
             console.log(product);
+            console.log(tax)
             startAddingProduct(product);
             clearForm();
             Toastify({
@@ -175,7 +179,7 @@ function NewProductComponent() {
                                             >
                                             </textarea>
                                         </div>
-                                        <TaxModal/>
+                                        <TaxModal props={{tax, setTax}}/>
                                     </div>
                                 </div>
                             </div>
