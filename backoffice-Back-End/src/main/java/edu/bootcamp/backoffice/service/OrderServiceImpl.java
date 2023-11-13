@@ -3,10 +3,13 @@ package edu.bootcamp.backoffice.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.bootcamp.backoffice.config.AppConstants;
 import edu.bootcamp.backoffice.model.Tax.Tax;
 import edu.bootcamp.backoffice.model.client.Client;
 import edu.bootcamp.backoffice.model.order.Order;
 import edu.bootcamp.backoffice.model.orderDetail.OrderDetail.OrderDetail;
+import edu.bootcamp.backoffice.model.orderDetail.productDetail.dto.ProductDetailRequest;
+import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.dto.ServiceDetailRequest;
 import edu.bootcamp.backoffice.model.product.Product;
 import edu.bootcamp.backoffice.model.service.ServiceEntity;
 import edu.bootcamp.backoffice.service.Interface.ClientService;
@@ -37,6 +40,7 @@ public class OrderServiceImpl implements OrderService {
   private final UserService userService;
   private final ClientService clientService;
   private final Validator validator;
+  private final AppConstants appConstants;
 
   public OrderServiceImpl(
       ProductDetailService productDetailService,
@@ -45,7 +49,8 @@ public class OrderServiceImpl implements OrderService {
       OrderRepository      orderRepository,
       UserService          userService,
       ClientService        clientService,
-      Validator            validator
+      Validator            validator,
+      AppConstants         appConstants
     )
   {
     this.userService          = userService;
@@ -54,7 +59,8 @@ public class OrderServiceImpl implements OrderService {
     this.orderRepository      = orderRepository;
     this.productDetailService = productDetailService;
     this.serviceDetailService = serviceDetailService;
-    this.validator = validator;
+    this.validator            = validator;
+    this.appConstants         = appConstants;
   }
 
   public OrderResponse registerOrder(
@@ -64,11 +70,9 @@ public class OrderServiceImpl implements OrderService {
   {
     User user = userService.getUserByUsername(username);
     StringBuilder errorBuilder = new StringBuilder();
-    validateOrderDetails(orderDto, errorBuilder);
     Order order = orderFactory.CreateOrderEntityForInsertNewRecord();
     validateAndMergeClient(order, orderDto, errorBuilder);
-    validateAndMergeProducts(order, orderDto, errorBuilder);
-    validateAndMergeServices(order, orderDto, errorBuilder);
+    validateAndMergeItems(order, orderDto, errorBuilder);
     if (errorBuilder.length() > 0)
       throw new IllegalArgumentException(errorBuilder.toString());
     order.setUser(user);
@@ -77,70 +81,131 @@ public class OrderServiceImpl implements OrderService {
     return orderFactory.createOrderResponse(order);
   }
 
-  private void completeOrderTotals(Order order)
+  private void validateAndMergeItems(
+          Order order,
+          OrderRequest orderDto,
+          StringBuilder errorBuilder
+    )
   {
-    double total = 0.00;;
-    double acumDiscount = 0.0;
-    for(ServiceDetail serviceDetail : order.getServices())
-      total = total + completeDetailSubtotal(
-              serviceDetail,
-              setPriceWithoutTaxes(serviceDetail)
-      );
-    Double discount = getOrderDiscount(order);
-    for(ProductDetail productDetail : order.getProducts()) {
-      Double subtotal = completeDetailSubtotal(
-              productDetail,
-              setPriceWithoutTaxes(productDetail)
-      );
-      double productDiscount = subtotal * discount;
-      double maxDiscount = getMaxDisccount();
-      if(productDiscount > maxDiscount)
-      {
-        productDiscount = maxDiscount;
-        discount = productDiscount / subtotal;
-      }
-      acumDiscount = acumDiscount + productDiscount;
-      total = total + subtotal * ( 1 - discount);
-    }
-    order.setDiscount(acumDiscount);
-    order.setTotal(total - order.getDiscount());
+    List<ServiceDetailRequest> services = orderDto.getServices();
+    Boolean withServices = services != null && ! services.isEmpty();
+    List<ProductDetailRequest> products = orderDto.getProducts();
+    Boolean withProducts =  products != null && ! products.isEmpty();
+    if(withServices)
+      validateAndMergeServices(order, orderDto, errorBuilder);
+    if(withProducts)
+      validateAndMergeProducts(order, orderDto, errorBuilder);
+    if(!(withProducts||withServices))
+      errorBuilder.append("The order has no items");
   }
 
-  private Double setPriceWithoutTaxes(
+  private void completeOrderTotals(Order order)
+  {
+    double totalWithoutDiscount = completeServicesSubtotal(
+            order.getServices()
+    );
+    double productsSubtotal = completeProductsSubtotal(
+            order.getProducts()
+    );
+    completeOrderDiscount(order, productsSubtotal);
+    totalWithoutDiscount += productsSubtotal - order.getTotalDiscount();
+    order.setTotal(totalWithoutDiscount);
+  }
+
+  private void completeOrderDiscount(
+          Order order,
+          Double productsSubtotal
+    )
+  {
+    setOrderDiscountService(order);
+    Double discountFactor = getDiscountFactor(order);
+    Double productDiscount = getOrderDiscount(
+            productsSubtotal,
+            discountFactor
+    );
+    order.setTotalDiscount(productDiscount);
+  }
+
+  private Double completeServicesSubtotal(
+          List<ServiceDetail> services
+    )
+  {
+    double total = 0.0;
+    for(ServiceDetail serviceDetail : services)
+    {
+      setServicePriceWithoutTaxes(serviceDetail);
+      completeDetailSubtotal(serviceDetail);
+      total += serviceDetail.getSubTotal();
+    }
+    return total;
+  }
+
+  private Double completeProductsSubtotal(
+          List<ProductDetail> productDetails
+    )
+  {
+    double total = 0.0;
+    for(ProductDetail productDetail : productDetails)
+    {
+      setProductPriceWithoutTaxes(productDetail);
+      completeDetailSubtotal(productDetail);
+      total += productDetail.getSubTotal() * productDetail.getQuantity();
+    }
+    return total;
+  }
+
+  private Double getOrderDiscount(
+          Double productsSubtotal,
+          Double discountFactor
+    )
+  {
+    double orderDiscount = productsSubtotal * discountFactor;
+    double maxDiscount = appConstants.getMaxOrderDiscount();
+    if(orderDiscount > maxDiscount)
+      orderDiscount = maxDiscount;
+    return orderDiscount;
+  }
+
+  private Double setServicePriceWithoutTaxes(
           ServiceDetail serviceDetail
     )
   {
     ServiceEntity service = serviceDetail.getService();
     double subtotal = service.getBasePrice();
     if(service.isSpecial())
-      subtotal = subtotal + service.getSuportCharge();
+      subtotal += service.getSuportCharge();
     serviceDetail.setPriceWithoutTaxes(subtotal);
     return subtotal;
   }
 
-  private Double setPriceWithoutTaxes(
+  private void setProductPriceWithoutTaxes(
           ProductDetail productDetail
     )
   {
     Product product = productDetail.getProduct();
     double subtotal = product.getBasePrice();
     if(productDetail.getWarranty() != null)
-      subtotal = subtotal * ( 1 + (productDetail.getWarranty() * 0.02));
+    {
+      Double yearWarrantyFactor = appConstants.getYearWarrantyFactor();
+      Double warrantyYears = productDetail.getWarranty();
+      Double totalWarrantyFactor = 1 + warrantyYears * yearWarrantyFactor;
+      subtotal *= totalWarrantyFactor;
+    }
     productDetail.setPriceWithoutTaxes(subtotal);
-    return subtotal * productDetail.getQuantity();
   }
 
-  private Double completeDetailSubtotal(
-          OrderDetail orderDetail,
-          Double subtotal
+  private void completeDetailSubtotal(
+          OrderDetail orderDetail
     )
   {
-    Double percentage = completeDetailTaxFields(orderDetail);
-    orderDetail.setSubTotal(subtotal * percentage);
-    return orderDetail.getSubTotal();
+    completeDetailTaxFields(orderDetail);
+    Double subtotal = orderDetail.getPriceWithoutTaxes();
+    Double taxCharges = orderDetail.getTaxCharges() / 100.0;
+    subtotal *= ( 1 + taxCharges );
+    orderDetail.setSubTotal(subtotal);
   }
 
-  private Double completeDetailTaxFields(
+  private void completeDetailTaxFields(
           OrderDetail orderDetail
     )
   {
@@ -157,35 +222,24 @@ public class OrderServiceImpl implements OrderService {
             chargesApplied.toString()
     );
     orderDetail.setTaxCharges(percentage*100-100);
-    return percentage;
   }
 
-  private Double getOrderDiscount(Order order)
+  private void setOrderDiscountService(Order order)
   {
     List<ServiceDetail> serviceDetails = order.getServices();
-    if(!serviceDetails.isEmpty())
-      order.setDiscountService(
-        order.getServices().get(0).getService()
-      );
+    ServiceEntity discountService = null;
+    if( ! serviceDetails.isEmpty())
+      discountService = order.getServices().get(0).getService();
     else
-    {/*
-      order.setDiscountService(
-        clientService.getDiscountService(client)
-      );*/
-    }
+      ;/* discountService = clientService.getDiscountService(client);*/
+    order.setDiscountService(discountService);
+  }
+
+  private Double getDiscountFactor(Order order)
+  {
     if(order.getDiscountService() != null)
-      return getDiscount(); // GET DISCOUNT
+      return appConstants.getDiscountFactor();
     return 0.0;
-  }
-
-  private Double getMaxDisccount()
-  {
-    return 2500.0;
-  }
-
-  private Double getDiscount()
-  {
-    return 0.1;
   }
 
   private void validateAndMergeClient(
@@ -265,16 +319,5 @@ public class OrderServiceImpl implements OrderService {
     Order order = validator.validateIdExistence(id, orderRepository);
     order.setEnabled(false);
     return orderFactory.createOrderResponse(order);
-  }
-
-  private void validateOrderDetails (
-          OrderRequest orderDto,
-          StringBuilder errorBuilder
-    )
-  {
-    if ((orderDto.getProducts() == null || orderDto.getProducts().isEmpty()) &&
-        (orderDto.getServices() == null || orderDto.getServices().isEmpty())
-    )
-      errorBuilder.append("No se recibieron ni productos ni servicios.");
   }
 }

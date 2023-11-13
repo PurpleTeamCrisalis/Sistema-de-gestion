@@ -42,12 +42,11 @@ public class Order implements SoftDeletable{
         )
     private String date;
 
-    // Total
     @Column(name = "total", nullable = false)
     private Double total;
 
-    @Column(name = "discount", nullable = false)
-    private Double discount;
+    @Column(name = "discountFactor", nullable = false)
+    private Double totalDiscount;
 
     @Column(name="enabled", nullable = false)
     private boolean enabled;
