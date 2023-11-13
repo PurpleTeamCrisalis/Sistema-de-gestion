@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import NavComponent from '../NavComponent'
 import { useNavigate } from 'react-router-dom'
 import { useForm, useServicesStore } from '../../hooks';
@@ -10,13 +10,15 @@ import "../../assets/styles/inputStyle.css"
 function EditServiceComponent() {
     const navigate = useNavigate();
     const { startUpdatingService, activeService, setActiveService, services } = useServicesStore();
-    const { name, description, basePrice, enabled, handleInputChange, emptyValidation } = useForm({
+    const { name, description, basePrice, enabled, suportCharge, handleInputChange, emptyValidation } = useForm({
         name: activeService?.name,
         description: activeService?.description,
         basePrice: activeService?.basePrice,
         enabled: activeService?.enabled,
         id: activeService?.id,
+        suportCharge: activeService?.suportCharge
     });
+    const [isSpecial, setIsSpecial] = useState(activeService?.isSpecial);
 
     // Edicion de servicio
     function editService(event) {
@@ -29,6 +31,8 @@ function EditServiceComponent() {
             description,
             basePrice: parseFloat(basePrice),
             enabled,
+            isSpecial,
+            suportCharge
         };
 
         if (!emptyValidation()) {
@@ -74,6 +78,16 @@ function EditServiceComponent() {
             }).showToast();
             return console.error("Error: precio negativo");
         }
+        if (isSpecial && suportCharge <= 0) {
+            Toastify({
+                text: "El precio de soporte debe ser mayor a cero",
+                duration: 2000,
+                style: {
+                    background: "linear-gradient(to right, #f44336, #b71c1c)",
+                },
+            }).showToast();
+            return console.error("Error: precio de soporte invalido");
+        }
 
         // Verifica si los nuevos datos son ya existentes
         const servicioExiste = services?.find(service => { return service.name === name });
@@ -88,7 +102,9 @@ function EditServiceComponent() {
             return console.error("Error: servicio ya existe");
         }
         try {
-            startUpdatingService(serviceaux)
+            //Si no es especial se manda un cero, para evitar que viaje un número cuando no debería
+            startUpdatingService({...serviceaux,
+            suportCharge: isSpecial?suportCharge:0})
             Toastify({
                 text: "Servicio Actualizado",
                 duration: 2000,
@@ -150,6 +166,48 @@ function EditServiceComponent() {
                                                 required
                                             />
                                         </div>
+                                        <div className="col-md-6 mb-3">
+                                            <p className="form-label">Servicio Especial</p>
+                                            <div className='d-flex align-items-end'>
+                                            <input
+                                                type="checkbox"
+                                                name="isSpecial"
+                                                id="isSpecial"
+                                                // className="form-control"
+                                                onChange={(event)=>setIsSpecial(event.target.checked)}
+                                                value={isSpecial}
+                                                className='btn-check'
+                                                defaultChecked={isSpecial}
+                                            />
+                                            <label htmlFor="isSpecial" className="btn checkbox-btn w-100">{`${isSpecial?"Habilitado":"Deshabilitado"}`}</label>
+                                            </div>
+                                        </div>
+
+                                        {isSpecial && 
+                                        <div className="col-md-6 mb-3">
+                                            <label htmlFor="suportCharge" className="form-label">Precio Soporte</label>
+                                            <input
+                                                type="number"
+                                                name="suportCharge"
+                                                id="suportCharge"
+                                                className="form-control"
+                                                min={0}
+                                                onChange={handleInputChange}
+                                                value={suportCharge}
+                                            />
+                                        </div>}
+                                        {!isSpecial && 
+                                        <div className="col-md-6 mb-3">
+                                            <label htmlFor="suportCharge" className="form-label">Precio Soporte</label>
+                                            <input
+                                                type="number"
+                                                name="suportCharge"
+                                                id="suportCharge"
+                                                className="form-control"
+                                                disabled
+                                                style={{background:"#fff3"}}
+                                            />
+                                        </div>}
                                         <div className="">
                                             <label htmlFor="description" className="form-label">Descripción</label>
                                             <textarea
