@@ -149,7 +149,10 @@ public class OrderServiceImpl implements OrderService {
     {
       setProductPriceWithoutTaxes(productDetail);
       completeDetailSubtotal(productDetail);
-      total += productDetail.getSubTotal() * productDetail.getQuantity();
+      Double subtotal = productDetail.getSubTotal();
+      subtotal *= productDetail.getQuantity();
+      productDetail.setSubTotal(subtotal);
+      total += subtotal;
     }
     return total;
   }
@@ -228,7 +231,7 @@ public class OrderServiceImpl implements OrderService {
   {
     List<ServiceDetail> serviceDetails = order.getServices();
     ServiceEntity discountService = null;
-    if( ! serviceDetails.isEmpty())
+    if( serviceDetails != null && ! serviceDetails.isEmpty())
       discountService = order.getServices().get(0).getService();
     else
       ;/* discountService = clientService.getDiscountService(client);*/

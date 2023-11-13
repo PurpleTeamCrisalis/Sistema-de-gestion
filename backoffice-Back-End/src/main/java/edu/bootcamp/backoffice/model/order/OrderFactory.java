@@ -73,7 +73,7 @@ public class OrderFactory {
     ClientResponse clientResponse = clientFactory.createResponse(order.getClient());
     ServiceResponse serviceDiscount = null;
     if(order.getDiscountService() != null)
-      serviceFactory.createResponse(order.getDiscountService());
+      serviceDiscount = serviceFactory.createResponse(order.getDiscountService());
     return CreateResponse(order, servicesResponse, productsResponse, clientResponse, serviceDiscount);
   }
 
