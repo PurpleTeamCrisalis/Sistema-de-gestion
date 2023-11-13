@@ -39,7 +39,7 @@ const Home = () =>
                         <div className="mx-auto">
                             <div className='d-flex justify-content-around' style={{ marginTop: "-2rem" }}>
                                 {dashboard.map((item) => (
-                                <div onClick={() => item.navigate()} key={item.id} class="e-card playing mx-5">
+                                <div onClick={() => item.navigate()} key={item.id} className="e-card playing mx-5">
                                     <div className="image"></div>
                                     <div className="wave"></div>
                                     <div className="wave"></div>

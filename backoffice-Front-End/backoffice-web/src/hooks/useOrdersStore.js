@@ -1,6 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { projectApi } from '../api'
 import { onAddNewOrder, onLoadOrders, onPullActiveOrder, onSetActiveOrder, onLoadOrderById } from '../redux'
+import Toastify from "toastify-js";
+import "toastify-js/src/toastify.css";
+import { getErrorResponse } from '../helpers/getErrorResponse';
+import { getSuccessResponse } from '../helpers';
 
 export function useOrdersStore() {
 
@@ -25,8 +29,9 @@ export function useOrdersStore() {
     try {
       const { data } = await projectApi.get('/order/list')
       dispatch(onLoadOrders(data))
+      getSuccessResponse("Ordenes cargadas!")
     } catch (error) {
-      console.error(error)
+      getErrorResponse(error)
     }
   }
   async function startAddingOrder(order) {
@@ -35,7 +40,7 @@ export function useOrdersStore() {
       dispatch(onAddNewOrder({
         client: data.client,
         date: data.date,
-        services: data.sercices,
+        services: data.services,
         products: data.products,
         enabled: data.enabled,
         id: data.id,

@@ -7,7 +7,7 @@ export const ClientModal = () => {
   const [client, setClient] = useState(null);
 
   useEffect(() => {
-    if(clients.length === 0)startLoadingClient();
+    if (clients.length === 0) startLoadingClient();
   }, []);
 
   function checkActiveClient(event, client) {
@@ -39,8 +39,7 @@ export const ClientModal = () => {
   }
 
   function handleButtonClick() {
-    if(client == null)
-      return;
+    if (client == null) return;
     addClient(client);
     cleanCheckBoxes();
   }
