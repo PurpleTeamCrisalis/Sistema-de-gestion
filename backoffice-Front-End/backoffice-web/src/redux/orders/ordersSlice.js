@@ -18,8 +18,11 @@ export const ordersSlice = createSlice({
         if (!exists) state.orders.push(order)
       })
     },
-    onLoadOrderById: (state, { payload }) => {
+    onSetSelectedOrder: (state, { payload }) => {
       state.selectedOrder = payload
+    },
+    onPullSelectedOrder: (state) => {
+      state.selectedOrder = null
     },
     onAddNewOrder: (state, { payload }) => {
       const exists = state.orders.some(dbOrder => dbOrder.id === payload.id)
@@ -40,4 +43,13 @@ export const ordersSlice = createSlice({
   }
 });
 
-export const { onLoadOrders, onAddNewOrder, onSetActiveOrder, onPullActiveOrder, onUpdateOrder, onLoadOrderById, onChangeOrderState } = ordersSlice.actions;
+export const {
+  onLoadOrders,
+  onAddNewOrder,
+  onSetActiveOrder,
+  onPullActiveOrder,
+  onUpdateOrder,
+  onSetSelectedOrder,
+  onChangeOrderState,
+  onPullSelectedOrder
+} = ordersSlice.actions;
