@@ -1,5 +1,4 @@
 import React from "react";
-import { getTextCropped } from "../helpers";
 
 export const NewOrderProductTable = ({
   items,
@@ -110,7 +109,12 @@ export const NewOrderProductTable = ({
                 />
               </div>
             </td>
-            <td>${detail.basePrice}</td>
+            <td>
+              $
+              {(detail.warranty
+                ? (0.02 * detail.warranty + 1) * detail.basePrice
+                : detail.basePrice).toFixed(2)}
+            </td>
           </tr>
         ))}
       </tbody>
