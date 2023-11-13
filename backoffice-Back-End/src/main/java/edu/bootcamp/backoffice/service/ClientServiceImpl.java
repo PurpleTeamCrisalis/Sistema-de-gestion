@@ -5,6 +5,7 @@ import edu.bootcamp.backoffice.exception.custom.parameterValidation.EmptyElement
 import edu.bootcamp.backoffice.exception.custom.parameterValidation.InvalidArgumentsFormatException;
 import edu.bootcamp.backoffice.model.EntitiesConstraints;
 import edu.bootcamp.backoffice.model.Subscription.Subscription;
+import edu.bootcamp.backoffice.model.Subscription.SubscriptionFactory;
 import edu.bootcamp.backoffice.model.Subscription.dto.SubscriptionResponse;
 import edu.bootcamp.backoffice.model.client.Client;
 import edu.bootcamp.backoffice.model.client.ClientFactory;
@@ -31,16 +32,19 @@ public class ClientServiceImpl implements ClientService {
     private final SubscriptionRepository subscriptionRepository;
     private final Validator validator;
 
+    private final SubscriptionFactory subscriptionFactory;
+
 
     public ClientServiceImpl(
             ClientRepository clientRepository,
             ClientFactory dtoFactory,
-            SubscriptionRepository subscriptionRepository, Validator validator
-    ) {
+            SubscriptionRepository subscriptionRepository, Validator validator,
+            SubscriptionFactory subscriptionFactory) {
         this.clientRepository = clientRepository;
         this.dtoFactory = dtoFactory;
         this.subscriptionRepository = subscriptionRepository;
         this.validator = validator;
+        this.subscriptionFactory = subscriptionFactory;
     }
 
 
@@ -101,8 +105,8 @@ public class ClientServiceImpl implements ClientService {
         );
         if (clientDto.getSubscriptionId() != null) {
             // Buscar la subscripcion por id y setear false al enabled
-            for(Subscription subs : client.getClientSubscriptions()){
-                if(subs.getId().equals(clientDto.getSubscriptionId())){
+            for (Subscription subs : client.getClientSubscriptions()) {
+                if (subs.getId().equals(clientDto.getSubscriptionId())) {
                     subs.setEnabled(false);
                 }
             }
@@ -329,6 +333,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public void registerSubscriptions(Client client, List<ServiceEntity> services) {
+        //Validar si el cliente ya tiene un servicio
         Subscription subscription = new Subscription();
         subscription.setClient(client);
         subscription.setEnabled(true);
@@ -356,18 +361,12 @@ public class ClientServiceImpl implements ClientService {
 
         Client client = validator.validateSoftDeletableEntityExistence(clientId, clientRepository);
 
-        List<SubscriptionResponse> subscriptionsNew = new ArrayList<>();
+        List<SubscriptionResponse> subscriptionsResponses = new ArrayList<>();
 
         for (Subscription subscriptions : client.getClientSubscriptions()) {
-            SubscriptionResponse subsResponse = new SubscriptionResponse();
-            subsResponse.setId(subscriptions.getId());
-            subsResponse.setServiceName(subscriptions.getService().getName());
-            subsResponse.setEnabled(subscriptions.isEnabled());
-
-            subscriptionsNew.add(subsResponse);
+            subscriptionsResponses.add(subscriptionFactory.createResponse(subscriptions));
         }
 
-
-        return subscriptionsNew;
+        return subscriptionsResponses;
     }
 }

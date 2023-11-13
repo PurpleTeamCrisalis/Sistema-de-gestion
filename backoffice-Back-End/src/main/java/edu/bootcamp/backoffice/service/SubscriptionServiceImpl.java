@@ -6,9 +6,11 @@ import edu.bootcamp.backoffice.model.Subscription.SubscriptionFactory;
 import edu.bootcamp.backoffice.model.Subscription.dto.SubscriptionResponse;
 import edu.bootcamp.backoffice.repository.SubscriptionRepository;
 import edu.bootcamp.backoffice.service.Interface.SubscriptionService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class SubscriptionServiceImpl implements SubscriptionService {
 
     private final SubscriptionRepository subscriptionRepository;

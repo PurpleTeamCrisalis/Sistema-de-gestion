@@ -13,6 +13,8 @@ import java.util.List;
 @Component
 public class ClientFactory {
 
+    private SubscriptionFactory subscriptionFactory;
+
     public Client CreateEntityForInsertNewRecord(ClientRequest clientDTO) {
         return Client
                 .builder()
@@ -30,7 +32,7 @@ public class ClientFactory {
     }
 
     public ClientResponse createResponse(Client client) {
-        List<SubscriptionResponse> subscriptionResponses = createSubscriptionsResponses((List<Subscription>) client.getClientSubscriptions());
+        List<SubscriptionResponse> subscriptionResponses = createSubscriptionsResponses(client.getClientSubscriptions());
         return ClientResponse
                 .builder()
                 .name(client.getName())
@@ -51,7 +53,7 @@ public class ClientFactory {
     public List<SubscriptionResponse> createSubscriptionsResponses(List<Subscription> subscription) {
         List<SubscriptionResponse> subscriptionResponses = new ArrayList<SubscriptionResponse>();
         for (Subscription s : subscription) {
-            SubscriptionResponse subscriptionResponse = SubscriptionFactory.createResponse(s);
+            SubscriptionResponse subscriptionResponse = subscriptionFactory.createResponse(s);
             subscriptionResponses.add(subscriptionResponse);
         }
         return subscriptionResponses;
