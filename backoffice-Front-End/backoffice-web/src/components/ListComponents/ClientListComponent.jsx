@@ -17,6 +17,8 @@ import { Tooltip } from 'react-tooltip'
 import { ClientOrdersAndSubscriptionsModal } from "../Modal/ClientOrdersAndSubscriptionsModal";
 import { DetailModal } from "../Modal/DetailModal";
 import { useOrdersStore } from "../../hooks";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function ClientListComponent() {
   const navigate = useNavigate();
@@ -29,10 +31,6 @@ function ClientListComponent() {
     setActiveClient,
     startLoadingClientSubscriptions,
   } = useClientsStore();
-
-  const {
-    startLoadingClientOrders,
-  } = useOrdersStore();
 
   useEffect(() => {
     if (clients.length === 0) startLoadingClient();
@@ -127,6 +125,7 @@ function ClientListComponent() {
 
   return (
     <div className="bgGrey">
+      <ToastContainer />
       <HeaderComponent />
       <div className="container-fluid mainContainer">
         <div className="secondContainer">
@@ -138,6 +137,15 @@ function ClientListComponent() {
             <section className='d-flex justify-content-center m-3 gap-4'>
               <button
                 type="button"
+                className="btn btn-primary mx-3 fw-bold btn-lg shadow-sm"
+                onClick={deleteClient}
+              >
+                Eliminar
+              </button>
+            </section>*/}
+            <section className="d-flex justify-content-center m-3 gap-4">
+              <button
+                type="button"
                 className="btn fw-bold btn-lg bgAdd circle"
                 onClick={abrirModal}
                 data-bs-toggle="modal"
@@ -145,13 +153,19 @@ function ClientListComponent() {
               >
                 <FontAwesomeIcon icon={faCirclePlus} color="white" />
               </button>
-              <button type="button" className="btn fw-bold btn-lg bgRemove circle" onClick={deleteClient}>
+              <button
+                type="button"
+                className="btn fw-bold btn-lg bgRemove circle"
+                onClick={deleteClient}
+              >
                 <FontAwesomeIcon icon={faTrash} color="white" />
               </button>
             </section>
 
             {/* Table Section */}
-            {clients.length != 0 && (
+            {clients.length === 0 ? (
+              <EmptyList name={"Clientes"} />
+            ) : (
               <section
                 className="d-flex justify-content-center rounded-3 custom-shadow tabla-container-color"
                 style={{ maxHeight: "85vh", overflowY: "auto" }}
@@ -200,11 +214,17 @@ function ClientListComponent() {
                             : `${client.name} ${client.lastname}`}
                         </td>
 
-                        <td>{client.isbussiness ? "Empresa" : "Persona Fisica"}</td>
+                        <td>
+                          {client.isbussiness ? "Empresa" : "Persona Fisica"}
+                        </td>
 
                         <td>{client.isbussiness ? client.cuit : client.dni}</td>
 
-                        <td>
+                        <td
+                          style={{
+                            color: client.enabled ? "green" : "red",
+                          }}
+                        >
                           {client.enabled ? "Habilitado" : "Deshabilitado"}
                         </td>
 
@@ -248,7 +268,6 @@ function ClientListComponent() {
                 <DetailModal />
               </section>
             )}
-            {clients.length == 0 && <EmptyList name={"Clientes"} />}
           </div>
         </div>
       </div>

@@ -2,6 +2,7 @@ package edu.bootcamp.backoffice.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import edu.bootcamp.backoffice.model.service.ServiceEntity;
@@ -93,6 +94,23 @@ public class ServiceServiceImpl implements ServiceService {
 			);
 		if(serviceRequest.getEnabled() != null)
 			service.setEnabled(serviceRequest.getEnabled());
+		if(serviceRequest.getIsSpecial() != null){
+			service.setSpecial(serviceRequest.getIsSpecial());
+			if (serviceRequest.getIsSpecial()){
+				if(serviceRequest.getBasePrice() > 0)
+					service.setSuportCharge(serviceRequest.getSuportCharge());
+				else
+					validator.validateLongValue(
+							(long)serviceRequest.getSuportCharge(),
+							Long.MAX_VALUE,
+							0L,
+							"Support Charge",
+							errors
+					);
+			}else{
+				service.setSuportCharge(0.0);
+			}
+		}
 		validateErrors(errors);
 		return service;
 

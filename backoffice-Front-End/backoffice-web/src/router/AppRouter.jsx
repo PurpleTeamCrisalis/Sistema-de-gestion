@@ -29,7 +29,6 @@ import EditServiceComponent from "../components/EditElementComponents/EditServic
 export const AppRouter = () => {
   const { status, checkAuthToken } = useAuthStore();
 
-
   useEffect(() => {
     checkAuthToken();
   }, []);
