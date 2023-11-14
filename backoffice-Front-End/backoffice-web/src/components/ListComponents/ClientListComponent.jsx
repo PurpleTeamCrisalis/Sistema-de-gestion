@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import NavComponent from "../NavComponent";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
@@ -11,7 +11,12 @@ import "toastify-js/src/toastify.css";
 import "../../assets/styles/navStyle.css";
 import EmptyList from "../../utils/EmptyList";
 import AddRemoveButtonsComponent from "../AddRemoveButtonsComponent";
-import { faCirclePlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faCirclePlus, faTrash, } from "@fortawesome/free-solid-svg-icons";
+import { FaHistory } from "react-icons/fa";
+import { Tooltip } from 'react-tooltip'
+import { ClientOrdersAndSubscriptionsModal } from "../Modal/ClientOrdersAndSubscriptionsModal";
+import { DetailModal } from "../Modal/DetailModal";
+import { useOrdersStore } from "../../hooks";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -24,6 +29,7 @@ function ClientListComponent() {
     startLoadingClient,
     startDeletingClient,
     setActiveClient,
+    startLoadingClientSubscriptions,
   } = useClientsStore();
 
   useEffect(() => {
@@ -111,6 +117,12 @@ function ClientListComponent() {
       }).showToast();
     }
   }
+  function clientOrdersHistory(client) {
+    startLoadingClientOrders(client.id);
+    setActiveClient(client);
+    startLoadingClientSubscriptions(client.id);
+  }
+
   return (
     <div className="bgGrey">
       <ToastContainer />
@@ -122,17 +134,7 @@ function ClientListComponent() {
 
           {/* Table and Buttons */}
           <div className="tablePane">
-            {/* Button Section 
-            <section className="d-flex justify-content-center m-3 ">
-              <button
-                type="button"
-                className="btn btn-primary mx-3 fw-bold btn-lg"
-                data-bs-toggle="modal"
-                data-bs-target="#chooseClientModal"
-                onClick={abrirModal}
-              >
-                Nuevo
-              </button>
+            <section className='d-flex justify-content-center m-3 gap-4'>
               <button
                 type="button"
                 className="btn btn-primary mx-3 fw-bold btn-lg shadow-sm"
@@ -182,6 +184,7 @@ function ClientListComponent() {
                       <th scope="col">Tipo de Cliente</th>
                       <th scope="col">DNI/CUIT</th>
                       <th scope="col">Estado</th>
+                      <th scope="col">#</th>
                       <th scope="col">#</th>
                     </tr>
                   </thead>
@@ -234,12 +237,35 @@ function ClientListComponent() {
                               cursor: "pointer",
                             }}
                             onClick={() => editClient(client)}
+                            data-tooltip-id="my-tooltip"
+                            data-tooltip-content="Editar Cliente"
+                            data-tooltip-place="top"
+                          />
+                          <Tooltip id="my-tooltip" />
+                        </td>
+
+                        <td>
+                          <Tooltip id="my-tooltip" />
+                          <FaHistory
+                            id={client.id}
+                            style={{
+                              color: "#000000",
+                              cursor: "pointer",
+                            }}
+                            onClick={() => clientOrdersHistory(client)}
+                            data-tooltip-id="my-tooltip"
+                            data-tooltip-content="Historial de pedidos"
+                            data-tooltip-place="top"
+                            data-bs-toggle="modal"
+                            data-bs-target="#client-orders-modal"
                           />
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
+                <ClientOrdersAndSubscriptionsModal />
+                <DetailModal />
               </section>
             )}
           </div>

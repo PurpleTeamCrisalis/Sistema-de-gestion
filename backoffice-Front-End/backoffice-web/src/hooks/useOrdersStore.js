@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { projectApi } from '../api'
-import { onAddNewOrder, onLoadOrders, onPullActiveOrder, onSetActiveOrder, onLoadOrderById } from '../redux'
+import { onAddNewOrder, onLoadOrders, onPullActiveOrder, onSetActiveOrder, onLoadOrderById, onLoadClientOrders, onDeleteCLientOrders } from '../redux'
 import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
 import { getErrorResponse } from '../helpers/getErrorResponse';
@@ -8,7 +8,7 @@ import { getSuccessResponse } from '../helpers';
 
 export function useOrdersStore() {
 
-  const { orders, activeOrder, selectedOrder } = useSelector(state => state.orders)
+  const { orders, activeOrder, selectedOrder, clientOrders } = useSelector(state => state.orders)
   const dispatch = useDispatch()
 
   function setActiveOrder(order) {
@@ -34,6 +34,20 @@ export function useOrdersStore() {
       getErrorResponse(error)
     }
   }
+
+  async function startLoadingClientOrders(clientId) {
+    try {
+      const { data } = await projectApi.get(`/order/list/${clientId}`)
+      dispatch(onLoadClientOrders(data))
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  function deleteClientOrders(){
+    dispatch(onDeleteCLientOrders());
+  }
+
   async function startAddingOrder(order) {
     try {
       const { data } = await projectApi.post('/order', order)
@@ -56,11 +70,14 @@ export function useOrdersStore() {
     orders,
     activeOrder,
     selectedOrder,
+    clientOrders,
     // Metodos
     startLoadingOrders,
+    startLoadingClientOrders,
     startAddingOrder,
     setActiveOrder,
     pullActiveOrder,
-    startLoadingOrderById
+    startLoadingOrderById,
+    deleteClientOrders
   }
 }

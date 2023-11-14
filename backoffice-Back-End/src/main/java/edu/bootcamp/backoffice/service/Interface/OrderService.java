@@ -17,6 +17,8 @@ public interface OrderService {
   // public OrderResponse update(int id, UpdateOrderRequest OrderDto)
   //     throws InvalidIdFormatException;
 
+  public List<OrderResponse> getClientOrders(int clientId)
+          throws InvalidIdFormatException;
   public OrderResponse delete(int id)
       throws InvalidIdFormatException;
 }
