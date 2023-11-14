@@ -32,6 +32,10 @@ function ClientListComponent() {
     startLoadingClientSubscriptions,
   } = useClientsStore();
 
+  const {
+    startLoadingClientOrders,
+  } = useOrdersStore();
+
   useEffect(() => {
     if (clients.length === 0) startLoadingClient();
   }, []);
@@ -134,15 +138,6 @@ function ClientListComponent() {
 
           {/* Table and Buttons */}
           <div className="tablePane">
-            <section className='d-flex justify-content-center m-3 gap-4'>
-              <button
-                type="button"
-                className="btn btn-primary mx-3 fw-bold btn-lg shadow-sm"
-                onClick={deleteClient}
-              >
-                Eliminar
-              </button>
-            </section>*/}
             <section className="d-flex justify-content-center m-3 gap-4">
               <button
                 type="button"

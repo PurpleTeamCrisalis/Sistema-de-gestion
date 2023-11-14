@@ -1,15 +1,29 @@
 .checkbox-btn{
-    border: 2px solid #007dbb !important;
+    border: 2px solid #099ee9 !important;
     font-weight: bolder !important;
     color: #fff !important;
-    background: linear-gradient(180deg, rgba(135, 176, 238, 0.60) 0%, #648bc6 52.12%, rgba(113, 152, 209, 0.87) 67.23%, rgba(135, 176, 238, 0.60) 100%) !important;
-    opacity: .5;
+    background-color: #508fee !important;
     transition: all .1s !important;
 }
 
+.btn-check + .checkbox-btn #specialIsChecked{
+    display: none;
+}
 
-.btn-check:checked + .checkbox-btn{
-    opacity: 1;
+.btn-check + .checkbox-btn #specialIsNotaChecked{
+    display: inline;
+}
+
+.btn-check:checked + .checkbox-btn #specialIsNotChecked{
+    display: none;
+}
+
+.btn-check:checked + .checkbox-btn #specialIsChecked{
+    display: inline;
+}
+
+.checkbox-btn:hover{
+    opacity: 0.8;
 }
 
 /* .btn-check:checked + .checkbox-btn{

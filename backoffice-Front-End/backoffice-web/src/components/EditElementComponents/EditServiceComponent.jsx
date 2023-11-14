@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import NavComponent from '../NavComponent'
 import { useNavigate } from 'react-router-dom'
 import { useForm, useServicesStore } from '../../hooks';
@@ -6,6 +6,8 @@ import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
 import HeaderComponent from "../HeaderComponent";
 import "../../assets/styles/inputStyle.css"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 
 function EditServiceComponent() {
     const navigate = useNavigate();
@@ -103,8 +105,10 @@ function EditServiceComponent() {
         }
         try {
             //Si no es especial se manda un cero, para evitar que viaje un número cuando no debería
-            startUpdatingService({...serviceaux,
-            suportCharge: isSpecial?suportCharge:0})
+            startUpdatingService({
+                ...serviceaux,
+                suportCharge: isSpecial ? suportCharge : 0
+            })
             Toastify({
                 text: "Servicio Actualizado",
                 duration: 2000,
@@ -130,7 +134,7 @@ function EditServiceComponent() {
                     <div className="tablePane">
                         {/* Inputs */}
                         <section className="container bg-primary rounded-3 mt-5 mb-4" style={{ minHeight: "70vh", width: "90%" }}>
-                            <div className="text-center py-4">
+                            <div className="text-center pt-4">
                                 <h3 className="fs-4">Editar Servicio</h3>
                                 <hr className="bg-light" />
                             </div>
@@ -138,10 +142,10 @@ function EditServiceComponent() {
                             <div className="row justify-content-center align-items-center">
                                 {/* Persona */}
 
-                                <div className="col-sm-6">
+                                <div className="col-sm-10">
                                     <h2 className='text-center'>Servicio</h2>
                                     <div className="row m-4">
-                                    <div className="col-md-6 mb-3">
+                                        <div className="col-md-6 mb-3">
                                             <label htmlFor="name" className="form-label">Nombre</label>
                                             <input
                                                 type="text"
@@ -152,9 +156,7 @@ function EditServiceComponent() {
                                                 value={name}
                                                 required
                                             />
-                                        </div>
-                                        <div className="col-md-6 mb-3">
-                                            <label htmlFor="basePrice" className="form-label">Precio Base</label>
+                                            <label htmlFor="basePrice" className="form-label mt-3">Precio Base</label>
                                             <input
                                                 type="number"
                                                 name="basePrice"
@@ -165,94 +167,109 @@ function EditServiceComponent() {
                                                 value={basePrice}
                                                 required
                                             />
-                                        </div>
-                                        <div className="col-md-6 mb-3">
-                                            <p className="form-label">Servicio Especial</p>
-                                            <div className='d-flex align-items-end'>
-                                            <input
-                                                type="checkbox"
-                                                name="isSpecial"
-                                                id="isSpecial"
-                                                // className="form-control"
-                                                onChange={(event)=>setIsSpecial(event.target.checked)}
-                                                value={isSpecial}
-                                                className='btn-check'
-                                                defaultChecked={isSpecial}
-                                            />
-                                            <label htmlFor="isSpecial" className="btn checkbox-btn w-100">{`${isSpecial?"Habilitado":"Deshabilitado"}`}</label>
+                                            <div className='row'>
+                                                <div className="col-md-6 mt-3">
+                                                    <p className="form-label">Servicio Especial</p>
+                                                    <div className='d-flex align-items-end'>
+                                                        <input
+                                                            type="checkbox"
+                                                            name="isSpecial"
+                                                            id="isSpecial"
+                                                            // className="form-control"
+                                                            onChange={(event) => setIsSpecial(event.target.checked)}
+                                                            value={isSpecial}
+                                                            className='btn-check'
+                                                            defaultChecked={isSpecial}
+                                                        />
+                                                        <label htmlFor="isSpecial" className="btn checkbox-btn w-100">
+                                                            {`${isSpecial ? "Habilitado   " : "Deshabilitado   "}`}
+                                                            <FontAwesomeIcon
+                                                                icon={faCircleCheck}
+                                                                id="specialIsChecked"
+                                                                style={{
+                                                                    color: "#0ee14e",
+                                                                }}
+                                                            />
+                                                            <FontAwesomeIcon
+                                                                icon={faCircleXmark}
+                                                                id="specialIsNotChecked"
+                                                                style={{
+                                                                    color: "#e60f0f",
+                                                                }}
+                                                            />
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                {isSpecial &&
+                                                    <div className="col-md-6 mt-3">
+                                                        <label htmlFor="suportCharge" className="form-label">Precio Soporte</label>
+                                                        <input
+                                                            type="number"
+                                                            name="suportCharge"
+                                                            id="suportCharge"
+                                                            className="form-control"
+                                                            min={0}
+                                                            onChange={handleInputChange}
+                                                            value={suportCharge}
+                                                        />
+                                                    </div>}
+                                                {!isSpecial &&
+                                                    <div className="col-md-6 mt-3">
+                                                        <label htmlFor="suportCharge" className="form-label">Precio Soporte</label>
+                                                        <input
+                                                            type="number"
+                                                            name="suportCharge"
+                                                            id="suportCharge"
+                                                            className="form-control"
+                                                            disabled
+                                                            style={{ background: "#fff3" }}
+                                                        />
+                                                    </div>}
                                             </div>
-                                        </div>
 
-                                        {isSpecial && 
+                                        </div>
                                         <div className="col-md-6 mb-3">
-                                            <label htmlFor="suportCharge" className="form-label">Precio Soporte</label>
-                                            <input
-                                                type="number"
-                                                name="suportCharge"
-                                                id="suportCharge"
-                                                className="form-control"
-                                                min={0}
-                                                onChange={handleInputChange}
-                                                value={suportCharge}
-                                            />
-                                        </div>}
-                                        {!isSpecial && 
-                                        <div className="col-md-6 mb-3">
-                                            <label htmlFor="suportCharge" className="form-label">Precio Soporte</label>
-                                            <input
-                                                type="number"
-                                                name="suportCharge"
-                                                id="suportCharge"
-                                                className="form-control"
-                                                disabled
-                                                style={{background:"#fff3"}}
-                                            />
-                                        </div>}
-                                        <div className="">
                                             <label htmlFor="description" className="form-label">Descripción</label>
                                             <textarea
                                                 name="description"
                                                 id="description"
                                                 className="form-control"
-                                                rows="4"
+                                                rows="5"
                                                 cols="2"
                                                 required
                                                 minLength={1}
                                                 maxLength={200}
                                                 onChange={handleInputChange}
                                                 value={description}
-                                                style={{resize:"none"}}
+                                                style={{ resize: "none" }}
                                             >
                                             </textarea>
+                                            <p className="form-label mt-2">Estado</p>
+                                            <div className="d-flex align-items-center gap-3">
+                                                <div className="d-flex align-items-center">
+                                                    <input
+                                                        type="radio"
+                                                        name="enabled"
+                                                        id="enabled"
+                                                        onChange={handleInputChange}
+                                                        value="true"
+                                                        defaultChecked={activeService.enabled === true}
+                                                    />
+                                                    <label className="mb-0 ms-2">Habilitado</label>
+                                                </div>
+                                                <div className="d-flex align-items-center">
+                                                    <input
+                                                        type="radio"
+                                                        name="enabled"
+                                                        id="enabled"
+                                                        onChange={handleInputChange}
+                                                        value="false"
+                                                        defaultChecked={activeService.enabled === false}
+                                                    />
+                                                    <label className="mb-0 ms-2">Deshabilitado</label>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {/* Estado del servicio */}
-                            <div className="d-flex align-items-center justify-content-center">
-                                <h5 className="mb-0 me-3">Estado</h5>
-                                <div className="d-flex align-items-center gap-3">
-                                    <div className="d-flex align-items-center">
-                                        <input
-                                            type="radio"
-                                            name="enabled"
-                                            id="enabled"
-                                            onChange={handleInputChange}
-                                            value="true"
-                                            defaultChecked={activeService.enabled === true}
-                                        />
-                                        <label className="mb-0 ms-2 fs-5">Habilitado</label>
-                                    </div>
-                                    <div className="d-flex align-items-center">
-                                        <input
-                                            type="radio"
-                                            name="enabled"
-                                            id="enabled"
-                                            onChange={handleInputChange}
-                                            value="false"
-                                            defaultChecked={activeService.enabled === false}
-                                        />
-                                        <label className="mb-0 ms-2 fs-5">Deshabilitado</label>
                                     </div>
                                 </div>
                             </div>

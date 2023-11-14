@@ -104,8 +104,12 @@ export const ClientOrdersAndSubscriptionsModal = () => {
                         ${order.total}
                       </td>
                       <td>
+                      <Tooltip id="my-tooltip" />
                         <FontAwesomeIcon
                           icon={faEye}
+                          data-tooltip-id="my-tooltip"
+                          data-tooltip-content="Ver detalles"
+                          data-tooltip-place="top"
                           style={{
                             color: "#000000",
                             cursor: "pointer",
