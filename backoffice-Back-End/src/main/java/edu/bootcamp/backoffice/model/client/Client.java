@@ -2,6 +2,7 @@ package edu.bootcamp.backoffice.model.client;
 
 import edu.bootcamp.backoffice.model.EntitiesConstraints;
 import edu.bootcamp.backoffice.model.SoftDeletable;
+import edu.bootcamp.backoffice.model.Subscription.Subscription;
 import edu.bootcamp.backoffice.model.order.Order;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -84,7 +85,7 @@ public class Client implements SoftDeletable {
     private Long cuit;
 
     @Column(
-            name="enabled",
+            name = "enabled",
             nullable = false
     )
     private boolean enabled = true;
@@ -94,6 +95,12 @@ public class Client implements SoftDeletable {
             fetch = FetchType.LAZY
     )
     private List<Order> clientOrders = new ArrayList<>();
+
+    @OneToMany(
+            mappedBy = "client",
+            fetch = FetchType.LAZY
+    )
+    private List<Subscription> clientSubscriptions = new ArrayList<>();
 
     public Boolean isDeleted() {
         return !enabled;

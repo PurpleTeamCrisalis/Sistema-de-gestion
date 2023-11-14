@@ -224,7 +224,5 @@ public class ServiceServiceImpl implements ServiceService {
 		List<ServiceResponse> dtos = new ArrayList<>();
 		for (ServiceEntity s : serviceEntities)
 			dtos.add(dtoFactory.createResponse(s));
-		if (dtos.isEmpty())
-			throw new EmptyTableException("There aren't registered services.");
 		return dtos;
 	}}

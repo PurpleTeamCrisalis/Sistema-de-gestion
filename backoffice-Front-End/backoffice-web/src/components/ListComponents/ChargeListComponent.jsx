@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 import HeaderComponent from "../HeaderComponent";
 import "../../assets/styles/navStyle.css";
 import AddRemoveButtonsComponent from "../AddRemoveButtonsComponent";
+import EmptyList from '../../utils/EmptyList'
 
 function ChargeListComponent() {
   const navigate = useNavigate();
@@ -118,7 +119,7 @@ function ChargeListComponent() {
             />
 
             {/* Table Section */}
-            <section
+            {charges.length != 0 && (<section
               className="d-flex justify-content-center rounded-3 custom-shadow tabla-container-color"
               style={{ maxHeight: "85vh", overflowY: "auto" }}
             >
@@ -171,7 +172,8 @@ function ChargeListComponent() {
                   ))}
                 </tbody>
               </table>
-            </section>
+            </section>)}
+            {charges.length == 0 && <EmptyList name={"Cargos"} />}
           </div>
         </div>
       </div>

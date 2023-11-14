@@ -10,6 +10,7 @@ import "toastify-js/src/toastify.css"
 import Swal from 'sweetalert2'
 import '../../assets/styles/tableStyle.css'
 import AddRemoveButtonsComponent from "../AddRemoveButtonsComponent";
+import EmptyList from '../../utils/EmptyList';
 
 function ServiceListComponent()
 {
@@ -114,7 +115,7 @@ function ServiceListComponent()
                         />
 
                         {/* Table Section */}
-                        <section className='d-flex justify-content-center rounded-3 custom-shadow tabla-container-color' style={{ maxHeight: '85vh', overflowY: 'auto' }}>
+                        {services.length != 0 && (<section className='d-flex justify-content-center rounded-3 custom-shadow tabla-container-color' style={{ maxHeight: '85vh', overflowY: 'auto' }}>
                             <table className="table table-color">
                                 <thead style={{ position: 'sticky', top: 0, borderBottom: '2px solid black' }}>
                                     <tr>
@@ -159,7 +160,8 @@ function ServiceListComponent()
                                     ))}
                                 </tbody>
                             </table>
-                        </section>
+                        </section>)}
+                        {services.length == 0 && <EmptyList name={"Servicios"} />}
                     </div>
                 </div>
             </div >

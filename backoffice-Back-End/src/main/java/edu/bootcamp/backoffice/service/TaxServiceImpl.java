@@ -112,8 +112,6 @@ public class TaxServiceImpl implements TaxService{
         List<ChargeResponse> dtos = new ArrayList<>();
 
         for(Tax charge : charges) dtos.add(dtoFactory.createResponse(charge));
-        if(dtos.isEmpty()) 
-            throw new EmptyTableException("There aren't registered users.");
 
         return dtos;
     }

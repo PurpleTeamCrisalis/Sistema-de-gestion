@@ -44,5 +44,6 @@ public class UpdateClientRequest {
     @JsonProperty("cuit")
     private Long cuit;
 
-
+    @JsonProperty("subscription")
+    private Integer subscriptionId;
 }

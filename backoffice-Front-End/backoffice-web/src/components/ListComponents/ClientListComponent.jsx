@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import NavComponent from "../NavComponent";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
@@ -11,10 +11,14 @@ import "toastify-js/src/toastify.css";
 import "../../assets/styles/navStyle.css";
 import EmptyList from "../../utils/EmptyList";
 import AddRemoveButtonsComponent from "../AddRemoveButtonsComponent";
-import { faCirclePlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faCirclePlus, faTrash, } from "@fortawesome/free-solid-svg-icons";
+import { FaHistory } from "react-icons/fa";
+import { Tooltip } from 'react-tooltip'
+import { ClientOrdersAndSubscriptionsModal } from "../Modal/ClientOrdersAndSubscriptionsModal";
+import { DetailModal } from "../Modal/DetailModal";
+import { useOrdersStore } from "../../hooks";
 
-function ClientListComponent()
-{
+function ClientListComponent() {
   const navigate = useNavigate();
   const [abierto, setAbierto] = useState(false);
   const {
@@ -23,106 +27,89 @@ function ClientListComponent()
     startLoadingClient,
     startDeletingClient,
     setActiveClient,
+    startLoadingClientSubscriptions,
   } = useClientsStore();
 
-  useEffect(() =>
-  {
-    if(clients.length === 0)startLoadingClient();
+  const {
+    startLoadingClientOrders,
+  } = useOrdersStore();
+
+  useEffect(() => {
+    if (clients.length === 0) startLoadingClient();
   }, []);
 
   // Modal de nuevo cliente
-  const abrirModal = () =>
-  {
+  const abrirModal = () => {
     setAbierto(!abierto);
   };
 
-  function checkActiveClient(event, client)
-  {
+  function checkActiveClient(event, client) {
     let checkboxes = document.getElementsByClassName("custom-checkbox");
     let checkbox = event.target;
     let tRow = checkbox.closest("tr");
-    for (const item of checkboxes)
-    {
-      if (item.id == checkbox.id)
-      {
-        if (checkbox.checked)
-        {
+    for (const item of checkboxes) {
+      if (item.id == checkbox.id) {
+        if (checkbox.checked) {
           tRow.classList.add("table-active");
           setActiveClient(client);
-        } else
-        {
+        } else {
           tRow.classList.remove("table-active");
           setActiveClient(null);
         }
-      } else
-      {
+      } else {
         item.checked = false;
         item.closest("tr").classList.remove("table-active");
       }
     }
   }
 
-  function editClient(client)
-  {
+  function editClient(client) {
     setActiveClient(client);
-    if (client.isbussiness)
-    {
+    if (client.isbussiness) {
       navigate("/client/editClientCompany");
-    } else
-    {
+    } else {
       navigate("/client/editClient");
     }
   }
 
-  function deleteClient()
-  {
-    if (activeClient)
-    {
-      if (activeClient.enabled === true)
-      {
-        if (activeClient.isbussiness)
-        {
+  function deleteClient() {
+    if (activeClient) {
+      if (activeClient.enabled === true) {
+        if (activeClient.isbussiness) {
           Swal.fire({
             title: `¿Seguro que quieres eliminar a ${activeClient.bussinessname} ?`,
             showCancelButton: true,
             confirmButtonText: "confirmar",
             cancelButtonText: "cancelar",
-          }).then((result) =>
-          {
+          }).then((result) => {
             /* Read more about isConfirmed, isDenied below */
-            if (result.isConfirmed)
-            {
+            if (result.isConfirmed) {
               startDeletingClient();
               Swal.fire("Empresa Eliminado", "", "success");
             }
           });
-        } else
-        {
+        } else {
           Swal.fire({
             title: `¿Seguro que quieres eliminar a ${activeClient.name} ${activeClient.lastname} ?`,
             showCancelButton: true,
             confirmButtonText: "confirmar",
             cancelButtonText: "cancelar",
-          }).then((result) =>
-          {
+          }).then((result) => {
             /* Read more about isConfirmed, isDenied below */
-            if (result.isConfirmed)
-            {
+            if (result.isConfirmed) {
               startDeletingClient();
               Swal.fire("Cliente Eliminado", "", "success");
             }
           });
         }
-      } else
-      {
+      } else {
         return Swal.fire({
           icon: "error",
           title: "Error",
           text: "No puede eliminar un cliente que esté deshabilitado",
         });
       }
-    } else
-    {
+    } else {
       Toastify({
         text: "Seleccionar un Cliente para eliminar",
         duration: 2000,
@@ -132,6 +119,12 @@ function ClientListComponent()
       }).showToast();
     }
   }
+  function clientOrdersHistory(client) {
+    startLoadingClientOrders(client.id);
+    setActiveClient(client);
+    startLoadingClientSubscriptions(client.id);
+  }
+
   return (
     <div className="bgGrey">
       <HeaderComponent />
@@ -142,33 +135,14 @@ function ClientListComponent()
 
           {/* Table and Buttons */}
           <div className="tablePane">
-            {/* Button Section 
-            <section className="d-flex justify-content-center m-3 ">
-              <button
-                type="button"
-                className="btn btn-primary mx-3 fw-bold btn-lg"
-                data-bs-toggle="modal"
-                data-bs-target="#chooseClientModal"
-                onClick={abrirModal}
-              >
-                Nuevo
-              </button>
-              <button
-                type="button"
-                className="btn btn-primary mx-3 fw-bold btn-lg shadow-sm"
-                onClick={deleteClient}
-              >
-                Eliminar
-              </button>
-            </section>*/}
             <section className='d-flex justify-content-center m-3 gap-4'>
-              <button 
-                type="button" 
-                className="btn fw-bold btn-lg bgAdd circle" 
+              <button
+                type="button"
+                className="btn fw-bold btn-lg bgAdd circle"
                 onClick={abrirModal}
                 data-bs-toggle="modal"
                 data-bs-target="#chooseClientModal"
-                >
+              >
                 <FontAwesomeIcon icon={faCirclePlus} color="white" />
               </button>
               <button type="button" className="btn fw-bold btn-lg bgRemove circle" onClick={deleteClient}>
@@ -196,6 +170,7 @@ function ClientListComponent()
                       <th scope="col">Tipo de Cliente</th>
                       <th scope="col">DNI/CUIT</th>
                       <th scope="col">Estado</th>
+                      <th scope="col">#</th>
                       <th scope="col">#</th>
                     </tr>
                   </thead>
@@ -242,12 +217,35 @@ function ClientListComponent()
                               cursor: "pointer",
                             }}
                             onClick={() => editClient(client)}
+                            data-tooltip-id="my-tooltip"
+                            data-tooltip-content="Editar Cliente"
+                            data-tooltip-place="top"
+                          />
+                          <Tooltip id="my-tooltip" />
+                        </td>
+
+                        <td>
+                          <Tooltip id="my-tooltip" />
+                          <FaHistory
+                            id={client.id}
+                            style={{
+                              color: "#000000",
+                              cursor: "pointer",
+                            }}
+                            onClick={() => clientOrdersHistory(client)}
+                            data-tooltip-id="my-tooltip"
+                            data-tooltip-content="Historial de pedidos"
+                            data-tooltip-place="top"
+                            data-bs-toggle="modal"
+                            data-bs-target="#client-orders-modal"
                           />
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
+                <ClientOrdersAndSubscriptionsModal />
+                <DetailModal />
               </section>
             )}
             {clients.length == 0 && <EmptyList name={"Clientes"} />}
@@ -291,8 +289,7 @@ function ClientListComponent()
                   type="button"
                   data-bs-dismiss="modal"
                   className="btn btn-primary btn-lg fw-bold"
-                  onClick={() =>
-                  {
+                  onClick={() => {
                     navigate("/client/newClient");
                   }}
                 >
@@ -302,8 +299,7 @@ function ClientListComponent()
                   type="button"
                   data-bs-dismiss="modal"
                   className="btn btn-primary btn-lg fw-bold"
-                  onClick={() =>
-                  {
+                  onClick={() => {
                     navigate("/client/newCompanyClient");
                   }}
                 >

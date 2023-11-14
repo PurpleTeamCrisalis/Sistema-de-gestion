@@ -1,16 +1,21 @@
 package edu.bootcamp.backoffice.service;
 
-import edu.bootcamp.backoffice.exception.custom.dbValidation.*;
+import edu.bootcamp.backoffice.exception.custom.dbValidation.AlreadyRegisteredException;
 import edu.bootcamp.backoffice.exception.custom.parameterValidation.EmptyElementException;
 import edu.bootcamp.backoffice.exception.custom.parameterValidation.InvalidArgumentsFormatException;
-import edu.bootcamp.backoffice.model.order.Order;
-import edu.bootcamp.backoffice.model.client.Client;
 import edu.bootcamp.backoffice.model.EntitiesConstraints;
+import edu.bootcamp.backoffice.model.Subscription.Subscription;
+import edu.bootcamp.backoffice.model.Subscription.SubscriptionFactory;
+import edu.bootcamp.backoffice.model.Subscription.dto.SubscriptionResponse;
+import edu.bootcamp.backoffice.model.client.Client;
 import edu.bootcamp.backoffice.model.client.ClientFactory;
-import edu.bootcamp.backoffice.model.client.dto.UpdateClientRequest;
 import edu.bootcamp.backoffice.model.client.dto.ClientRequest;
 import edu.bootcamp.backoffice.model.client.dto.ClientResponse;
+import edu.bootcamp.backoffice.model.client.dto.UpdateClientRequest;
+import edu.bootcamp.backoffice.model.order.Order;
+import edu.bootcamp.backoffice.model.service.ServiceEntity;
 import edu.bootcamp.backoffice.repository.ClientRepository;
+import edu.bootcamp.backoffice.repository.SubscriptionRepository;
 import edu.bootcamp.backoffice.service.Interface.ClientService;
 import edu.bootcamp.backoffice.service.Interface.Validator;
 import org.springframework.stereotype.Service;
@@ -24,18 +29,23 @@ import java.util.Optional;
 public class ClientServiceImpl implements ClientService {
     private final ClientRepository clientRepository;
     private final ClientFactory dtoFactory;
+    private final SubscriptionRepository subscriptionRepository;
     private final Validator validator;
+
+    private final SubscriptionFactory subscriptionFactory;
+
 
     public ClientServiceImpl(
             ClientRepository clientRepository,
             ClientFactory dtoFactory,
-            Validator validator
-    ) {
+            SubscriptionRepository subscriptionRepository, Validator validator,
+            SubscriptionFactory subscriptionFactory) {
         this.clientRepository = clientRepository;
         this.dtoFactory = dtoFactory;
+        this.subscriptionRepository = subscriptionRepository;
         this.validator = validator;
+        this.subscriptionFactory = subscriptionFactory;
     }
-
 
 
     public ClientResponse registerClient(ClientRequest clientRequest) {
@@ -88,27 +98,34 @@ public class ClientServiceImpl implements ClientService {
         validateErrors(errors);
     }
 
-    private Client validateUpdateConflicts(Integer id, UpdateClientRequest clientDto)
-    {
+    private Client validateUpdateConflicts(Integer id, UpdateClientRequest clientDto) {
         Client client = validator.completeValidationForId(
                 id,
                 clientRepository
         );
-        if(clientDto.getName()!=null)
+        if (clientDto.getSubscriptionId() != null) {
+            // Buscar la subscripcion por id y setear false al enabled
+            for (Subscription subs : client.getClientSubscriptions()) {
+                if (subs.getId().equals(clientDto.getSubscriptionId())) {
+                    subs.setEnabled(false);
+                    break;
+                }
+            }
+        }
+        if (clientDto.getName() != null)
             client.setName(clientDto.getName());
-        if(clientDto.getLastname()!=null)
+        if (clientDto.getLastname() != null)
             client.setLastName(clientDto.getLastname());
-        if(clientDto.getDni()!=null)
+        if (clientDto.getDni() != null)
             client.setDni(clientDto.getDni());
-        if(clientDto.getPhone()!=null)
+        if (clientDto.getPhone() != null)
             client.setPhone(clientDto.getPhone());
-        if(clientDto.getAdress()!=null)
+        if (clientDto.getAdress() != null)
             client.setAdress(clientDto.getAdress());
         if (clientDto.getStartdate() != null)
             client.setStartDate(clientDto.getStartdate());
-        if(clientDto.getIsbussiness()!=null)
-        {
-            if(clientDto.getIsbussiness()) {
+        if (clientDto.getIsbussiness() != null) {
+            if (clientDto.getIsbussiness()) {
                 if (client.getIsBussiness()) {
                     if (clientDto.getBussinessname() != null)
                         client.setBussinessName(clientDto.getBussinessname());
@@ -116,7 +133,7 @@ public class ClientServiceImpl implements ClientService {
                         client.setCuit(clientDto.getCuit());
                 } else {
                     StringBuilder errorBuilder = new StringBuilder(
-                        "Intentando actualizar el usuario Persona a usuario Empresa: "
+                            "Intentando actualizar el usuario Persona a usuario Empresa: "
                     );
                     int count = errorBuilder.length();
                     if (clientDto.getBussinessname() == null)
@@ -129,15 +146,13 @@ public class ClientServiceImpl implements ClientService {
                     client.setCuit(clientDto.getCuit());
                     client.setIsBussiness(true);
                 }
-            }
-            else
-            {
+            } else {
                 client.setBussinessName(null);
                 client.setCuit(null);
                 client.setIsBussiness(false);
             }
         }
-        if(clientDto.getEnabled()!=null)
+        if (clientDto.getEnabled() != null)
             client.setEnabled(clientDto.getEnabled());
         return client;
     }
@@ -203,11 +218,11 @@ public class ClientServiceImpl implements ClientService {
         );
         validator.validateIntegerValue
                 (clientRequest.getDni(),
-                EntitiesConstraints.CLIENTDNI_MAX,
-                EntitiesConstraints.CLIENTDNI_MIN,
-                "Client dni",
-                errorBuilder
-        );
+                        EntitiesConstraints.CLIENTDNI_MAX,
+                        EntitiesConstraints.CLIENTDNI_MIN,
+                        "Client dni",
+                        errorBuilder
+                );
         validator.validateLongValue(
                 clientRequest.getPhone(),
                 EntitiesConstraints.CLIENTPHONE_MAX,
@@ -226,7 +241,7 @@ public class ClientServiceImpl implements ClientService {
                 clientRequest.getIsbussiness(),
                 errorBuilder
         );
-        if(clientRequest.getIsbussiness()){
+        if (clientRequest.getIsbussiness()) {
             validator.validateVarchar(
                     clientRequest.getBussinessname(),
                     EntitiesConstraints.CLIENT_BUSSINESSNAME_MIN_LENGTH,
@@ -267,9 +282,9 @@ public class ClientServiceImpl implements ClientService {
                 "Client lastname"
         );
         validator.validateLongValue(
-                (long)clientRequest.getDni(),
-                (long)EntitiesConstraints.CLIENTDNI_MAX,
-                (long)EntitiesConstraints.CLIENTDNI_MIN,
+                (long) clientRequest.getDni(),
+                (long) EntitiesConstraints.CLIENTDNI_MAX,
+                (long) EntitiesConstraints.CLIENTDNI_MIN,
                 "Client dni",
                 errorBuilder
         );
@@ -287,11 +302,11 @@ public class ClientServiceImpl implements ClientService {
                 errorBuilder,
                 "Client adress"
         );
-       if(validator.isEmpty(
+        if (validator.isEmpty(
                 clientRequest.getIsbussiness(),
                 errorBuilder
-        ))return;
-       if(clientRequest.getIsbussiness()){
+        )) return;
+        if (clientRequest.getIsbussiness()) {
             validator.validateVarchar(
                     clientRequest.getBussinessname(),
                     EntitiesConstraints.CLIENTNAME_MIN_LENGTH,
@@ -310,10 +325,49 @@ public class ClientServiceImpl implements ClientService {
                     "Client cuit",
                     errorBuilder
             );
-       }
-       validator.isEmpty(
-               clientRequest.getEnabled(),
-               errorBuilder
-       );
+        }
+        validator.isEmpty(
+                clientRequest.getEnabled(),
+                errorBuilder
+        );
+    }
+
+    @Override
+    public void registerSubscriptions(Client client, List<ServiceEntity> services) {
+        //Validar si el cliente ya tiene un servicio
+        Subscription subscription = new Subscription();
+        subscription.setClient(client);
+        subscription.setEnabled(true);
+        for (ServiceEntity service : services) {
+            subscription.setService(service);
+            subscriptionRepository.save(subscription);
+        }
+    }
+
+    @Override
+    public ServiceEntity getDiscountService(Client client) {
+        // Buscar las subscripciones que posee el cliente y mandar una subscripcion que este activa
+        for (Subscription subscriptions : client.getClientSubscriptions()) {
+            if (subscriptions.isEnabled()) {
+                return subscriptions.getService();
+            } else {
+                continue;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public List<SubscriptionResponse> getClientSubscriptions(Integer clientId) {
+
+        Client client = validator.validateSoftDeletableEntityExistence(clientId, clientRepository);
+
+        List<SubscriptionResponse> subscriptionsResponses = new ArrayList<>();
+
+        for (Subscription subscriptions : client.getClientSubscriptions()) {
+            subscriptionsResponses.add(subscriptionFactory.createResponse(subscriptions));
+        }
+
+        return subscriptionsResponses;
     }
 }

@@ -10,76 +10,62 @@ import "toastify-js/src/toastify.css"
 import Swal from 'sweetalert2'
 import AddRemoveButtonsComponent from "../AddRemoveButtonsComponent";
 import '../../assets/styles/tableStyle.css'
+import EmptyList from '../../utils/EmptyList';
 
-function ProductListComponent()
-{
+function ProductListComponent() {
 
     const navigate = useNavigate();
 
     const { products, startLoadingProducts, setActiveProduct, startDeletingProduct, activeProduct } = useProductsStore();
 
-    useEffect(() =>
-    {
-        if(products.length === 0)startLoadingProducts();
+    useEffect(() => {
+        if (products.length === 0) startLoadingProducts();
     }, []);
 
-    function checkActiveProduct(event, product)
-    {
+    function checkActiveProduct(event, product) {
 
         let checkboxes = document.getElementsByClassName("custom-checkbox");
         let checkbox = event.target;
         let tRow = checkbox.closest("tr");
-        for (const item of checkboxes)
-        {
-            if (item.id == checkbox.id)
-            {
-                if (checkbox.checked)
-                {
+        for (const item of checkboxes) {
+            if (item.id == checkbox.id) {
+                if (checkbox.checked) {
                     tRow.classList.add("table-active");
                     setActiveProduct(product);
-                } else
-                {
+                } else {
                     tRow.classList.remove("table-active");
                     setActiveProduct(null);
                 }
-            } else
-            {
+            } else {
                 item.checked = false;
                 item.closest("tr").classList.remove("table-active");
             }
         }
     }
 
-    function deleteProduct()
-    {
-        if (activeProduct)
-        {
-            if (activeProduct.enabled === true)
-            {
+    function deleteProduct() {
+        if (activeProduct) {
+            if (activeProduct.enabled === true) {
                 Swal.fire({
                     title: `¿Seguro que quieres eliminar ${activeProduct.name}?`,
                     showCancelButton: true,
                     confirmButtonText: 'confirmar',
                     cancelButtonText: 'cancelar',
-                }).then((result) =>
-                {
+                }).then((result) => {
                     /* Read more about isConfirmed, isDenied below */
-                    if (result.isConfirmed)
-                    {
+                    if (result.isConfirmed) {
                         startDeletingProduct();
                         Swal.fire('Producto Eliminado', '', 'success')
                     }
                 });
-            } else
-            {
+            } else {
                 return Swal.fire({
                     icon: "error",
                     title: "Error",
                     text: "No puede eliminar un producto que esté deshabilitado",
                 });
             }
-        } else
-        {
+        } else {
             Toastify({
                 text: "Seleccionar un producto para eliminar",
                 duration: 2000,
@@ -90,8 +76,7 @@ function ProductListComponent()
         }
     }
 
-    function editProduct(event, product)
-    {
+    function editProduct(event, product) {
         setActiveProduct(product);
         navigate("/product/editProduct");
     }
@@ -114,7 +99,7 @@ function ProductListComponent()
                         />
 
                         {/* Table Section */}
-                        <section className='d-flex justify-content-center rounded-3 custom-shadow tabla-container-color'
+                        {products.length != 0 && (<section className='d-flex justify-content-center rounded-3 custom-shadow tabla-container-color'
                             style={{ maxHeight: '85vh', overflowY: 'auto' }}>
                             <table className="table table-color">
                                 <thead style={{ position: 'sticky', top: 0, borderBottom: '2px solid black' }}>
@@ -144,7 +129,7 @@ function ProductListComponent()
                                             </td>
                                             <td>{product.name}</td>
                                             <td className="text-overflow">{product.description}</td>
-                                            <td>{"$"+product.basePrice}</td>
+                                            <td>{"$" + product.basePrice}</td>
                                             <td>{product.enabled ? "habilitado" : "deshabilitado"}</td>
                                             <td>
                                                 <FontAwesomeIcon
@@ -160,7 +145,8 @@ function ProductListComponent()
                                     ))}
                                 </tbody>
                             </table>
-                        </section>
+                        </section>)}
+                        {products.length == 0 && <EmptyList name={"Productos"} />}
                     </div>
                 </div>
             </div >

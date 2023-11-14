@@ -9,6 +9,7 @@ import HeaderComponent from "../HeaderComponent";
 import { faCirclePlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import "../../assets/styles/AddRemoveButtonsStyle.css";
 import { DetailModal } from "../Modal/DetailModal";
+import EmptyList from "../../utils/EmptyList";
 
 function OrderListComponent() {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ function OrderListComponent() {
     useOrdersStore();
 
   useEffect(() => {
-    if(orders.length === 0)startLoadingOrders();
+    if (orders.length === 0) startLoadingOrders();
   }, []);
 
   function checkActiveOrder(event, user) {
@@ -81,7 +82,7 @@ function OrderListComponent() {
             </section>
 
             {/* Table Section */}
-            <section
+            {orders.length != 0 && (<section
               className="d-flex justify-content-center rounded-3 custom-shadow tabla-container-color"
               style={{ maxHeight: "85vh", overflowY: "auto" }}
             >
@@ -143,7 +144,8 @@ function OrderListComponent() {
                 </tbody>
               </table>
               <DetailModal />
-            </section>
+            </section>)}
+            {orders.length == 0 && <EmptyList name={"Pedidos"} />}
           </div>
         </div>
       </div>
