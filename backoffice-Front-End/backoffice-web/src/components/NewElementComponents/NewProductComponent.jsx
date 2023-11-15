@@ -91,9 +91,11 @@ function NewProductComponent() {
         }
 
         try {
-            console.log(product);
-            console.log(tax)
+            let taxes = [];
+            tax.forEach(item => taxes.push(item.id));
+            product.taxes = tax
             startAddingProduct(product);
+            setTax([]); //Vacia los datos de impuestos
             clearForm();
             Toastify({
                 text: "Producto Creado",
@@ -179,8 +181,8 @@ function NewProductComponent() {
                                             >
                                             </textarea>
                                         </div>
-                                        <TaxModal props={{tax, setTax}}/>
                                     </div>
+                                    <TaxModal tax={tax} setTax={setTax}/>   
                                 </div>
                             </div>
                         </section>

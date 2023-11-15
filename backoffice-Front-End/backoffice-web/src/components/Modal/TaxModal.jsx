@@ -4,20 +4,20 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlus} from "@fortawesome/free-solid-svg-icons";
 import SearchBar from '../Utils/SearchBar';
 import { useChargesStore } from '../../hooks';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaX } from "react-icons/fa6";
 
-function TaxModal({props}) {
+function TaxModal({ tax, setTax }) {
     const { charges, startLoadingCharges } = useChargesStore();
-    const [filteredList, setFilteredList] = useState(charges);
+    const [filteredList, setFilteredList] = useState(charges);  
 
-    let {tax, setTax} = props
     // const [tax, setTax] = useState([]); //Guarda los impuestos seleccionados por id
 
-    useEffect(() => {
+    useEffect(()  => {
+        if (tax.length > 0 ) CheckActive();
         if (charges.length === 0) startLoadingCharges();
-        setFilteredList([...charges])
-    }, [charges]);
+         setFilteredList([...charges])
+    }, [charges, tax]);
 
     function checkActiveCharge(event) {
         let checkboxes = document.getElementsByClassName("custom-checkbox");
@@ -26,9 +26,9 @@ function TaxModal({props}) {
             if (item.id === checkbox.id) {
                 if (checkbox.checked) {
                     //Si esta vacio agregamos directamente el impuesto
-                    if(tax.length == 0) setTax(prevTax => [...prevTax, charges.find(charge => charge.id == item.id)]);
+                    if(tax.length == 0) setTax(prevTax => [...prevTax, charges.find(charge => charge.id == item.id && charge.id)]);
                     //Si la lista tiene datos guardados, verificamos que no tenga la misma id y agregamos la info que no tenemos
-                    else if (!tax.some(charge => charge.id === item.id)) setTax(prevTax => [...prevTax, charges.find(charge => charge.id == item.id)]);
+                    else if (!tax.some(charge => charge.id === item.id)) setTax(prevTax => [...prevTax, charges.find(charge => charge.id == item.id && charge.id)]);
                 } else if (!checkbox.checked) {
                     //filtamos los impuestos por id
                     setTax(tax.filter((charge) => charge.id != item.id));
@@ -51,9 +51,14 @@ function TaxModal({props}) {
         }
     }
 
+    function CheckActive(id){
+        return tax.some(charge => charge.id === id)
+    }
+    
+
 
     return (
-        <div className='mt-2'>
+        <div className='divCharge'>
             <label htmlFor="impuesto" className="form-label">Impuesto</label>
             <button type="button" className="btn fw-bold btn-lg bgAdd circle ms-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 <FontAwesomeIcon icon={faCirclePlus} color="white" />
@@ -91,19 +96,20 @@ function TaxModal({props}) {
                                                     color: "#000000",
                                                     cursor: "pointer",
                                                 }}
+                                                checked = {CheckActive(charge.id)}
                                                 onChange={(event) => checkActiveCharge(event)}
                                                 className="custom-checkbox "
                                             />
                                             <label htmlFor="" className='ms-2'>{charge.name}</label>
                                         </div>
                                     ))
-                                }
+                                } 
                             </div>
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                         </div>
-                    </div>
+                    </div> 
                 </div>
             </div>
         </div>

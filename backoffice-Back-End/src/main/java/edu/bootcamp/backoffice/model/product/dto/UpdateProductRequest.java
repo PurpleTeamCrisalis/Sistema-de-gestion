@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import edu.bootcamp.backoffice.model.Tax.dto.ChargeRequest;
+import edu.bootcamp.backoffice.model.Tax.dto.ChargeResponse;
 import edu.bootcamp.backoffice.model.Tax.dto.UpdateChargeRequest;
 
 import lombok.AllArgsConstructor;
@@ -32,6 +34,6 @@ public class UpdateProductRequest {
 	
 	@JsonProperty("taxes")
 	@Singular
-	private List<UpdateChargeRequest> taxes;
+	private List<ChargeRequest> taxes;
 
 }

@@ -3,6 +3,7 @@ package edu.bootcamp.backoffice.model.product;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.stereotype.Component;
@@ -18,13 +19,16 @@ import edu.bootcamp.backoffice.model.orderDetail.productDetail.dto.ProductDetail
 import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.dto.ServiceDetailResponse;
 import edu.bootcamp.backoffice.model.product.dto.ProductRequest;
 import edu.bootcamp.backoffice.model.product.dto.ProductResponse;
+import edu.bootcamp.backoffice.repository.TaxRepository;
 
 @Component
 public class ProductFactory {
 	private final TaxFactory taxFactory;
+	private final TaxRepository taxRepository;
 
-	public ProductFactory(TaxFactory taxFactory) {
 
+	public ProductFactory(TaxFactory taxFactory, TaxRepository taxRepository) {
+		this.taxRepository = taxRepository;
 		this.taxFactory = taxFactory;
 	}
 
@@ -36,35 +40,54 @@ public class ProductFactory {
 
 	public Product CreateEntityForInsertNewRecord(ProductRequest productDto) {
 
-		return Product.builder().name(productDto.getName()).description(productDto.getDescription())
-				.basePrice(productDto.getBasePrice()).taxes(createTaxResponses(productDto.getTaxes())).enabled(true)
-				.build();
+		return Product.builder()
+			.name(productDto.getName())
+			.description(productDto.getDescription())
+			.basePrice(productDto.getBasePrice())
+			.taxes(createTaxResponses(productDto.getTaxes()))
+			.enabled(true)
+			.build();
 
 	}
 
-	private List<Tax> createTaxResponses(List<ChargeRequest> listResponse)
+	// private List<Tax> createTaxResponses(List<ChargeRequest> listResponse)
+	// {
+	// 	List<Tax> listTaxes = new ArrayList<Tax>();
+	// 	for (ChargeRequest chargeRequest : listResponse) {
+	// 		Tax tax = taxFactory.CreateEntityForInsertNewRecord(chargeRequest);
+	// 		listTaxes.add(tax);
+	// 	}
+	// 	return listTaxes;
+	// }
 
-	{
-		List<Tax> listTaxes = new ArrayList<Tax>();
-
-		for (ChargeRequest chargeRequest : listResponse) {
-			Tax tax = taxFactory.CreateEntityForInsertNewRecord(chargeRequest);
-			listTaxes.add(tax);
+	public List<Tax> createTaxResponses(List<ChargeRequest> taxes) {
+		List<Tax> chargeResponses = new ArrayList<>();
+		for (ChargeRequest chargeRequest : taxes) {
+			Optional<Tax> taxOptional = taxRepository.findByName(chargeRequest.getName());
+			// Verificar si el impuesto existe antes de intentar agregarlo
+			taxOptional.ifPresent(chargeResponses::add);
 		}
-
-		return listTaxes;
+    	return chargeResponses;
 	}
 
 	public ProductResponse createResponse(Product product, List<ChargeResponse> taxes) {
+	// public ProductResponse createResponse(Product product) {
 
-		return ProductResponse.builder().id(product.getId()).name(product.getName())
-				.description(product.getDescription()).basePrice(product.getBasePrice()).taxes(taxes)
-				.enabled(product.isEnabled()).build();
+		return ProductResponse.builder()
+			.id(product.getId())
+			.name(product.getName())
+			.description(product.getDescription())
+			.basePrice(product.getBasePrice())
+			.taxes(taxes)
+			.enabled(product.isEnabled())
+			.build();
 	}
 
 	public ProductResponse createProductResponse(Product product) {
 		List<ChargeResponse> chargeResponse = createChargeResponses(product.getTaxes());
-		return createResponse(product, chargeResponse);
+		return createResponse(product, chargeResponse);		
+		// return createResponse(product);
+
 	}
 
 	private List<ChargeResponse> createChargeResponses(List<Tax> taxes) {

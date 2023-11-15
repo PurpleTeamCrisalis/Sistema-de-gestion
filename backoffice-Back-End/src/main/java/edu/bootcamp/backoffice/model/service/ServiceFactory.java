@@ -43,10 +43,10 @@ public class ServiceFactory {
 	{
 		List<Tax> listTaxes = new ArrayList<Tax>();
 
-		for (ChargeRequest chargeRequest : listResponse) {
-			Tax tax = taxFactory.CreateEntityForInsertNewRecord(chargeRequest);
-			listTaxes.add(tax);
-		}
+		// for (ChargeRequest chargeRequest : listResponse) {
+		// 	Tax tax = taxFactory.CreateEntityForInsertNewRecord(chargeRequest);
+		// 	listTaxes.add(tax);
+		// }
 
 		return listTaxes;
 	}

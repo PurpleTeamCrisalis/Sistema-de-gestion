@@ -6,6 +6,8 @@ import java.util.Optional;
 import java.util.Set;
 
 import edu.bootcamp.backoffice.model.Tax.Tax;
+import edu.bootcamp.backoffice.model.Tax.dto.ChargeRequest;
+import edu.bootcamp.backoffice.model.Tax.dto.ChargeResponse;
 import edu.bootcamp.backoffice.service.Interface.TaxService;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,7 @@ import edu.bootcamp.backoffice.model.product.dto.ProductRequest;
 import edu.bootcamp.backoffice.model.product.dto.ProductResponse;
 import edu.bootcamp.backoffice.model.product.dto.UpdateProductRequest;
 import edu.bootcamp.backoffice.repository.ProductRepository;
+import edu.bootcamp.backoffice.repository.TaxRepository;
 import edu.bootcamp.backoffice.service.Interface.ProductService;
 import edu.bootcamp.backoffice.service.Interface.Validator;
 
@@ -28,11 +31,13 @@ public class ProductServiceImpl implements ProductService {
 	private final ProductRepository productRepository;
 	private final ProductFactory dtoFactory;
 	private final Validator validator;
+	private final TaxRepository taxRepository;
 
-	public ProductServiceImpl(ProductRepository productRepository, ProductFactory dtoFactory, Validator validator) {
+	public ProductServiceImpl(ProductRepository productRepository, ProductFactory dtoFactory, Validator validator, TaxRepository taxRepository) {
 		this.productRepository = productRepository;
 		this.dtoFactory = dtoFactory;
 		this.validator = validator;
+		this.taxRepository = taxRepository;
 
 	}
 /*
@@ -94,6 +99,8 @@ public class ProductServiceImpl implements ProductService {
 			);
 		if(productRequest.getEnabled() != null)
 			product.setEnabled(productRequest.getEnabled());
+
+		product.setTaxes(dtoFactory.createTaxResponses(productRequest.getTaxes()));
 		validateErrors(errors);
 		return product;
 	}

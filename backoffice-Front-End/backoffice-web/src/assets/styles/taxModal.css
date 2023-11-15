@@ -1,6 +1,9 @@
 .modal{
-    top: 20% !important;
-    left: 5% !important;
+    top: 50px !important;
+    left: 50px !important;
+}
+.divCharge{
+    margin: 35px;
 }
 
 .modal-body{
