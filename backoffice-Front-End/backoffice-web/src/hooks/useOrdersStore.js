@@ -47,7 +47,9 @@ export function useOrdersStore() {
         products: data.products,
         enabled: data.enabled,
         id: data.id,
-        total: data.total
+        total: data.total,
+        totalDiscount: data.totalDiscount,
+        discountService: data.discountService
       }))
     } catch (error) {
       console.error(error)

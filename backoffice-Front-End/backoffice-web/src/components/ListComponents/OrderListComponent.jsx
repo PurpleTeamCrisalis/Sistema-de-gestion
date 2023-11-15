@@ -148,7 +148,9 @@ function OrderListComponent() {
                             color: "#198754",
                           }}
                         >
-                          {order.discount ? `($${order.discount})` : "---"}
+                          {order.totalDiscount
+                            ? `($${order.totalDiscount.toFixed(2)})`
+                            : "---"}
                         </td>
                         <td>{order.date}</td>
                         <td style={{ color: orderState[order.state] }}>
