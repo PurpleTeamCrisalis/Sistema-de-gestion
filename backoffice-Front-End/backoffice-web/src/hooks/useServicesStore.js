@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { projectApi } from '../api'
 import { onAddNewService, onDeleteService, onLoadServices, onPullActiveService, onSetActiveService, onUpdateService } from '../redux'
-import { getErrorResponse, getSuccessResponse } from '../helpers'
 
 export function useServicesStore() {
 
@@ -18,9 +17,8 @@ export function useServicesStore() {
     try {
       const { data } = await projectApi.get('/service/list')
       dispatch(onLoadServices(data))
-      getSuccessResponse("Servicios cargados!")
     } catch (error) {
-      getErrorResponse(error, "servicios")
+      console.error(error)
     }
   }
   async function startAddingService(service) {
@@ -31,9 +29,7 @@ export function useServicesStore() {
         description: data.description,
         basePrice: data.basePrice,
         enabled: data.enabled,
-        id: data.id,
-        isSpecial: data.isSpecial,
-        suportCharge: data.suportCharge
+        id: data.id
       }))
     } catch (error) {
       console.error(error)

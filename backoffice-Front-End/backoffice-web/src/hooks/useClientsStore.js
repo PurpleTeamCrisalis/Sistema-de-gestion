@@ -7,13 +7,10 @@ import {
   onSetActiveClient,
   onPullActiveClient,
   onDeleteClient,
-  onLoadClientSubscriptions,
-  onDeleteClientSubcriptions,
 } from "../redux/client/clientsSlice";
-import { getSuccessResponse } from "../helpers";
 
 export function useClientsStore() {
-  const { clients, activeClient, clientSubscriptions } = useSelector((state) => state.clients);
+  const { clients, activeClient } = useSelector((state) => state.clients);
   const dispatch = useDispatch();
 
   function setActiveClient(client) {
@@ -27,23 +24,9 @@ export function useClientsStore() {
     try {
       const { data } = await projectApi.get("/client/list");
       dispatch(onLoadClients(data));
-      getSuccessResponse('Clientes cargados!')
     } catch (error) {
       console.error("Lista vacía");
     }
-  }
-
-  async function startLoadingClientSubscriptions(clientId) {
-    try {
-      const { data } = await projectApi.get(`/client/list/${clientId}/subscriptions`)
-      dispatch(onLoadClientSubscriptions(data))
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  function deleteClientSubscriptions(){
-    dispatch(onDeleteClientSubcriptions());
   }
 
   async function startAddingClients(client) {
@@ -100,7 +83,6 @@ export function useClientsStore() {
     // Atributos
     clients,
     activeClient,
-    clientSubscriptions,
     // Metodos
     startLoadingClient,
     setActiveClient,
@@ -108,7 +90,5 @@ export function useClientsStore() {
     startAddingClients,
     startDeletingClient,
     startUpdatingClient,
-    startLoadingClientSubscriptions,
-    deleteClientSubscriptions,
   };
 }

@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { projectApi } from '../api'
 import { onAddNewCharge, onDeleteCharge, onLoadCharges, onPullActiveCharge, onSetActiveCharge, onUpdateCharge } from '../redux'
-import { getErrorResponse, getSuccessResponse } from '../helpers'
 
 export function useChargesStore() {
 
@@ -18,16 +17,16 @@ export function useChargesStore() {
         try {
             const { data } = await projectApi.get('/charge/list')
             dispatch(onLoadCharges(data))
-            getSuccessResponse("Impuestos cargados!")
         } catch (error) {
-            getErrorResponse(error, "impuestos")
+            dispatch(onLoadCharges([]))
+            // console.error(error)
         }
     }
     async function startAddingCharge(charge) {
         try {
         const { data } = await projectApi.post('/charge/create', charge)
         dispatch(onAddNewCharge({
-            name: data.name,
+            name: data.username,
             percentage: data.percentage,
             enabled: data.enabled,
             id: data.id
