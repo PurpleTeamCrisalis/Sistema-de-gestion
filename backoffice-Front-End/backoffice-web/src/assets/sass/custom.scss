@@ -2,13 +2,11 @@ $enable-negative-margins: true;
 $primary: #BAD6FF;
 $danger: #ff4136;
 $dark: #000;
-$light: #fff;
 
 $theme-colors: (
   "primary": $primary,
   "danger": $danger,
-  "dark": $dark,
-  "light": $light
+  "dark": $dark
 );
 
 @import "../../../node_modules/bootstrap/scss/bootstrap";

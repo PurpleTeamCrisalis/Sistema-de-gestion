@@ -14,6 +14,7 @@ export const useAuthStore = () => {
     try {
       // Peticion a API para Login
       const response = await authApi.post("/login", { username, password });
+
       if (response.data) {
         // Si la API devuelve datos, el inicio de sesión fue exitoso
         localStorage.setItem('user', JSON.stringify({ username })) // Guarda en localStorage el usuario autenticado
