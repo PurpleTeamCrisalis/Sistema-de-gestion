@@ -321,6 +321,7 @@ public class OrderServiceImpl implements OrderService {
   public OrderResponse delete(int id) {
     Order order = validator.validateIdExistence(id, orderRepository);
     order.setEnabled(false);
+    orderRepository.save(order);
     return orderFactory.createOrderResponse(order);
   }
 }
