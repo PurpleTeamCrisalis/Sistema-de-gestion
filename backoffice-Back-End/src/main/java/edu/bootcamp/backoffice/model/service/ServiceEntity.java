@@ -11,6 +11,9 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -34,8 +37,12 @@ public class ServiceEntity extends Asset {
 	private double suportCharge;
 
 	@ManyToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "taxesByServices", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "tax_id"))
-	public List<Tax> taxes=new ArrayList<>();
+	@JoinTable(
+			name = "taxesByServices",
+			joinColumns = @JoinColumn(name = "id"),
+			inverseJoinColumns = @JoinColumn(name = "tax_id")
+	)
+	public List<Tax> taxes = new ArrayList<>();
 
 	@OneToMany(mappedBy = "discountService", fetch = FetchType.LAZY)
 	private List<Order> ordersWithDiscount = new ArrayList<>();
@@ -49,4 +56,22 @@ public class ServiceEntity extends Asset {
 	)
 	private List<Subscription> serviceSubscriptions = new ArrayList<>();
 
+	@Override
+	public List<Tax> getAllTaxes() {
+		return taxes;
+	}
+
+	/*
+	 * public double suportCharge() {
+	 * 
+	 * double suport = 0;
+	 * 
+	 * if (isSpecial == true) {
+	 * 
+	 * suport += super.getBasePrice();
+	 * }
+	 * 
+	 * return suport;
+	 * }
+	 */
 }

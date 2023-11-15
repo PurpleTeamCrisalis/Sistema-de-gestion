@@ -9,6 +9,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.bootcamp.backoffice.model.client.dto.ClientResponse;
 import edu.bootcamp.backoffice.model.orderDetail.productDetail.dto.ProductDetailResponse;
 import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.dto.ServiceDetailResponse;
+import edu.bootcamp.backoffice.model.service.ServiceEntity;
+import edu.bootcamp.backoffice.model.service.dto.ServiceResponse;
 import lombok.*;
 
 @Getter
@@ -29,8 +31,11 @@ public class OrderResponse {
   @JsonProperty("client")
   private ClientResponse client;
 
-  // @JsonProperty("discountService")
-  // private
+  @JsonProperty("discountService")
+  private ServiceResponse discountService;
+
+  @JsonProperty("totalDiscount")
+  private Double totalDiscount;
 
   @JsonProperty("enabled")
   private Boolean enabled;

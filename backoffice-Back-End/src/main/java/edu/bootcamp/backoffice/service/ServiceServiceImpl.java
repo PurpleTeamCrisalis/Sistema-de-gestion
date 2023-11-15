@@ -214,8 +214,12 @@ public class ServiceServiceImpl implements ServiceService {
 		return dtoFactory.createServiceResponse(serviceEntity);
 	}
 
-	public ServiceEntity getServiceById(Integer id) {
-		return validator.completeValidationForId(id, serviceRepository);
+	public ServiceEntity getServiceById(
+			Integer id,
+			StringBuilder errorBuilder
+			)
+	{
+		return validator.validateFkExistence(id, serviceRepository, errorBuilder);
 	}
 
 	@Override

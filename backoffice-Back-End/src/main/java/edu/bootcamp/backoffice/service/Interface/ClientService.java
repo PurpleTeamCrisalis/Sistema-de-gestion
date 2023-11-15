@@ -16,7 +16,10 @@ public interface ClientService {
 
     public ClientResponse get(Integer id);
 
-    public Client getClientEntity(Integer id); 
+    public Client getClientEntity(
+            Integer id,
+            StringBuilder errorBuilder
+    );
 
     public List<ClientResponse> get()
             throws InvalidIdFormatException;

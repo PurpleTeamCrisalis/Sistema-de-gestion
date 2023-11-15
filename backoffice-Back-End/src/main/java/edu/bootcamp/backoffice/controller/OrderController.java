@@ -33,12 +33,13 @@ public class OrderController {
           produces = MediaType.APPLICATION_JSON_VALUE
     )
   public ResponseEntity<OrderResponse> registerOrder(
-    // HttpServletRequest request,
-      @RequestBody OrderRequest createRequest
-    )
-  {
-    // String token = request.getHeader("Authorization");
-    // String username = JWTGenerator.getUsernameFromJWT(token);
+         // HttpServletRequest request,
+          @RequestBody OrderRequest createRequest
+  )
+  {/*
+    String token = request.getHeader("Authorization");
+    String username = JWTGenerator.getUsernameFromJWT(
+            token.replace("Bearer ", ""));*/
     String username = "admin";
     OrderResponse orderDto = orderService.registerOrder(createRequest, username);
     URI location = ServletUriComponentsBuilder
