@@ -28,7 +28,7 @@ export function useServicesStore() {
       console.log(service)
       const { data } = await projectApi.post('/service/', service)
       console.log(data)
-      
+
       dispatch(onAddNewService({
         name: data.name,
         description: data.description,
@@ -45,15 +45,15 @@ export function useServicesStore() {
   }
   async function startDeletingService() {
     try {
-      await projectApi.delete(`/service/delete/${activeService.id}`)
-      dispatch(onDeleteService())
+      const { data } = await projectApi.delete(`/service/delete/${activeService.id}`)
+      dispatch(onDeleteService(data))
     } catch (error) {
       console.error(error)
     }
   }
   async function startUpdatingService(service) {
     try {
-      const {data} = await projectApi.patch(`/service/update/${service.id}`, service)
+      const { data } = await projectApi.patch(`/service/update/${service.id}`, service)
       dispatch(onUpdateService(data))
     } catch (error) {
       console.error(error)

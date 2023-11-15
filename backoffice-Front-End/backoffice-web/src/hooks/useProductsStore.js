@@ -16,7 +16,7 @@ export function useProductsStore() {
   }
   async function startLoadingProducts() {
     try {
-      const {data} = await projectApi.get('/product/list')
+      const { data } = await projectApi.get('/product/list')
       console.log(data)
       dispatch(onLoadProducts(data))
       getSuccessResponse("Productos cargados!")
@@ -26,7 +26,7 @@ export function useProductsStore() {
   }
   async function startAddingProduct(product) {
     try {
-      const {data}  = await projectApi.post('/product/', product);
+      const { data } = await projectApi.post('/product/', product);
 
       dispatch(onAddNewProduct({
         name: data.name,
@@ -42,15 +42,15 @@ export function useProductsStore() {
   }
   async function startDeletingProduct() {
     try {
-      await projectApi.delete(`/product/delete/${activeProduct.id}`)
-      dispatch(onDeleteProduct())
+      const { data } = await projectApi.delete(`/product/delete/${activeProduct.id}`)
+      dispatch(onDeleteProduct(data))
     } catch (error) {
       console.error(error)
     }
   }
   async function startUpdatingProduct(product) {
     try {
-      const {data} = await projectApi.patch(`/product/update/${product.id}`, product)
+      const { data } = await projectApi.patch(`/product/update/${product.id}`, product)
       console.log(data)
       dispatch(onUpdateProduct(data))
     } catch (error) {
