@@ -78,6 +78,8 @@ public class OrderServiceImpl implements OrderService {
         serviceDetailService.registerServiceDetail(servicesDetails, order);
         productDetailService.registerProductDetail(productsDetails, order);
 
+        clientService.registerSubscriptions(client, List.of(servicesDetails.get(0).getService()));
+
         // Creo y estructuro la OrderResponse
         return orderFactory.createOrderResponse(order); // Return OrderResponse
         // END TRANSACTION

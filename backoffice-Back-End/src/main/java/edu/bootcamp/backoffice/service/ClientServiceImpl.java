@@ -334,42 +334,19 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public void registerSubscriptions(Client client, List<ServiceEntity> services) {
-        if (client == null || services == null) {
-            throw new IllegalArgumentException("Client and services must not be null");
-        }
-
+        //Validar si el cliente ya tiene un servicio
+        Subscription subscription = new Subscription();
+        subscription.setClient(client);
+        subscription.setEnabled(true);
         for (ServiceEntity service : services) {
-            if (!clientHaveActiveSubscription(client, service)) {
-                Subscription subscription = new Subscription();
-                subscription.setClient(client);
-                subscription.setEnabled(true);
-                subscription.setService(service);
-
-                subscriptionRepository.save(subscription);
-            }else{
-                System.out.println("Client already have a subscription with a service");
-            }
+            subscription.setService(service);
+            subscriptionRepository.save(subscription);
         }
-    }
-
-    public Boolean clientHaveActiveSubscription(Client client, ServiceEntity service) {
-        if (client == null || service == null) {
-            throw new IllegalArgumentException("Client and service must not be null");
-        }
-
-        for (Subscription sub : client.getClientSubscriptions()) {
-            ServiceEntity subService = sub.getService();
-            if (subService != null && subService.getId() != null && subService.getId().equals(service.getId())) {
-                if(sub.isEnabled()){
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     @Override
     public ServiceEntity getDiscountService(Client client) {
+        // Buscar las subscripciones que posee el cliente y mandar una subscripcion que este activa
         for (Subscription subscriptions : client.getClientSubscriptions()) {
             if (subscriptions.isEnabled()) {
                 return subscriptions.getService();

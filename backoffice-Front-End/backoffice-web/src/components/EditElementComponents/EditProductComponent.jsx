@@ -114,7 +114,7 @@ function EditProductComponent() {
                     <div className="tablePane">
                         {/* Inputs */}
                         <section className="container bg-primary rounded-3 mt-5 mb-4" style={{ minHeight: "70vh", width: "90%" }}>
-                            <div className="text-center py-4">
+                            <div className="text-center pt-4">
                                 <h3 className="fs-4">Editar Producto</h3>
                                 <hr className="bg-light" />
                             </div>

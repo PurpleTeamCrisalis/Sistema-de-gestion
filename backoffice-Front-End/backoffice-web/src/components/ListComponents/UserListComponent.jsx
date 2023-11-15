@@ -22,15 +22,9 @@ function UserListComponent() {
 
   const [filteredList, setFilteredList] = useState(users);
 
-
-
-
-  // CUANDO SE USE EL COMPONENTE, SE VA TRAER LA LISTA DE USUARIOS
-
   useEffect(() => {
-    if(users.length === 0)startLoadingUsers();
-    setFilteredList([...users])
-  }, [users]);
+    if(users.length === 0) startLoadingUsers();
+  }, []);
 
   function checkActiveUser(event, user) {
     let checkboxes = document.getElementsByClassName("custom-checkbox");
