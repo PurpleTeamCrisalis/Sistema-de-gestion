@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import NavComponent from '../NavComponent'
 import { useNavigate } from 'react-router-dom'
 import { useForm, useServicesStore } from '../../hooks';
@@ -6,17 +6,24 @@ import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
 import HeaderComponent from "../HeaderComponent";
 import "../../assets/styles/inputStyle.css"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
+import TaxModal from '../Modal/TaxModal';
 
 function EditServiceComponent() {
     const navigate = useNavigate();
     const { startUpdatingService, activeService, setActiveService, services } = useServicesStore();
-    const { name, description, basePrice, enabled, handleInputChange, emptyValidation } = useForm({
+    const { name, description, basePrice, enabled, suportCharge, handleInputChange, emptyValidation, taxes} = useForm({
         name: activeService?.name,
         description: activeService?.description,
         basePrice: activeService?.basePrice,
         enabled: activeService?.enabled,
         id: activeService?.id,
+        taxes: activeService.taxes,
+        suportCharge: activeService?.suportCharge
     });
+    const [isSpecial, setIsSpecial] = useState(activeService?.isSpecial);
+    const [tax, setTax] = useState(taxes);
 
     // Edicion de servicio
     function editService(event) {
@@ -88,7 +95,12 @@ function EditServiceComponent() {
             return console.error("Error: servicio ya existe");
         }
         try {
-            startUpdatingService(serviceaux)
+            //Si no es especial se manda un cero, para evitar que viaje un número cuando no debería
+            startUpdatingService({
+                ...serviceaux,
+                suportCharge: isSpecial ? suportCharge : 0,
+                taxes: tax
+            })
             Toastify({
                 text: "Servicio Actualizado",
                 duration: 2000,
@@ -168,6 +180,7 @@ function EditServiceComponent() {
                                             </textarea>
                                         </div>
                                     </div>
+                                    <TaxModal  tax={tax} setTax={setTax}/>
                                 </div>
                             </div>
                             {/* Estado del servicio */}

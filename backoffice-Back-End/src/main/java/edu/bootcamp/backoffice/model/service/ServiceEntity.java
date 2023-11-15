@@ -33,9 +33,9 @@ public class ServiceEntity extends Asset {
 	@Column(name = "suportCharge", nullable = false)
 	private double suportCharge;
 
-	@ManyToMany
+	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "taxesByServices", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "tax_id"))
-	public Set<Tax> taxes;
+	public List<Tax> taxes=new ArrayList<>();
 
 	@OneToMany(mappedBy = "discountService", fetch = FetchType.LAZY)
 	private List<Order> ordersWithDiscount = new ArrayList<>();
@@ -49,17 +49,4 @@ public class ServiceEntity extends Asset {
 	)
 	private List<Subscription> serviceSubscriptions = new ArrayList<>();
 
-	/*
-	 * public double suportCharge() {
-	 * 
-	 * double suport = 0;
-	 * 
-	 * if (isSpecial == true) {
-	 * 
-	 * suport += super.getBasePrice();
-	 * }
-	 * 
-	 * return suport;
-	 * }
-	 */
 }

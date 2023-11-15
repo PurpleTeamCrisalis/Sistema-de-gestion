@@ -6,6 +6,9 @@ import Toastify from 'toastify-js'
 import "toastify-js/src/toastify.css"
 import "../../assets/styles/inputStyle.css"
 import HeaderComponent from "../HeaderComponent";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons'
+import TaxModal from '../Modal/TaxModal'
 
 const formDTO = {
     name: "",
@@ -16,7 +19,9 @@ const formDTO = {
 function NewServiceComponent() {
     const navigate = useNavigate();
     const { startAddingService, services } = useServicesStore();
-    const { name, description, basePrice, handleInputChange, clearForm, emptyValidation } = useForm(formDTO);
+    const { name, description, basePrice, suportCharge, handleInputChange, clearForm, emptyValidation } = useForm(formDTO);
+    const [isSpecial, setIsSpecial] = useState(false);
+    const [tax, setTax] = useState([]); //Guarda los impuestos seleccionados por id
 
     function addService(event) {
         event.preventDefault();
@@ -86,7 +91,13 @@ function NewServiceComponent() {
         }
 
         try {
-            startAddingService(service);
+            //Si no es especial se manda un cero, para evitar que viaje un número cuando no debería
+            startAddingService({
+                ...service,
+                suportCharge: isSpecial?suportCharge:0,
+                taxes: tax
+            });
+            setTax([]);
             clearForm();
             Toastify({
                 text: "Servicio Creado",
@@ -173,6 +184,7 @@ function NewServiceComponent() {
                                             </textarea>
                                         </div>
                                     </div>
+                                    <TaxModal tax={tax} setTax={setTax}/>
                                 </div>
                             </div>
                         </section>
