@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { projectApi } from '../api'
 import { onAddNewProduct, onDeleteProduct, onLoadProducts, onPullActiveProduct, onSetActiveProduct, onUpdateProduct } from '../redux'
-import { getErrorResponse, getSuccessResponse } from '../helpers'
 
 export function useProductsStore() {
 
@@ -19,9 +18,8 @@ export function useProductsStore() {
       const {data} = await projectApi.get('/product/list')
       console.log(data)
       dispatch(onLoadProducts(data))
-      getSuccessResponse("Productos cargados!")
     } catch (error) {
-      getErrorResponse(error, "productos")
+      console.error(error)
     }
   }
   async function startAddingProduct(product) {

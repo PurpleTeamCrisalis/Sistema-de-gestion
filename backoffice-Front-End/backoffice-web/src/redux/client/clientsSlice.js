@@ -4,7 +4,6 @@ const initialState = {
   isLoadingClients: true,
   clients: [],
   activeClient: null,
-  clientSubscriptions: [],
 };
 
 export const clientsSlice = createSlice({
@@ -20,13 +19,6 @@ export const clientsSlice = createSlice({
         );
         if (!exists) state.clients.push(client);
       });
-    },
-    onLoadClientSubscriptions: (state, { payload = [] }) => {
-      state.isLoadingClients = false;
-      state.clientSubscriptions = payload;
-    },
-    onDeleteCLientSubscriptions: (state) => {
-      state.clientSubscriptions = [];
     },
     onAddNewClient: (state, { payload }) => {
       state.clients.push(payload);
@@ -65,6 +57,4 @@ export const {
   onUpdateClient,
   onSetActiveClient,
   onPullActiveClient,
-  onLoadClientSubscriptions,
-  onDeleteClientSubcriptions,
 } = clientsSlice.actions;

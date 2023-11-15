@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import edu.bootcamp.backoffice.model.Subscription.Subscription;
+import edu.bootcamp.backoffice.model.Subscription.SubscriptionFactory;
 import edu.bootcamp.backoffice.model.Subscription.dto.SubscriptionResponse;
 import edu.bootcamp.backoffice.model.Tax.Tax;
 import edu.bootcamp.backoffice.model.Tax.TaxFactory;
@@ -22,9 +23,11 @@ import java.util.List;
 @Component
 public class ServiceFactory {
 
-    /*public ServiceFactory(SubscriptionFactory subscriptionFactory) {
+    private final SubscriptionFactory subscriptionFactory;
+
+    public ServiceFactory(SubscriptionFactory subscriptionFactory) {
         this.subscriptionFactory = subscriptionFactory;
-    }*/
+    }
 
 	private final TaxFactory taxFactory;
 	private final TaxRepository taxRepository;
@@ -53,7 +56,6 @@ public class ServiceFactory {
 		.enabled(true)
 		.serviceSubscriptions(new ArrayList<>())
 		.build();
-
 	}
 
 	public List<Tax> createTaxResponses(List<ChargeRequest> listResponse)

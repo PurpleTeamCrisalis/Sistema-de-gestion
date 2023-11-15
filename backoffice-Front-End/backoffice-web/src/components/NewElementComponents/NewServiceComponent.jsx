@@ -1,10 +1,9 @@
-import React, {useState} from 'react'
+import React from 'react'
 import NavComponent from '../NavComponent'
 import { useNavigate } from 'react-router-dom'
 import { useForm, useServicesStore } from '../../hooks'
 import Toastify from 'toastify-js'
 import "toastify-js/src/toastify.css"
-import "../../assets/styles/checkboxButtonStyle.css"
 import "../../assets/styles/inputStyle.css"
 import HeaderComponent from "../HeaderComponent";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -14,8 +13,7 @@ import TaxModal from '../Modal/TaxModal'
 const formDTO = {
     name: "",
     description: "",
-    basePrice: 0,
-    suportCharge: 0
+    basePrice: 0
 }
 
 function NewServiceComponent() {
@@ -33,8 +31,6 @@ function NewServiceComponent() {
             name,
             description,
             basePrice: parseFloat(basePrice),
-            isSpecial,
-            suportCharge
         };
 
         if (!emptyValidation()) {
@@ -79,16 +75,6 @@ function NewServiceComponent() {
                 },
             }).showToast();
             return console.error("Error: precio negativo");
-        }
-        if (isSpecial && suportCharge <= 0) {
-            Toastify({
-                text: "El precio de soporte debe ser mayor a cero",
-                duration: 2000,
-                style: {
-                    background: "linear-gradient(to right, #f44336, #b71c1c)",
-                },
-            }).showToast();
-            return console.error("Error: precio de soporte invalido");
         }
 
         // Comprueba existencia de servicio
@@ -152,7 +138,7 @@ function NewServiceComponent() {
                             <div className="row justify-content-center align-items-center">
                                 {/* Persona */}
 
-                                <div className="col-sm-10">
+                                <div className="col-sm-6">
                                     <h2 className='text-center'>Servicio</h2>
                                     <div className="row m-4">
                                         <div className="col-md-6 mb-3">
@@ -166,7 +152,9 @@ function NewServiceComponent() {
                                                 value={name}
                                                 required
                                             />
-                                            <label htmlFor="basePrice" className="form-label mt-3">Precio Base</label>
+                                        </div>
+                                        <div className="col-md-6 mb-3">
+                                            <label htmlFor="basePrice" className="form-label">Precio Base</label>
                                             <input
                                                 type="number"
                                                 name="basePrice"
@@ -177,74 +165,14 @@ function NewServiceComponent() {
                                                 value={basePrice}
                                                 required
                                             />
-                                            <div className='row'>
-                                                <div className="col-md-6 mt-3">
-                                                    <p className="form-label">Servicio Especial</p>
-                                                    <div className='d-flex align-items-end'>
-                                                        <input
-                                                            type="checkbox"
-                                                            name="isSpecial"
-                                                            id="isSpecial"
-                                                            // className="form-control"
-                                                            onChange={(event) => setIsSpecial(event.target.checked)}
-                                                            value={isSpecial}
-                                                            className='btn-check'
-                                                            defaultChecked={isSpecial}
-                                                        />
-                                                        <label htmlFor="isSpecial" className="btn checkbox-btn w-100">
-                                                            {`${isSpecial ? "Habilitado   " : "Deshabilitado   "}`}
-                                                            <FontAwesomeIcon
-                                                                icon={faCircleCheck}
-                                                                id="specialIsChecked"
-                                                                style={{
-                                                                    color: "#0ee14e",
-                                                                }}
-                                                            />
-                                                            <FontAwesomeIcon
-                                                                icon={faCircleXmark}
-                                                                id="specialIsNotChecked"
-                                                                style={{
-                                                                    color: "#e60f0f",
-                                                                }}
-                                                            />
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                {isSpecial &&
-                                                    <div className="col-md-6 mt-3">
-                                                        <label htmlFor="suportCharge" className="form-label">Precio Soporte</label>
-                                                        <input
-                                                            type="number"
-                                                            name="suportCharge"
-                                                            id="suportCharge"
-                                                            className="form-control"
-                                                            min={0}
-                                                            onChange={handleInputChange}
-                                                            value={suportCharge}
-                                                        />
-                                                    </div>}
-                                                {!isSpecial &&
-                                                    <div className="col-md-6 mt-3">
-                                                        <label htmlFor="suportCharge" className="form-label">Precio Soporte</label>
-                                                        <input
-                                                            type="number"
-                                                            name="suportCharge"
-                                                            id="suportCharge"
-                                                            className="form-control"
-                                                            disabled
-                                                            style={{ background: "#fff3" }}
-                                                        />
-                                                    </div>}
-                                            </div>
-
                                         </div>
-                                        <div className="col-md-6 mb-3">
+                                        <div className="">
                                             <label htmlFor="description" className="form-label">Descripción</label>
                                             <textarea
                                                 name="description"
                                                 id="description"
                                                 className="form-control"
-                                                rows="8"
+                                                rows="4"
                                                 cols="2"
                                                 required
                                                 minLength={1}

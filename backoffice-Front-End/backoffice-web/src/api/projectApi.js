@@ -12,7 +12,6 @@ projectApi.interceptors.response.use(response => {
   return response
 }, error => {
   localStorage.setItem('token', error.response.headers['authorization'])
-  return Promise.reject(error)
 })
 
 projectApi.interceptors.request.use(config => {
