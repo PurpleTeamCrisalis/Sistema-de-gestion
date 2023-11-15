@@ -2,7 +2,13 @@ import React, { useEffect } from "react";
 import { useOrdersStore } from "../../hooks";
 
 export const DetailModal = () => {
-  const { selectedOrder, pullSelectedOrder } = useOrdersStore();
+  const { selectedOrder, pullSelectedOrder, startCancelingOrder } =
+    useOrdersStore();
+
+  const cancelOrder = (id) => {
+    startCancelingOrder(id);
+  };
+
   return (
     <div
       className="modal fade"
@@ -71,7 +77,9 @@ export const DetailModal = () => {
                           <td>{product.name}</td>
                           <td>{product.quantity}</td>
                           <td>${product.basePrice.toFixed(2)}</td>
-                          <td>${(product.quantity * product.basePrice).toFixed(2)}</td>
+                          <td>
+                            ${(product.quantity * product.basePrice).toFixed(2)}
+                          </td>
                           <td>{product.taxesApplied}</td>
                           <td>{product.taxCharges.toFixed(2)}%</td>
                           <td>${product.subTotal.toFixed(2)}</td>
@@ -146,9 +154,7 @@ export const DetailModal = () => {
               type="button"
               className="btn btn-danger"
               // data-bs-dismiss="modal"
-              onClick={() => {
-                alert("Orden cancelada");
-              }} // Llamar a la funcion para que cambie el estado de la orden a cancelado.
+              onClick={() => cancelOrder(selectedOrder.id)} // Llamar a la funcion para que cambie el estado de la orden a cancelado.
             >
               Cancelar orden
             </button>

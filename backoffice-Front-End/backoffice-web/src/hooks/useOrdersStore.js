@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { projectApi } from '../api'
-import { onAddNewOrder, onLoadOrders, onPullActiveOrder, onPullSelectedOrder, onSetActiveOrder, onSetSelectedOrder } from '../redux'
+import { onAddNewOrder, onLoadOrders, onPullActiveOrder, onPullSelectedOrder, onSetActiveOrder, onSetSelectedOrder, onChangeOrderState } from '../redux'
 import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
 import { getErrorResponse } from '../helpers/getErrorResponse';
@@ -56,6 +56,16 @@ export function useOrdersStore() {
     }
   }
 
+  async function startCancelingOrder(id) {
+    try {
+      const { data } = await projectApi.delete(`/order/${id}`)
+      console.log(data)
+      dispatch(onChangeOrderState(data))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return {
     // Atributos
     orders,
@@ -67,6 +77,7 @@ export function useOrdersStore() {
     setActiveOrder,
     pullActiveOrder,
     startLoadingOrderById,
-    pullSelectedOrder
+    pullSelectedOrder,
+    startCancelingOrder
   }
 }
