@@ -34,8 +34,9 @@ public class ServiceFactory {
 		this.taxFactory = taxFactory;
 	}
 
-    public ServiceEntity CreateServiceEntity(String name, String description, double basePrice, boolean isSpecial,
-			double suportCharge, List<Tax> taxes) {
+    public ServiceEntity CreateServiceEntity(
+			String name, String description, double basePrice, boolean isSpecial,
+			double suportCharge) {
 
 		return ServiceEntity.builder().name(name).description(description).basePrice(basePrice).isSpecial(isSpecial)
 				.suportCharge(suportCharge).enabled(true).build();
@@ -82,7 +83,8 @@ public class ServiceFactory {
 
 		return ServiceResponse.builder().id(serviceEntity.getId()).name(serviceEntity.getName())
 				.description(serviceEntity.getDescription()).basePrice(serviceEntity.getBasePrice())
-				.isSpecial(serviceEntity.isSpecial()).suportCharge(serviceEntity.getSuportCharge()).taxes(taxes)
+				.isSpecial(serviceEntity.isSpecial()).suportCharge(serviceEntity.getSuportCharge())
+				.taxes(taxes)
 				.enabled(serviceEntity.isEnabled()).build();
 	}
 

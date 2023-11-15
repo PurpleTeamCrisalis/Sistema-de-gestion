@@ -50,7 +50,7 @@ public class BackofficeApplication {
 				);
 				userRepository.save(user);
 			}
-			if (
+			/*if (
 					taxRepository.findAll().isEmpty() &&
 					serviceRepository.findAll().isEmpty() &&
 					productRepository.findAll().isEmpty() &&
@@ -61,7 +61,7 @@ public class BackofficeApplication {
 				ChargeRequest taxRequest = new ChargeRequest("IIBB", 10);
 				Tax tax = taxFactory.CreateEntityForInsertNewRecord(taxRequest);
 				taxRepository.save(tax);
-				ServiceFactory serviceFactory = new ServiceFactory();
+				ServiceFactory serviceFactory = new ServiceFactory(taxFactory, taxRepository);
 				ServiceEntity service = serviceFactory.CreateServiceEntity(
 						"Servico de 100",
 						"Un servico de $100. SuportChage de $10",
@@ -73,11 +73,12 @@ public class BackofficeApplication {
 				taxes.add(tax);
 				service.setTaxes(taxes);
 				serviceRepository.save(service);
-				ProductFactory productFactory = new ProductFactory();
+				ProductFactory productFactory = new ProductFactory(taxFactory, taxRepository);
 				Product product = productFactory.CreateProductEntity(
 						"Producto de 200",
 						"Un producto de $200",
-						200.0
+						200.0,
+						new ArrayList<>()
 				);
 				product.setTaxes(taxes);
 				productRepository.save(product);
@@ -93,7 +94,7 @@ public class BackofficeApplication {
 				client.setCuit(27137460350L);
 				client.setEnabled(Boolean.TRUE);
 				clientRepository.save(client);
-			}
+			}*/
 		};
 	}
 }
