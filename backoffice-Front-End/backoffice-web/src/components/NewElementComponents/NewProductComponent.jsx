@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React from 'react'
 import NavComponent from '../NavComponent'
 import { useNavigate } from 'react-router-dom'
-import { useChargesStore, useForm, useProductsStore } from '../../hooks'
+import { useForm, useProductsStore } from '../../hooks'
 import Toastify from 'toastify-js'
 import "toastify-js/src/toastify.css"
 import "../../assets/styles/inputStyle.css"
@@ -16,12 +16,7 @@ const formDTO = {
 function NewProductComponent() {
     const navigate = useNavigate();
     const { startAddingProduct, products } = useProductsStore();
-    const { charges, startLoadingCharges } = useChargesStore();
     const { name, description, basePrice, handleInputChange, clearForm, emptyValidation } = useForm(formDTO);
-
-    useEffect(() => {
-        if(charges.length === 0)startLoadingCharges();
-      }, []);
 
     function addProduct(event) {
         event.preventDefault();
@@ -177,9 +172,6 @@ function NewProductComponent() {
                                                 style={{ resize: "none" }}
                                             >
                                             </textarea>
-                                        </div>
-                                        <div>
-                                            
                                         </div>
                                     </div>
                                 </div>

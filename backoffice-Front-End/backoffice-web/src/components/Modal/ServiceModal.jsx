@@ -7,9 +7,7 @@ export const ServiceModal = () => {
   const [servicesSelected, setServicesSelected] = useState([]);
 
   useEffect(() => {
-    setTimeout(() => {
-      if (services.length === 0) startLoadingServices();
-    }, 2000);
+    if(services.length === 0)startLoadingServices();
   }, []);
 
   function checkActiveItem(event, bien) {

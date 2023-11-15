@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -86,7 +87,13 @@ public class ClientController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<List<SubscriptionResponse>> getClientSubscriptions(@PathVariable int clientId) {
-        List<SubscriptionResponse> subscription = clientService.getClientSubscriptions(clientId);
+        // clientService.getClientSubscriptions(clientId);
+        List<SubscriptionResponse> subscription = new ArrayList<>();
+        for (SubscriptionResponse subscriptionResponse : clientService.getClientSubscriptions(clientId)) {
+            if (subscriptionResponse.getEnabled()) {
+                subscription.add(subscriptionResponse);
+            }
+        }
         return ResponseEntity.ok(subscription);
     }
 }
