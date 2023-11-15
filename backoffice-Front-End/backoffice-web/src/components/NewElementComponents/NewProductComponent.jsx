@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from "react";
 import NavComponent from '../NavComponent'
 import { useNavigate } from 'react-router-dom'
-import { useForm, useProductsStore } from '../../hooks'
+import { useChargesStore, useForm, useProductsStore } from '../../hooks'
 import Toastify from 'toastify-js'
 import "toastify-js/src/toastify.css"
 import "../../assets/styles/inputStyle.css"
@@ -18,10 +18,14 @@ const formDTO = {
 function NewProductComponent() {
     const navigate = useNavigate();
     const { startAddingProduct, products } = useProductsStore();
+    const { charges, startLoadingCharges } = useChargesStore();
     const { name, description, basePrice, handleInputChange, clearForm, emptyValidation } = useForm(formDTO);
-
     const [tax, setTax] = useState([]); //Guarda los impuestos seleccionados por id
 
+
+    useEffect(() => {
+        if(charges.length === 0)startLoadingCharges();
+      }, []);
 
     function addProduct(event) {
         event.preventDefault();
@@ -91,10 +95,7 @@ function NewProductComponent() {
         }
 
         try {
-            let taxes = [];
-            tax.forEach(item => taxes.push(item.id));
-            product.taxes = tax
-            startAddingProduct(product);
+            startAddingProduct({...product, taxes: tax});
             setTax([]); //Vacia los datos de impuestos
             clearForm();
             Toastify({
@@ -180,6 +181,9 @@ function NewProductComponent() {
                                                 style={{ resize: "none" }}
                                             >
                                             </textarea>
+                                        </div>
+                                        <div>
+                                            
                                         </div>
                                     </div>
                                     <TaxModal tax={tax} setTax={setTax}/>   

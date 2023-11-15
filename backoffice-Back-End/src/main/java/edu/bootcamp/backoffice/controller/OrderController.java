@@ -62,6 +62,12 @@ public class OrderController {
     return ResponseEntity.ok(orders);
   }
 
+  @GetMapping(value = "list/{clientId}", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<List<OrderResponse>> getAllClientOrders(@PathVariable int clientId) {
+    List<OrderResponse> orders = orderService.getClientOrders(clientId);
+    return ResponseEntity.ok(orders);
+  }
+
   @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<OrderResponse> deleteOrder(@PathVariable int id) {
     OrderResponse order = orderService.delete(id);

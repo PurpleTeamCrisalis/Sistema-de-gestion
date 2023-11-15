@@ -7,7 +7,9 @@ export const ProductModal = () => {
   const [productsSelected, setProductsSelected] = useState([]);
 
   useEffect(() => {
-    if(products.length === 0)startLoadingProducts();
+    setTimeout(() => {
+      if (products.length === 0) startLoadingProducts();
+    }, 1000);
   }, []);
 
   function checkActiveItem(event, bien) {

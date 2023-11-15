@@ -111,6 +111,7 @@ public class ServiceServiceImpl implements ServiceService {
 				service.setSuportCharge(0.0);
 			}
 		}
+		service.setTaxes(dtoFactory.createTaxResponses(serviceRequest.getTaxes()));
 		validateErrors(errors);
 		return service;
 

@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { projectApi } from '../api'
 import { onAddNewCharge, onDeleteCharge, onLoadCharges, onPullActiveCharge, onSetActiveCharge, onUpdateCharge } from '../redux'
+import { getErrorResponse, getSuccessResponse } from '../helpers'
 
 export function useChargesStore() {
 
@@ -18,9 +19,9 @@ export function useChargesStore() {
             const {data } = await projectApi.get('/charge/list')
             console.log(data);
             dispatch(onLoadCharges(data))
+            getSuccessResponse("Impuestos cargados!")
         } catch (error) {
-            dispatch(onLoadCharges([]))
-            console.error(error)
+            getErrorResponse(error, "impuestos")
         }
     }
     async function startAddingCharge(charge) {

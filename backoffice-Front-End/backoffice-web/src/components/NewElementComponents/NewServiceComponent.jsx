@@ -4,8 +4,12 @@ import { useNavigate } from 'react-router-dom'
 import { useForm, useServicesStore } from '../../hooks'
 import Toastify from 'toastify-js'
 import "toastify-js/src/toastify.css"
+import "../../assets/styles/checkboxButtonStyle.css"
 import "../../assets/styles/inputStyle.css"
 import HeaderComponent from "../HeaderComponent";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons'
+import TaxModal from '../Modal/TaxModal'
 
 const formDTO = {
     name: "",
@@ -19,6 +23,8 @@ function NewServiceComponent() {
     const { startAddingService, services } = useServicesStore();
     const { name, description, basePrice, suportCharge, handleInputChange, clearForm, emptyValidation } = useForm(formDTO);
     const [isSpecial, setIsSpecial] = useState(false);
+    const [tax, setTax] = useState([]); //Guarda los impuestos seleccionados por id
+
     function addService(event) {
         event.preventDefault();
 
@@ -74,19 +80,9 @@ function NewServiceComponent() {
             }).showToast();
             return console.error("Error: precio negativo");
         }
-        if (suportCharge < 0) {
+        if (isSpecial && suportCharge <= 0) {
             Toastify({
-                text: "El precio de soporte no puede ser negativo",
-                duration: 2000,
-                style: {
-                    background: "linear-gradient(to right, #f44336, #b71c1c)",
-                },
-            }).showToast();
-            return console.error("Error: precio de soporte negativo");
-        }
-        if (isSpecial && suportCharge == 0) {
-            Toastify({
-                text: "El precio de soporte debe ser válido",
+                text: "El precio de soporte debe ser mayor a cero",
                 duration: 2000,
                 style: {
                     background: "linear-gradient(to right, #f44336, #b71c1c)",
@@ -109,8 +105,13 @@ function NewServiceComponent() {
         }
 
         try {
-            startAddingService({...service,
-            suportCharge: isSpecial?suportCharge:0});
+            //Si no es especial se manda un cero, para evitar que viaje un número cuando no debería
+            startAddingService({
+                ...service,
+                suportCharge: isSpecial?suportCharge:0,
+                taxes: tax
+            });
+            setTax([]);
             clearForm();
             Toastify({
                 text: "Servicio Creado",
@@ -151,7 +152,7 @@ function NewServiceComponent() {
                             <div className="row justify-content-center align-items-center">
                                 {/* Persona */}
 
-                                <div className="col-sm-6">
+                                <div className="col-sm-10">
                                     <h2 className='text-center'>Servicio</h2>
                                     <div className="row m-4">
                                         <div className="col-md-6 mb-3">
@@ -165,9 +166,7 @@ function NewServiceComponent() {
                                                 value={name}
                                                 required
                                             />
-                                        </div>
-                                        <div className="col-md-6 mb-3">
-                                            <label htmlFor="basePrice" className="form-label">Precio Base</label>
+                                            <label htmlFor="basePrice" className="form-label mt-3">Precio Base</label>
                                             <input
                                                 type="number"
                                                 name="basePrice"
@@ -178,50 +177,74 @@ function NewServiceComponent() {
                                                 value={basePrice}
                                                 required
                                             />
+                                            <div className='row'>
+                                                <div className="col-md-6 mt-3">
+                                                    <p className="form-label">Servicio Especial</p>
+                                                    <div className='d-flex align-items-end'>
+                                                        <input
+                                                            type="checkbox"
+                                                            name="isSpecial"
+                                                            id="isSpecial"
+                                                            // className="form-control"
+                                                            onChange={(event) => setIsSpecial(event.target.checked)}
+                                                            value={isSpecial}
+                                                            className='btn-check'
+                                                            defaultChecked={isSpecial}
+                                                        />
+                                                        <label htmlFor="isSpecial" className="btn checkbox-btn w-100">
+                                                            {`${isSpecial ? "Habilitado   " : "Deshabilitado   "}`}
+                                                            <FontAwesomeIcon
+                                                                icon={faCircleCheck}
+                                                                id="specialIsChecked"
+                                                                style={{
+                                                                    color: "#0ee14e",
+                                                                }}
+                                                            />
+                                                            <FontAwesomeIcon
+                                                                icon={faCircleXmark}
+                                                                id="specialIsNotChecked"
+                                                                style={{
+                                                                    color: "#e60f0f",
+                                                                }}
+                                                            />
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                {isSpecial &&
+                                                    <div className="col-md-6 mt-3">
+                                                        <label htmlFor="suportCharge" className="form-label">Precio Soporte</label>
+                                                        <input
+                                                            type="number"
+                                                            name="suportCharge"
+                                                            id="suportCharge"
+                                                            className="form-control"
+                                                            min={0}
+                                                            onChange={handleInputChange}
+                                                            value={suportCharge}
+                                                        />
+                                                    </div>}
+                                                {!isSpecial &&
+                                                    <div className="col-md-6 mt-3">
+                                                        <label htmlFor="suportCharge" className="form-label">Precio Soporte</label>
+                                                        <input
+                                                            type="number"
+                                                            name="suportCharge"
+                                                            id="suportCharge"
+                                                            className="form-control"
+                                                            disabled
+                                                            style={{ background: "#fff3" }}
+                                                        />
+                                                    </div>}
+                                            </div>
+
                                         </div>
                                         <div className="col-md-6 mb-3">
-                                            <label htmlFor="isSpecial" className="form-label">Servicio Especial</label>
-                                            <input
-                                                type="checkbox"
-                                                name="isSpecial"
-                                                id="isSpecial"
-                                                // className="form-control"
-                                                onChange={(event)=>setIsSpecial(event.target.checked)}
-                                                value={isSpecial}
-                                            />
-                                        </div>
-                                        {isSpecial && 
-                                        <div className="col-md-6 mb-3">
-                                            <label htmlFor="suportCharge" className="form-label">Precio Soporte</label>
-                                            <input
-                                                type="number"
-                                                name="suportCharge"
-                                                id="suportCharge"
-                                                className="form-control"
-                                                min={0}
-                                                onChange={handleInputChange}
-                                                value={suportCharge}
-                                            />
-                                        </div>}
-                                        {!isSpecial && 
-                                        <div className="col-md-6 mb-3">
-                                            <label htmlFor="suportCharge" className="form-label">Precio Soporte</label>
-                                            <input
-                                                type="number"
-                                                name="suportCharge"
-                                                id="suportCharge"
-                                                className="form-control"
-                                                disabled
-                                                style={{background:"#fff3"}}
-                                            />
-                                        </div>}
-                                        <div className="">
                                             <label htmlFor="description" className="form-label">Descripción</label>
                                             <textarea
                                                 name="description"
                                                 id="description"
                                                 className="form-control"
-                                                rows="4"
+                                                rows="8"
                                                 cols="2"
                                                 required
                                                 minLength={1}
@@ -233,6 +256,7 @@ function NewServiceComponent() {
                                             </textarea>
                                         </div>
                                     </div>
+                                    <TaxModal tax={tax} setTax={setTax}/>
                                 </div>
                             </div>
                         </section>
