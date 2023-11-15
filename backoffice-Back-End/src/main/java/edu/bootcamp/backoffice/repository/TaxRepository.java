@@ -6,11 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import edu.bootcamp.backoffice.model.Tax.Tax;
-import edu.bootcamp.backoffice.model.Tax.dto.ChargeResponse;
 
 @Repository
 public interface TaxRepository extends JpaRepository<Tax, Integer>{
 
-    public Optional<Tax> findByName(String name);    
-
+    public Optional<Tax> findByName(String name);
 }

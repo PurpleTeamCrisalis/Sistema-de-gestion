@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import NavComponent from '../NavComponent'
 import { useNavigate } from 'react-router-dom'
 import { useForm, useProductsStore } from '../../hooks';
@@ -6,21 +6,17 @@ import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
 import HeaderComponent from "../HeaderComponent";
 import "../../assets/styles/inputStyle.css"
-import TaxModal from '../Modal/TaxModal';
 
 function EditProductComponent() {
     const navigate = useNavigate();
     const { startUpdatingProduct, activeProduct, setActiveProduct, products } = useProductsStore();
-    const { name, description, basePrice, enabled, handleInputChange, emptyValidation, taxes} = useForm({
+    const { name, description, basePrice, enabled, handleInputChange, emptyValidation } = useForm({
         name: activeProduct?.name,
         description: activeProduct?.description,
         basePrice: activeProduct?.basePrice,
         enabled: activeProduct?.enabled,
-        taxes: activeProduct.taxes,
         id: activeProduct?.id,
     });
-
-    const [tax, setTax] = useState(taxes);
 
     // Edicion de producto
     function editProduct(event) {
@@ -92,7 +88,7 @@ function EditProductComponent() {
             return console.error("Error: producto ya existe");
         }
         try {
-            startUpdatingProduct({...productaux, taxes: tax})
+            startUpdatingProduct(productaux)
             Toastify({
                 text: "Producto Actualizado",
                 duration: 2000,
@@ -172,36 +168,34 @@ function EditProductComponent() {
                                             </textarea>
                                         </div>
                                     </div>
-
-                                    {/* Estado del producto */}
-                                    <div className="d-flex align-items-center justify-content-center">
-                                        <h5 className="mb-0 me-3">Estado</h5>
-                                        <div className="d-flex align-items-center gap-3">
-                                            <div className="d-flex align-items-center">
-                                                <input
-                                                    type="radio"
-                                                    name="enabled"
-                                                    id="enabled"
-                                                    onChange={handleInputChange}
-                                                    value="true"
-                                                    defaultChecked={activeProduct.enabled === true}
-                                                />
-                                                <label className="mb-0 ms-2 fs-5">Habilitado</label>
-                                            </div>
-                                            <div className="d-flex align-items-center">
-                                                <input
-                                                    type="radio"
-                                                    name="enabled"
-                                                    id="enabled"
-                                                    onChange={handleInputChange}
-                                                    value="false"
-                                                    defaultChecked={activeProduct.enabled === false}
-                                                />
-                                                <label className="mb-0 ms-2 fs-5">Deshabilitado</label>
-                                            </div>
-                                        </div>
+                                </div>
+                            </div>
+                            {/* Estado del producto */}
+                            <div className="d-flex align-items-center justify-content-center">
+                                <h5 className="mb-0 me-3">Estado</h5>
+                                <div className="d-flex align-items-center gap-3">
+                                    <div className="d-flex align-items-center">
+                                        <input
+                                            type="radio"
+                                            name="enabled"
+                                            id="enabled"
+                                            onChange={handleInputChange}
+                                            value="true"
+                                            defaultChecked={activeProduct.enabled === true}
+                                        />
+                                        <label className="mb-0 ms-2 fs-5">Habilitado</label>
                                     </div>
-                                    <TaxModal  tax={tax} setTax={setTax}/>  
+                                    <div className="d-flex align-items-center">
+                                        <input
+                                            type="radio"
+                                            name="enabled"
+                                            id="enabled"
+                                            onChange={handleInputChange}
+                                            value="false"
+                                            defaultChecked={activeProduct.enabled === false}
+                                        />
+                                        <label className="mb-0 ms-2 fs-5">Deshabilitado</label>
+                                    </div>
                                 </div>
                             </div>
                         </section>

@@ -6,8 +6,6 @@ import java.util.Optional;
 import java.util.Set;
 
 import edu.bootcamp.backoffice.model.Tax.Tax;
-import edu.bootcamp.backoffice.model.Tax.dto.ChargeRequest;
-import edu.bootcamp.backoffice.model.Tax.dto.ChargeResponse;
 import edu.bootcamp.backoffice.service.Interface.TaxService;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +20,6 @@ import edu.bootcamp.backoffice.model.product.dto.ProductRequest;
 import edu.bootcamp.backoffice.model.product.dto.ProductResponse;
 import edu.bootcamp.backoffice.model.product.dto.UpdateProductRequest;
 import edu.bootcamp.backoffice.repository.ProductRepository;
-import edu.bootcamp.backoffice.repository.TaxRepository;
 import edu.bootcamp.backoffice.service.Interface.ProductService;
 import edu.bootcamp.backoffice.service.Interface.Validator;
 
@@ -31,13 +28,11 @@ public class ProductServiceImpl implements ProductService {
 	private final ProductRepository productRepository;
 	private final ProductFactory dtoFactory;
 	private final Validator validator;
-	private final TaxRepository taxRepository;
 
-	public ProductServiceImpl(ProductRepository productRepository, ProductFactory dtoFactory, Validator validator, TaxRepository taxRepository) {
+	public ProductServiceImpl(ProductRepository productRepository, ProductFactory dtoFactory, Validator validator) {
 		this.productRepository = productRepository;
 		this.dtoFactory = dtoFactory;
 		this.validator = validator;
-		this.taxRepository = taxRepository;
 
 	}
 /*
@@ -99,8 +94,6 @@ public class ProductServiceImpl implements ProductService {
 			);
 		if(productRequest.getEnabled() != null)
 			product.setEnabled(productRequest.getEnabled());
-
-		product.setTaxes(dtoFactory.createTaxResponses(productRequest.getTaxes()));
 		validateErrors(errors);
 		return product;
 	}
@@ -131,7 +124,7 @@ public class ProductServiceImpl implements ProductService {
 		List<Product> products = productRepository.findAll();
 		List<ProductResponse> dtos = new ArrayList<>();
 		for (Product p : products)
-			dtos.add(dtoFactory.createProductResponse(p));
+			dtos.add(dtoFactory.createResponse(p));
 		if (dtos.isEmpty())
 			throw new EmptyTableException("There aren't registered products.");
 		return dtos;
@@ -167,13 +160,13 @@ public class ProductServiceImpl implements ProductService {
 		validateNewProductDbConflicts(productDto);
 		Product product = dtoFactory.CreateEntityForInsertNewRecord(productDto);
 		product = productRepository.save(product);
-		return dtoFactory.createProductResponse(product);
+		return dtoFactory.createResponse(product);
 	}
 
 	@Override
 	public ProductResponse get(int id) {
 		Product product = validator.completeValidationForId(id, productRepository);
-		return dtoFactory.createProductResponse(product);
+		return dtoFactory.createResponse(product);
 	}
 
 	public Product getProductById(Integer id) {
@@ -184,7 +177,7 @@ public class ProductServiceImpl implements ProductService {
 	public ProductResponse update(int id, UpdateProductRequest productDto) {
 		Product product = validateUpdateRequest(id, productDto);
 		product = productRepository.save(product);
-		return dtoFactory.createProductResponse(product);
+		return dtoFactory.createResponse(product);
 	}
 
 	@Override
@@ -200,7 +193,7 @@ public class ProductServiceImpl implements ProductService {
 		// 	productRepository.save(product);
 		// } else
 		productRepository.delete(product);
-		return dtoFactory.createProductResponse(product);
+		return dtoFactory.createResponse(product);
 	}
 
 	@Override
@@ -208,9 +201,7 @@ public class ProductServiceImpl implements ProductService {
 		List<Product> products = productRepository.findAll();
 		List<ProductResponse> dtos = new ArrayList<>();
 		for (Product p : products)
-			dtos.add(dtoFactory.createProductResponse(p));
-		if (dtos.isEmpty())
-			throw new EmptyTableException("There aren't registered products.");
+			dtos.add(dtoFactory.createResponse(p));
 		return dtos;
 	}
 }

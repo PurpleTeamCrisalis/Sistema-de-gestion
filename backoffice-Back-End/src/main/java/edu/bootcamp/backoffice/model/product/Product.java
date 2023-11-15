@@ -7,7 +7,6 @@ import java.util.Set;
 import javax.persistence.*;
 
 import edu.bootcamp.backoffice.model.Tax.Tax;
-import edu.bootcamp.backoffice.model.Tax.dto.ChargeRequest;
 import edu.bootcamp.backoffice.model.asset.Asset;
 import edu.bootcamp.backoffice.model.orderDetail.productDetail.ProductDetail;
 import lombok.AllArgsConstructor;
@@ -27,9 +26,9 @@ public class Product extends Asset {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(name = "taxesByProducts", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "tax_id"))
-    public List<Tax> taxes= new ArrayList<>();
+    public Set<Tax> taxes;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<ProductDetail> productDetails = new ArrayList<>();
