@@ -13,6 +13,12 @@ import EmptyList from "../../utils/EmptyList";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+const orderState = {
+  Pendiente: "#617474",
+  Pagado: "#198754",
+  Cancelado: "#a32525",
+};
+
 function OrderListComponent() {
   const navigate = useNavigate();
   const { orders, startLoadingOrders, setActiveOrder, startLoadingOrderById } =
@@ -101,18 +107,23 @@ function OrderListComponent() {
                       borderBottom: "2px solid black",
                     }}
                   >
-                    <tr>
+                    <tr style={{ textAlign: "center" }}>
                       <th scope="col">#</th>
                       <th scope="col">N°</th>
                       <th scope="col">Cliente</th>
                       <th scope="col">Total</th>
+                      <th scope="col">Descuento</th>
                       <th scope="col">Fecha</th>
+                      <th scope="col">Estado</th>
                       <th scope="col">#</th>
                     </tr>
                   </thead>
                   <tbody>
                     {orders?.map((order) => (
-                      <tr key={order.id} style={{ marginBottom: "0px" }}>
+                      <tr
+                        key={order.id}
+                        style={{ marginBottom: "0px", textAlign: "center" }}
+                      >
                         <td>
                           <input
                             type="checkbox"
@@ -131,8 +142,29 @@ function OrderListComponent() {
                             ? order.client.bussinessname
                             : `${order.client.name} ${order.client.lastname}`}
                         </td>
-                        <td>${order.total}</td>
+                        <td>${order.total.toFixed(2)}</td>
+                        <td
+                          style={{
+                            color: "#198754",
+                          }}
+                        >
+                          {order.totalDiscount
+                            ? `($${order.totalDiscount.toFixed(2)})`
+                            : "---"}
+                        </td>
                         <td>{order.date}</td>
+                        {/* <td style={{ color: orderState[order.state] }}>
+                          {order.state ? order.state : "Pendiente"}
+                        </td> */}
+                        <td
+                          style={{
+                            color: order.enabled
+                              ? orderState["Pagado"]
+                              : orderState["Cancelado"],
+                          }}
+                        >
+                          {order.enabled ? "Pagado" : "Cancelado"}
+                        </td>
                         <td>
                           <FontAwesomeIcon
                             icon={faEye}

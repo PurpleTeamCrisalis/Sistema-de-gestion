@@ -138,17 +138,31 @@ function ChargeListComponent() {
                       borderBottom: "2px solid black",
                     }}
                   >
-                    <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">Nombre Cargo</th>
-                      <th scope="col">Porcentaje</th>
-                      <th scope="col">Estado</th>
-                      <th scope="col">#</th>
+                    <tr style={{ textAlign: "center" }}>
+                      <th scope="col" width="5%">
+                        #
+                      </th>
+                      <th scope="col" width="50%">
+                        Nombre Cargo
+                      </th>
+                      <th scope="col" width="10%">
+                        Porcentaje
+                      </th>
+                      <th scope="col" width="10%">
+                        Estado
+                      </th>
+                      <th scope="col" width="5%">
+                        #
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {charges?.map((charge) => (
-                      <tr key={charge.id} className="">
+                      <tr
+                        key={charge.id}
+                        className=""
+                        style={{ textAlign: "center" }}
+                      >
                         <td>
                           <input
                             type="checkbox"
@@ -167,7 +181,7 @@ function ChargeListComponent() {
                         <td>{charge.percentage}%</td>
                         <td
                           style={{
-                            color: charge.enabled ? "green" : "red",
+                            color: charge.enabled ? "#198754" : "red",
                           }}
                         >
                           {charge.enabled ? "Habilitado" : "Deshabilitado"}
