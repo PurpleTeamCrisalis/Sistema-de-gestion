@@ -20,11 +20,11 @@ public class ServiceRequest {
 
 	@JsonProperty("basePrice")
 	private double basePrice;
-/*
+
 	@JsonProperty("isSpecial")
 	private boolean isSpecial;
 
 	@JsonProperty("suportCharge")
 	private double suportCharge;
-*/
+
 }

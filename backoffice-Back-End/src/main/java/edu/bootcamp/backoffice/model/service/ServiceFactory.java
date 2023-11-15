@@ -1,6 +1,7 @@
 package edu.bootcamp.backoffice.model.service;
 
 import edu.bootcamp.backoffice.model.Subscription.Subscription;
+import edu.bootcamp.backoffice.model.Subscription.SubscriptionFactory;
 import edu.bootcamp.backoffice.model.Subscription.dto.SubscriptionResponse;
 import edu.bootcamp.backoffice.model.service.dto.ServiceRequest;
 import edu.bootcamp.backoffice.model.service.dto.ServiceResponse;
@@ -12,9 +13,11 @@ import java.util.List;
 @Component
 public class ServiceFactory {
 
-    /*public ServiceFactory(SubscriptionFactory subscriptionFactory) {
+    private final SubscriptionFactory subscriptionFactory;
+
+    public ServiceFactory(SubscriptionFactory subscriptionFactory) {
         this.subscriptionFactory = subscriptionFactory;
-    }*/
+    }
 
     public ServiceEntity CreateServiceEntity(String name, String description, double basePrice, boolean isSpecial,
                                              double suportCharge) {
@@ -25,9 +28,15 @@ public class ServiceFactory {
 
     public ServiceEntity CreateEntityForInsertNewRecord(ServiceRequest servicetDto) {
 
-        return ServiceEntity.builder().name(servicetDto.getName()).description(servicetDto.getDescription())
-                .basePrice(servicetDto.getBasePrice())/*.isSpecial(servicetDto.isSpecial())
-				.suportCharge(servicetDto.getSuportCharge())*/.enabled(true).build();
+        return ServiceEntity.builder()
+                .name(servicetDto.getName())
+                .description(servicetDto.getDescription())
+                .basePrice(servicetDto.getBasePrice())
+                .isSpecial(servicetDto.isSpecial())
+				.suportCharge(servicetDto.getSuportCharge())
+                .enabled(true)
+                .serviceSubscriptions(new ArrayList<>())
+                .build();
 
     }
 

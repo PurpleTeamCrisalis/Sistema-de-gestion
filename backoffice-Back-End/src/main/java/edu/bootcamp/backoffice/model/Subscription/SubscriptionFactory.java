@@ -9,15 +9,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class SubscriptionFactory {
 
-    private final ClientFactory clientFactory;
-
-    private final ServiceFactory serviceFactory;
-
-    public SubscriptionFactory(ClientFactory clientFactory, ServiceFactory serviceFactory) {
-        this.clientFactory = clientFactory;
-        this.serviceFactory = serviceFactory;
-    }
-
     public Subscription CreateEntityForInsertNewRecord(SubscriptionRequest subscriptionRequest) {
         return Subscription
                 .builder()

@@ -78,8 +78,6 @@ public class OrderServiceImpl implements OrderService {
         serviceDetailService.registerServiceDetail(servicesDetails, order);
         productDetailService.registerProductDetail(productsDetails, order);
 
-        clientService.registerSubscriptions(client, List.of(servicesDetails.get(0).getService()));
-
         // Creo y estructuro la OrderResponse
         return orderFactory.createOrderResponse(order); // Return OrderResponse
         // END TRANSACTION
@@ -100,8 +98,16 @@ public class OrderServiceImpl implements OrderService {
             dtos.add(orderFactory.createOrderResponse(order));
         }
 
-        if (dtos.isEmpty()) {
-            throw new EmptyTableException("There aren't registered orders");
+        return dtos;
+    }
+
+    public List<OrderResponse> getClientOrders(int clientId) {
+        List<Order> orders = orderRepository.findAll();
+        List<OrderResponse> dtos = new ArrayList<OrderResponse>();
+
+        for (Order order : orders) {
+            if (order.getClient().getId() != clientId) continue;
+            dtos.add(orderFactory.createOrderResponse(order));
         }
 
         return dtos;

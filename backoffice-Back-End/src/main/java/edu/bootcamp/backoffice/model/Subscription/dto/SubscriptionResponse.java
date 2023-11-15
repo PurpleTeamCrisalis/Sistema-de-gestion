@@ -16,7 +16,7 @@ public class SubscriptionResponse {
     @JsonProperty("id")
     private Integer id;
 
-    //Revisar
+
     @JsonProperty("serviceName")
     private String serviceName;
 

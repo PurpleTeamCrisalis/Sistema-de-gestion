@@ -5,6 +5,8 @@ import edu.bootcamp.backoffice.model.Subscription.SubscriptionFactory;
 import edu.bootcamp.backoffice.model.Subscription.dto.SubscriptionResponse;
 import edu.bootcamp.backoffice.model.client.dto.ClientRequest;
 import edu.bootcamp.backoffice.model.client.dto.ClientResponse;
+import edu.bootcamp.backoffice.model.orderDetail.productDetail.ProductDetailFactory;
+import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.ServiceDetailFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -14,6 +16,12 @@ import java.util.List;
 public class ClientFactory {
 
     private SubscriptionFactory subscriptionFactory;
+
+    public ClientFactory (
+            SubscriptionFactory subscriptionFactory
+    ) {
+        this.subscriptionFactory = subscriptionFactory;
+    }
 
     public Client CreateEntityForInsertNewRecord(ClientRequest clientDTO) {
         return Client
@@ -28,6 +36,7 @@ public class ClientFactory {
                 .startDate(clientDTO.getStartdate())
                 .cuit(clientDTO.getCuit())
                 .enabled(true)
+                .clientSubscriptions(new ArrayList<>())
                 .build();
     }
 

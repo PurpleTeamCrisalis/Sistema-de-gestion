@@ -202,8 +202,6 @@ public class ProductServiceImpl implements ProductService {
 		List<ProductResponse> dtos = new ArrayList<>();
 		for (Product p : products)
 			dtos.add(dtoFactory.createResponse(p));
-		if (dtos.isEmpty())
-			throw new EmptyTableException("There aren't registered products.");
 		return dtos;
 	}
 }
