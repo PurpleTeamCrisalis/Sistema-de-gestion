@@ -78,6 +78,7 @@ public class OrderServiceImpl implements OrderService {
     order.setUser(user);
     completeOrderTotals(order);
     order = orderRepository.save(order);
+    clientService.registerSubscriptions(order.getClient(), order.getServices());
     return orderFactory.createOrderResponse(order);
   }
 

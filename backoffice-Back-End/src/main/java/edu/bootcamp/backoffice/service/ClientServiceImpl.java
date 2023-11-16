@@ -355,6 +355,7 @@ public class ClientServiceImpl implements ClientService {
         if (client == null || serviceDetails == null) {
             throw new IllegalArgumentException("Client and services must not be null");
         }
+        StringBuilder errorBuilder = new StringBuilder();
 
         // Obtencion del service de cada detail
         List<ServiceEntity> services = new ArrayList<>();
@@ -364,7 +365,7 @@ public class ClientServiceImpl implements ClientService {
 
         //Guardado de suscripcion con sus validaciones
         for (ServiceEntity service : services) {
-            if (!clientHaveActiveSubscription(client, service)) {
+            if (!clientHaveActiveSubscription(client, service, errorBuilder)) {
                 Subscription subscription = new Subscription();
                 subscription.setClient(client);
                 subscription.setEnabled(true);
@@ -372,20 +373,23 @@ public class ClientServiceImpl implements ClientService {
 
                 subscriptionRepository.save(subscription);
             } else {
-                System.out.println("Client already have a subscription with a service");
+                throw new IllegalArgumentException(errorBuilder.toString());
             }
         }
     }
 
-    public Boolean clientHaveActiveSubscription(Client client, ServiceEntity service) {
+    public Boolean clientHaveActiveSubscription(Client client, ServiceEntity service, StringBuilder errorBuilder) {
         if (client == null || service == null) {
             throw new IllegalArgumentException("Client and service must not be null");
         }
+
+        StringBuilder niceError = new StringBuilder(service.getName() + " have conflicts");
 
         for (Subscription sub : client.getClientSubscriptions()) {
             ServiceEntity subService = sub.getService();
             if (subService != null && subService.getId() != null && subService.getId().equals(service.getId())) {
                 if (sub.isEnabled()) {
+                    errorBuilder.append(niceError);
                     return true;
                 }
             }
