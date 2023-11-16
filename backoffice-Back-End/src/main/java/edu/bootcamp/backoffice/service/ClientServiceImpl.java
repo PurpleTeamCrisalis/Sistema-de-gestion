@@ -13,6 +13,7 @@ import edu.bootcamp.backoffice.model.client.dto.ClientRequest;
 import edu.bootcamp.backoffice.model.client.dto.ClientResponse;
 import edu.bootcamp.backoffice.model.client.dto.UpdateClientRequest;
 import edu.bootcamp.backoffice.model.order.Order;
+import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.ServiceDetail;
 import edu.bootcamp.backoffice.model.service.ServiceEntity;
 import edu.bootcamp.backoffice.repository.ClientRepository;
 import edu.bootcamp.backoffice.repository.SubscriptionRepository;
@@ -168,8 +169,7 @@ public class ClientServiceImpl implements ClientService {
     public Client getClientEntity(
             Integer id,
             StringBuilder errorBuilder
-            )
-    {
+    ) {
         return validator.validateFkExistence(
                 id,
                 clientRepository,
@@ -245,12 +245,12 @@ public class ClientServiceImpl implements ClientService {
                 errorBuilder,
                 "Client adress"
         );
-        var isBussinesNotNull = ! validator.isNull(
+        var isBussinesNotNull = !validator.isNull(
                 clientRequest.getIsbussiness(),
                 errorBuilder,
                 "isbussiness"
         );
-        if(isBussinesNotNull && clientRequest.getIsbussiness()){
+        if (isBussinesNotNull && clientRequest.getIsbussiness()) {
             validator.validateVarchar(
                     clientRequest.getBussinessname(),
                     EntitiesConstraints.CLIENT_BUSSINESSNAME_MIN_LENGTH,
@@ -312,12 +312,12 @@ public class ClientServiceImpl implements ClientService {
                 errorBuilder,
                 "Client adress"
         );
-       if(validator.isNull(
+        if (validator.isNull(
                 clientRequest.getIsbussiness(),
                 errorBuilder,
-               "isbussiness"
-        ))return;
-       if(clientRequest.getIsbussiness()){
+                "isbussiness"
+        )) return;
+        if (clientRequest.getIsbussiness()) {
             validator.validateVarchar(
                     clientRequest.getBussinessname(),
                     EntitiesConstraints.CLIENTNAME_MIN_LENGTH,
@@ -343,22 +343,54 @@ public class ClientServiceImpl implements ClientService {
         //         errorBuilder
         // );
         validator.isNull(
-               clientRequest.getEnabled(),
-               errorBuilder,
-               "enabled"
-       );
+                clientRequest.getEnabled(),
+                errorBuilder,
+                "enabled"
+        );
     }
 
     @Override
-    public void registerSubscriptions(Client client, List<ServiceEntity> services) {
-        //Validar si el cliente ya tiene un servicio
-        Subscription subscription = new Subscription();
-        subscription.setClient(client);
-        subscription.setEnabled(true);
-        for (ServiceEntity service : services) {
-            subscription.setService(service);
-            subscriptionRepository.save(subscription);
+    public void registerSubscriptions(Client client, List<ServiceDetail> serviceDetails) {
+        //Verifica que los parámetros no sean nulos
+        if (client == null || serviceDetails == null) {
+            throw new IllegalArgumentException("Client and services must not be null");
         }
+
+        // Obtencion del service de cada detail
+        List<ServiceEntity> services = new ArrayList<>();
+        for (ServiceDetail detail : serviceDetails) {
+            services.add(detail.getService());
+        }
+
+        //Guardado de suscripcion con sus validaciones
+        for (ServiceEntity service : services) {
+            if (!clientHaveActiveSubscription(client, service)) {
+                Subscription subscription = new Subscription();
+                subscription.setClient(client);
+                subscription.setEnabled(true);
+                subscription.setService(service);
+
+                subscriptionRepository.save(subscription);
+            } else {
+                System.out.println("Client already have a subscription with a service");
+            }
+        }
+    }
+
+    public Boolean clientHaveActiveSubscription(Client client, ServiceEntity service) {
+        if (client == null || service == null) {
+            throw new IllegalArgumentException("Client and service must not be null");
+        }
+
+        for (Subscription sub : client.getClientSubscriptions()) {
+            ServiceEntity subService = sub.getService();
+            if (subService != null && subService.getId() != null && subService.getId().equals(service.getId())) {
+                if (sub.isEnabled()) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override
@@ -386,6 +418,6 @@ public class ClientServiceImpl implements ClientService {
         }
 
         return subscriptionsResponses;
-       }
-       
     }
+
+}
