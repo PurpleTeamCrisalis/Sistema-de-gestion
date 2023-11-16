@@ -26,6 +26,7 @@ export function useClientsStore() {
   async function startLoadingClient() {
     try {
       const { data } = await projectApi.get("/client/list");
+      if (data.length === 0) throw { response: { status: 404 } }
       dispatch(onLoadClients(data));
       getSuccessResponse('Clientes cargados!')
     } catch (error) {
