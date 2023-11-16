@@ -16,6 +16,7 @@ import edu.bootcamp.backoffice.utils.PasswordGenerator;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -99,8 +100,7 @@ public class UserServiceImpl implements UserService
             );
     }
 
-    public UserResponse update(int id, UpdateUserRequest userRequest)
-    {
+    public UserResponse update(int id, UpdateUserRequest userRequest) throws IOException {
         validateUpdateRequest(id, userRequest);
         User user = validateUpdateConflicts(id, userRequest);
         user = userRepository.save(user);
@@ -124,8 +124,7 @@ public class UserServiceImpl implements UserService
     private User validateUpdateConflicts(
             int id,
             UpdateUserRequest userDto
-        )
-    {
+        ) throws IOException {
         Optional<User> result = userRepository
                 .findByUsername(userDto.getUsername());
         User user;

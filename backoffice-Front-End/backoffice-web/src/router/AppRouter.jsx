@@ -25,6 +25,7 @@ import NewProductComponent from "../components/NewElementComponents/NewProductCo
 import EditProductComponent from "../components/EditElementComponents/EditProductComponent"
 import NewServiceComponent from "../components/NewElementComponents/NewServiceComponent";
 import EditServiceComponent from "../components/EditElementComponents/EditServiceComponent"
+import UserProfileComponent from "../components/UserProfileComponent";
 
 export const AppRouter = () => {
   const { status, checkAuthToken } = useAuthStore();
@@ -53,6 +54,7 @@ export const AppRouter = () => {
       {status === "authenticated" ? (
         <>
           <Route path="/" element={<HomePage />}/>
+          <Route path="/userProfile" element={<UserProfileComponent/>}/>
           <Route path="/user" element={<UserListComponent />}></Route>
           <Route path="/user/newUser" element={<NewUserComponent />}></Route>
           <Route path="/user/editUser" element={<EditUserComponent />}></Route>

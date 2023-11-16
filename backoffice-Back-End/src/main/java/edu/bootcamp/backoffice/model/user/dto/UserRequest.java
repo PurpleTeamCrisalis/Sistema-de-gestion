@@ -3,6 +3,8 @@ package edu.bootcamp.backoffice.model.user.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import javax.persistence.Column;
+
 @Getter
 @Setter
 @AllArgsConstructor

@@ -11,8 +11,7 @@ const formDTO = {
   email: ""
 };
 
-function NewUserComponent()
-{
+function NewUserComponent() {
   const navigate = useNavigate();
 
   const { username, password, email, handleInputChange, clearForm, emptyValidation } =
@@ -20,12 +19,10 @@ function NewUserComponent()
 
   const { startAddingUser, users } = useUsersStore();
 
-  function addUser(event)
-  {
+  function addUser(event) {
     event.preventDefault();
 
-    if (!emptyValidation())
-    {
+    if (!emptyValidation()) {
       Toastify({
         text: "Hay campos vacíos",
         duration: 2000,
@@ -36,8 +33,7 @@ function NewUserComponent()
       return console.error("Error: Campos vacíos");
     }
 
-    if (username.length < 5)
-    {
+    if (username.length < 5) {
       Toastify({
         text: "El Nombre de usuario debe ser mayor a 5 caracteres",
         duration: 2000,
@@ -48,8 +44,7 @@ function NewUserComponent()
       return console.error("Error: Nombre de usuario menor a 5 caracteres");
     }
 
-    if (password.length < 5)
-    {
+    if (password.length < 5) {
       Toastify({
         text: "La contraseña debe ser mayor a 5 caracteres",
         duration: 2000,
@@ -61,8 +56,7 @@ function NewUserComponent()
     }
 
     const usuarioExiste = users?.find(user => user.username === username);
-    if (usuarioExiste)
-    {
+    if (usuarioExiste) {
       Toastify({
         text: "Nombre de usuario ya existe",
         duration: 2000,
@@ -72,7 +66,7 @@ function NewUserComponent()
       }).showToast();
       return console.error("Error: Nombre de usuario ya existe");
     }
-    const user = { username, email ,password };
+    const user = { username, email, password };
 
     startAddingUser(user);
     clearForm();
@@ -84,7 +78,7 @@ function NewUserComponent()
       },
     }).showToast();
   }
-
+  
   return (
     <div className="bgGrey">
       <HeaderComponent />
