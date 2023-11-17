@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNewOrderStore, useServicesStore } from "../../hooks";
+import SearchBar from "../Utils/SearchBar";
 
 export const ServiceModal = () => {
   const { addServices } = useNewOrderStore();
   const { services, startLoadingServices } = useServicesStore();
   const [servicesSelected, setServicesSelected] = useState([]);
+  const [filteredList, setFilteredList] = useState([]);
+  const [checkItems, setCheckItems] = useState({});
 
   useEffect(() => {
     setTimeout(() => {
@@ -21,11 +24,13 @@ export const ServiceModal = () => {
         if (checkbox.checked) {
           tRow.classList.add("table-active");
           setServicesSelected([...servicesSelected, bien]);
+          setCheckItems({ ...checkItems, [bien.id]: true });
         } else {
           tRow.classList.remove("table-active");
           setServicesSelected(
             [...servicesSelected].filter((service) => service.id !== bien.id)
           );
+          setCheckItems({ ...checkItems, [bien.id]: false });
         }
       }
     }
@@ -38,6 +43,7 @@ export const ServiceModal = () => {
       item.checked = false;
     }
     setServicesSelected([]);
+    setCheckItems({});
   }
 
   function handleButtonClick() {
@@ -71,6 +77,11 @@ export const ServiceModal = () => {
           </div>
           <div className="modal-body modal-dialog-scrollable">
             <div className="bg-white rounded-3 overflow-hidden">
+              <SearchBar
+                rawList={services}
+                setFilteredList={setFilteredList}
+                compareTag={"name"}
+              />
               <table className="table table-hover">
                 {/* Header de la table */}
                 <thead
@@ -80,31 +91,45 @@ export const ServiceModal = () => {
                     borderBottom: "2px solid black",
                   }}
                 >
-                  <tr>
+                  <tr style={{ textAlign: "center" }}>
                     <th scope="col">#</th>
                     <th scope="col">Nombre</th>
                     <th scope="col">Detalle</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {services.map((service) => (
-                    <tr key={service.id}>
-                      <td>
-                        <input
-                          type="checkbox"
-                          id={service.id}
-                          style={{
-                            color: "#000000",
-                            cursor: "pointer",
-                          }}
-                          onChange={(event) => checkActiveItem(event, service)}
-                          className="custom-checkbox"
-                        />
-                      </td>
-                      <td>{service.name}</td>
-                      <td>{service.description}</td>
-                    </tr>
-                  ))}
+                  {filteredList?.map(
+                    (service) =>
+                      service.enabled && (
+                        <tr
+                          key={service.id}
+                          className={
+                            checkItems[service.id] ? "table-active" : ""
+                          }
+                          style={{ textAlign: "center" }}
+                        >
+                          <td>
+                            <input
+                              type="checkbox"
+                              id={service.id}
+                              style={{
+                                color: "#000000",
+                                cursor: "pointer",
+                              }}
+                              onChange={(event) =>
+                                checkActiveItem(event, service)
+                              }
+                              className="custom-checkbox"
+                              defaultChecked={checkItems[service.id]}
+                            />
+                          </td>
+                          <td>{service.name}</td>
+                          <td className="text-overflow">
+                            {service.description}
+                          </td>
+                        </tr>
+                      )
+                  )}
                 </tbody>
               </table>
             </div>

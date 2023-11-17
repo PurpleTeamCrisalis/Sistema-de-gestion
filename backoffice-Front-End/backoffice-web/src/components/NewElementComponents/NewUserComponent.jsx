@@ -78,7 +78,7 @@ function NewUserComponent() {
       },
     }).showToast();
   }
-  
+
   return (
     <div className="bgGrey">
       <HeaderComponent />
@@ -89,70 +89,52 @@ function NewUserComponent() {
 
           {/* Table and Buttons */}
           <div className="col-md-9 col-xl-10">
-            <section
-              className="container bg-primary rounded-3 mt-5 mb-3"
-              style={{ minHeight: "70vh", width: "90%" }}
-            >
-              <div className="">
-                <h2 className="text-center pt-4 pb-2">Añadir Usuario</h2>
-                <hr></hr>
+            <section className="container bg-primary rounded-3 mt-5 mb-3" style={{ minHeight: "70vh", width: "90%" }}>
+              <div className="text-center pt-4">
+                <h3 className="fs-4 text-light">Añadir Usuario</h3>
+                <hr className="bg-light" />
               </div>
-              <div
-                className="d-flex flex-column align-items-center justify-content-center"
-                style={{ minHeight: "50vh" }}
-              >
-                <div>
-                  <div className="mb-5">
-                    <span
-                      className="d-inline-block fs-2"
-                      style={{ width: "350px" }}
-                    >
-
-                      Nombre de Usuario
-                    </span>
-                    <input
-                      type="text"
-                      name="username"
-                      id="username"
-                      onChange={handleInputChange}
-                      value={username}
-                      placeholder="Ingresar nombre de usuario"
-                      style={{ width: "350px", height: "50px" }}
-                    />
-                  </div>
-                  <div className="mb-5">
-                    <span
-                      className="d-inline-block fs-2"
-                      style={{ width: "350px" }}
-                    >
-                      Contraseña
-                    </span>
-                    <input
-                      type="text"
-                      name="password"
-                      id="password"
-                      onChange={handleInputChange}
-                      value={password}
-                      placeholder="Ingresar contraseña"
-                      style={{ width: "350px", height: "50px" }}
-                    />
-                  </div>
-                  <div>
-                    <span
-                      className="d-inline-block fs-2"
-                      style={{ width: "350px" }}
-                    >
-                      E-Mail
-                    </span>
-                    <input
-                      type="email"
-                      name="email"
-                      id="email"
-                      onChange={handleInputChange}
-                      value={email}
-                      placeholder="Ingresar el email"
-                      style={{ width: "350px", height: "50px" }}
-                    />
+              <div className="row justify-content-center align-items-center">
+                {/* Persona */}
+                <div className="col-sm-6">
+                  <div className="row m-4">
+                    <div className="mb-3">
+                      <label htmlFor="name" className="form-label">Nombre de usuario</label>
+                      <input
+                        type="text"
+                        name="username"
+                        id="username"
+                        className="form-control"
+                        onChange={handleInputChange}
+                        value={username}
+                        placeholder="Ingresar nombre de usuario"
+                        required
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <label htmlFor="password" className="form-label">Contraseña</label>
+                      <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        className="form-control"
+                        onChange={handleInputChange}
+                        value={password}
+                        placeholder="Ingresar constraseña"
+                      />
+                    </div>
+                    <div className="">
+                      <label htmlFor="description" className="form-label">Email</label>
+                      <input
+                        type="email"
+                        name="email"
+                        id="email"
+                        className="form-control"
+                        onChange={handleInputChange}
+                        value={email}
+                        placeholder="Ingresar email"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>

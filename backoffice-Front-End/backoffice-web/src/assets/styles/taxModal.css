@@ -1,0 +1,40 @@
+.modal{
+    top: 50px !important;
+    left: 50px !important;
+}
+/* .divCharge{
+    margin: 35px;
+} */
+
+.addButton{
+    background-color: #508fee;
+    border-radius: 10px;
+}
+
+.addButton:active {
+    box-shadow: 0 1px #666;
+    transform: translateY(2px);
+  }
+
+  .addButton:hover{
+    opacity: 0.8;
+}
+
+.listTax{
+    width: 400px;
+    height: 100% !important;
+}
+
+.scroll {
+    height: 5em;
+    line-height: 1em;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.boxTax{
+    width: auto; 
+    height: 130px; 
+    background: #fff;
+    border-radius: 8px;
+}

@@ -5,7 +5,7 @@ export function createOrderRequest(order) {
       return {
         productId: product.id,
         quantity: product.quantity,
-        warranty: 10.5
+        warranty: product.warranty
       }
     }),
     services: order.services.map(service => service.id)

@@ -27,6 +27,7 @@ import NewServiceComponent from "../components/NewElementComponents/NewServiceCo
 import EditServiceComponent from "../components/EditElementComponents/EditServiceComponent"
 import UserProfileComponent from "../components/UserProfileComponent";
 
+
 export const AppRouter = () => {
   const { status, checkAuthToken } = useAuthStore();
 

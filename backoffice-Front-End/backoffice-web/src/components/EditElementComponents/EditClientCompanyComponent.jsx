@@ -7,6 +7,9 @@ import { formValidations } from '../../utils/FormValidations'
 import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
 import HeaderComponent from "../HeaderComponent";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
+import { useState } from "react";
 
 function EditClientCompanyComponent() {
 
@@ -26,6 +29,8 @@ function EditClientCompanyComponent() {
         id: activeClient?.id,
     });
 
+    const [isEnabled, setIsEnabled] = useState(activeClient?.enabled);
+
     // Edicion de cliente
     function editClient(event) {
         event.preventDefault();
@@ -41,7 +46,7 @@ function EditClientCompanyComponent() {
             isbussiness,
             bussinessname,
             startdate,
-            enabled,
+            enabled: isEnabled,
             cuit: parseInt(cuit),
         };
 
@@ -81,7 +86,7 @@ function EditClientCompanyComponent() {
     return (
 
         <div className="bgGrey">
-        <HeaderComponent />
+            <HeaderComponent />
             <div className="container-fluid mainContainer">
                 <div className="secondContainer">
                     {/* Navbar */}
@@ -94,18 +99,18 @@ function EditClientCompanyComponent() {
                             className="container bg-primary rounded-3 mt-5 mb-4"
                             style={{ minHeight: "70vh", width: "90%" }}
                         >
-                            <div className="text-center py-4">
+                            <div className="text-center pt-4">
                                 <h3 className="fs-4">Editar Cliente</h3>
                                 <hr className="bg-light" />
                             </div>
 
-                            <div className="row">
+                            <div className="row justify-content-md-center">
                                 {/* Persona/Responsable */}
                                 <div className="col-md-6 col-sm-12 d-flex flex-column justify-content-center align-items-center">
-                                    <h2>Persona/Responsable</h2>
-                                    <div className="row m-4">
+                                    <h3 className="mb-3">Persona/Responsable</h3>
+                                    <div className="row mx-4">
                                         <div className="col-md-6 mb-3">
-                                            <h5 className="form-h5">Nombre</h5>
+                                            <label htmlFor="name" className="form-label">Nombre</label>
                                             <input
                                                 type="text"
                                                 name='name'
@@ -117,7 +122,7 @@ function EditClientCompanyComponent() {
                                             />
                                         </div>
                                         <div className="col-md-6 mb-3">
-                                            <h5 className="form-h5">Apellido</h5>
+                                            <label htmlFor="lastname" className="form-label">Apellido</label>
                                             <input
                                                 type="text"
                                                 name='lastname'
@@ -129,7 +134,7 @@ function EditClientCompanyComponent() {
                                             />
                                         </div>
                                         <div className="col-md-6 mb-3">
-                                            <h5 className="form-h5">D.N.I</h5>
+                                            <label htmlFor="dni" className="form-label">D.N.I</label>
                                             <input
                                                 type="text"
                                                 name='dni'
@@ -141,7 +146,7 @@ function EditClientCompanyComponent() {
                                             />
                                         </div>
                                         <div className="col-md-6 mb-3">
-                                            <h5 className="form-h5">Teléfono</h5>
+                                            <label htmlFor="phone" className="form-label">Teléfono</label>
                                             <input
                                                 type="text"
                                                 name='phone'
@@ -153,7 +158,7 @@ function EditClientCompanyComponent() {
                                             />
                                         </div>
                                         <div className="col-md-12 mb-3">
-                                            <h5 className="form-h5">Dirección</h5>
+                                            <label htmlFor="adress" className="form-label">Dirección</label>
 
                                             <input
                                                 type="text"
@@ -170,10 +175,10 @@ function EditClientCompanyComponent() {
                                 </div>
                                 {/* Empresa */}
                                 <div className="col-md-6 col-sm-12 d-flex flex-column align-items-center">
-                                    <h2>Empresa</h2>
-                                    <div className="row m-4">
+                                    <h3 className="mb-3">Empresa</h3>
+                                    <div className="row mx-4">
                                         <div className="mb-3">
-                                            <h5 className="form-h5">Nombre</h5>
+                                            <label htmlFor="bussinessname" className="form-label">Nombre</label>
                                             <input
                                                 type="text"
                                                 name='bussinessname'
@@ -185,7 +190,7 @@ function EditClientCompanyComponent() {
                                             />
                                         </div>
                                         <div className="mb-3">
-                                            <h5 className="form-h5">CUIT</h5>
+                                            <label htmlFor="cuit" className="form-label">CUIT</label>
                                             <input
                                                 type="text"
                                                 name='cuit'
@@ -197,7 +202,7 @@ function EditClientCompanyComponent() {
                                             />
                                         </div>
                                         <div className="mb-3">
-                                            <h5 className="form-h5">Inicio de Actividades</h5>
+                                            <label htmlFor="startdate" className="form-label">Inicio de actividades</label>
                                             <input
                                                 type="date"
                                                 name='startdate'
@@ -209,38 +214,40 @@ function EditClientCompanyComponent() {
                                             />
                                         </div>
                                     </div>
-                                </div>
 
-                                {/* Estado del cliente */}
-                                <div className="d-flex align-items-center justify-content-center">
-                                    <h5 className="mb-0 me-3">Estado</h5>
-                                    <div className="d-flex align-items-center gap-3">
-                                        <div className="d-flex align-items-center">
-                                            <input
-                                                type="radio"
-                                                name="enabled"
-                                                id="enabled"
-                                                onChange={handleInputChange}
-                                                value="true"
-                                                defaultChecked={activeClient.enabled === true}
+                                </div>
+                                <div className="col-md-6 col-sm-12">
+                                    <label htmlFor="enabled" className="form-label">Estado</label>
+                                    <div className='d-flex align-items-end'>
+                                        <input
+                                            type="checkbox"
+                                            name="enabled"
+                                            id="enabled"
+                                            // className="form-control"
+                                            onChange={(event) => setIsEnabled(event.target.checked)}
+                                            value={isEnabled}
+                                            className='btn-check'
+                                            defaultChecked={isEnabled}
+                                        />
+                                        <label htmlFor="enabled" className="btn checkbox-btn w-100">
+                                            {`${isEnabled ? "Habilitado   " : "Deshabilitado   "}`}
+                                            <FontAwesomeIcon
+                                                icon={faCircleCheck}
+                                                id="specialIsChecked"
+                                                style={{
+                                                    color: "#0ee14e",
+                                                }}
                                             />
-                                            <label className="mb-0 ms-2 fs-5">Habilitado</label>
-                                        </div>
-                                        <div className="d-flex align-items-center">
-                                            <input
-                                                type="radio"
-                                                name="enabled"
-                                                id="enabled"
-                                                onChange={handleInputChange}
-                                                value="false"
-                                                defaultChecked={activeClient.enabled === false}
+                                            <FontAwesomeIcon
+                                                icon={faCircleXmark}
+                                                id="specialIsNotChecked"
+                                                style={{
+                                                    color: "#e60f0f",
+                                                }}
                                             />
-                                            <label className="mb-0 ms-2 fs-5">Deshabilitado</label>
-                                        </div>
+                                        </label>
                                     </div>
                                 </div>
-
-
                             </div>
 
                         </section>
@@ -258,7 +265,7 @@ function EditClientCompanyComponent() {
                             <button
                                 type="button"
                                 className="btn btn-primary mx-3 fw-bold btn-lg"
-                                onClick={() => navigate("/client")}
+                                onClick={() => {navigate("/client"); setActiveClient(null)}}
                             >
                                 Volver
                             </button>

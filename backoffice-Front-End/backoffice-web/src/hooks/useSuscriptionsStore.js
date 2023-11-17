@@ -10,10 +10,10 @@ export function usesuscriptionsStore() {
   function setActiveSuscription(suscription) {
     dispatch(onSetActiveSuscription(suscription))
   }
-  function pullActivesuscription() {
+  function pullActiveSuscription() {
     dispatch(onPullActive())
   }
-  async function startLoadingsuscriptionById(id) {
+  async function startLoadingSuscriptionById(id) {
     try {
       const { data } = await projectApi.get(`/suscription/${id}`)
       dispatch(onLoadSuscriptionById(data))
@@ -21,7 +21,7 @@ export function usesuscriptionsStore() {
       console.error(error)
     }
   }
-  async function startLoadingsuscriptions() {
+  async function startLoadingSuscriptions() {
     try {
       const { data } = await projectApi.get('/suscription/list')
       dispatch(onLoadSuscriptions(data))
@@ -30,7 +30,7 @@ export function usesuscriptionsStore() {
     }
   }
 
-  async function startLoadingClientsuscriptions(clientId) {
+  async function startLoadingClientSuscriptions(clientId) {
     try {
       const { data } = await projectApi.get(`/suscription/list/${clientId}`)
       console.log(data)
@@ -40,7 +40,7 @@ export function usesuscriptionsStore() {
     }
   }
 
-  function deleteClientsuscriptions(){
+  function deleteClientSuscriptions() {
     dispatch(onDeleteCLientSuscriptions());
   }
 
@@ -56,7 +56,7 @@ export function usesuscriptionsStore() {
     }
   }
 
-  async function startAddingsuscription(suscription) {
+  async function startAddingSuscription(suscription) {
     try {
       const { data } = await projectApi.post('/suscription', suscription)
       dispatch(onAddNewSuscription({
@@ -76,13 +76,13 @@ export function usesuscriptionsStore() {
     selectedSuscription,
     clientSuscriptions,
     // Metodos
-    startLoadingsuscriptions,
-    startLoadingClientsuscriptions,
-    startAddingsuscription,
+    startLoadingSuscriptions,
+    startLoadingClientSuscriptions,
+    startAddingSuscription,
     setActiveSuscription,
-    pullActivesuscription,
-    startLoadingsuscriptionById,
-    deleteClientsuscriptions,
+    pullActiveSuscription,
+    startLoadingSuscriptionById,
+    deleteClientSuscriptions,
     startUpdatingSuscription
   }
 }

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import logoUser from "../assets/images/iconUser.png";
 import "../assets/styles/headerStyle.css";
 import imageLogoFinnegans from "../assets/images/logoEmpresa.png";
-import { FaUserCircle } from "react-icons/fa";
 import { useAuthStore } from "../hooks/useAuthStore";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
@@ -13,7 +13,6 @@ function HeaderComponent() {
   const { startLogout } = useAuthStore();
   const { setActiveUser, users, startLoadingUsers, activeUsers } = useUsersStore();
   const { user } = useAuthStore();
-
 
   useEffect(() => {
     if (users.length === 0) startLoadingUsers();
@@ -91,7 +90,7 @@ function HeaderComponent() {
 
           </button>
           <div className="dropdown-menu">
-            <a className="dropdown-item" href="/" onClick={(event) => handleLogout(event)}>
+            <a className="dropdown-item" href="/" onClick={(event)=>handleLogout(event)}>
               Cerrar sesion
             </a>
             <Link to="/userProfile" onClick={() => toUserProfile()} className="dropdown-item">

@@ -5,10 +5,10 @@ import { useAuthStore } from "../../hooks";
 import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
 import HeaderComponent from "../HeaderComponent";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
+import { useState } from "react";
 
-// const formDTO = {
-//   username: "",
-// };
 
 function EditChargeComponent() {
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ function EditChargeComponent() {
     enabled: activeCharge?.enabled,
     id: activeCharge?.id
   });
-  // const { user, changeAuthUsername } = useAuthStore()
+  const [isEnabled, setIsEnabled] = useState(activeCharge?.enabled);
 
   function editCharge(event) {
     event.preventDefault();
@@ -61,10 +61,9 @@ function EditChargeComponent() {
     const chargeAux = {
       name,
       id,
-      enabled,
+      enabled: isEnabled,
       percentage
     };
-    console.log(chargeAux)
     startUpdatingCharge(chargeAux);
 
     Toastify({
@@ -124,34 +123,38 @@ function EditChargeComponent() {
                         required
                       />
                     </div>
-                  </div>
-                </div>
-              </div>
-              {/* Estado del cargo */}
-              <div className="d-flex align-items-center justify-content-center">
-                <h5 className="mb-0 me-3">Estado</h5>
-                <div className="d-flex align-items-center gap-3">
-                  <div className="d-flex align-items-center">
-                    <input
-                      type="radio"
-                      name="enabled"
-                      id="enabled"
-                      onChange={handleInputChange}
-                      value="true"
-                      defaultChecked={activeCharge.enabled === true}
-                    />
-                    <label className="mb-0 ms-2 fs-5">Habilitado</label>
-                  </div>
-                  <div className="d-flex align-items-center">
-                    <input
-                      type="radio"
-                      name="enabled"
-                      id="enabled"
-                      onChange={handleInputChange}
-                      value="false"
-                      defaultChecked={activeCharge.enabled === false}
-                    />
-                    <label className="mb-0 ms-2 fs-5">Deshabilitado</label>
+                    <div className="">
+                      <label htmlFor="enabled" className="form-label">Estado</label>
+                      <div className='d-flex align-items-end'>
+                        <input
+                          type="checkbox"
+                          name="enabled"
+                          id="enabled"
+                          // className="form-control"
+                          onChange={(event) => setIsEnabled(event.target.checked)}
+                          value={isEnabled}
+                          className='btn-check'
+                          defaultChecked={isEnabled}
+                        />
+                        <label htmlFor="enabled" className="btn checkbox-btn w-100">
+                          {`${isEnabled ? "Habilitado   " : "Deshabilitado   "}`}
+                          <FontAwesomeIcon
+                            icon={faCircleCheck}
+                            id="specialIsChecked"
+                            style={{
+                              color: "#0ee14e",
+                            }}
+                          />
+                          <FontAwesomeIcon
+                            icon={faCircleXmark}
+                            id="specialIsNotChecked"
+                            style={{
+                              color: "#e60f0f",
+                            }}
+                          />
+                        </label>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

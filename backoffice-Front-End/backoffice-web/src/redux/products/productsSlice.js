@@ -20,6 +20,7 @@ export const productsSlice = createSlice({
     },
     onAddNewProduct: (state, { payload }) => {
       state.products.push(payload)
+      console.log(payload)
       state.activeProduct = null
     },
     onSetActiveProduct: (state, { payload }) => {
@@ -37,8 +38,8 @@ export const productsSlice = createSlice({
         }
       }
     },
-    onDeleteProduct: (state) => {
-      state.products = state.products.filter(product => product.id !== state.activeProduct.id)
+    onDeleteProduct: (state, { payload }) => {
+      state.products = state.products.map(product => product.id === payload.id ? payload : product)
       state.activeProduct = null
     }
   }

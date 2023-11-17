@@ -9,9 +9,11 @@ import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import '../assets/styles/userProfileImageStyle.css'
+import { useNavigate } from "react-router-dom";
 
 
 function UserProfileComponent() {
+    const navigate = useNavigate();
     const { startUpdatingUser, activeUser, setActiveUser, users } = useUsersStore();
     const { user, changeAuthUsername } = useAuthStore();
     const { username, email, enabled, handleInputChange, emptyValidation } = useForm({
@@ -241,10 +243,17 @@ function UserProfileComponent() {
                         <section className="d-flex justify-content-center ">
                             <button
                                 type="button"
-                                className="btn btn-primary fw-bold btn-lg"
+                                className="btn btn-primary mx-3 fw-bold btn-lg"
                                 onClick={(event)=>saveUserProfile(event)}
                             >
                                 Guardar
+                            </button>
+                            <button
+                                type="button"
+                                className="btn btn-primary mx-3 fw-bold btn-lg"
+                                onClick={() => navigate("/")}
+                            >
+                                Volver
                             </button>
                         </section>
                     </div>

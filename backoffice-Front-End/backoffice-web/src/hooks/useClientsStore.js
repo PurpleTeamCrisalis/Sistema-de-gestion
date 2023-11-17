@@ -10,7 +10,7 @@ import {
   onLoadClientSubscriptions,
   onDeleteClientSubcriptions,
 } from "../redux/client/clientsSlice";
-import { getSuccessResponse } from "../helpers";
+import { getErrorResponse, getSuccessResponse } from "../helpers";
 
 export function useClientsStore() {
   const { clients, activeClient, clientSubscriptions } = useSelector((state) => state.clients);
@@ -26,10 +26,11 @@ export function useClientsStore() {
   async function startLoadingClient() {
     try {
       const { data } = await projectApi.get("/client/list");
+      if (data.length === 0) throw { response: { status: 404 } }
       dispatch(onLoadClients(data));
       getSuccessResponse('Clientes cargados!')
     } catch (error) {
-      console.error("Lista vacía");
+      getErrorResponse(error, "clientes");
     }
   }
 
@@ -42,13 +43,13 @@ export function useClientsStore() {
     }
   }
 
-  function deleteClientSubscriptions(){
+  function deleteClientSubscriptions() {
     dispatch(onDeleteClientSubcriptions());
   }
 
   async function startAddingClients(client) {
     try {
-      
+
       const response = await projectApi.post("/client/", client);
 
       if (response && response.data) {

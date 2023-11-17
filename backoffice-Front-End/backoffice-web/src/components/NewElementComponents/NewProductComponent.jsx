@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import NavComponent from '../NavComponent'
 import { useNavigate } from 'react-router-dom'
 import { useChargesStore, useForm, useProductsStore } from '../../hooks'
@@ -6,6 +6,8 @@ import Toastify from 'toastify-js'
 import "toastify-js/src/toastify.css"
 import "../../assets/styles/inputStyle.css"
 import HeaderComponent from "../HeaderComponent";
+import TaxModal from '../Modal/TaxModal'
+
 
 const formDTO = {
     name: "",
@@ -18,6 +20,8 @@ function NewProductComponent() {
     const { startAddingProduct, products } = useProductsStore();
     const { charges, startLoadingCharges } = useChargesStore();
     const { name, description, basePrice, handleInputChange, clearForm, emptyValidation } = useForm(formDTO);
+    const [tax, setTax] = useState([]); //Guarda los impuestos seleccionados por id
+
 
     useEffect(() => {
         if(charges.length === 0)startLoadingCharges();
@@ -91,8 +95,8 @@ function NewProductComponent() {
         }
 
         try {
-            console.log(product);
-            startAddingProduct(product);
+            startAddingProduct({...product, taxes: tax});
+            setTax([]); //Vacia los datos de impuestos
             clearForm();
             Toastify({
                 text: "Producto Creado",
@@ -125,17 +129,14 @@ function NewProductComponent() {
                     <div className="tablePane">
                         {/* Inputs */}
                         <section className="container bg-primary rounded-3 mt-5 mb-4" style={{ minHeight: "70vh", width: "90%" }}>
-                            <div className="text-center py-4">
+                            <div className="text-center pt-4">
                                 <h3 className="fs-4 text-light">Añadir Producto</h3>
                                 <hr className="bg-light" />
                             </div>
 
                             <div className="row justify-content-center align-items-center">
-                                {/* Persona */}
-
                                 <div className="col-sm-6">
-                                    <h2 className='text-center'>Producto</h2>
-                                    <div className="row m-4">
+                                    <div className="row">
                                         <div className="col-md-6 mb-3">
                                             <label htmlFor="name" className="form-label">Nombre</label>
                                             <input
@@ -161,13 +162,19 @@ function NewProductComponent() {
                                                 required
                                             />
                                         </div>
-                                        <div className="">
-                                            <label htmlFor="description" className="form-label">Descripción</label>
+                                        
+                                    </div>
+
+                                </div>
+                                <div className="col-sm-10">
+                                    <div className="row">
+                                        <div className="col-md-6 mb-3">
+                                            <label htmlFor="description" className="form-label mb-4">Descripción</label>
                                             <textarea
                                                 name="description"
                                                 id="description"
                                                 className="form-control"
-                                                rows="4"
+                                                rows="5"
                                                 cols="2"
                                                 required
                                                 minLength={1}
@@ -178,8 +185,8 @@ function NewProductComponent() {
                                             >
                                             </textarea>
                                         </div>
-                                        <div>
-                                            
+                                        <div className="col-md-6 mb-3">
+                                            <TaxModal tax={tax} setTax={setTax} />
                                         </div>
                                     </div>
                                 </div>

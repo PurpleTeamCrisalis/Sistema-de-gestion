@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import imageLogoFinnegans from "../assets/images/logoEmpresa.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse } from "@fortawesome/free-solid-svg-icons";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
@@ -7,6 +8,7 @@ import { faBox } from "@fortawesome/free-solid-svg-icons";
 import { faBellConcierge } from "@fortawesome/free-solid-svg-icons";
 import { faFileInvoiceDollar } from "@fortawesome/free-solid-svg-icons";
 import { faList } from "@fortawesome/free-solid-svg-icons";
+import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import "../../node_modules/bootstrap/dist/js/bootstrap.bundle";
 import "../assets/styles/navStyle.css";
 import "../assets/styles/tableStyle.css";
