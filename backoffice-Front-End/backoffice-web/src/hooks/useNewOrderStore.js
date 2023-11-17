@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { onAddProducts, onAddServices, onDeleteDetail, onAddClient, onSetActiveDetail, onPullActiveDetail, onUpdateQuantity, onCleanNewOrder } from '../redux'
+import { onAddProducts, onAddServices, onDeleteDetail, onAddClient, onSetActiveDetail, onPullActiveDetail, onUpdateQuantity, onCleanNewOrder, onUpdateWarranty } from '../redux'
 
 export function useNewOrderStore() {
 
@@ -33,6 +33,10 @@ export function useNewOrderStore() {
     dispatch(onUpdateQuantity(objeto))
   }
 
+  function updateWarranty(objeto) {
+    dispatch(onUpdateWarranty(objeto))
+  }
+
   function cleanNewOrder() {
     dispatch(onCleanNewOrder())
   }
@@ -47,6 +51,7 @@ export function useNewOrderStore() {
     setActiveDetail,
     deleteDetail,
     updateQuantity,
+    updateWarranty,
     pullActiveDetail,
     cleanNewOrder
   }

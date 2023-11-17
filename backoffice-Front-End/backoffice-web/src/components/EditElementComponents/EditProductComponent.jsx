@@ -16,11 +16,11 @@ function EditProductComponent() {
         description: activeProduct?.description,
         basePrice: activeProduct?.basePrice,
         enabled: activeProduct?.enabled,
-        taxes: activeProduct.taxes,
+        //taxes: activeProduct.taxes,
         id: activeProduct?.id,
     });
 
-    const [tax, setTax] = useState(taxes);
+    const [tax, setTax] = useState(activeProduct?.taxes);
 
     // Edicion de producto
     function editProduct(event) {

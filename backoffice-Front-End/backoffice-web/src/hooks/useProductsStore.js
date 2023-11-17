@@ -17,7 +17,6 @@ export function useProductsStore() {
   async function startLoadingProducts() {
     try {
       const { data } = await projectApi.get('/product/list')
-      console.log(data)
       dispatch(onLoadProducts(data))
       getSuccessResponse("Productos cargados!")
     } catch (error) {
@@ -51,7 +50,6 @@ export function useProductsStore() {
   async function startUpdatingProduct(product) {
     try {
       const { data } = await projectApi.patch(`/product/update/${product.id}`, product)
-      console.log(data)
       dispatch(onUpdateProduct(data))
     } catch (error) {
       console.error(error)

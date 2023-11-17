@@ -120,18 +120,34 @@ function ProductListComponent() {
                       borderBottom: "2px solid black",
                     }}
                   >
-                    <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">Nombre Producto</th>
-                      <th scope="col">Descripción</th>
-                      <th scope="col">Precio Base</th>
-                      <th scope="col">Estado</th>
-                      <th scope="col">#</th>
+                    <tr style={{ textAlign: "center" }}>
+                      <th scope="col" width="5%">
+                        #
+                      </th>
+                      <th scope="col" width="12%">
+                        Nombre Producto
+                      </th>
+                      <th scope="col" width="50%">
+                        Descripción
+                      </th>
+                      <th scope="col" width="10%">
+                        Precio Base
+                      </th>
+                      <th scope="col" width="10%">
+                        Estado
+                      </th>
+                      <th scope="col" width="5%">
+                        #
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {products?.map((product) => (
-                      <tr key={product.id} className="">
+                      <tr
+                        key={product.id}
+                        className=""
+                        style={{ textAlign: "center" }}
+                      >
                         <td>
                           <input
                             type="checkbox"
@@ -148,10 +164,10 @@ function ProductListComponent() {
                         </td>
                         <td>{product.name}</td>
                         <td className="text-overflow">{product.description}</td>
-                        <td>{"$" + product.basePrice}</td>
+                        <td>{"$" + product.basePrice.toFixed(2)}</td>
                         <td
                           style={{
-                            color: product.enabled ? "green" : "red",
+                            color: product.enabled ? "#198754" : "red",
                           }}
                         >
                           {product.enabled ? "Habilitado" : "Deshabilitado"}

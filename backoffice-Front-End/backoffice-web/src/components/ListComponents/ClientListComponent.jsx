@@ -11,9 +11,9 @@ import "toastify-js/src/toastify.css";
 import "../../assets/styles/navStyle.css";
 import EmptyList from "../../utils/EmptyList";
 import AddRemoveButtonsComponent from "../AddRemoveButtonsComponent";
-import { faCirclePlus, faTrash, } from "@fortawesome/free-solid-svg-icons";
+import { faCirclePlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FaHistory } from "react-icons/fa";
-import { Tooltip } from 'react-tooltip'
+import { Tooltip } from "react-tooltip";
 import { ClientOrdersAndSubscriptionsModal } from "../Modal/ClientOrdersAndSubscriptionsModal";
 import { DetailModal } from "../Modal/DetailModal";
 import { useOrdersStore } from "../../hooks";
@@ -32,9 +32,7 @@ function ClientListComponent() {
     startLoadingClientSubscriptions,
   } = useClientsStore();
 
-  const {
-    startLoadingClientOrders,
-  } = useOrdersStore();
+  const { startLoadingClientOrders } = useOrdersStore();
 
   useEffect(() => {
     if (clients.length === 0) startLoadingClient();
@@ -173,20 +171,34 @@ function ClientListComponent() {
                       borderBottom: "2px solid black",
                     }}
                   >
-                    <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">Nombre</th>
-                      <th scope="col">Tipo de Cliente</th>
-                      <th scope="col">DNI/CUIT</th>
-                      <th scope="col">Estado</th>
-                      <th scope="col">#</th>
-                      <th scope="col">#</th>
+                    <tr style={{ textAlign: "center" }}>
+                      <th scope="col" width="5%">
+                        #
+                      </th>
+                      <th scope="col" width="22%">
+                        Nombre
+                      </th>
+                      <th scope="col" width="22%">
+                        Tipo de Cliente
+                      </th>
+                      <th scope="col" width="22%">
+                        DNI/CUIT
+                      </th>
+                      <th scope="col" width="22%">
+                        Estado
+                      </th>
+                      <th scope="col" width="5%">
+                        #
+                      </th>
+                      <th scope="col" width="5%">
+                        #
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {/* Acá se va a recorrer la lista de la entidad */}
                     {clients?.map((client) => (
-                      <tr key={client.id}>
+                      <tr key={client.id} style={{ textAlign: "center" }}>
                         {/* Checkbox */}
                         <td>
                           <input
@@ -217,7 +229,7 @@ function ClientListComponent() {
 
                         <td
                           style={{
-                            color: client.enabled ? "green" : "red",
+                            color: client.enabled ? "#198754" : "red",
                           }}
                         >
                           {client.enabled ? "Habilitado" : "Deshabilitado"}

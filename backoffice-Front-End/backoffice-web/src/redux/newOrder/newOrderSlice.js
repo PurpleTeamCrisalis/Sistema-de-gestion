@@ -20,14 +20,14 @@ export const newOrderSlice = createSlice({
       payload.forEach((product) => {
         const exists = state.newOrder.products.some(p => p.id === product.id)
         if (!exists)
-          state.newOrder.products.push({ ...product, quantity: 1, type: "Product" });
+          state.newOrder.products.push({ ...product, quantity: 1, warranty: 0, type: "Product" });
       })
     },
     onAddServices: (state, { payload }) => {
       payload.forEach((service) => {
         const exists = state.newOrder.services.some(s => s.id === service.id)
         if (!exists)
-          state.newOrder.services.push({ ...service, quantity: 1, type: "Service" });
+          state.newOrder.services.push({ ...service, type: "Service" });
       })
     },
     onSetActiveDetail: (state, { payload }) => {
@@ -39,6 +39,11 @@ export const newOrderSlice = createSlice({
     onUpdateQuantity: (state, { payload }) => {
       state.newOrder.products.forEach(product => {
         if (product.id === payload.detail.id) product.quantity = payload.quantity
+      })
+    },
+    onUpdateWarranty: (state, { payload }) => {
+      state.newOrder.products.forEach(product => {
+        if (product.id === payload.detail.id) product.warranty = payload.warranty
       })
     },
     onDeleteDetail: (state) => {
@@ -54,4 +59,4 @@ export const newOrderSlice = createSlice({
   }
 });
 
-export const { onNewOrder, onAddClient, onAddProducts, onAddServices, onDeleteDetail, onSetActiveDetail, onPullActiveDetail, onUpdateQuantity, onCleanNewOrder } = newOrderSlice.actions;
+export const { onNewOrder, onAddClient, onAddProducts, onAddServices, onDeleteDetail, onSetActiveDetail, onPullActiveDetail, onUpdateQuantity, onUpdateWarranty, onCleanNewOrder } = newOrderSlice.actions;

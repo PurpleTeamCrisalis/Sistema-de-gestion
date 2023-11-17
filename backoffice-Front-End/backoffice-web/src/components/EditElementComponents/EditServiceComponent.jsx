@@ -20,11 +20,11 @@ function EditServiceComponent() {
         basePrice: activeService?.basePrice,
         enabled: activeService?.enabled,
         id: activeService?.id,
-        taxes: activeService.taxes,
+        //taxes: activeService?.taxes,
         suportCharge: activeService?.suportCharge
     });
     const [isSpecial, setIsSpecial] = useState(activeService?.isSpecial);
-    const [tax, setTax] = useState(taxes);
+    const [tax, setTax] = useState(activeService?.taxes);
 
     // Edicion de servicio
     function editService(event) {
@@ -276,7 +276,7 @@ function EditServiceComponent() {
                                             </div>
                                         </div>
                                     </div>
-                                    <TaxModal  tax={tax} setTax={setTax}/>
+                                    <TaxModal  tax={tax} setTax={setTax} handler={handleInputChange}/>
                                 </div>
                             </div>
                         </section>
