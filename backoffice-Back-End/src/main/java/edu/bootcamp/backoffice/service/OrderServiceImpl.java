@@ -77,8 +77,8 @@ public class OrderServiceImpl implements OrderService {
       throw new IllegalArgumentException(errorBuilder.toString());
     order.setUser(user);
     completeOrderTotals(order);
-    order = orderRepository.save(order);
     clientService.registerSubscriptions(order.getClient(), order.getServices());
+    order = orderRepository.save(order);
     return orderFactory.createOrderResponse(order);
   }
 
@@ -235,7 +235,7 @@ public class OrderServiceImpl implements OrderService {
     if( serviceDetails != null && ! serviceDetails.isEmpty())
       discountService = order.getServices().get(0).getService();
     else
-      ;/* discountService = clientService.getDiscountService(client);*/
+       discountService = clientService.getDiscountService(order.getClient());
     order.setDiscountService(discountService);
   }
 
