@@ -25,7 +25,7 @@ public class ImageData {
     @Column(name = "imageData")
     private byte[] imageData;
 
-    @Column(name = "userId")
-    private Integer userId;
+    @Column(name = "userUsername")
+    private String userUsername;
 
 }

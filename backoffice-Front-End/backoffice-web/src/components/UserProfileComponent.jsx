@@ -8,57 +8,162 @@ import HeaderComponent from "./HeaderComponent";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
+import '../assets/styles/userProfileImageStyle.css'
 
 
 function UserProfileComponent() {
     const { startUpdatingUser, activeUser, setActiveUser, users } = useUsersStore();
+    const { user, changeAuthUsername } = useAuthStore();
     const { username, email, enabled, handleInputChange, emptyValidation } = useForm({
         username: activeUser?.username,
         email: activeUser?.email,
         enabled: activeUser?.enabled,
     });
-    const { user, changeAuthUsername } = useAuthStore()
 
-    const [userProfileImageExist, setUserProfileImageExist] = useState(true)
+    const [value, setValue] = useState();
 
     useEffect(() => {
         const imageElement = document.getElementById('userProfileImage');
-        axios.get(`http://localhost:8080/image/${activeUser.id}`)
-            .then(function (response) {
-                if (!response.data) return setUserProfileImageExist(false);
-                if (response.data) return imageElement.src = `http://localhost:8080/image/${activeUser.id}`
-            })
-
-
-    }, []);
-
-    async function updatedUserProfileImage(event) {
-        event.preventDefault();
-        const file = document.getElementById('file-input');
         const noImageElement = document.getElementById('userNoProfileImage');
+        const imageElementSmall = document.getElementById('userProfileImageSmall');
+        const noImageElementSmall = document.getElementById('userNoProfileImageSmall');
+        axios.get(`http://localhost:8080/image/${user.username}`)
+            .then(function (response) {
+                if (!response.data) return imageElement.src = `http://localhost:3000/image/hideme`;
+                if (response.data) {
+                    imageElement.src = `http://localhost:8080/image/${user.username}`;
+                    noImageElement.src = "http://localhost:3000/image/hideme";
+                    noImageElementSmall.src = "http://localhost:3000/image/hideme";
+                    imageElementSmall.src = `http://localhost:8080/image/${user.username}`;
+                    return;
+                }
+            })
+    });
+
+    function updatedUserProfileImage(event) {
+        event.preventDefault();
+
+        const imageElement = document.getElementById('userProfileImage');
+        const noImageElement = document.getElementById('userNoProfileImage');
+        const imageElementSmall = document.getElementById('userProfileImageSmall');
+        const noImageElementSmall = document.getElementById('userNoProfileImageSmall');
+        const file = document.getElementById('file-input');
         const form = new FormData();
         form.append('image', file.files[0]);
 
-        if (noImageElement) {
-            console.log("Entro para postear")
-            setUserProfileImageExist(true);
+        if (imageElement.src === `http://localhost:8080/image/${user.username}`) {
+            console.log("Entro update 1")
             const imageElement = document.getElementById('userProfileImage');
-            await axios.post(`http://localhost:8080/image/${activeUser.id}`, form);
-            console.log(imageElement);
-
-            //imageElement.src = `http://localhost:8080/image/${activeUser.id}`
-        } else {
-            console.log("Entro para update")
+            axios.patch(`http://localhost:8080/image/${user.username}`, form)
+                .then(function (response) {
+                    if (response.data) {
+                        imageElement.src = "http://localhost:3000/image/hideme";
+                        imageElementSmall.src = "http://localhost:3000/image/hideme";
+                        noImageElement.src = `http://localhost:8080/image/${user.username}`;
+                        noImageElementSmall.src = `http://localhost:8080/image/${user.username}`;
+                        return;
+                    }
+                });
+            return;
+        }
+        if (noImageElement.src === `http://localhost:8080/image/${user.username}`) {
+            console.log("Entro update 2")
             const imageElement = document.getElementById('userProfileImage');
-            await axios.patch(`http://localhost:8080/image/${activeUser.id}`, form);
-            imageElement.src = `http://localhost:8080/image/${activeUser.id}`;
+            axios.patch(`http://localhost:8080/image/${user.username}`, form)
+                .then(function (response) {
+                    if (response.data) {
+                        imageElement.src = `http://localhost:8080/image/${user.username}`;
+                        imageElementSmall.src = `http://localhost:8080/image/${user.username}`;
+                        noImageElement.src = "http://localhost:3000/image/hideme";
+                        noImageElementSmall.src = "http://localhost:3000/image/hideme";
+                        return;
+                    }
+                });
+            return;
         }
 
-
+        console.log("Entro para postear")
+        axios.post(`http://localhost:8080/image/${user.username}`, form).then((response) => {
+            imageElement.src = `http://localhost:8080/image/${user.username}`
+            noImageElement.src = "http://localhost:3000/image/hideme";
+            noImageElementSmall.src = "http://localhost:3000/image/hideme";
+            imageElementSmall.src = `http://localhost:8080/image/${user.username}`;
+        })
     }
 
-    function saveUserProfile() {
+    function saveUserProfile(event) {
+        event.preventDefault();
 
+        if (!emptyValidation()) {
+            Toastify({
+                text: "Hay campos vacíos",
+                duration: 2000,
+                style: {
+                    background: "linear-gradient(to right, #f44336, #b71c1c)",
+                },
+            }).showToast();
+            return console.error("Error: Campos vacíos");
+        }
+
+        if (username.length < 5) {
+            Toastify({
+                text: "Nombre de usuario debe ser mayor a 5 caracteres",
+                duration: 2000,
+                style: {
+                    background: "linear-gradient(to right, #f44336, #b71c1c)",
+                },
+            }).showToast();
+            return console.error("Error: Nombre de usuario menor a 5 caracteres");;
+        }
+
+        const usuarioExiste = users?.find(user => user.username === username);
+        if ((usuarioExiste) && (activeUser.username !== username)) {
+            Toastify({
+                text: "Nombre de usuario ya existe",
+                duration: 2000,
+                style: {
+                    background: "linear-gradient(to right, #f44336, #b71c1c)",
+                },
+            }).showToast();
+            return console.error("Error: Nombre de usuario ya existe");
+        }
+
+        const userAux = {
+            username,
+            email,
+            id: activeUser.id,
+            enabled
+        };
+
+        const form = new FormData();
+        form.append('newUserUsername', username);
+        axios.patch(`http://localhost:8080/image/update/${user.username}`, form);
+
+        if (activeUser.username !== user.username) {
+            startUpdatingUser(userAux);
+        } else {
+            if (enabled !== "false") {
+                startUpdatingUser(userAux);
+                changeAuthUsername(userAux.username);
+            } else {
+                Toastify({
+                    text: "No se puede deshabilitar el usuario con el que está logeado",
+                    duration: 2000,
+                    style: {
+                        background: "linear-gradient(to right, #f44336, #b71c1c)",
+                    },
+                }).showToast();
+                return console.error("Error: usuario logeado intentó auto-deshabilitarse");
+            }
+        }
+
+        Toastify({
+            text: "Usuario Actualizado",
+            duration: 2000,
+            style: {
+                background: "linear-gradient(to right, #00b09b, #96c93d)",
+            },
+        }).showToast();
     }
 
 
@@ -78,11 +183,9 @@ function UserProfileComponent() {
                                 <hr className="bg-light" />
                             </div>
                             <div className="d-flex flex-column align-items-center" id="output">
-                                {
-                                    userProfileImageExist
-                                        ? <img id="userProfileImage" alt="foto de perfil" width={"100px"} height={"100px"} />
-                                        : <img id="userNoProfileImage" src="src\assets\images\user-no-image.png" alt="foto de perfil" width={"100px"} height={"100px"} />
-                                }
+                                <img id="userProfileImage" alt="foto de perfil" width={"100px"} height={"100px"} />
+                                <img id="userNoProfileImage" src="src\assets\images\user-no-image.png" alt="foto de perfil" width={"100px"} height={"100px"} />
+
                                 <label for="file-input">
                                     <FontAwesomeIcon icon={faUpload} size="lg" className="mt-2" style={{ cursor: "pointer" }} />
                                 </label>
@@ -98,8 +201,8 @@ function UserProfileComponent() {
                                             <label htmlFor="name" className="form-label">Nombre</label>
                                             <input
                                                 type="text"
-                                                name="name"
-                                                id="name"
+                                                name="username"
+                                                id="username"
                                                 className="form-control"
                                                 onChange={handleInputChange}
                                                 value={username}
@@ -139,7 +242,7 @@ function UserProfileComponent() {
                             <button
                                 type="button"
                                 className="btn btn-primary fw-bold btn-lg"
-                                onClick={saveUserProfile}
+                                onClick={(event)=>saveUserProfile(event)}
                             >
                                 Guardar
                             </button>

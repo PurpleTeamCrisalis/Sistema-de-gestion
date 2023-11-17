@@ -9,6 +9,6 @@ public interface ImageRepository extends JpaRepository<ImageData, Long> {
 
     Optional<ImageData> findByName(String fileName);
 
-    ImageData findByUserId(Integer userId);
+    ImageData findByUserUsername(String username);
 
 }

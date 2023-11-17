@@ -16,13 +16,13 @@ public class ImageService {
     @Autowired
     private ImageRepository imageRepository;
 
-    public String uploadImage(Integer userId, MultipartFile file) throws IOException {
+    public String uploadImage(String userUsername, MultipartFile file) throws IOException {
 
         ImageData imageData = imageRepository.save(ImageData.builder()
                 .name(file.getOriginalFilename())
                 .type(file.getContentType())
                 .imageData(ImageUtil.compressImage(file.getBytes()))
-                .userId(userId).build());
+                .userUsername(userUsername).build());
         if(imageData!=null){
             return ("Image uploaded successfully: " +
                     file.getOriginalFilename());
@@ -30,8 +30,8 @@ public class ImageService {
         return null;
     }
 
-    public String updateImage(Integer userId, MultipartFile file) throws IOException {
-        ImageData image = imageRepository.findByUserId(userId);
+    public String updateImage(String userUsername, MultipartFile file) throws IOException {
+        ImageData image = imageRepository.findByUserUsername(userUsername);
 
         image.setName(file.getOriginalFilename());
         image.setType(file.getContentType());
@@ -46,6 +46,19 @@ public class ImageService {
         return null;
     }
 
+    public String updateImageUsername(String userUsername, String newUserUsername) throws IOException {
+        ImageData image = imageRepository.findByUserUsername(userUsername);
+
+        image.setUserUsername(newUserUsername);
+
+        imageRepository.save(image);
+
+        if(image!=null){
+            return ("Image username update successfully: ");
+        }
+        return null;
+    }
+
     public ImageData getInfoByImageByName(String name) {
         Optional<ImageData> dbImage = imageRepository.findByName(name);
 
@@ -53,12 +66,12 @@ public class ImageService {
                 .name(dbImage.get().getName())
                 .type(dbImage.get().getType())
                 .imageData(ImageUtil.decompressImage(dbImage.get().getImageData()))
-                .userId(dbImage.get().getUserId()).build();
+                .userUsername(dbImage.get().getUserUsername()).build();
 
     }
 
-    public byte[] getImage(Integer userId) {
-        ImageData dbImage = imageRepository.findByUserId(userId);
+    public byte[] getImage(String userUsername) {
+        ImageData dbImage = imageRepository.findByUserUsername(userUsername);
         if(dbImage == null){
             return null;
         }
