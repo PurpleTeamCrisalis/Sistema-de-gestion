@@ -16,7 +16,7 @@ export const DetailModal = () => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
         startCancelingOrder(id);
-        Swal.fire("Orden eliminada", "", "success");
+        Swal.fire("Orden cancelada", "", "success");
       }
     });
   };
@@ -170,7 +170,7 @@ export const DetailModal = () => {
             >
               Cancelar orden
             </button>
-            <button
+            {/* <button
               type="button"
               className="btn btn-primary"
               // data-bs-dismiss="modal"
@@ -179,7 +179,7 @@ export const DetailModal = () => {
               }} // Llamar a la funcion para que cambie el estado de la orden a pagado.
             >
               Pagar orden
-            </button>
+            </button> */}
           </div>
         </div>
       </div>

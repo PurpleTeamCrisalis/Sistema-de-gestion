@@ -83,7 +83,7 @@ function TaxModal({ tax, setTax }) {
                             <h2 className="fs-5" id="exampleModalLabel">Añadir Impuesto</h2>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div className="modal-body d-flex flex-column align-items-center">
+                        <div className="modal-body d-flex flex-column align-items-center" style={{height:"50vh"}}>
                             <SearchBar rawList={charges} setFilteredList={setFilteredList} compareTag={"name"} />
                             <div className='listTax scroll'>
                                 {

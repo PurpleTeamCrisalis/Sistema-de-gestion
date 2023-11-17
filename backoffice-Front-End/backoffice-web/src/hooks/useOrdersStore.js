@@ -73,7 +73,9 @@ export function useOrdersStore() {
         totalDiscount: data.totalDiscount,
         discountService: data.discountService
       }))
+      getSuccessResponse("Orden Creada")
     } catch (error) {
+      getErrorResponse(error, "Orden")
       console.error(error)
     }
   }
