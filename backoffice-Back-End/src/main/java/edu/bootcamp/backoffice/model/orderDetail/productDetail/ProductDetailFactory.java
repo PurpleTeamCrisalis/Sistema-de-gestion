@@ -28,7 +28,7 @@ public class ProductDetailFactory {
     return productDetail;
   }
 
-  public ProductDetailResponse CreateResponse(
+  public ProductDetailResponse createResponse(
     ProductDetail productDetail
   ) {
     return ProductDetailResponse 
@@ -37,8 +37,8 @@ public class ProductDetailFactory {
     .productId(productDetail.getProduct().getId())
     .quantity(productDetail.getQuantity())
     .subTotal(productDetail.getSubTotal())
-    .taxCharges(productDetail.getTaxCharges())
-    .taxesApplied(productDetail.getTaxesApplied())
+    //.taxCharges(productDetail.getTaxCharges())
+    //.taxesApplied(productDetail.getTaxesApplied())
     .name(productDetail.getProduct().getName())
     .basePrice(productDetail.getPriceWithoutTaxes())
     .build();

@@ -1,10 +1,12 @@
 package edu.bootcamp.backoffice.model.order;
 
 import edu.bootcamp.backoffice.model.SoftDeletable;
+import edu.bootcamp.backoffice.model.Subscription.Subscription;
 import edu.bootcamp.backoffice.model.client.Client;
 import edu.bootcamp.backoffice.model.orderDetail.productDetail.ProductDetail;
 import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.ServiceDetail;
 import edu.bootcamp.backoffice.model.service.ServiceEntity;
+import edu.bootcamp.backoffice.model.taxByOrder.TaxByOrder;
 import edu.bootcamp.backoffice.model.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,12 +42,12 @@ public class Order implements SoftDeletable{
             nullable = false,
             updatable = false
         )
-    private String date;
+    private Date date;
 
     @Column(name = "total", nullable = false)
     private Double total;
 
-    @Column(name = "discountFactor", nullable = false)
+    @Column(name = "totalDiscount", nullable = false)
     private Double totalDiscount;
 
     @Column(name="enabled", nullable = false)
@@ -80,11 +82,19 @@ public class Order implements SoftDeletable{
         )
     private List<ServiceDetail> services = new ArrayList<>();
 
-    public void getFormattedDate() {
+    @OneToMany(
+            mappedBy = "order",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL
+    )
+    private List<TaxByOrder> taxesByOrder = new ArrayList<>();
+
+    public void getFormattedDate() {/*
         Calendar calendar = Calendar.getInstance();
         Date fecha = calendar.getTime();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        date = sdf.format(fecha);
+        date = sdf.format(fecha);*/
+        date = new Date();
     }
 
     public Boolean isDeleted() {
