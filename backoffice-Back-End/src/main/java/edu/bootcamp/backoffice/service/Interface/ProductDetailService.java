@@ -7,11 +7,13 @@ import edu.bootcamp.backoffice.model.orderDetail.productDetail.ProductDetail;
 import edu.bootcamp.backoffice.model.orderDetail.productDetail.dto.ProductDetailRequest;
 
 public interface ProductDetailService {
-  public void registerProductDetail (
+  /*public void registerProductDetail (
     List<ProductDetail> createProductRequests,
     Order order 
-  );
+  );*/
   public List<ProductDetail> getProductsDetails (
-    List<ProductDetailRequest> orderProductRequests
+    List<ProductDetailRequest> orderProductRequests,
+    StringBuilder errorBuilder,
+    Order order
   );
 }

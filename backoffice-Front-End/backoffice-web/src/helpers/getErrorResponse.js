@@ -14,7 +14,7 @@ export const getErrorResponse = (error, string) => {
       theme: "dark",
     });
   if (error.response.status === 401)
-    toast.error('No tienes autorización', {
+    toast.error("No tienes autorización", {
       position: "bottom-right",
       autoClose: 700,
       hideProgressBar: false,
@@ -24,4 +24,16 @@ export const getErrorResponse = (error, string) => {
       progress: undefined,
       theme: "dark",
     });
-}
+  if (error.response.status === 400) {
+    toast.error("Ya tiene suscripción activa con un servicio", {
+      position: "bottom-right",
+      autoClose: 700,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+  }
+};

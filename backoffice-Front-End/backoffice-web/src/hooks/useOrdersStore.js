@@ -1,8 +1,16 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { projectApi } from '../api'
-import { onAddNewOrder, onLoadOrders, onPullActiveOrder, onSetActiveOrder, onLoadOrderById, onLoadClientOrders, onDeleteCLientOrders } from '../redux'
-import Toastify from "toastify-js";
-import "toastify-js/src/toastify.css";
+import {
+  onAddNewOrder,
+  onLoadOrders,
+  onPullActiveOrder,
+  onSetActiveOrder,
+  onPullSelectedOrder,
+  onSetSelectedOrder,
+  onChangeOrderState,
+  onLoadClientOrders,
+  onDeleteCLientOrders
+} from '../redux'
 import { getErrorResponse } from '../helpers/getErrorResponse';
 import { getSuccessResponse } from '../helpers';
 
@@ -20,10 +28,13 @@ export function useOrdersStore() {
   async function startLoadingOrderById(id) {
     try {
       const { data } = await projectApi.get(`/order/${id}`)
-      dispatch(onLoadOrderById(data))
+      dispatch(onSetSelectedOrder(data))
     } catch (error) {
       console.error(error)
     }
+  }
+  function pullSelectedOrder() {
+    dispatch(onPullSelectedOrder())
   }
   async function startLoadingOrders() {
     try {
@@ -31,7 +42,7 @@ export function useOrdersStore() {
       dispatch(onLoadOrders(data))
       getSuccessResponse("Ordenes cargadas!")
     } catch (error) {
-      getErrorResponse(error)
+      getErrorResponse(error, "ordenes")
     }
   }
 
@@ -44,7 +55,7 @@ export function useOrdersStore() {
     }
   }
 
-  function deleteClientOrders(){
+  function deleteClientOrders() {
     dispatch(onDeleteCLientOrders());
   }
 
@@ -58,10 +69,24 @@ export function useOrdersStore() {
         products: data.products,
         enabled: data.enabled,
         id: data.id,
-        total: data.total
+        total: data.total,
+        totalDiscount: data.totalDiscount,
+        discountService: data.discountService
       }))
+      getSuccessResponse("Orden Creada")
     } catch (error) {
+      getErrorResponse(error, "Orden")
       console.error(error)
+    }
+  }
+
+  async function startCancelingOrder(id) {
+    try {
+      const { data } = await projectApi.delete(`/order/${id}`)
+      console.log(data)
+      dispatch(onChangeOrderState(data))
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -78,6 +103,8 @@ export function useOrdersStore() {
     setActiveOrder,
     pullActiveOrder,
     startLoadingOrderById,
-    deleteClientOrders
+    deleteClientOrders,
+    pullSelectedOrder,
+    startCancelingOrder
   }
 }

@@ -41,6 +41,7 @@ public class AuthController {
         }
         return new ResponseEntity<>("Credentials do not correspond to a valid user", HttpStatus.NOT_FOUND);
     }
+    
     @GetMapping(path="/logout")
     public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication){
         if (authentication != null) {

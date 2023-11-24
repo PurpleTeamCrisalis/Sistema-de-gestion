@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, {useState} from 'react'
 import NavComponent from '../NavComponent'
 import { useNavigate } from 'react-router-dom'
 import { useForm, useServicesStore } from '../../hooks';
@@ -8,19 +8,23 @@ import HeaderComponent from "../HeaderComponent";
 import "../../assets/styles/inputStyle.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
+import TaxModal from '../Modal/TaxModal';
+
 
 function EditServiceComponent() {
     const navigate = useNavigate();
     const { startUpdatingService, activeService, setActiveService, services } = useServicesStore();
-    const { name, description, basePrice, enabled, suportCharge, handleInputChange, emptyValidation } = useForm({
+    const { name, description, basePrice, enabled, suportCharge, handleInputChange, emptyValidation, taxes} = useForm({
         name: activeService?.name,
         description: activeService?.description,
         basePrice: activeService?.basePrice,
         enabled: activeService?.enabled,
         id: activeService?.id,
+        //taxes: activeService?.taxes,
         suportCharge: activeService?.suportCharge
     });
     const [isSpecial, setIsSpecial] = useState(activeService?.isSpecial);
+    const [tax, setTax] = useState(activeService?.taxes);
 
     // Edicion de servicio
     function editService(event) {
@@ -107,7 +111,8 @@ function EditServiceComponent() {
             //Si no es especial se manda un cero, para evitar que viaje un número cuando no debería
             startUpdatingService({
                 ...serviceaux,
-                suportCharge: isSpecial ? suportCharge : 0
+                suportCharge: isSpecial ? suportCharge : 0,
+                taxes: tax
             })
             Toastify({
                 text: "Servicio Actualizado",
@@ -271,6 +276,7 @@ function EditServiceComponent() {
                                             </div>
                                         </div>
                                     </div>
+                                    <TaxModal  tax={tax} setTax={setTax} handler={handleInputChange}/>
                                 </div>
                             </div>
                         </section>

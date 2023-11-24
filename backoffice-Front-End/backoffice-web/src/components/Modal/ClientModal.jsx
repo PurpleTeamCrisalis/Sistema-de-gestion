@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useClientsStore, useNewOrderStore } from "../../hooks";
+import SearchBar from "../Utils/SearchBar";
 
 export const ClientModal = () => {
   const { addClient } = useNewOrderStore();
   const { clients, startLoadingClient } = useClientsStore();
-  const [client, setClient] = useState(null);
+  const [selectedClient, setSelectedClient] = useState(null);
+  const [filteredList, setFilteredList] = useState([]);
 
   useEffect(() => {
     if (clients.length === 0) startLoadingClient();
@@ -18,7 +20,7 @@ export const ClientModal = () => {
       if (item.id == checkbox.id) {
         if (checkbox.checked) {
           tRow.classList.add("table-active");
-          setClient(client);
+          setSelectedClient(client);
         } else {
           tRow.classList.remove("table-active");
         }
@@ -35,12 +37,12 @@ export const ClientModal = () => {
       item.closest("tr").classList.remove("table-active");
       item.checked = false;
     }
-    setClient(null);
+    setSelectedClient(null);
   }
 
   function handleButtonClick() {
-    if (client == null) return;
-    addClient(client);
+    if (selectedClient == null) return;
+    addClient(selectedClient);
     cleanCheckBoxes();
   }
 
@@ -65,10 +67,16 @@ export const ClientModal = () => {
               className="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
+              onClick={cleanCheckBoxes}
             ></button>
           </div>
           <div className="modal-body modal-dialog-scrollable">
             <div className="bg-white rounded-3 overflow-hidden">
+              <SearchBar
+                rawList={clients}
+                setFilteredList={setFilteredList}
+                compareTag={"isbussiness"}
+              />
               <table className="table table-hover">
                 {/* Header de la table */}
                 <thead
@@ -85,30 +93,51 @@ export const ClientModal = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {clients.map((client) => (
-                    <tr key={client.id}>
-                      <td>
-                        <input
-                          type="checkbox"
-                          id={client.id}
-                          style={{
-                            color: "#000000",
-                            cursor: "pointer",
-                          }}
-                          onChange={(event) => checkActiveClient(event, client)}
-                          className="custom-checkbox"
-                        />
-                      </td>
-                      <td>
-                        {client.isbussiness ? "Empresa" : "Persona Fisica"}
-                      </td>
-                      <td>
-                        {client.isbussiness
-                          ? client.bussinessname
-                          : `${client.name} ${client.lastname}`}
-                      </td>
-                    </tr>
-                  ))}
+                  {filteredList?.map(
+                    (client) =>
+                      client.enabled && (
+                        <tr
+                          key={client.id}
+                          className={
+                            selectedClient
+                              ? selectedClient.id === client.id
+                                ? "table-active"
+                                : ""
+                              : ""
+                          }
+                        >
+                          <td>
+                            <input
+                              type="checkbox"
+                              id={client.id}
+                              style={{
+                                color: "#000000",
+                                cursor: "pointer",
+                              }}
+                              onChange={(event) =>
+                                checkActiveClient(event, client)
+                              }
+                              className="custom-checkbox"
+                              checked={
+                                selectedClient
+                                  ? selectedClient.id === client.id
+                                    ? true
+                                    : false
+                                  : ""
+                              }
+                            />
+                          </td>
+                          <td>
+                            {client.isbussiness ? "Empresa" : "Persona Fisica"}
+                          </td>
+                          <td>
+                            {client.isbussiness
+                              ? client.bussinessname
+                              : `${client.name} ${client.lastname}`}
+                          </td>
+                        </tr>
+                      )
+                  )}
                 </tbody>
               </table>
             </div>

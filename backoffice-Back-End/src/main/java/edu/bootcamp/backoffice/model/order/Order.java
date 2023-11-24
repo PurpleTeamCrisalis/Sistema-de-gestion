@@ -35,23 +35,29 @@ public class Order implements SoftDeletable{
     // @Column(name = "orderState", nullable = false)
     // private OrderState orderState;
 
-    @Column(name = "date", nullable = false, updatable = false)
+    @Column(
+            name = "date",
+            nullable = false,
+            updatable = false
+        )
     private String date;
 
-    // Total
     @Column(name = "total", nullable = false)
     private Double total;
+
+    @Column(name = "discountFactor", nullable = false)
+    private Double totalDiscount;
 
     @Column(name="enabled", nullable = false)
     private boolean enabled;
 
     @ManyToOne
-    // @JoinColumn(nullable = false) // Revisar como reacciona.
+    @JoinColumn(nullable = false)
     private User user;
 
     // Client
     @ManyToOne
-    // @JoinColumn(nullable = false) // Revisar como reacciona.
+    @JoinColumn(nullable = false)
     private Client client;
 
     // discountServiceId
@@ -59,11 +65,19 @@ public class Order implements SoftDeletable{
     private ServiceEntity discountService;
 
     // ProductDetail
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    @OneToMany(
+            mappedBy = "order",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL
+        )
     private List<ProductDetail> products = new ArrayList<>();
 
     // ServiceDetail
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    @OneToMany(
+            mappedBy = "order",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL
+        )
     private List<ServiceDetail> services = new ArrayList<>();
 
     public void getFormattedDate() {
@@ -71,16 +85,6 @@ public class Order implements SoftDeletable{
         Date fecha = calendar.getTime();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         date = sdf.format(fecha);
-    }
-
-    public void calculateTotal () {
-        total = 0.00;
-        for(ServiceDetail service : services) {
-            total = total + service.getSubTotal();
-        }
-        for(ProductDetail product : products) {
-            total = total + product.getSubTotal();
-        }
     }
 
     public Boolean isDeleted() {
