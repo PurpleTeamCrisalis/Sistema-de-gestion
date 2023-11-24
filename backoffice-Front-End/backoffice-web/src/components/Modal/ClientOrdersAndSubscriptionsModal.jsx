@@ -1,14 +1,20 @@
 import React, { useEffect } from "react";
 import { useClientsStore, useOrdersStore } from "../../hooks";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faXmark } from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
-import { Tooltip } from 'react-tooltip'
-
+import { Tooltip } from "react-tooltip";
 
 export const ClientOrdersAndSubscriptionsModal = () => {
-  const { clientSubscriptions, deleteClientSubscriptions, startUpdatingClient, activeClient, setActiveClient } = useClientsStore();
-  const { clientOrders, startLoadingOrderById, deleteClientOrders } = useOrdersStore();
+  const {
+    clientSubscriptions,
+    deleteClientSubscriptions,
+    startUpdatingClient,
+    activeClient,
+    setActiveClient,
+  } = useClientsStore();
+  const { clientOrders, startLoadingOrderById, deleteClientOrders } =
+    useOrdersStore();
 
   function showDetails(order) {
     startLoadingOrderById(order.id);
@@ -35,12 +41,14 @@ export const ClientOrdersAndSubscriptionsModal = () => {
           enabled: activeClient?.enabled,
           startdate: activeClient?.startdate,
           cuit: parseInt(activeClient?.cuit),
-          subscriptionId: subId
+          subscriptionId: subId,
         };
         startUpdatingClient(clientAux);
         deleteClientOrders;
         deleteClientSubscriptions;
-        const modal = bootstrap.Modal.getOrCreateInstance('#client-orders-modal');
+        const modal = bootstrap.Modal.getOrCreateInstance(
+          "#client-orders-modal"
+        );
         modal.hide();
         Swal.fire("Subscripción cancelada", "", "success");
       }
@@ -68,13 +76,19 @@ export const ClientOrdersAndSubscriptionsModal = () => {
               className="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
-              onClick={() => { deleteClientOrders; deleteClientSubscriptions }}
+              onClick={() => {
+                deleteClientOrders;
+                deleteClientSubscriptions;
+              }}
             ></button>
           </div>
 
           <div className="modal-body modal-dialog-scrollable">
             <h2 className="fs-5">Pedidos</h2>
-            <div className="bg-white rounded-3 overflow-auto" style={{ height: "40%" }}>
+            <div
+              className="bg-white rounded-3 overflow-auto"
+              style={{ height: "40%" }}
+            >
               <table className="table table-hover">
                 {/* Header de la table */}
                 <thead
@@ -84,27 +98,29 @@ export const ClientOrdersAndSubscriptionsModal = () => {
                     borderBottom: "2px solid black",
                   }}
                 >
-                  <tr>
+                  <tr style={{ textAlign: "center" }}>
                     <th scope="col">N°</th>
                     <th scope="col">Fecha</th>
                     <th scope="col">Total</th>
+                    <th scope="col">Estado</th>
                     <th scope="col">#</th>
                   </tr>
                 </thead>
                 <tbody>
                   {clientOrders.map((order) => (
-                    <tr key={order.id}>
-                      <td>
-                        {order.id}
+                    <tr key={order.id} style={{ textAlign: "center" }}>
+                      <td>{order.id}</td>
+                      <td>{order.date}</td>
+                      <td>${order.total.toFixed(2)}</td>
+                      <td
+                        style={{
+                          color: order.enabled ? "#198754" : "#a32525",
+                        }}
+                      >
+                        {order.enabled ? "Pagado" : "Cancelado"}
                       </td>
                       <td>
-                        {order.date}
-                      </td>
-                      <td>
-                        ${order.total}
-                      </td>
-                      <td>
-                      <Tooltip id="my-tooltip" />
+                        <Tooltip id="my-tooltip" />
                         <FontAwesomeIcon
                           icon={faEye}
                           data-tooltip-id="my-tooltip"
@@ -125,7 +141,10 @@ export const ClientOrdersAndSubscriptionsModal = () => {
               </table>
             </div>
             <h2 className="fs-5 mt-4">Subscripciones activas</h2>
-            <div className="bg-white rounded-3 overflow-auto" style={{ height: "40%" }}>
+            <div
+              className="bg-white rounded-3 overflow-auto"
+              style={{ height: "40%" }}
+            >
               <table className="table table-hover">
                 {/* Header de la table */}
                 <thead
@@ -135,35 +154,38 @@ export const ClientOrdersAndSubscriptionsModal = () => {
                     borderBottom: "2px solid black",
                   }}
                 >
-                  <tr>
+                  <tr style={{ textAlign: "center" }}>
                     <th scope="col">Servicio</th>
                     <th scope="col">#</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {clientSubscriptions.filter((subs) => subs.enabled === true).map((subscription) => (
-                    <tr key={subscription.id}>
-                      <td>
-                        {subscription.serviceName}
-                      </td>
-                      <td>
-                        <Tooltip id="my-tooltip" />
-                        <FontAwesomeIcon
-                          icon={faXmark}
-                          data-tooltip-id="my-tooltip"
-                          data-tooltip-content="Cancelar Subscripción"
-                          data-tooltip-place="top"
-                          style={{
-                            color: "#000000",
-                            cursor: "pointer",
-                          }}
-                          onClick={() => {
-                            disableSubscription(subscription.id, subscription.serviceName);
-                          }}
-                        />
-                      </td>
-                    </tr>
-                  ))}
+                  {clientSubscriptions
+                    .filter((subs) => subs.enabled === true)
+                    .map((subscription) => (
+                      <tr key={subscription.id} style={{ textAlign: "center" }}>
+                        <td>{subscription.serviceName}</td>
+                        <td>
+                          <Tooltip id="my-tooltip" />
+                          <FontAwesomeIcon
+                            icon={faXmark}
+                            data-tooltip-id="my-tooltip"
+                            data-tooltip-content="Cancelar Subscripción"
+                            data-tooltip-place="top"
+                            style={{
+                              color: "#000000",
+                              cursor: "pointer",
+                            }}
+                            onClick={() => {
+                              disableSubscription(
+                                subscription.id,
+                                subscription.serviceName
+                              );
+                            }}
+                          />
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>

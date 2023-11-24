@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.client.HttpClientErrorException;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -47,6 +48,15 @@ public class ApiExceptionHandler {
     @ResponseBody
     public ErrorMessage conflict(HttpServletRequest request, Exception exception){
         return new ErrorMessage(exception, request.getRequestURI());
+    }
+
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    @ExceptionHandler({
+            HttpClientErrorException.UnprocessableEntity.class
+    })
+    @ResponseBody
+    public void unprocessable(){
+        //Empty because http in case 401 not support body response
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)

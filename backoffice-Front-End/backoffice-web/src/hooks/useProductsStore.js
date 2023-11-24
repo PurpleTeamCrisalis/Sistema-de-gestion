@@ -25,12 +25,14 @@ export function useProductsStore() {
   }
   async function startAddingProduct(product) {
     try {
-      const { data } = await projectApi.post('/product/', product)
+      const { data } = await projectApi.post('/product/', product);
+
       dispatch(onAddNewProduct({
         name: data.name,
         description: data.description,
         basePrice: data.basePrice,
         enabled: data.enabled,
+        taxes: data.taxes,
         id: data.id
       }))
     } catch (error) {
@@ -39,15 +41,15 @@ export function useProductsStore() {
   }
   async function startDeletingProduct() {
     try {
-      await projectApi.delete(`/product/delete/${activeProduct.id}`)
-      dispatch(onDeleteProduct())
+      const { data } = await projectApi.delete(`/product/delete/${activeProduct.id}`)
+      dispatch(onDeleteProduct(data))
     } catch (error) {
       console.error(error)
     }
   }
   async function startUpdatingProduct(product) {
     try {
-      const {data} = await projectApi.patch(`/product/update/${product.id}`, product)
+      const { data } = await projectApi.patch(`/product/update/${product.id}`, product)
       dispatch(onUpdateProduct(data))
     } catch (error) {
       console.error(error)

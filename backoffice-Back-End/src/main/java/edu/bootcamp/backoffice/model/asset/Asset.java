@@ -2,6 +2,7 @@ package edu.bootcamp.backoffice.model.asset;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -18,6 +19,7 @@ import javax.persistence.OneToMany;
 
 import edu.bootcamp.backoffice.model.EntitiesConstraints;
 import edu.bootcamp.backoffice.model.SoftDeletable;
+import edu.bootcamp.backoffice.model.Tax.Tax;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -52,5 +54,7 @@ public abstract class Asset implements SoftDeletable {
 	public Boolean isNotDeleted() {
 		return enabled;
 	}
+
+	public abstract List<Tax> getAllTaxes();
 
 }

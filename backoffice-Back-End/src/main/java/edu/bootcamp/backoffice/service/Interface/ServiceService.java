@@ -19,6 +19,8 @@ public interface ServiceService {
 
 	public ServiceResponse delete(int id) throws InvalidIdFormatException;
 
-	public ServiceEntity getServiceById (Integer id);
-
+	public ServiceEntity getServiceById(
+			Integer id,
+			StringBuilder errorBuilder
+	);
 }

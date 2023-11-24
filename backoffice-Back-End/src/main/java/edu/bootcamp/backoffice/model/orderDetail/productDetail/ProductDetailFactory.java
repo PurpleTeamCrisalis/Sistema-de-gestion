@@ -1,5 +1,6 @@
 package edu.bootcamp.backoffice.model.orderDetail.productDetail;
 
+import edu.bootcamp.backoffice.model.order.Order;
 import org.springframework.stereotype.Component;
 
 import edu.bootcamp.backoffice.model.orderDetail.productDetail.dto.ProductDetailRequest;
@@ -11,24 +12,23 @@ public class ProductDetailFactory {
 
   public ProductDetail CreateEntity(
     ProductDetailRequest productDetailDTO,
-    Product product
+    Product product,
+    Order order
   ) {
     ProductDetail productDetail = ProductDetail
       .builder()
       .product(product)
+      .order(order)
       .quantity(productDetailDTO.getQuantity())
       .warranty(productDetailDTO.getWarranty())
       // .taxCharges(product.getTaxCharges())
       // .taxesApplied(product.getTaxesApplied())
       .subTotal(0.00)
       .build();
-    productDetail.calculateSubtotal();
-    productDetail.setTaxCharges(10.00);
-    productDetail.setTaxesApplied("IVA - Ganancias - IIBB");
     return productDetail;
   }
 
-  public ProductDetailResponse CreateResponse(
+  public ProductDetailResponse createResponse(
     ProductDetail productDetail
   ) {
     return ProductDetailResponse 
@@ -37,10 +37,10 @@ public class ProductDetailFactory {
     .productId(productDetail.getProduct().getId())
     .quantity(productDetail.getQuantity())
     .subTotal(productDetail.getSubTotal())
-    .taxCharges(productDetail.getTaxCharges())
-    .taxesApplied(productDetail.getTaxesApplied())
-            .name(productDetail.getProduct().getName())
-            .basePrice(productDetail.getProduct().getBasePrice())
+    //.taxCharges(productDetail.getTaxCharges())
+    //.taxesApplied(productDetail.getTaxesApplied())
+    .name(productDetail.getProduct().getName())
+    .basePrice(productDetail.getPriceWithoutTaxes())
     .build();
   }
 }

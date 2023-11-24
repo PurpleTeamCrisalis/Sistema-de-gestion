@@ -35,18 +35,20 @@ public class ServiceServiceImpl implements ServiceService {
 		this.validator = validator;
 
 	}
-/*
-	public boolean isPresent(ServiceRequest serviceDto) {
-		StringBuilder errors = new StringBuilder();
-		validateName(serviceDto.getName(), errors);
-		if (errors.length() > 0)
-			throw new InvalidCredentialsException("Invalid Product Name");
-		Optional<edu.bootcamp.backoffice.model.service.Service> result = serviceRepository.findByName(serviceDto.getName());
-		if (result.isPresent())
-			return !result.get().isDeleted();
-		return false;
-	}
-*/
+
+	/*
+	 * public boolean isPresent(ServiceRequest serviceDto) {
+	 * StringBuilder errors = new StringBuilder();
+	 * validateName(serviceDto.getName(), errors);
+	 * if (errors.length() > 0)
+	 * throw new InvalidCredentialsException("Invalid Product Name");
+	 * Optional<edu.bootcamp.backoffice.model.service.Service> result =
+	 * serviceRepository.findByName(serviceDto.getName());
+	 * if (result.isPresent())
+	 * return !result.get().isDeleted();
+	 * return false;
+	 * }
+	 */
 	private void validateNewServiceDbConflicts(ServiceRequest serviceRequest) {
 		Optional<ServiceEntity> result = serviceRepository.findByName(serviceRequest.getName());
 		if (result.isPresent())
@@ -58,12 +60,11 @@ public class ServiceServiceImpl implements ServiceService {
 		validateName(serviceRequest.getName(), errors);
 		validateDescription(serviceRequest.getDescription(), errors);
 		validator.validateLongValue(
-				(long)serviceRequest.getBasePrice(),
+				(long) serviceRequest.getBasePrice(),
 				Long.MAX_VALUE,
 				1L,
 				"Base price",
-				errors
-		);
+				errors);
 		validateErrors(errors);
 	}
 
@@ -71,10 +72,8 @@ public class ServiceServiceImpl implements ServiceService {
 		StringBuilder errors = new StringBuilder();
 		ServiceEntity service = validator.validateIdExistence(
 				id,
-				serviceRepository
-		);
-		if (serviceRequest.getName() != null)
-		{
+				serviceRepository);
+		if (serviceRequest.getName() != null) {
 			validateName(serviceRequest.getName(), errors);
 			service.setName(serviceRequest.getName());
 		}
@@ -82,89 +81,95 @@ public class ServiceServiceImpl implements ServiceService {
 			validateDescription(serviceRequest.getDescription(), errors);
 			service.setDescription(serviceRequest.getDescription());
 		}
-		if(serviceRequest.getBasePrice() > 0)
+		if (serviceRequest.getBasePrice() > 0)
 			service.setBasePrice(serviceRequest.getBasePrice());
 		else
 			validator.validateLongValue(
-					(long)serviceRequest.getBasePrice(),
+					(long) serviceRequest.getBasePrice(),
 					Long.MAX_VALUE,
 					0L,
 					"Base price",
-					errors
-			);
-		if(serviceRequest.getEnabled() != null)
+					errors);
+		if (serviceRequest.getEnabled() != null)
 			service.setEnabled(serviceRequest.getEnabled());
-		if(serviceRequest.getIsSpecial() != null){
+		if (serviceRequest.getIsSpecial() != null) {
 			service.setSpecial(serviceRequest.getIsSpecial());
-			if (serviceRequest.getIsSpecial()){
-				if(serviceRequest.getBasePrice() > 0)
+			if (serviceRequest.getIsSpecial()) {
+				if (serviceRequest.getBasePrice() > 0)
 					service.setSuportCharge(serviceRequest.getSuportCharge());
 				else
 					validator.validateLongValue(
-							(long)serviceRequest.getSuportCharge(),
+							(long) serviceRequest.getSuportCharge(),
 							Long.MAX_VALUE,
 							0L,
 							"Support Charge",
-							errors
-					);
-			}else{
+							errors);
+			} else {
 				service.setSuportCharge(0.0);
 			}
 		}
+		service.setTaxes(dtoFactory.createTaxResponses(serviceRequest.getTaxes()));
 		validateErrors(errors);
 		return service;
 
 	}
 
 	/*
-	private ServiceEntity validateUpdateConflicts(int id, UpdateServiceRequest serviceDto) {
-		Optional<ServiceEntity> result = serviceRepository.findByName(serviceDto.getName());
-		ServiceEntity serviceEntity;
-		boolean modified = !result.isPresent();
-		if (modified) {
-			serviceEntity = findAndSetServicenameIfNotNull(id, serviceDto.getName());
-		} else {
-			serviceEntity = validateEnabledServiceSearchResult(result, id);
-			modified |= mergeEnabled(serviceDto, serviceEntity);
-			if (!modified) {
-				throw new AlreadyUpdatedException("Not modified database.");
-			}
-
-		}
-		return serviceEntity;
-	}
-*//*
-	private ServiceEntity validateEnabledServiceSearchResult(Optional<ServiceEntity> result, int requesteId) {
-		ServiceEntity serviceEntity = result.get();
-
-		if (serviceEntity.getId() != requesteId)
-			throw new AlreadyRegisteredException("Already registered service");
-		return serviceEntity;
-	}
-*//*
-	private ServiceEntity findAndSetServicenameIfNotNull(int id, String name) {
-		ServiceEntity serviceEntity = validator.completeValidationForId(id, serviceRepository);
-		if (name != null)
-			serviceEntity.setName(name);
-		;
-		return serviceEntity;
-	}
-
-	private boolean mergeEnabled(UpdateServiceRequest serviceDto, ServiceEntity serviceEntity) {
-		Boolean dtoEnabled = serviceDto.getEnabled();
-		Boolean serviceEnabled = serviceEntity.isEnabled();
-		if (dtoEnabled != null && !serviceEnabled.equals(dtoEnabled)) {
-			serviceEntity.setEnabled(serviceDto.getEnabled());
-			return true;
-		}
-		return false;
-	}*/
+	 * private ServiceEntity validateUpdateConflicts(int id, UpdateServiceRequest
+	 * serviceDto) {
+	 * Optional<ServiceEntity> result =
+	 * serviceRepository.findByName(serviceDto.getName());
+	 * ServiceEntity serviceEntity;
+	 * boolean modified = !result.isPresent();
+	 * if (modified) {
+	 * serviceEntity = findAndSetServicenameIfNotNull(id, serviceDto.getName());
+	 * } else {
+	 * serviceEntity = validateEnabledServiceSearchResult(result, id);
+	 * modified |= mergeEnabled(serviceDto, serviceEntity);
+	 * if (!modified) {
+	 * throw new AlreadyUpdatedException("Not modified database.");
+	 * }
+	 * 
+	 * }
+	 * return serviceEntity;
+	 * }
+	 *//*
+			 * private ServiceEntity
+			 * validateEnabledServiceSearchResult(Optional<ServiceEntity> result, int
+			 * requesteId) {
+			 * ServiceEntity serviceEntity = result.get();
+			 * 
+			 * if (serviceEntity.getId() != requesteId)
+			 * throw new AlreadyRegisteredException("Already registered service");
+			 * return serviceEntity;
+			 * }
+			 *//*
+					 * private ServiceEntity findAndSetServicenameIfNotNull(int id, String name) {
+					 * ServiceEntity serviceEntity = validator.completeValidationForId(id,
+					 * serviceRepository);
+					 * if (name != null)
+					 * serviceEntity.setName(name);
+					 * ;
+					 * return serviceEntity;
+					 * }
+					 * 
+					 * private boolean mergeEnabled(UpdateServiceRequest serviceDto, ServiceEntity
+					 * serviceEntity) {
+					 * Boolean dtoEnabled = serviceDto.getEnabled();
+					 * Boolean serviceEnabled = serviceEntity.isEnabled();
+					 * if (dtoEnabled != null && !serviceEnabled.equals(dtoEnabled)) {
+					 * serviceEntity.setEnabled(serviceDto.getEnabled());
+					 * return true;
+					 * }
+					 * return false;
+					 * }
+					 */
 
 	public List<ServiceResponse> getProducts() {
 		List<ServiceEntity> serviceEntities = serviceRepository.findAll();
 		List<ServiceResponse> dtos = new ArrayList<>();
 		for (ServiceEntity s : serviceEntities)
-			dtos.add(dtoFactory.createResponse(s));
+			dtos.add(dtoFactory.createServiceResponse(s));
 		if (dtos.isEmpty())
 			throw new EmptyTableException("There aren't registered services.");
 		return dtos;
@@ -194,46 +199,52 @@ public class ServiceServiceImpl implements ServiceService {
 				EntitiesConstraints.DESCRIPTION_MAX_LENGTH, errorBuilder, "description");
 	}
 
-	
-
-
 	@Override
 	public ServiceResponse registerService(ServiceRequest serviceDto) {
 		validateNewServiceRequest(serviceDto);
 		validateNewServiceDbConflicts(serviceDto);
 		ServiceEntity serviceEntity = dtoFactory.CreateEntityForInsertNewRecord(serviceDto);
 		serviceEntity = serviceRepository.save(serviceEntity);
-		return dtoFactory.createResponse(serviceEntity);
+		return dtoFactory.createServiceResponse(serviceEntity);
 	}
 
 	@Override
 	public ServiceResponse get(int id) {
 		ServiceEntity serviceEntity = validator.completeValidationForId(id, serviceRepository);
-		return dtoFactory.createResponse(serviceEntity);
+		return dtoFactory.createServiceResponse(serviceEntity);
 	}
 
-	public ServiceEntity getServiceById(Integer id) {
-		return validator.completeValidationForId(id, serviceRepository);
+	public ServiceEntity getServiceById(
+			Integer id,
+			StringBuilder errorBuilder
+			)
+	{
+		return validator.validateFkExistence(id, serviceRepository, errorBuilder);
 	}
 
 	@Override
 	public ServiceResponse update(int id, UpdateServiceRequest serviceDto) throws InvalidIdFormatException {
 		ServiceEntity serviceEntity = validateUpdateRequest(id, serviceDto);
 		serviceEntity = serviceRepository.save(serviceEntity);
-		return dtoFactory.createResponse(serviceEntity);
+		return dtoFactory.createServiceResponse(serviceEntity);
 	}
 
 	@Override
 	public ServiceResponse delete(int id) throws InvalidIdFormatException {
 		ServiceEntity serviceEntity = validator.validateSoftDeletableEntityExistence(id, serviceRepository);
-		//serviceEntity.getTaxes().clear();
+		// serviceEntity.getTaxes().clear();
 		// List<Taxs> taxs = service.getTaxs();
 		// if (taxs.size() > 0) {
-		// 	service.setEnabled(false);
-		// 	serviceRepository.save(service);
+		// service.setEnabled(false);
+		// serviceRepository.save(service);
 		// } else
+		if (serviceEntity.getServiceDetails().isEmpty() && serviceEntity.getServiceSubscriptions().isEmpty()) {
 			serviceRepository.delete(serviceEntity);
-		return dtoFactory.createResponse(serviceEntity);
+		} else {
+			serviceEntity.setEnabled(false);
+			serviceRepository.save(serviceEntity);
+		}
+		return dtoFactory.createServiceResponse(serviceEntity);
 	}
 
 	@Override
@@ -241,6 +252,9 @@ public class ServiceServiceImpl implements ServiceService {
 		List<ServiceEntity> serviceEntities = serviceRepository.findAll();
 		List<ServiceResponse> dtos = new ArrayList<>();
 		for (ServiceEntity s : serviceEntities)
-			dtos.add(dtoFactory.createResponse(s));
+			dtos.add(dtoFactory.createServiceResponse(s));
+		if (dtos.isEmpty())
+			throw new EmptyTableException("There aren't registered services.");
 		return dtos;
-	}}
+	}
+}

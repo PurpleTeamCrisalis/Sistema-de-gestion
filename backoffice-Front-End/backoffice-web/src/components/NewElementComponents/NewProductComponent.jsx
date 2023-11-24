@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import NavComponent from '../NavComponent'
 import { useNavigate } from 'react-router-dom'
 import { useChargesStore, useForm, useProductsStore } from '../../hooks'
@@ -6,6 +6,8 @@ import Toastify from 'toastify-js'
 import "toastify-js/src/toastify.css"
 import "../../assets/styles/inputStyle.css"
 import HeaderComponent from "../HeaderComponent";
+import TaxModal from '../Modal/TaxModal'
+
 
 const formDTO = {
     name: "",
@@ -18,6 +20,8 @@ function NewProductComponent() {
     const { startAddingProduct, products } = useProductsStore();
     const { charges, startLoadingCharges } = useChargesStore();
     const { name, description, basePrice, handleInputChange, clearForm, emptyValidation } = useForm(formDTO);
+    const [tax, setTax] = useState([]); //Guarda los impuestos seleccionados por id
+
 
     useEffect(() => {
         if(charges.length === 0)startLoadingCharges();
@@ -91,8 +95,8 @@ function NewProductComponent() {
         }
 
         try {
-            console.log(product);
-            startAddingProduct(product);
+            startAddingProduct({...product, taxes: tax});
+            setTax([]); //Vacia los datos de impuestos
             clearForm();
             Toastify({
                 text: "Producto Creado",
@@ -182,6 +186,7 @@ function NewProductComponent() {
                                             
                                         </div>
                                     </div>
+                                    <TaxModal tax={tax} setTax={setTax}/>   
                                 </div>
                             </div>
                         </section>

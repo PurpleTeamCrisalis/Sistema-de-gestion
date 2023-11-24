@@ -37,8 +37,8 @@ export const servicesSlice = createSlice({
         }
       }
     },
-    onDeleteService: (state) => {
-      state.services = state.services.filter(service => service.id !== state.activeService.id)
+    onDeleteService: (state, {payload}) => {
+      state.services = state.services.map(service => service.id === payload.id ? payload : service)
       state.activeService = null
     }
   }

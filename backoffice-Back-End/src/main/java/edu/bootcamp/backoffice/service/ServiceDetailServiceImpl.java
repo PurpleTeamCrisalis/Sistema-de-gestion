@@ -30,7 +30,7 @@ public class ServiceDetailServiceImpl implements ServiceDetailService{
     this.serviceDetailRepository = serviceDetailRepository;
     this.serviceService = serviceService;
   }
-
+/*
   public void registerServiceDetail(
     List<ServiceDetail> createServiceRequests,
     Order order
@@ -40,19 +40,24 @@ public class ServiceDetailServiceImpl implements ServiceDetailService{
       serviceDetail.setOrder(order);
       serviceDetailRepository.save(serviceDetail);
     }
-  }
+  }*/
 
   public List<ServiceDetail> getServicesDetails(
-    List<ServiceDetailRequest> orderServiceRequests
+    List<ServiceDetailRequest> orderServiceRequests,
+    StringBuilder errorBuilder,
+    Order order
   ) {
     List<ServiceDetail> services = new ArrayList<ServiceDetail>();
     for (ServiceDetailRequest serviceDetailRequest : orderServiceRequests) {
-      // Valido que exista Service --Por ahora lo hardcodeo jeje--
-      ServiceEntity service = serviceService.getServiceById(serviceDetailRequest.getServiceId());
-      // Creo la entidad serviceDetail
-      ServiceDetail serviceDetail = serviceDetailFactory.CreateEntity(service);
-      // Agrego serviceDetail a la orden
-      services.add(serviceDetail);
+      ServiceEntity service = serviceService.getServiceById(
+              serviceDetailRequest.getServiceId(),
+              errorBuilder
+      );
+      if (service != null)
+      {
+        ServiceDetail serviceDetail = serviceDetailFactory.CreateEntity(service, order);
+        services.add(serviceDetail);
+      }
     }
     return services;
   }

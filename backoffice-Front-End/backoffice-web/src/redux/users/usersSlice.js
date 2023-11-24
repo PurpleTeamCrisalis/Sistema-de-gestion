@@ -6,13 +6,12 @@ const initialState = {
   activeUser: null
 }
 
-export const userSlice = createSlice({
+export const usersSlice = createSlice({
   name: 'users',
   initialState,
   reducers: {
     onLoadUsers: (state, { payload = [] }) => {
       state.isLoadingUsers = false
-      // state.users = payload
       payload.forEach(user => {
         const exists = state.users.some(dbUser => dbUser.id === user.id)
         if (!exists) state.users.push(user)
@@ -45,4 +44,4 @@ export const userSlice = createSlice({
 });
 
 // Action creators are generated for each case redicer function
-export const { onLoadUsers, onAddNewUser, onSetActiveUser, onDeleteUser, onPullActiveUser, onUpdateUser } = userSlice.actions;
+export const { onLoadUsers, onAddNewUser, onSetActiveUser, onDeleteUser, onPullActiveUser, onUpdateUser } = usersSlice.actions;

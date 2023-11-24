@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNewOrderStore, useProductsStore } from "../../hooks";
+import SearchBar from "../Utils/SearchBar";
 
 export const ProductModal = () => {
   const { addProducts } = useNewOrderStore();
   const { products, startLoadingProducts } = useProductsStore();
   const [productsSelected, setProductsSelected] = useState([]);
+  const [filteredList, setFilteredList] = useState([]);
+  const [checkItems, setCheckItems] = useState({});
 
   useEffect(() => {
     setTimeout(() => {
@@ -21,11 +24,13 @@ export const ProductModal = () => {
         if (checkbox.checked) {
           tRow.classList.add("table-active");
           setProductsSelected([...productsSelected, bien]);
+          setCheckItems({ ...checkItems, [bien.id]: true });
         } else {
           tRow.classList.remove("table-active");
           setProductsSelected(
             [...productsSelected].filter((product) => product.id !== bien.id)
           );
+          setCheckItems({ ...checkItems, [bien.id]: false });
         }
       }
     }
@@ -38,6 +43,7 @@ export const ProductModal = () => {
       item.checked = false;
     }
     setProductsSelected([]);
+    setCheckItems({});
   }
 
   function handleButtonClick() {
@@ -71,6 +77,11 @@ export const ProductModal = () => {
           </div>
           <div className="modal-body modal-dialog-scrollable">
             <div className="bg-white rounded-3 overflow-hidden">
+              <SearchBar
+                rawList={products}
+                setFilteredList={setFilteredList}
+                compareTag={"name"}
+              />
               <table className="table table-hover">
                 {/* Header de la table */}
                 <thead
@@ -80,31 +91,45 @@ export const ProductModal = () => {
                     borderBottom: "2px solid black",
                   }}
                 >
-                  <tr>
+                  <tr style={{ textAlign: "center" }}>
                     <th scope="col">#</th>
                     <th scope="col">Nombre</th>
                     <th scope="col">Detalle</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {products.map((product) => (
-                    <tr key={product.id}>
-                      <td>
-                        <input
-                          type="checkbox"
-                          id={product.id}
-                          style={{
-                            color: "#000000",
-                            cursor: "pointer",
-                          }}
-                          onChange={(event) => checkActiveItem(event, product)}
-                          className="custom-checkbox"
-                        />
-                      </td>
-                      <td>{product.name}</td>
-                      <td>{product.description}</td>
-                    </tr>
-                  ))}
+                  {filteredList?.map(
+                    (product) =>
+                      product.enabled && (
+                        <tr
+                          key={product.id}
+                          style={{ textAlign: "center" }}
+                          className={
+                            checkItems[product.id] ? "table-active" : ""
+                          }
+                        >
+                          <td>
+                            <input
+                              type="checkbox"
+                              id={product.id}
+                              style={{
+                                color: "#000000",
+                                cursor: "pointer",
+                              }}
+                              onChange={(event) =>
+                                checkActiveItem(event, product)
+                              }
+                              className="custom-checkbox"
+                              defaultChecked={checkItems[product.id]}
+                            />
+                          </td>
+                          <td>{product.name}</td>
+                          <td className="text-overflow">
+                            {product.description}
+                          </td>
+                        </tr>
+                      )
+                  )}
                 </tbody>
               </table>
             </div>

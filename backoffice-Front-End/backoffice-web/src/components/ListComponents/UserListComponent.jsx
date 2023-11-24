@@ -17,13 +17,19 @@ function UserListComponent() {
   //   const { data } = useFetch("http://localhost:8080/user");
   const navigate = useNavigate();
 
-  const { users, startLoadingUsers, setActiveUser, startDeletingUser, activeUser } = useUsersStore();
-  const { user } = useAuthStore()
+  const {
+    users,
+    startLoadingUsers,
+    setActiveUser,
+    startDeletingUser,
+    activeUser,
+  } = useUsersStore();
+  const { user } = useAuthStore();
 
   const [filteredList, setFilteredList] = useState(users);
 
   useEffect(() => {
-    if(users.length === 0) startLoadingUsers();
+    if (users.length === 0) startLoadingUsers();
   }, []);
 
   function checkActiveUser(event, user) {
@@ -112,13 +118,16 @@ function UserListComponent() {
               removeHandler={deleteUser}
               name=""
             />
-            <SearchBar rawList={users} setFilteredList={setFilteredList} compareTag={"username"}/>
+            <SearchBar
+              rawList={users}
+              setFilteredList={setFilteredList}
+              compareTag={"username"}
+            />
             {/* Table Section */}
             <section
               className="d-flex justify-content-center rounded-3 custom-shadow tabla-container-color"
               style={{ maxHeight: "85vh", overflowY: "auto" }}
             >
-
               <table className="table table-color">
                 {/* Header de la table */}
                 <thead
@@ -151,7 +160,9 @@ function UserListComponent() {
                         />
                       </td>
                       <td>{user.username}</td>
-                      <td>{user.enabled ? "Habilitado" : "Deshabilitado"}</td>
+                      <td style={{ color: user.enabled ? "#198754" : "red" }}>
+                        {user.enabled ? "Habilitado" : "Deshabilitado"}
+                      </td>
                       <td>
                         <FontAwesomeIcon
                           icon={faPenToSquare}
