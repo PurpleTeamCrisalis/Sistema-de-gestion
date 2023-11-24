@@ -18,7 +18,7 @@ import javax.persistence.*;
 // @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 // @DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.STRING)
 public abstract class OrderDetail
-{
+{/*
     @Column(
             name = "taxesApplied", nullable = false,
             length = EntitiesConstraints.TAXES_APPLIED_MAX_LENGTH
@@ -26,7 +26,7 @@ public abstract class OrderDetail
     private String taxesApplied;
 
     @Column(name = "taxCharges", nullable = false)
-    private Double taxCharges;
+    private Double taxCharges;*/
 
     @Column(name = "subTotal", nullable = false)
     private Double subTotal;

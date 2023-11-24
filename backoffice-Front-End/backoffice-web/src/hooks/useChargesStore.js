@@ -16,7 +16,8 @@ export function useChargesStore() {
     }
     async function startLoadingCharges() {
         try {
-            const { data } = await projectApi.get('/charge/list')
+            const { data } = await projectApi.get('/charge/list');
+            console.log(data)
             if (data.length === 0) throw { response: { status: 404 } }
             dispatch(onLoadCharges(data))
             getSuccessResponse("Impuestos cargados!")

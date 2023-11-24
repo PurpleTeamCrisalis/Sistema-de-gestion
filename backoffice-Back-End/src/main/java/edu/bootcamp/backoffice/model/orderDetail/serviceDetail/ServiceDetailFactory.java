@@ -19,11 +19,12 @@ public class ServiceDetailFactory {
       .builder()
       .service(serviceEntity)
       .order(order)
+      .order(order)
       .build();
     return serviceDetail;
   }
 
-  public ServiceDetailResponse CreateResponse(
+  public ServiceDetailResponse createResponse(
     ServiceDetail serviceDetail
     )
   {
@@ -32,8 +33,8 @@ public class ServiceDetailFactory {
     .id(serviceDetail.getId())
     .serviceId(serviceDetail.getService().getId())
     .subTotal(serviceDetail.getSubTotal())
-    .taxesApplied(serviceDetail.getTaxesApplied())
-    .taxCharges(serviceDetail.getTaxCharges())
+    // .taxesApplied(serviceDetail.getTaxesApplied())
+    // .taxCharges(serviceDetail.getTaxCharges())
     .name(serviceDetail.getService().getName())
     .basePrice(serviceDetail.getPriceWithoutTaxes())
     .build();

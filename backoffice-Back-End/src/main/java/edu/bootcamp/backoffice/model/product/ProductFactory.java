@@ -6,6 +6,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
 import org.springframework.stereotype.Component;
 
 import edu.bootcamp.backoffice.model.Tax.Tax;
@@ -17,8 +23,18 @@ import edu.bootcamp.backoffice.model.order.Order;
 import edu.bootcamp.backoffice.model.order.dto.OrderResponse;
 import edu.bootcamp.backoffice.model.orderDetail.productDetail.dto.ProductDetailResponse;
 import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.dto.ServiceDetailResponse;
+import edu.bootcamp.backoffice.model.Tax.Tax;
+import edu.bootcamp.backoffice.model.Tax.TaxFactory;
+import edu.bootcamp.backoffice.model.Tax.dto.ChargeRequest;
+import edu.bootcamp.backoffice.model.Tax.dto.ChargeResponse;
+import edu.bootcamp.backoffice.model.client.dto.ClientResponse;
+import edu.bootcamp.backoffice.model.order.Order;
+import edu.bootcamp.backoffice.model.order.dto.OrderResponse;
+import edu.bootcamp.backoffice.model.orderDetail.productDetail.dto.ProductDetailResponse;
+import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.dto.ServiceDetailResponse;
 import edu.bootcamp.backoffice.model.product.dto.ProductRequest;
 import edu.bootcamp.backoffice.model.product.dto.ProductResponse;
+import edu.bootcamp.backoffice.repository.TaxRepository;
 import edu.bootcamp.backoffice.repository.TaxRepository;
 
 @Component
@@ -33,7 +49,6 @@ public class ProductFactory {
 	}
 
 	public Product CreateProductEntity(String name, String description, double basePrice, List<Tax> taxes) {
-
 		return Product.builder().name(name).description(description).basePrice(basePrice).taxes(taxes).enabled(true)
 				.build();
 	}

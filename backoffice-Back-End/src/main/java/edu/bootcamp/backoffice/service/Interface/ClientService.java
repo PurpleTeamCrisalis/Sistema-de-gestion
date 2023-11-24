@@ -32,6 +32,7 @@ public interface ClientService {
             throws InvalidIdFormatException;
 
     public void registerSubscriptions(Client client, List<ServiceDetail> services);
+    public void createSubscriptionsAndMergeWithClient(Client client, List<ServiceDetail> services);
 
     public ServiceEntity getDiscountService(Client client);
 
