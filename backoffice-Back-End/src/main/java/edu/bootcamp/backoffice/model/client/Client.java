@@ -98,7 +98,8 @@ public class Client implements SoftDeletable {
 
     @OneToMany(
             mappedBy = "client",
-            fetch = FetchType.LAZY
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL
     )
     private List<Subscription> clientSubscriptions = new ArrayList<>();
 

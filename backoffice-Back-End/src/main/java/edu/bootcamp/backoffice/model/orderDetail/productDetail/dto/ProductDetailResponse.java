@@ -23,13 +23,13 @@ public class ProductDetailResponse {
 
   @JsonProperty("subTotal")
   private Double subTotal;
-
+/*
   @JsonProperty("taxesApplied")
   private String taxesApplied;
 
   @JsonProperty("taxCharges")
   private Double taxCharges;
-
+*/
   @JsonProperty("name")
   private String name;
 

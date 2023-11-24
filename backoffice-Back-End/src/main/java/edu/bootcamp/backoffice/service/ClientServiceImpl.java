@@ -350,6 +350,32 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
+    public void createSubscriptionsAndMergeWithClient(
+            Client client,
+            List<ServiceDetail> serviceDetails
+        )
+    {
+        if (client == null || serviceDetails == null)
+            throw new IllegalArgumentException("Client and services must not be null");
+        StringBuilder errorBuilder = new StringBuilder();
+        for (ServiceDetail detail : serviceDetails)
+        {
+            ServiceEntity service = detail.getService();
+            if (!clientHaveActiveSubscription(client, service, errorBuilder)) {
+                Subscription subscription = new Subscription();
+                subscription.setClient(client);
+                subscription.setEnabled(true);
+                subscription.setService(service);
+                service.getServiceSubscriptions().add(subscription);
+                client.getClientSubscriptions().add(subscription);
+            }
+        }
+        if(errorBuilder.length()>0)
+            throw new IllegalArgumentException(errorBuilder.toString());
+    }
+
+/*
+    @Override
     public void registerSubscriptions(Client client, List<ServiceDetail> serviceDetails) {
         //Verifica que los parámetros no sean nulos
         if (client == null || serviceDetails == null) {
@@ -377,14 +403,17 @@ public class ClientServiceImpl implements ClientService {
             }
         }
     }
-
+*/
     public Boolean clientHaveActiveSubscription(Client client, ServiceEntity service, StringBuilder errorBuilder) {
         if (client == null || service == null) {
             throw new IllegalArgumentException("Client and service must not be null");
         }
 
-        StringBuilder niceError = new StringBuilder(service.getName() + " have conflicts");
-
+        StringBuilder niceError = new StringBuilder(
+                client.getName() +
+                        " already has a suscription for " +
+                        service.getName()
+        );
         for (Subscription sub : client.getClientSubscriptions()) {
             ServiceEntity subService = sub.getService();
             if (subService != null && subService.getId() != null && subService.getId().equals(service.getId())) {

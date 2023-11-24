@@ -1,13 +1,17 @@
 package edu.bootcamp.backoffice.model.Tax;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.*;
 
 import edu.bootcamp.backoffice.model.SoftDeletable;
 import edu.bootcamp.backoffice.model.EntitiesConstraints;
+import edu.bootcamp.backoffice.model.Subscription.Subscription;
 import edu.bootcamp.backoffice.model.product.Product;
 import edu.bootcamp.backoffice.model.service.ServiceEntity;
+import edu.bootcamp.backoffice.model.taxByOrder.TaxByOrder;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -49,6 +53,13 @@ public class Tax implements SoftDeletable{
         nullable = false
     )
     private boolean enabled = true;
+
+    @OneToMany(
+            mappedBy = "tax",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL
+    )
+    private List<TaxByOrder> taxesByOrder = new ArrayList<>();
 
     //@Override
     public Boolean isDeleted() {
