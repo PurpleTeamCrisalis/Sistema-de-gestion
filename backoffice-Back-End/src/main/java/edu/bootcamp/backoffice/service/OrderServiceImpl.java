@@ -1,7 +1,9 @@
 package edu.bootcamp.backoffice.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import edu.bootcamp.backoffice.config.AppConstants;
 import edu.bootcamp.backoffice.model.Tax.Tax;
@@ -12,6 +14,7 @@ import edu.bootcamp.backoffice.model.orderDetail.productDetail.dto.ProductDetail
 import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.dto.ServiceDetailRequest;
 import edu.bootcamp.backoffice.model.product.Product;
 import edu.bootcamp.backoffice.model.service.ServiceEntity;
+import edu.bootcamp.backoffice.model.taxByOrder.TaxByOrder;
 import edu.bootcamp.backoffice.service.Interface.ClientService;
 import edu.bootcamp.backoffice.service.Interface.UserService;
 import org.springframework.stereotype.Service;
@@ -77,7 +80,10 @@ public class OrderServiceImpl implements OrderService {
       throw new IllegalArgumentException(errorBuilder.toString());
     order.setUser(user);
     completeOrderTotals(order);
-    clientService.registerSubscriptions(order.getClient(), order.getServices());
+    clientService.createSubscriptionsAndMergeWithClient(
+            order.getClient(),
+            order.getServices()
+    );
     order = orderRepository.save(order);
     return orderFactory.createOrderResponse(order);
   }
@@ -102,15 +108,22 @@ public class OrderServiceImpl implements OrderService {
 
   private void completeOrderTotals(Order order)
   {
+    Map<Integer, TaxByOrder> taxesByOrder = new HashMap<>();
     double totalWithoutDiscount = completeServicesSubtotal(
-            order.getServices()
+            order.getServices(),
+            taxesByOrder
     );
     double productsSubtotal = completeProductsSubtotal(
-            order.getProducts()
+            order.getProducts(),
+            taxesByOrder
     );
     completeOrderDiscount(order, productsSubtotal);
     totalWithoutDiscount += productsSubtotal - order.getTotalDiscount();
     order.setTotal(totalWithoutDiscount);
+    List<TaxByOrder> taxChargesList = new ArrayList<>(taxesByOrder.values());
+    for (TaxByOrder taxByOrder : taxChargesList)
+      taxByOrder.setOrder(order);
+    order.setTaxesByOrder(taxChargesList);
   }
 
   private void completeOrderDiscount(
@@ -128,28 +141,30 @@ public class OrderServiceImpl implements OrderService {
   }
 
   private Double completeServicesSubtotal(
-          List<ServiceDetail> services
+          List<ServiceDetail> services,
+          Map<Integer, TaxByOrder> taxesByOrder
     )
   {
     double total = 0.0;
     for(ServiceDetail serviceDetail : services)
     {
-      setServicePriceWithoutTaxes(serviceDetail);
-      completeDetailSubtotal(serviceDetail);
+      setServiceGrossPrice(serviceDetail);
+      applyTaxes(serviceDetail, taxesByOrder);
       total += serviceDetail.getSubTotal();
     }
     return total;
   }
 
   private Double completeProductsSubtotal(
-          List<ProductDetail> productDetails
+          List<ProductDetail> productDetails,
+          Map<Integer, TaxByOrder> taxesByOrder
     )
   {
     double total = 0.0;
     for(ProductDetail productDetail : productDetails)
     {
-      setProductPriceWithoutTaxes(productDetail);
-      completeDetailSubtotal(productDetail);
+      setProductGrossPrice(productDetail);
+      applyTaxes(productDetail, taxesByOrder);
       Double subtotal = productDetail.getSubTotal();
       subtotal *= productDetail.getQuantity();
       productDetail.setSubTotal(subtotal);
@@ -170,7 +185,7 @@ public class OrderServiceImpl implements OrderService {
     return orderDiscount;
   }
 
-  private Double setServicePriceWithoutTaxes(
+  private void setServiceGrossPrice(
           ServiceDetail serviceDetail
     )
   {
@@ -179,10 +194,9 @@ public class OrderServiceImpl implements OrderService {
     if(service.isSpecial())
       subtotal += service.getSuportCharge();
     serviceDetail.setPriceWithoutTaxes(subtotal);
-    return subtotal;
   }
 
-  private void setProductPriceWithoutTaxes(
+  private void setProductGrossPrice(
           ProductDetail productDetail
     )
   {
@@ -198,34 +212,37 @@ public class OrderServiceImpl implements OrderService {
     productDetail.setPriceWithoutTaxes(subtotal);
   }
 
-  private void completeDetailSubtotal(
-          OrderDetail orderDetail
+  private void applyTaxes(
+          OrderDetail orderDetail,
+          Map<Integer, TaxByOrder> taxesByOrder
     )
   {
-    completeDetailTaxFields(orderDetail);
-    Double subtotal = orderDetail.getPriceWithoutTaxes();
-    Double taxCharges = orderDetail.getTaxCharges() / 100.0;
-    subtotal *= ( 1 + taxCharges );
+    double subtotal = orderDetail.getPriceWithoutTaxes();
+    for (Tax tax : orderDetail.getAsset().getAllTaxes())
+    {
+      double tax_factor = tax.getPercentage() / 100.0;
+      double charge = orderDetail.getPriceWithoutTaxes() * tax_factor;
+      addTaxAmount(taxesByOrder, charge, tax);
+      subtotal += charge;
+    }
     orderDetail.setSubTotal(subtotal);
   }
 
-  private void completeDetailTaxFields(
-          OrderDetail orderDetail
-    )
-  {
-    StringBuilder chargesApplied = new StringBuilder();
-    double percentage = 1.00;
-    for (Tax tax : orderDetail.getAsset().getAllTaxes())
-    {
-      percentage = percentage + (tax.getPercentage() / 100.0);
-      chargesApplied
-              .append(" ")
-              .append(tax.getName());
+  private void addTaxAmount(
+    Map<Integer, TaxByOrder> taxesByOrder,
+    double amount,
+    Tax tax
+  ){
+    if (taxesByOrder.containsKey(tax.getId())) {
+      TaxByOrder existingTaxByOrder = taxesByOrder.get(tax.getId());
+      double updatedAmount = existingTaxByOrder.getAmount() + amount;
+      existingTaxByOrder.setAmount(updatedAmount);
+    } else {
+      TaxByOrder newTaxByOrder = new TaxByOrder();
+      newTaxByOrder.setTax(tax);
+      newTaxByOrder.setAmount(amount);
+      taxesByOrder.put(tax.getId(), newTaxByOrder);
     }
-    orderDetail.setTaxesApplied(
-            chargesApplied.toString()
-    );
-    orderDetail.setTaxCharges(percentage*100-100);
   }
 
   private void setOrderDiscountService(Order order)

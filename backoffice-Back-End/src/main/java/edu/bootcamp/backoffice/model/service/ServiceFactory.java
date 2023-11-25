@@ -56,24 +56,32 @@ public class ServiceFactory {
 	public List<Tax> createTaxResponses(List<ChargeRequest> listResponse)
 	{
 		List<Tax> chargeResponses = new ArrayList<>();
-		for (ChargeRequest chargeRequest : listResponse) {
-			Optional<Tax> taxOptional = taxRepository.findByName(chargeRequest.getName());
+		if(listResponse!=null)
+			for (ChargeRequest chargeRequest : listResponse) {
+				Optional<Tax> taxOptional = taxRepository.findByName(chargeRequest.getName());
 
-			taxOptional.ifPresent(chargeResponses::add);
-		}
+				taxOptional.ifPresent(chargeResponses::add);
+			}
     	return chargeResponses;
     }
 
-  	public ServiceResponse createResponse(ServiceEntity serviceEntity, List<ChargeResponse> taxes) {
-
-		return ServiceResponse.builder().id(serviceEntity.getId()).name(serviceEntity.getName())
-				.description(serviceEntity.getDescription()).basePrice(serviceEntity.getBasePrice())
-				.isSpecial(serviceEntity.isSpecial()).suportCharge(serviceEntity.getSuportCharge())
+  	public ServiceResponse createResponse(ServiceEntity serviceEntity, List<ChargeResponse> taxes)
+	{
+		return ServiceResponse
+				.builder()
+				.id(serviceEntity.getId())
+				.name(serviceEntity.getName())
+				.description(serviceEntity.getDescription())
+				.basePrice(serviceEntity.getBasePrice())
+				.isSpecial(serviceEntity.isSpecial())
+				.suportCharge(serviceEntity.getSuportCharge())
 				.taxes(taxes)
-				.enabled(serviceEntity.isEnabled()).build();
+				.enabled(serviceEntity.isEnabled())
+				.build();
 	}
 
-	public ServiceResponse createServiceResponse(ServiceEntity serviceEntity) {
+	public ServiceResponse createServiceResponse(ServiceEntity serviceEntity)
+	{
 		List<ChargeResponse> chargeResponse = createChargeResponses(serviceEntity.getTaxes());
 		return createResponse(serviceEntity, chargeResponse);
 	}
