@@ -50,51 +50,6 @@ public class BackofficeApplication {
 				);
 				userRepository.save(user);
 			}
-			/*if (
-					taxRepository.findAll().isEmpty() &&
-					serviceRepository.findAll().isEmpty() &&
-					productRepository.findAll().isEmpty() &&
-					clientRepository.findAll().isEmpty()
-				)
-			{
-				TaxFactory taxFactory = new TaxFactory();
-				ChargeRequest taxRequest = new ChargeRequest("IIBB", 10);
-				Tax tax = taxFactory.CreateEntityForInsertNewRecord(taxRequest);
-				taxRepository.save(tax);
-				ServiceFactory serviceFactory = new ServiceFactory(taxFactory, taxRepository);
-				ServiceEntity service = serviceFactory.CreateServiceEntity(
-						"Servico de 100",
-						"Un servico de $100. SuportChage de $10",
-						100.0,
-						Boolean.TRUE,
-						10.0
-				);
-				List<Tax> taxes = new ArrayList<>();
-				taxes.add(tax);
-				service.setTaxes(taxes);
-				serviceRepository.save(service);
-				ProductFactory productFactory = new ProductFactory(taxFactory, taxRepository);
-				Product product = productFactory.CreateProductEntity(
-						"Producto de 200",
-						"Un producto de $200",
-						200.0,
-						new ArrayList<>()
-				);
-				product.setTaxes(taxes);
-				productRepository.save(product);
-				Client client =  new Client();
-				client.setName("diego");
-				client.setLastName("paez");
-				client.setDni(46013734);
-				client.setPhone(43512226L);
-				client.setAdress("ca1lle siempre viva");
-				client.setIsBussiness(Boolean.TRUE);
-				client.setBussinessName("x.srl");
-				client.setStartDate(Date.valueOf("2023-10-31"));
-				client.setCuit(27137460350L);
-				client.setEnabled(Boolean.TRUE);
-				clientRepository.save(client);
-			}*/
-		};
+        };
 	}
 }
