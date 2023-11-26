@@ -2,9 +2,21 @@ import React from 'react'
 import HeaderComponent from '../HeaderComponent'
 import NavComponent from '../NavComponent'
 import { FaFilter } from "react-icons/fa";
-
+import { IoIosArrowBack } from "react-icons/io";
+import { useNavigate } from 'react-router-dom';
+import { useServicesDiscountStore } from '../../hooks'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
+import { FaFilePdf } from "react-icons/fa6";
 
 function ServiceDiscountComponent() {
+    const navigate = useNavigate();
+    const { servicesDiscount, activeServiceDiscount } = useServicesDiscountStore();
+
+    function showDetails(item) {
+        console.log(item)
+    }
+
     return (
         <div className="bgGrey">
             <HeaderComponent />
@@ -14,28 +26,39 @@ function ServiceDiscountComponent() {
                     <NavComponent />
 
                     <div className='container-fluid mt-4'>
+                        {/* Boton back */}
+                        <div className='mb-2'>
+                            <button
+                                type="button"
+                                className="btn btn-outline-secondary m-0 pt-0"
+                                onClick={() => navigate("/report")}
+                            >
+                                <IoIosArrowBack style={{ fontSize: '1.7em' }} />
+                            </button>
+                        </div>
+
                         {/* Filtro */}
-                        <div class="accordion" id="accordionExample">
-                            <div class="accordion-item">
+                        <div className="accordion" id="accordion">
+                            <div className="accordion-item">
                                 {/* Boton de despliegue */}
-                                <h2 class="accordion-header d-flex align-items-center">
-                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                <h2 className="accordion-header d-flex align-items-center">
+                                    <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
                                         <FaFilter style={{ fontSize: '1em', marginRight: '0.5em' }} />
                                         Filtros
                                     </button>
                                 </h2>
                                 {/* Inputs */}
-                                <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                                    <div class="accordion-body col-sm-12">
+                                <div id="collapseOne" className="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                    <div className="accordion-body">
                                         <div className="row">
-                                            <div className="col-md-6 mb-3">
+                                            {/* <div className="col-md-6 mb-3">
                                                 <label htmlFor="cliente" className="form-label">Cliente</label>
                                                 <input type="text" className="form-control" id="cliente" />
                                             </div>
                                             <div className="col-md-6 mb-3">
                                                 <label htmlFor="servicio" className="form-label">Servicio</label>
                                                 <input type="text" className="form-control" id="servicio" />
-                                            </div>
+                                            </div> */}
                                             <div className="col-md-6 mb-3">
                                                 <label htmlFor="fechaInicio" className="form-label">Fecha de inicio</label>
                                                 <input type="date" className="form-control" id="fechaInicio" />
@@ -53,8 +76,9 @@ function ServiceDiscountComponent() {
                             </div>
                         </div>
 
+                        {/* Tabla */}
                         <section
-                            className="rounded-3 shadow-lg"
+                            className="rounded-3 shadow"
                         >
                             <table className="table table-color m-0 mt-3">
                                 {/* Header de la table */}
@@ -67,15 +91,67 @@ function ServiceDiscountComponent() {
                                 >
                                     <tr style={{ textAlign: "center" }}>
                                         <th scope="col">Cliente</th>
-                                        <th scope="col">Total</th>
-                                        <th scope="col">Descuento</th>
+                                        <th scope="col">Servicio</th>
                                         <th scope="col">Fecha</th>
-                                        <th scope="col">Estado</th>
+                                        <th scope="col">Descuento</th>
+                                        <th scope="col">#</th>
                                         <th scope="col">#</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    {
+                                        servicesDiscount.map((item) => (
+                                            <tr
+                                                key={item.id}
+                                                style={{ marginBottom: "0px", textAlign: "center" }}
+                                            >
+                                                <td>
+                                                    {
+                                                        item.isBusiness ? item.businessName : `${item.clientname} ${item.lastname}`
+                                                    }
 
+                                                </td>
+                                                <td>
+                                                    {
+                                                        item.servicename
+                                                    }
+                                                </td>
+                                                <td>
+                                                    {
+                                                        item.startdate.split("T")[0]
+                                                    }
+                                                </td>
+                                                <td>
+                                                    ${
+                                                        item.totaldiscount.toFixed(2)
+                                                    }
+                                                </td>
+                                                <td>
+                                                    <FontAwesomeIcon
+                                                        icon={faEye}
+                                                        style={{
+                                                            color: "#000000",
+                                                            cursor: "pointer",
+                                                        }}
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#detail-modal"
+                                                        onClick={() => showDetails(item)}
+                                                    />
+                                                </td>
+                                                <td>
+                                                    {/* Descargar informe */}
+                                                    <FaFilePdf
+                                                        style={{
+                                                            color: "#000000",
+                                                            cursor: "pointer",
+                                                        }}
+                                                        onClick={() => console.log("PDF")}
+                                                    />
+
+                                                </td>
+                                            </tr>
+                                        ))
+                                    }
                                 </tbody>
                             </table>
                         </section>
