@@ -19,11 +19,13 @@ import lombok.extern.slf4j.Slf4j;
 @EnableStateMachineFactory
 @Configuration
 public class StateMachineConfig extends StateMachineConfigurerAdapter<OrderState, OrderStateEvent> {
+
 	@Override
 	public void configure(StateMachineStateConfigurer<OrderState, OrderStateEvent> states) throws Exception {
 		// TODO Auto-generated method stub
 		states.withStates().initial(OrderState.PENDIENT_TO_PAY).states(EnumSet.allOf(OrderState.class))
 				.end(OrderState.ORDER_DELIVERED).end(OrderState.ORDER_CANCELLED);
+
 	}
 
 	@Override
