@@ -1,21 +1,20 @@
-package edu.bootcamp.backoffice.model.ticketOrdersHistory.dto;
+package edu.bootcamp.backoffice.model.ticket;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
+import java.math.BigInteger;
 import java.util.Date;
 
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class TicketResponse {
+public class TicketForOrdersHistoryDto {
 
-    @JsonProperty ("ticket_id")
-    private Integer ticketId;
+    @JsonProperty("ticket_id")
+    private BigInteger ticketId;
 
     @JsonProperty ("client_name")
     private String clientName;
@@ -26,8 +25,8 @@ public class TicketResponse {
     @JsonProperty ("order_id")
     private Integer orderId;
 
-    @JsonProperty ("order_status")
-    private Boolean orderStatus;
+    @JsonProperty ("order_state")
+    private String orderState;
 
     @JsonProperty ("order_date")
     private Date orderDate;
@@ -47,6 +46,10 @@ public class TicketResponse {
     @JsonProperty ("taxes_total_price")
     private Double taxesTotalPrice;
 
+    @JsonProperty ("total_discount")
+    private Double totalDiscount;
+
     @JsonProperty ("total_price")
     private Double totalPrice;
+
 }

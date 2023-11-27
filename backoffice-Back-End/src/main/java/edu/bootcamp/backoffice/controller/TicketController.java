@@ -1,7 +1,9 @@
 package edu.bootcamp.backoffice.controller;
 
 import edu.bootcamp.backoffice.model.ticket.ServiceForMaxDiscountPerClientDto;
+import edu.bootcamp.backoffice.model.ticket.TicketForOrdersHistoryDto;
 import edu.bootcamp.backoffice.service.Interface.ServiceForMaxDiscountPerClientService;
+import edu.bootcamp.backoffice.service.Interface.TicketForOrdersHistory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
@@ -10,8 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import edu.bootcamp.backoffice.model.ticketOrdersHistory.dto.TicketResponse;
-import edu.bootcamp.backoffice.service.Interface.TicketService;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
@@ -24,13 +24,14 @@ public class TicketController
     @Autowired
     private final ServiceForMaxDiscountPerClientService serviceForMaxDiscountPerClientService;
 
-    private final TicketService ticketService;
+    private final TicketForOrdersHistory ticketService;
 
     public TicketController(
-            ServiceForMaxDiscountPerClientService serviceForMaxDiscountPerClientService
-        )
+            ServiceForMaxDiscountPerClientService serviceForMaxDiscountPerClientService,
+            TicketForOrdersHistory ticketService)
     {
         this.serviceForMaxDiscountPerClientService = serviceForMaxDiscountPerClientService;
+        this.ticketService = ticketService;
     }
 
     @GetMapping(path = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -45,11 +46,11 @@ public class TicketController
 
     @Transactional
     @GetMapping(
-            path = "/ordersHistory",
+            path = "/orders-history",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<List<TicketResponse>> getOrdersHistory() {
-        List<TicketResponse> tickets = ticketService.get();
+    public ResponseEntity<List<TicketForOrdersHistoryDto>> getOrdersHistory() {
+        List<TicketForOrdersHistoryDto> tickets = ticketService.getOrdersHistory();
         return ResponseEntity.ok(tickets);
     }
 }
