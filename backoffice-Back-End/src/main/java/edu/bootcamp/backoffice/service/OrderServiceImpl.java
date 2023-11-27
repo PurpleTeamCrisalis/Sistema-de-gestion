@@ -1,5 +1,6 @@
 package edu.bootcamp.backoffice.service;
 
+import java.lang.invoke.ClassSpecializer.Factory;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,9 +34,10 @@ import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.ServiceDetail;
 import edu.bootcamp.backoffice.model.user.User;
 
 @Service
-public class OrderServiceImpl implements OrderService {
-
-  // Injectar Repository
+public class OrderServiceImpl implements OrderService, OrderStateService  
+{
+	private final StateMachineFactory<OrderState, OrderStateEvent> stateMachineFactory;
+	private final OrderStateChangeInterceptor orderStateChangeInterceptor;
   private final OrderFactory orderFactory;
   private final OrderRepository orderRepository;
   private final ProductDetailService productDetailService;
@@ -48,22 +50,26 @@ public class OrderServiceImpl implements OrderService {
   public OrderServiceImpl(
       ProductDetailService productDetailService,
       ServiceDetailService serviceDetailService,
-      OrderFactory         orderFactory,
-      OrderRepository      orderRepository,
-      UserService          userService,
-      ClientService        clientService,
-      Validator            validator,
-      AppConstants         appConstants
+      OrderFactory orderFactory,
+      OrderRepository orderRepository,
+      UserService userService,
+      ClientService clientService,
+      Validator validator,
+      AppConstants appConstants,
+			OrderStateChangeInterceptor orderStateChangeInterceptor,
+			StateMachineFactory<OrderState, OrderStateEvent> stateMachineFactory
     )
   {
-    this.userService          = userService;
-    this.clientService        = clientService;
-    this.orderFactory         = orderFactory;
-    this.orderRepository      = orderRepository;
+    this.userService = userService;
+    this.clientService = clientService;
+    this.orderFactory = orderFactory;
+    this.orderRepository = orderRepository;
     this.productDetailService = productDetailService;
     this.serviceDetailService = serviceDetailService;
-    this.validator            = validator;
-    this.appConstants         = appConstants;
+    this.validator = validator;
+    this.appConstants = appConstants;
+		this.stateMachineFactory = stateMachineFactory;
+		this.orderStateChangeInterceptor = orderStateChangeInterceptor;
   }
 
   public OrderResponse registerOrder(
@@ -79,6 +85,7 @@ public class OrderServiceImpl implements OrderService {
     if (errorBuilder.length() > 0)
       throw new IllegalArgumentException(errorBuilder.toString());
     order.setUser(user);
+    order.setOrderState(OrderState.PENDIENT_TO_PAY);
     completeOrderTotals(order);
     clientService.createSubscriptionsAndMergeWithClient(
             order.getClient(),
@@ -149,7 +156,7 @@ public class OrderServiceImpl implements OrderService {
     for(ServiceDetail serviceDetail : services)
     {
       setServiceGrossPrice(serviceDetail);
-      applyTaxes(serviceDetail, taxesByOrder, 1);
+      applyTaxes(serviceDetail, taxesByOrder);
       total += serviceDetail.getSubTotal();
     }
     return total;
@@ -164,12 +171,11 @@ public class OrderServiceImpl implements OrderService {
     for(ProductDetail productDetail : productDetails)
     {
       setProductGrossPrice(productDetail);
-      applyTaxes(
-              productDetail,
-              taxesByOrder,
-              productDetail.getQuantity()
-      );
-      total += productDetail.getSubTotal();;
+      applyTaxes(productDetail, taxesByOrder);
+      Double subtotal = productDetail.getSubTotal();
+      subtotal *= productDetail.getQuantity();
+      productDetail.setSubTotal(subtotal);
+      total += subtotal;
     }
     return total;
   }
@@ -215,16 +221,15 @@ public class OrderServiceImpl implements OrderService {
 
   private void applyTaxes(
           OrderDetail orderDetail,
-          Map<Integer, TaxByOrder> taxesByOrder,
-          int quantity
+          Map<Integer, TaxByOrder> taxesByOrder
     )
   {
-    double subtotal = orderDetail.getPriceWithoutTaxes() * quantity;
+    double subtotal = orderDetail.getPriceWithoutTaxes();
     for (Tax tax : orderDetail.getAsset().getAllTaxes())
     {
       double tax_factor = tax.getPercentage() / 100.0;
-      double charge = orderDetail.getPriceWithoutTaxes() * tax_factor* quantity;
-      addTaxAmount(taxesByOrder, charge , tax);
+      double charge = orderDetail.getPriceWithoutTaxes() * tax_factor;
+      addTaxAmount(taxesByOrder, charge, tax);
       subtotal += charge;
     }
     orderDetail.setSubTotal(subtotal);
@@ -355,5 +360,44 @@ public class OrderServiceImpl implements OrderService {
     }
 
     return dtos;
-}
+  }
+
+  private StateMachine<OrderState, OrderStateEvent> build(Integer orderId) {
+		Order order = orderRepository.getOne(orderId);
+
+		StateMachine<OrderState, OrderStateEvent> sm = stateMachineFactory
+				.getStateMachine(Integer.toString(order.getId()));
+
+		sm.stop();
+
+		sm.getStateMachineAccessor().doWithAllRegions(sma -> {
+			sma.addStateMachineInterceptor(orderStateChangeInterceptor);
+			sma.resetStateMachine(new DefaultStateMachineContext<>(order.getOrderState(), null, null, null));
+		});
+
+		sm.start();
+
+		return sm;
+	}
+
+  private void sendEvent(Integer orderId, StateMachine<OrderState, OrderStateEvent> sm, OrderStateEvent event) {
+
+		sm.sendEvent(event);
+	}
+
+	@Transactional
+	@Override
+	public StateMachine<OrderState, OrderStateEvent> cancellOrder(Integer id) {
+		StateMachine<OrderState, OrderStateEvent> sm = build(id);
+		sendEvent(id, sm, OrderStateEvent.ORDER_CANCELLED);
+		return sm;
+	}
+
+	@Transactional
+	@Override
+	public StateMachine<OrderState, OrderStateEvent> payOrder(Integer id) {
+		StateMachine<OrderState, OrderStateEvent> sm = build(id);
+		sendEvent(id, sm, OrderStateEvent.ORDER_PAYED);
+		return sm;
+	}
 }
