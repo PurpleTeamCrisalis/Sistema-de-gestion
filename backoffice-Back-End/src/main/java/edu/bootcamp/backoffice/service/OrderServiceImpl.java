@@ -1,10 +1,11 @@
 package edu.bootcamp.backoffice.service;
 
-import java.lang.invoke.ClassSpecializer.Factory;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.transaction.Transactional;
 
 import edu.bootcamp.backoffice.config.AppConstants;
 import edu.bootcamp.backoffice.model.Tax.Tax;
@@ -18,6 +19,10 @@ import edu.bootcamp.backoffice.model.service.ServiceEntity;
 import edu.bootcamp.backoffice.model.taxByOrder.TaxByOrder;
 import edu.bootcamp.backoffice.service.Interface.ClientService;
 import edu.bootcamp.backoffice.service.Interface.UserService;
+
+import org.springframework.statemachine.StateMachine;
+import org.springframework.statemachine.config.StateMachineFactory;
+import org.springframework.statemachine.support.DefaultStateMachineContext;
 import org.springframework.stereotype.Service;
 
 import edu.bootcamp.backoffice.exception.custom.dbValidation.EmptyTableException;
@@ -32,6 +37,7 @@ import edu.bootcamp.backoffice.service.Interface.ServiceDetailService;
 import edu.bootcamp.backoffice.service.Interface.Validator;
 import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.ServiceDetail;
 import edu.bootcamp.backoffice.model.user.User;
+import edu.bootcamp.backoffice.model.order.*;
 
 @Service
 public class OrderServiceImpl implements OrderService, OrderStateService  
@@ -46,6 +52,7 @@ public class OrderServiceImpl implements OrderService, OrderStateService
   private final ClientService clientService;
   private final Validator validator;
   private final AppConstants appConstants;
+  public static final String ORDER_ID_HEADER = "Order_id";
 
   public OrderServiceImpl(
       ProductDetailService productDetailService,
