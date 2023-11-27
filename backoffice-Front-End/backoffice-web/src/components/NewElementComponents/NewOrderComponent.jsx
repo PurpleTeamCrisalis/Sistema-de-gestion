@@ -56,18 +56,18 @@ export const NewOrderComponent = () => {
     }
     const orderRequest = createOrderRequest(newOrder);
     startAddingOrder(orderRequest);
-    //handleCleanNewOrder();
-    // Toastify({
-    //   text: "Orden creada exitosamente!",
-    //   duration: 2000,
-    //   style: {
-    //     background: "linear-gradient(to right, #00b09b, #96c93d)",
-    //   },
-    // }).showToast();
+    handleCleanNewOrder();
+    Toastify({
+      text: "Orden creada exitosamente!",
+      duration: 2000,
+      style: {
+        background: "linear-gradient(to right, #00b09b, #96c93d)",
+      },
+    }).showToast();
 
-    // setTimeout(() => {
-    //   navigate("/order");
-    // }, 500);
+    setTimeout(() => {
+      navigate("/order");
+    }, 500);
   }
 
   function checkActiveDetail(event, detail) {
