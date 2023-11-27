@@ -62,11 +62,12 @@ public class ProductFactory {
 
 	public List<Tax> createTaxResponses(List<ChargeRequest> taxes) {
 		List<Tax> chargeResponses = new ArrayList<>();
-		for (ChargeRequest chargeRequest : taxes) {
-			Optional<Tax> taxOptional = taxRepository.findByName(chargeRequest.getName());
-			// Verificar si el impuesto existe antes de intentar agregarlo
-			taxOptional.ifPresent(chargeResponses::add);
-		}
+		if(taxes != null )
+			for (ChargeRequest chargeRequest : taxes) {
+				Optional<Tax> taxOptional = taxRepository.findByName(chargeRequest.getName());
+				// Verificar si el impuesto existe antes de intentar agregarlo
+				taxOptional.ifPresent(chargeResponses::add);
+			}
     	return chargeResponses;
 	}
 

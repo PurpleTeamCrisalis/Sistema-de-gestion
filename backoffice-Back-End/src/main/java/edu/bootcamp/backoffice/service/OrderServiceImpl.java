@@ -1,10 +1,10 @@
 package edu.bootcamp.backoffice.service;
 
+import java.lang.invoke.ClassSpecializer.Factory;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-import javax.mail.Message;
-import javax.transaction.Transactional;
+import java.util.Map;
 
 import edu.bootcamp.backoffice.config.AppConstants;
 import edu.bootcamp.backoffice.model.Tax.Tax;
@@ -15,19 +15,13 @@ import edu.bootcamp.backoffice.model.orderDetail.productDetail.dto.ProductDetail
 import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.dto.ServiceDetailRequest;
 import edu.bootcamp.backoffice.model.product.Product;
 import edu.bootcamp.backoffice.model.service.ServiceEntity;
+import edu.bootcamp.backoffice.model.taxByOrder.TaxByOrder;
 import edu.bootcamp.backoffice.service.Interface.ClientService;
 import edu.bootcamp.backoffice.service.Interface.UserService;
-
-import org.springframework.messaging.support.MessageBuilder;
-import org.springframework.statemachine.StateMachine;
-import org.springframework.statemachine.config.StateMachineFactory;
-import org.springframework.statemachine.support.DefaultStateMachineContext;
 import org.springframework.stereotype.Service;
 
 import edu.bootcamp.backoffice.exception.custom.dbValidation.EmptyTableException;
 import edu.bootcamp.backoffice.model.order.OrderFactory;
-import edu.bootcamp.backoffice.model.order.OrderState;
-import edu.bootcamp.backoffice.model.order.OrderStateEvent;
 import edu.bootcamp.backoffice.model.order.dto.OrderRequest;
 import edu.bootcamp.backoffice.model.order.dto.OrderResponse;
 import edu.bootcamp.backoffice.model.orderDetail.productDetail.ProductDetail;
@@ -40,42 +34,335 @@ import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.ServiceDetail;
 import edu.bootcamp.backoffice.model.user.User;
 
 @Service
-public class OrderServiceImpl implements OrderService, OrderStateService {
-
-	// Injectar Repository
-	public static final String ORDER_ID_HEADER = "Order_id";
-	private final OrderFactory orderFactory;
-	private final OrderRepository orderRepository;
-	private final ProductDetailService productDetailService;
-	private final ServiceDetailService serviceDetailService;
-	private final UserService userService;
-	private final ClientService clientService;
-	private final Validator validator;
-	private final AppConstants appConstants;
+public class OrderServiceImpl implements OrderService, OrderStateService  
+{
 	private final StateMachineFactory<OrderState, OrderStateEvent> stateMachineFactory;
 	private final OrderStateChangeInterceptor orderStateChangeInterceptor;
+  private final OrderFactory orderFactory;
+  private final OrderRepository orderRepository;
+  private final ProductDetailService productDetailService;
+  private final ServiceDetailService serviceDetailService;
+  private final UserService userService;
+  private final ClientService clientService;
+  private final Validator validator;
+  private final AppConstants appConstants;
 
-	public OrderServiceImpl(ProductDetailService productDetailService, ServiceDetailService serviceDetailService,
-			OrderFactory orderFactory, OrderRepository orderRepository, UserService userService,
-			ClientService clientService, Validator validator, AppConstants appConstants,
+  public OrderServiceImpl(
+      ProductDetailService productDetailService,
+      ServiceDetailService serviceDetailService,
+      OrderFactory orderFactory,
+      OrderRepository orderRepository,
+      UserService userService,
+      ClientService clientService,
+      Validator validator,
+      AppConstants appConstants,
 			OrderStateChangeInterceptor orderStateChangeInterceptor,
-			StateMachineFactory<OrderState, OrderStateEvent> stateMachineFactory) {
-		this.userService = userService;
-		this.clientService = clientService;
-		this.orderFactory = orderFactory;
-		this.orderRepository = orderRepository;
-		this.productDetailService = productDetailService;
-		this.serviceDetailService = serviceDetailService;
-		this.validator = validator;
-		this.appConstants = appConstants;
+			StateMachineFactory<OrderState, OrderStateEvent> stateMachineFactory
+    )
+  {
+    this.userService = userService;
+    this.clientService = clientService;
+    this.orderFactory = orderFactory;
+    this.orderRepository = orderRepository;
+    this.productDetailService = productDetailService;
+    this.serviceDetailService = serviceDetailService;
+    this.validator = validator;
+    this.appConstants = appConstants;
 		this.stateMachineFactory = stateMachineFactory;
 		this.orderStateChangeInterceptor = orderStateChangeInterceptor;
+  }
 
-		;
+  public OrderResponse registerOrder(
+    OrderRequest orderDto,
+    String username
+    )
+  {
+    User user = userService.getUserByUsername(username);
+    StringBuilder errorBuilder = new StringBuilder();
+    Order order = orderFactory.CreateOrderEntityForInsertNewRecord();
+    validateAndMergeClient(order, orderDto, errorBuilder);
+    validateAndMergeItems(order, orderDto, errorBuilder);
+    if (errorBuilder.length() > 0)
+      throw new IllegalArgumentException(errorBuilder.toString());
+    order.setUser(user);
+    order.setOrderState(OrderState.PENDIENT_TO_PAY);
+    completeOrderTotals(order);
+    clientService.createSubscriptionsAndMergeWithClient(
+            order.getClient(),
+            order.getServices()
+    );
+    order = orderRepository.save(order);
+    return orderFactory.createOrderResponse(order);
+  }
 
-	}
+  private void validateAndMergeItems(
+          Order order,
+          OrderRequest orderDto,
+          StringBuilder errorBuilder
+    )
+  {
+    List<ServiceDetailRequest> services = orderDto.getServices();
+    Boolean withServices = services != null && ! services.isEmpty();
+    List<ProductDetailRequest> products = orderDto.getProducts();
+    Boolean withProducts =  products != null && ! products.isEmpty();
+    if(withServices)
+      validateAndMergeServices(order, orderDto, errorBuilder);
+    if(withProducts)
+      validateAndMergeProducts(order, orderDto, errorBuilder);
+    if(!(withProducts||withServices))
+      errorBuilder.append("The order has no items");
+  }
 
-	private StateMachine<OrderState, OrderStateEvent> build(Integer orderId) {
+  private void completeOrderTotals(Order order)
+  {
+    Map<Integer, TaxByOrder> taxesByOrder = new HashMap<>();
+    double totalWithoutDiscount = completeServicesSubtotal(
+            order.getServices(),
+            taxesByOrder
+    );
+    double productsSubtotal = completeProductsSubtotal(
+            order.getProducts(),
+            taxesByOrder
+    );
+    completeOrderDiscount(order, productsSubtotal);
+    totalWithoutDiscount += productsSubtotal - order.getTotalDiscount();
+    order.setTotal(totalWithoutDiscount);
+    List<TaxByOrder> taxChargesList = new ArrayList<>(taxesByOrder.values());
+    for (TaxByOrder taxByOrder : taxChargesList)
+      taxByOrder.setOrder(order);
+    order.setTaxesByOrder(taxChargesList);
+  }
+
+  private void completeOrderDiscount(
+          Order order,
+          Double productsSubtotal
+    )
+  {
+    setOrderDiscountService(order);
+    Double discountFactor = getDiscountFactor(order);
+    Double productDiscount = getOrderDiscount(
+            productsSubtotal,
+            discountFactor
+    );
+    order.setTotalDiscount(productDiscount);
+  }
+
+  private Double completeServicesSubtotal(
+          List<ServiceDetail> services,
+          Map<Integer, TaxByOrder> taxesByOrder
+    )
+  {
+    double total = 0.0;
+    for(ServiceDetail serviceDetail : services)
+    {
+      setServiceGrossPrice(serviceDetail);
+      applyTaxes(serviceDetail, taxesByOrder);
+      total += serviceDetail.getSubTotal();
+    }
+    return total;
+  }
+
+  private Double completeProductsSubtotal(
+          List<ProductDetail> productDetails,
+          Map<Integer, TaxByOrder> taxesByOrder
+    )
+  {
+    double total = 0.0;
+    for(ProductDetail productDetail : productDetails)
+    {
+      setProductGrossPrice(productDetail);
+      applyTaxes(productDetail, taxesByOrder);
+      Double subtotal = productDetail.getSubTotal();
+      subtotal *= productDetail.getQuantity();
+      productDetail.setSubTotal(subtotal);
+      total += subtotal;
+    }
+    return total;
+  }
+
+  private Double getOrderDiscount(
+          Double productsSubtotal,
+          Double discountFactor
+    )
+  {
+    double orderDiscount = productsSubtotal * discountFactor;
+    double maxDiscount = appConstants.getMaxOrderDiscount();
+    if(orderDiscount > maxDiscount)
+      orderDiscount = maxDiscount;
+    return orderDiscount;
+  }
+
+  private void setServiceGrossPrice(
+          ServiceDetail serviceDetail
+    )
+  {
+    ServiceEntity service = serviceDetail.getService();
+    double subtotal = service.getBasePrice();
+    if(service.isSpecial())
+      subtotal += service.getSuportCharge();
+    serviceDetail.setPriceWithoutTaxes(subtotal);
+  }
+
+  private void setProductGrossPrice(
+          ProductDetail productDetail
+    )
+  {
+    Product product = productDetail.getProduct();
+    double subtotal = product.getBasePrice();
+    if(productDetail.getWarranty() != null)
+    {
+      Double yearWarrantyFactor = appConstants.getYearWarrantyFactor();
+      Double warrantyYears = productDetail.getWarranty();
+      Double totalWarrantyFactor = 1 + warrantyYears * yearWarrantyFactor;
+      subtotal *= totalWarrantyFactor;
+    }
+    productDetail.setPriceWithoutTaxes(subtotal);
+  }
+
+  private void applyTaxes(
+          OrderDetail orderDetail,
+          Map<Integer, TaxByOrder> taxesByOrder
+    )
+  {
+    double subtotal = orderDetail.getPriceWithoutTaxes();
+    for (Tax tax : orderDetail.getAsset().getAllTaxes())
+    {
+      double tax_factor = tax.getPercentage() / 100.0;
+      double charge = orderDetail.getPriceWithoutTaxes() * tax_factor;
+      addTaxAmount(taxesByOrder, charge, tax);
+      subtotal += charge;
+    }
+    orderDetail.setSubTotal(subtotal);
+  }
+
+  private void addTaxAmount(
+    Map<Integer, TaxByOrder> taxesByOrder,
+    double amount,
+    Tax tax
+  ){
+    if (taxesByOrder.containsKey(tax.getId())) {
+      TaxByOrder existingTaxByOrder = taxesByOrder.get(tax.getId());
+      double updatedAmount = existingTaxByOrder.getAmount() + amount;
+      existingTaxByOrder.setAmount(updatedAmount);
+    } else {
+      TaxByOrder newTaxByOrder = new TaxByOrder();
+      newTaxByOrder.setTax(tax);
+      newTaxByOrder.setAmount(amount);
+      taxesByOrder.put(tax.getId(), newTaxByOrder);
+    }
+  }
+
+  private void setOrderDiscountService(Order order)
+  {
+    List<ServiceDetail> serviceDetails = order.getServices();
+    ServiceEntity discountService = null;
+    if( serviceDetails != null && ! serviceDetails.isEmpty())
+      discountService = order.getServices().get(0).getService();
+    else
+       discountService = clientService.getDiscountService(order.getClient());
+    order.setDiscountService(discountService);
+  }
+
+  private Double getDiscountFactor(Order order)
+  {
+    if(order.getDiscountService() != null)
+      return appConstants.getDiscountFactor();
+    return 0.0;
+  }
+
+  private void validateAndMergeClient(
+          Order order,
+          OrderRequest orderDto,
+          StringBuilder errorBuilder
+  )
+  {
+    StringBuilder niceError = new StringBuilder(" Client:");
+    int initLength = niceError.length();
+    Client client = clientService.getClientEntity(
+            orderDto.getClientId(),
+            niceError
+    );
+    if(niceError.length() > initLength)
+      errorBuilder.append(niceError);
+    order.setClient(client);
+  }
+
+  private void validateAndMergeProducts(
+          Order order,
+          OrderRequest orderDto,
+          StringBuilder errorBuilder
+  )
+  {
+    StringBuilder niceError = new StringBuilder(" Products:");
+    int initLength = niceError.length();
+    List<ProductDetail> productsDetails = productDetailService.getProductsDetails(
+            orderDto.getProducts(),
+            niceError,
+            order
+    );
+    if(niceError.length() > initLength)
+      errorBuilder.append(niceError);
+    order.setProducts(productsDetails);
+  }
+
+  private void validateAndMergeServices(
+          Order order,
+          OrderRequest orderDto,
+          StringBuilder errorBuilder
+  )
+  {
+    StringBuilder niceError = new StringBuilder(" Services:");
+    int initLength = niceError.length();
+    List<ServiceDetail> servicesDetails = serviceDetailService.getServicesDetails(
+            orderDto.getServices(),
+            niceError,
+            order
+    );
+    if(niceError.length() > initLength)
+      errorBuilder.append(niceError);
+    order.setServices(servicesDetails);
+  }
+
+  public OrderResponse get(int id) {
+    Order order = validator.completeValidationForId(id, orderRepository);
+    return orderFactory.createOrderResponse(order);
+  }
+
+  public List<OrderResponse> get() {
+    List<Order> orders = orderRepository.findAll();
+    List<OrderResponse> dtos = new ArrayList<OrderResponse>();
+
+    for (Order order : orders) {
+      dtos.add(orderFactory.createOrderResponse(order));
+    }
+    
+    if (dtos.isEmpty()) {
+      throw new EmptyTableException("There aren't registered orders");
+    }
+
+    return dtos;
+  }
+
+  public OrderResponse delete(int id) {
+    Order order = validator.validateIdExistence(id, orderRepository);
+    order.setEnabled(false);
+    orderRepository.save(order);
+    return orderFactory.createOrderResponse(order);
+  }
+
+  public List<OrderResponse> getClientOrders(int clientId) {
+    List<Order> orders = orderRepository.findAll();
+    List<OrderResponse> dtos = new ArrayList<OrderResponse>();
+
+    for (Order order : orders) {
+        if (order.getClient().getId() != clientId) continue;
+        dtos.add(orderFactory.createOrderResponse(order));
+    }
+
+    return dtos;
+  }
+
+  private StateMachine<OrderState, OrderStateEvent> build(Integer orderId) {
 		Order order = orderRepository.getOne(orderId);
 
 		StateMachine<OrderState, OrderStateEvent> sm = stateMachineFactory
@@ -93,207 +380,7 @@ public class OrderServiceImpl implements OrderService, OrderStateService {
 		return sm;
 	}
 
-	public OrderResponse registerOrder(OrderRequest orderDto, String username) {
-		User user = userService.getUserByUsername(username);
-		StringBuilder errorBuilder = new StringBuilder();
-		Order order = orderFactory.CreateOrderEntityForInsertNewRecord();
-		validateAndMergeClient(order, orderDto, errorBuilder);
-		validateAndMergeItems(order, orderDto, errorBuilder);
-		if (errorBuilder.length() > 0)
-			throw new IllegalArgumentException(errorBuilder.toString());
-		order.setUser(user);
-		order.setOrderState(OrderState.PENDIENT_TO_PAY);
-		completeOrderTotals(order);
-		clientService.registerSubscriptions(order.getClient(), order.getServices());
-		order = orderRepository.save(order);
-		return orderFactory.createOrderResponse(order);
-	}
-
-	private void validateAndMergeItems(Order order, OrderRequest orderDto, StringBuilder errorBuilder) {
-		List<ServiceDetailRequest> services = orderDto.getServices();
-		Boolean withServices = services != null && !services.isEmpty();
-		List<ProductDetailRequest> products = orderDto.getProducts();
-		Boolean withProducts = products != null && !products.isEmpty();
-		if (withServices)
-			validateAndMergeServices(order, orderDto, errorBuilder);
-		if (withProducts)
-			validateAndMergeProducts(order, orderDto, errorBuilder);
-		if (!(withProducts || withServices))
-			errorBuilder.append("The order has no items");
-	}
-
-	private void completeOrderTotals(Order order) {
-		double totalWithoutDiscount = completeServicesSubtotal(order.getServices());
-		double productsSubtotal = completeProductsSubtotal(order.getProducts());
-		completeOrderDiscount(order, productsSubtotal);
-		totalWithoutDiscount += productsSubtotal - order.getTotalDiscount();
-		order.setTotal(totalWithoutDiscount);
-	}
-
-	private void completeOrderDiscount(Order order, Double productsSubtotal) {
-		setOrderDiscountService(order);
-		Double discountFactor = getDiscountFactor(order);
-		Double productDiscount = getOrderDiscount(productsSubtotal, discountFactor);
-		order.setTotalDiscount(productDiscount);
-	}
-
-	private Double completeServicesSubtotal(List<ServiceDetail> services) {
-		double total = 0.0;
-		for (ServiceDetail serviceDetail : services) {
-			setServicePriceWithoutTaxes(serviceDetail);
-			completeDetailSubtotal(serviceDetail);
-			total += serviceDetail.getSubTotal();
-		}
-		return total;
-	}
-
-	private Double completeProductsSubtotal(List<ProductDetail> productDetails) {
-		double total = 0.0;
-		for (ProductDetail productDetail : productDetails) {
-			setProductPriceWithoutTaxes(productDetail);
-			completeDetailSubtotal(productDetail);
-			Double subtotal = productDetail.getSubTotal();
-			subtotal *= productDetail.getQuantity();
-			productDetail.setSubTotal(subtotal);
-			total += subtotal;
-		}
-		return total;
-	}
-
-	private Double getOrderDiscount(Double productsSubtotal, Double discountFactor) {
-		double orderDiscount = productsSubtotal * discountFactor;
-		double maxDiscount = appConstants.getMaxOrderDiscount();
-		if (orderDiscount > maxDiscount)
-			orderDiscount = maxDiscount;
-		return orderDiscount;
-	}
-
-	private Double setServicePriceWithoutTaxes(ServiceDetail serviceDetail) {
-		ServiceEntity service = serviceDetail.getService();
-		double subtotal = service.getBasePrice();
-		if (service.isSpecial())
-			subtotal += service.getSuportCharge();
-		serviceDetail.setPriceWithoutTaxes(subtotal);
-		return subtotal;
-	}
-
-	private void setProductPriceWithoutTaxes(ProductDetail productDetail) {
-		Product product = productDetail.getProduct();
-		double subtotal = product.getBasePrice();
-		if (productDetail.getWarranty() != null) {
-			Double yearWarrantyFactor = appConstants.getYearWarrantyFactor();
-			Double warrantyYears = productDetail.getWarranty();
-			Double totalWarrantyFactor = 1 + warrantyYears * yearWarrantyFactor;
-			subtotal *= totalWarrantyFactor;
-		}
-		productDetail.setPriceWithoutTaxes(subtotal);
-	}
-
-	private void completeDetailSubtotal(OrderDetail orderDetail) {
-		completeDetailTaxFields(orderDetail);
-		Double subtotal = orderDetail.getPriceWithoutTaxes();
-		Double taxCharges = orderDetail.getTaxCharges() / 100.0;
-		subtotal *= (1 + taxCharges);
-		orderDetail.setSubTotal(subtotal);
-	}
-
-	private void completeDetailTaxFields(OrderDetail orderDetail) {
-		StringBuilder chargesApplied = new StringBuilder();
-		double percentage = 1.00;
-		for (Tax tax : orderDetail.getAsset().getAllTaxes()) {
-			percentage = percentage + (tax.getPercentage() / 100.0);
-			chargesApplied.append(" ").append(tax.getName());
-		}
-		orderDetail.setTaxesApplied(chargesApplied.toString());
-		orderDetail.setTaxCharges(percentage * 100 - 100);
-	}
-
-	private void setOrderDiscountService(Order order) {
-		List<ServiceDetail> serviceDetails = order.getServices();
-		ServiceEntity discountService = null;
-		if (serviceDetails != null && !serviceDetails.isEmpty())
-			discountService = order.getServices().get(0).getService();
-		else
-			discountService = clientService.getDiscountService(order.getClient());
-		order.setDiscountService(discountService);
-	}
-
-	private Double getDiscountFactor(Order order) {
-		if (order.getDiscountService() != null)
-			return appConstants.getDiscountFactor();
-		return 0.0;
-	}
-
-	private void validateAndMergeClient(Order order, OrderRequest orderDto, StringBuilder errorBuilder) {
-		StringBuilder niceError = new StringBuilder(" Client:");
-		int initLength = niceError.length();
-		Client client = clientService.getClientEntity(orderDto.getClientId(), niceError);
-		if (niceError.length() > initLength)
-			errorBuilder.append(niceError);
-		order.setClient(client);
-	}
-
-	private void validateAndMergeProducts(Order order, OrderRequest orderDto, StringBuilder errorBuilder) {
-		StringBuilder niceError = new StringBuilder(" Products:");
-		int initLength = niceError.length();
-		List<ProductDetail> productsDetails = productDetailService.getProductsDetails(orderDto.getProducts(), niceError,
-				order);
-		if (niceError.length() > initLength)
-			errorBuilder.append(niceError);
-		order.setProducts(productsDetails);
-	}
-
-	private void validateAndMergeServices(Order order, OrderRequest orderDto, StringBuilder errorBuilder) {
-		StringBuilder niceError = new StringBuilder(" Services:");
-		int initLength = niceError.length();
-		List<ServiceDetail> servicesDetails = serviceDetailService.getServicesDetails(orderDto.getServices(), niceError,
-				order);
-		if (niceError.length() > initLength)
-			errorBuilder.append(niceError);
-		order.setServices(servicesDetails);
-	}
-
-	public OrderResponse get(int id) {
-		Order order = validator.completeValidationForId(id, orderRepository);
-		return orderFactory.createOrderResponse(order);
-	}
-
-	public List<OrderResponse> get() {
-		List<Order> orders = orderRepository.findAll();
-		List<OrderResponse> dtos = new ArrayList<OrderResponse>();
-
-		for (Order order : orders) {
-			dtos.add(orderFactory.createOrderResponse(order));
-		}
-
-		if (dtos.isEmpty()) {
-			throw new EmptyTableException("There aren't registered orders");
-		}
-
-		return dtos;
-	}
-
-	public OrderResponse delete(int id) {
-		Order order = validator.validateIdExistence(id, orderRepository);
-		order.setEnabled(false);
-		orderRepository.save(order);
-		return orderFactory.createOrderResponse(order);
-	}
-
-	public List<OrderResponse> getClientOrders(int clientId) {
-		List<Order> orders = orderRepository.findAll();
-		List<OrderResponse> dtos = new ArrayList<OrderResponse>();
-
-		for (Order order : orders) {
-			if (order.getClient().getId() != clientId)
-				continue;
-			dtos.add(orderFactory.createOrderResponse(order));
-		}
-
-		return dtos;
-	}
-
-	private void sendEvent(Integer orderId, StateMachine<OrderState, OrderStateEvent> sm, OrderStateEvent event) {
+  private void sendEvent(Integer orderId, StateMachine<OrderState, OrderStateEvent> sm, OrderStateEvent event) {
 
 		sm.sendEvent(event);
 	}
@@ -303,7 +390,6 @@ public class OrderServiceImpl implements OrderService, OrderStateService {
 	public StateMachine<OrderState, OrderStateEvent> cancellOrder(Integer id) {
 		StateMachine<OrderState, OrderStateEvent> sm = build(id);
 		sendEvent(id, sm, OrderStateEvent.ORDER_CANCELLED);
-
 		return sm;
 	}
 

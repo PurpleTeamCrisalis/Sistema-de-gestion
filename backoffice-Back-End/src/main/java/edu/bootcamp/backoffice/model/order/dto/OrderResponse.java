@@ -15,11 +15,13 @@ import edu.bootcamp.backoffice.model.orderDetail.productDetail.dto.ProductDetail
 import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.dto.ServiceDetailResponse;
 import edu.bootcamp.backoffice.model.service.ServiceEntity;
 import edu.bootcamp.backoffice.model.service.dto.ServiceResponse;
+import edu.bootcamp.backoffice.model.taxByOrder.dto.TaxByOrderResponse;
 import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class OrderResponse {
 
@@ -27,7 +29,7 @@ public class OrderResponse {
   private Integer id;
 
   @JsonProperty("date")
-  private String date;
+  private Date date;
 
   @JsonProperty("total")
   private Double total;
@@ -55,4 +57,8 @@ public class OrderResponse {
   @JsonProperty("services")
   @Singular
   private List<ServiceDetailResponse> services;
+
+  @JsonProperty("taxes")
+  //@Singular
+  private List<TaxByOrderResponse> taxesByOrder;
 }
