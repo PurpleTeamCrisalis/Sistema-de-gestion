@@ -65,5 +65,5 @@ SELECT
 SELECT 
     ROW_NUMBER() OVER (ORDER BY CAST(GETDATE() AS TIMESTAMP)) AS ticket_id, *
 FROM CombinedData
-ORDER BY name, bussiness_name, order_id, date
+ORDER BY name, bussiness_name, order_id, product_name, date
 END
