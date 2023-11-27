@@ -388,9 +388,10 @@ public class OrderServiceImpl implements OrderService, OrderStateService
 	}
 
   private void sendEvent(Integer orderId, StateMachine<OrderState, OrderStateEvent> sm, OrderStateEvent event) {
-
+		OrderStateChangeInterceptor.setOrderId(orderId);
 		sm.sendEvent(event);
 	}
+
 
 	@Transactional
 	@Override

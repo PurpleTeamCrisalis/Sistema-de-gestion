@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 public class OrderStateChangeInterceptor extends StateMachineInterceptorAdapter<OrderState, OrderStateEvent> {
 
 	private final OrderRepository orderRepository;
+	private static Integer orderId;
 
 	@Override
 	public void preStateChange(State<OrderState, OrderStateEvent> state, Message<OrderStateEvent> message,
@@ -26,13 +27,17 @@ public class OrderStateChangeInterceptor extends StateMachineInterceptorAdapter<
 		// TODO Auto-generated method stub
 		Optional.ofNullable(message).ifPresent(msg -> {
 			Optional.ofNullable(
-					Integer.class.cast(msg.getHeaders().getOrDefault(OrderServiceImpl.ORDER_ID_HEADER, -1L)))
+					Integer.class.cast(msg.getHeaders().getOrDefault(OrderServiceImpl.ORDER_ID_HEADER, orderId)))
 					.ifPresent(id -> {
 						Order order = orderRepository.getOne(id);
 						order.setOrderState(state.getId());
 						orderRepository.save(order);
 					});
 		});
+	}
+
+	public static void setOrderId(Integer orderId) {
+		OrderStateChangeInterceptor.orderId = orderId;
 	}
 
 }
