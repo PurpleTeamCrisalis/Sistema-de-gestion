@@ -12,10 +12,8 @@ export const servicesDiscountSlice = createSlice({
   reducers: {
     onLoadServicesDiscount: (state, { payload = [] }) => {
       state.isLoadingServicesDiscount = false;
-      payload.forEach((sd) => {
-        const exists = state.servicesDiscount.some((dbSD) => dbSD.id === sd.id);
-        if (!exists) state.servicesDiscount.push(sd);
-      });
+
+      state.servicesDiscount = payload;
     },
     onSetActiveServicesDiscount: (state, { payload }) => {
       state.activeServicesDiscount = payload;

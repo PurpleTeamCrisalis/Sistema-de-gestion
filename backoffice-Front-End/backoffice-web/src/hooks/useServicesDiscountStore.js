@@ -22,7 +22,6 @@ export function useServicesDiscountStore() {
   }
   async function startLoadingServicesDiscount(startDate, endDate) {
     try {
-      console.log(startDate, endDate);
       const { data } = await projectApi.get(
         `/ticket/list?startDate=${startDate}&endDate=${endDate}`
       );
