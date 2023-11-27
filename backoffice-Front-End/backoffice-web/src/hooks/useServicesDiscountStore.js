@@ -20,9 +20,12 @@ export function useServicesDiscountStore() {
   function pullActiveServicesDiscount() {
     dispatch(onPullActiveServicesDiscount());
   }
-  async function startLoadingServicesDiscount() {
+  async function startLoadingServicesDiscount(startDate, endDate) {
     try {
-      const { data } = await projectApi.get(""); //preguntar la lista por defecto
+      console.log(startDate, endDate);
+      const { data } = await projectApi.get(
+        `/ticket/list?startDate=${startDate}&endDate=${endDate}`
+      );
       dispatch(onLoadServicesDiscount(data));
       getSuccessResponse("Servicios descontados cargados!");
     } catch (error) {

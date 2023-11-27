@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import HeaderComponent from '../HeaderComponent'
 import NavComponent from '../NavComponent'
 import { FaFilter } from "react-icons/fa";
@@ -8,10 +8,67 @@ import { useServicesDiscountStore } from '../../hooks'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import { FaFilePdf } from "react-icons/fa6";
+import { format } from 'date-fns';
+import Toastify from "toastify-js";
+import "toastify-js/src/toastify.css";
 
 function ServiceDiscountComponent() {
     const navigate = useNavigate();
-    const { servicesDiscount, activeServiceDiscount } = useServicesDiscountStore();
+    const { servicesDiscount, activeServiceDiscount, startLoadingServicesDiscount } = useServicesDiscountStore();
+
+    const [startDate, setStartDate] = useState("1900-01-01");
+    const [endDate, setEndDate] = useState(format(new Date(), 'yyyy-MM-dd'));
+
+    useEffect(() => {
+        if (servicesDiscount.length === 0) startLoadingServicesDiscount(startDate, endDate);
+    }, [])
+
+    function handleInputStartDate(event) {
+        setStartDate(event.target.value)
+    }
+
+    function handleInputEndDate(event) {
+        setEndDate(event.target.value)
+    }
+
+    function handleFilterButton() {
+        // Con las fechas ingresadas, ya se puede buscar
+        if (checkInputs()) {
+            const paramsFilter = {
+                startDate: startDate,
+                endDate: endDate,
+            };
+            startLoadingServicesDiscount(paramsFilter);
+        }
+    }
+
+    function checkInputs() {
+        // Verifica si los campos no estan vacios y si el rango es correcto
+        const startDateValue = document.getElementById("fechaInicio").value;
+        const endDateValue = document.getElementById("fechaFin").value;
+
+        if (startDateValue > endDateValue) {
+            Toastify({
+                text: "Rango de fechas erróneo",
+                duration: 2000,
+                style: {
+                    background: "linear-gradient(to right, #f44336, #b71c1c)",
+                },
+            }).showToast();
+            return console.error("Error: Rango de fechas erróneo");
+        }
+
+        if (startDateValue && endDateValue) {
+            Toastify({
+                text: "Complete los campos",
+                duration: 2000,
+                style: {
+                    background: "linear-gradient(to right, #f44336, #b71c1c)",
+                },
+            }).showToast();
+            return console.error("Error: Complete los campos");
+        }
+    }
 
     function showDetails(item) {
         console.log(item)
@@ -61,15 +118,31 @@ function ServiceDiscountComponent() {
                                             </div> */}
                                             <div className="col-md-6 mb-3">
                                                 <label htmlFor="fechaInicio" className="form-label">Fecha de inicio</label>
-                                                <input type="date" className="form-control" id="fechaInicio" />
+                                                <input
+                                                    type="date"
+                                                    className="form-control"
+                                                    id="fechaInicio"
+                                                    onChange={handleInputStartDate}
+                                                />
                                             </div>
                                             <div className="col-md-6 mb-3">
                                                 <label htmlFor="fechaFin" className="form-label">Fecha de fin</label>
-                                                <input type="date" className="form-control" id="fechaFin" />
+                                                <input
+                                                    type="date"
+                                                    className="form-control"
+                                                    id="fechaFin"
+                                                    onChange={handleInputEndDate}
+                                                />
                                             </div>
                                         </div>
                                         <div className='d-flex justify-content-end'>
-                                            <button type="button" className="btn btn-primary">Buscar</button>
+                                            <button
+                                                type="button"
+                                                className="btn btn-primary"
+                                                onClick={handleFilterButton}
+                                            >
+                                                Buscar
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -109,7 +182,6 @@ function ServiceDiscountComponent() {
                                                     {
                                                         item.isBusiness ? item.businessName : `${item.clientname} ${item.lastname}`
                                                     }
-
                                                 </td>
                                                 <td>
                                                     {
@@ -118,7 +190,7 @@ function ServiceDiscountComponent() {
                                                 </td>
                                                 <td>
                                                     {
-                                                        item.startdate.split("T")[0]
+                                                        item.orderdate.split("T")[0]
                                                     }
                                                 </td>
                                                 <td>
