@@ -55,12 +55,10 @@ public class Order implements SoftDeletable{
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    @JoinColumn(nullable = false)
     private User user;
 
     // Client
     @ManyToOne
-    @JoinColumn(nullable = false)
     @JoinColumn(nullable = false)
     private Client client;
 
