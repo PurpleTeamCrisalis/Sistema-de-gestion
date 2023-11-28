@@ -25,8 +25,8 @@ public class DiscountServiceImpl {
     }
 
     @Transactional
-    public List<DiscountServiceDto> getOrderDiscountServices() {
-        List<Object[]> result = repository.getOrderDiscountServices();
+    public List<DiscountServiceDto> getTotalDiscountServices() {
+        List<Object[]> result = repository.getTotalDiscountServices();
         System.out.println(result);
         return mapToObject(result);
     }
@@ -36,26 +36,11 @@ public class DiscountServiceImpl {
 
         for (Object[] row : result) {
             DiscountServiceDto dto = new DiscountServiceDto();
-            dto.setClientId((Integer) row[0]);
-            dto.setClientName   ((String) row[1]);
-            dto.setLastName((String) row[2]);
-            dto.setDni((Integer) row[3]);
-            dto.setPhone(((BigInteger) row[4]).longValueExact());
-            dto.setAdress((String) row[5]);
-            // dto.setStartDate((Date) row[6]);
-            // dto.setClientEnabled((Boolean) row[7]);
-            // dto.setIsBussiness((Boolean) row[8]);
-            dto.setBussinessName((String) row[6]);
-            // dto.setCuit(((BigInteger) row[7]).longValueExact());
-            dto.setServiceId((Integer) row[7]);
-            dto.setServiceName((String) row[8]);
-            dto.setDescription((String) row[9]);
-            dto.setBasePrice((Double) row[10]);
-            dto.setIsSpecial(row[12] != null ? (Boolean) row[11] : false);
-            dto.setSuportCharge((Double) row[12]);
-            dto.setServiceEnabled((Boolean) row[13]);
-            dto.setOrderDate((Date) row[14]);
-            dto.setTotalDiscount((Double) row[15]);
+            dto.setClientName   ((String) row[0]);
+            dto.setProductsname((String) row[1]);
+            dto.setServicename  ((String) row[2]);
+            dto.setOrderDate    ((Date) row[3]);
+            dto.setTotalDiscount((Double) row[4]);
             dtos.add(dto);
         }
 

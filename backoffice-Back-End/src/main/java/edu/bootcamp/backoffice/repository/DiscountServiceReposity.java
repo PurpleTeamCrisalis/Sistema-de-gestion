@@ -10,7 +10,7 @@ import edu.bootcamp.backoffice.model.order.Order;
 
 @Repository
 public interface DiscountServiceReposity extends JpaRepository<Order, Integer> {
-    @Procedure(name = "discountServiceForDate")
-    List<Object[]> getOrderDiscountServices();
+    @Procedure(name = "getTotalDiscountServices")
+    List<Object[]> getTotalDiscountServices();
 }
 
