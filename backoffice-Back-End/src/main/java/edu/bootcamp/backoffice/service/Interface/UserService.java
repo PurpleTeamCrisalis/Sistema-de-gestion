@@ -16,7 +16,7 @@ public interface UserService {
 
     public List<UserResponse> get();
 
-    public UserResponse update(int id, UpdateUserRequest userDto);
+    public UserResponse update(int id, UpdateUserRequest userDto) throws IOException;
 
     public UserResponse delete(int id);
 
