@@ -11,22 +11,14 @@ import '../assets/styles/userProfileImageStyle.css'
 
 function HeaderComponent() {
   const { startLogout } = useAuthStore();
-  const { setActiveUser, users, startLoadingUsers, activeUsers } = useUsersStore();
+  const { setActiveUser, users, startLoadingUsers, activeUsers, startLoadingProfileImage } = useUsersStore();
   const { user } = useAuthStore();
 
   useEffect(() => {
     if (users.length === 0) startLoadingUsers();
     const imageElement = document.getElementById('userProfileImageSmall');
     const noImageElement = document.getElementById('userNoProfileImageSmall');
-    axios.get(`http://localhost:8080/image/${user.username}`)
-      .then(function (response) {
-        if (!response.data) return imageElement.src = `http://localhost:3000/image/hideme`;
-        if (response.data) {
-          imageElement.src = `http://localhost:8080/image/${user.username}`;
-          noImageElement.src = "http://localhost:3000/image/hideme";
-          return;
-        }
-      })
+    startLoadingProfileImage(user.username, imageElement, noImageElement)
   }, []);
 
   function handleLogout(event) {
