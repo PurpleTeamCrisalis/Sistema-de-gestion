@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
@@ -51,7 +53,7 @@ public class UserController {
     @PatchMapping(path = "update/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserResponse> updateUser(
             @PathVariable int id,
-            @RequestBody UpdateUserRequest userDTO) {
+            @RequestBody UpdateUserRequest userDTO) throws IOException {
         UserResponse user = userService.update(id, userDTO);
         return ResponseEntity.ok(user);
     }

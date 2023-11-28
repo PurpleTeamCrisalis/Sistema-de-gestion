@@ -98,23 +98,6 @@ function ChargeListComponent() {
 
           {/* Table and Buttons */}
           <div className="tablePane">
-            {/* Button Section
-            <section className="d-flex justify-content-center m-3">
-              <button
-                type="button"
-                className="btn btn-primary mx-3 fw-bold btn-lg"
-                onClick={() => navigate("/charge/newCharge")}
-              >
-                Nuevo
-              </button>
-              <button
-                type="button"
-                className="btn btn-primary mx-3 fw-bold btn-lg"
-                onClick={deleteCharge}
-              >
-                Eliminar
-              </button>
-            </section> */}
             <AddRemoveButtonsComponent
               newHandler={() => navigate("/charge/newCharge")}
               removeHandler={deleteCharge}
@@ -142,7 +125,7 @@ function ChargeListComponent() {
                       <th scope="col" width="5%">
                         #
                       </th>
-                      <th scope="col" width="50%">
+                      <th scope="col" width="10%">
                         Nombre Cargo
                       </th>
                       <th scope="col" width="10%">

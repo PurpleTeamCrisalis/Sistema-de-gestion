@@ -25,7 +25,10 @@ export function useServicesStore() {
   }
   async function startAddingService(service) {
     try {
+      console.log(service)
       const { data } = await projectApi.post('/service/', service)
+      console.log(data)
+
       dispatch(onAddNewService({
         name: data.name,
         description: data.description,

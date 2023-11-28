@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import NavComponent from '../NavComponent'
 import { useNavigate } from 'react-router-dom'
 import { useClientsStore } from '../../hooks/useClientsStore';
@@ -7,6 +7,9 @@ import { formValidations } from '../../utils/FormValidations';
 import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
 import HeaderComponent from "../HeaderComponent";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
+
 
 function EditClientComponent() {
     const navigate = useNavigate();
@@ -25,6 +28,8 @@ function EditClientComponent() {
         id: activeClient?.id,
     });
 
+    const [isEnabled, setIsEnabled] = useState(activeClient?.enabled);
+
     // Edicion de cliente
     function editClient(event) {
         event.preventDefault();
@@ -39,7 +44,7 @@ function EditClientComponent() {
             adress,
             isbussiness,
             bussinessname,
-            enabled,
+            enabled: isEnabled,
             startdate,
             cuit: parseInt(cuit),
         };
@@ -48,7 +53,7 @@ function EditClientComponent() {
         if (formValidations(clientAux)) {
             return console.log("Campos incorrectos")
         }
-        
+
         // Verifica si los nuevos datos son ya existentes
         const clienteExiste = clients?.find(client => { return client.dni === dni });
         if ((clienteExiste) && (activeClient.dni !== dni)) {
@@ -78,7 +83,7 @@ function EditClientComponent() {
     return (
 
         <div className="bgGrey">
-        <HeaderComponent />
+            <HeaderComponent />
             <div className="container-fluid mainContainer">
                 <div className="secondContainer">
                     {/* Navbar */}
@@ -88,7 +93,7 @@ function EditClientComponent() {
                     <div className="tablePane">
                         {/* Inputs */}
                         <section className="container bg-primary rounded-3 mt-5 mb-4" style={{ minHeight: "70vh", width: "90%" }}>
-                            <div className="text-center py-2">
+                            <div className="text-center pt-4">
                                 <h3 className="fs-4">Editar Cliente</h3>
                                 <hr className="bg-light" />
                             </div>
@@ -97,7 +102,7 @@ function EditClientComponent() {
                                 {/* Persona */}
 
                                 <div className="col-sm-6">
-                                    <h2 className='text-center'>Persona</h2>
+                                    <h3 className='text-center'>Persona</h3>
                                     <div className="row m-4">
                                         <div className="col-md-6 mb-3">
                                             <label htmlFor="name" className="form-label">Nombre</label>
@@ -147,7 +152,7 @@ function EditClientComponent() {
                                                 placeholder={"Ingresa Teléfono"}
                                             />
                                         </div>
-                                        <div className="col-12 mb-3">
+                                        <div className="col-6 mb-3">
                                             <label htmlFor="adress" className="form-label">Dirección</label>
                                             <input
                                                 type="text"
@@ -159,37 +164,42 @@ function EditClientComponent() {
                                                 placeholder={"Ingresa Direccion"}
                                             />
                                         </div>
+                                        <div className="col-6 mb-3">
+                                            <label htmlFor="enabled" className="form-label">Estado</label>
+                                            <div className='d-flex align-items-end'>
+                                                <input
+                                                    type="checkbox"
+                                                    name="enabled"
+                                                    id="enabled"
+                                                    // className="form-control"
+                                                    onChange={(event) => setIsEnabled(event.target.checked)}
+                                                    value={isEnabled}
+                                                    className='btn-check'
+                                                    defaultChecked={isEnabled}
+                                                />
+                                                <label htmlFor="enabled" className="btn checkbox-btn w-100">
+                                                    {`${isEnabled ? "Habilitado   " : "Deshabilitado   "}`}
+                                                    <FontAwesomeIcon
+                                                        icon={faCircleCheck}
+                                                        id="specialIsChecked"
+                                                        style={{
+                                                            color: "#0ee14e",
+                                                        }}
+                                                    />
+                                                    <FontAwesomeIcon
+                                                        icon={faCircleXmark}
+                                                        id="specialIsNotChecked"
+                                                        style={{
+                                                            color: "#e60f0f",
+                                                        }}
+                                                    />
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             {/* Estado del cliente */}
-                            <div className="d-flex align-items-center justify-content-center">
-                                <h5 className="mb-0 me-3">Estado</h5>
-                                <div className="d-flex align-items-center gap-3">
-                                    <div className="d-flex align-items-center">
-                                        <input
-                                            type="radio"
-                                            name="enabled"
-                                            id="enabled"
-                                            onChange={handleInputChange}
-                                            value="true"
-                                            defaultChecked={activeClient.enabled === true}
-                                        />
-                                        <label className="mb-0 ms-2 fs-5">Habilitado</label>
-                                    </div>
-                                    <div className="d-flex align-items-center">
-                                        <input
-                                            type="radio"
-                                            name="enabled"
-                                            id="enabled"
-                                            onChange={handleInputChange}
-                                            value="false"
-                                            defaultChecked={activeClient.enabled === false}
-                                        />
-                                        <label className="mb-0 ms-2 fs-5">Deshabilitado</label>
-                                    </div>
-                                </div>
-                            </div>
                         </section>
 
 
@@ -205,7 +215,7 @@ function EditClientComponent() {
                             <button
                                 type="button"
                                 className="btn btn-primary mx-3 fw-bold btn-lg"
-                                onClick={() => navigate("/client")}
+                                onClick={() => {navigate("/client"); setActiveClient(null)}}
                             >
                                 Volver
                             </button>

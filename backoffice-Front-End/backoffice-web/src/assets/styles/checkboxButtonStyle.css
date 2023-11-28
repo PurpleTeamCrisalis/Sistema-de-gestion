@@ -6,6 +6,11 @@
     transition: all .1s !important;
 }
 
+.checkbox-btn:active {
+    box-shadow: 0 1px #666;
+    transform: translateY(4px);
+  }
+
 .btn-check + .checkbox-btn #specialIsChecked{
     display: none;
 }

@@ -66,7 +66,7 @@ export const ClientOrdersAndSubscriptionsModal = () => {
       aria-hidden="true"
     >
       <div className="modal-dialog">
-        <div className="modal-content" style={{ height: "90vh" }}>
+        <div className="modal-content" style={{ height: "80vh" }}>
           <div className="modal-header">
             <h1 className="modal-title fs-5" id="staticBackdropLabel">
               Historial Cliente

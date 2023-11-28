@@ -127,7 +127,7 @@ function ProductListComponent() {
                       <th scope="col" width="12%">
                         Nombre Producto
                       </th>
-                      <th scope="col" width="50%">
+                      <th scope="col" width="10%">
                         Descripción
                       </th>
                       <th scope="col" width="10%">

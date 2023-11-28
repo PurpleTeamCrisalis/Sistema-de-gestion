@@ -16,7 +16,7 @@ export const DetailModal = () => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
         startCancelingOrder(id);
-        Swal.fire("Orden cancelada", "", "success");
+        Swal.fire("Orden eliminada", "", "success");
       }
     });
   };

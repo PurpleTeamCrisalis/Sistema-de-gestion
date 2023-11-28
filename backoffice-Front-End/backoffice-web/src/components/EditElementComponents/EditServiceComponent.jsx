@@ -14,17 +14,17 @@ import TaxModal from '../Modal/TaxModal';
 function EditServiceComponent() {
     const navigate = useNavigate();
     const { startUpdatingService, activeService, setActiveService, services } = useServicesStore();
-    const { name, description, basePrice, enabled, suportCharge, handleInputChange, emptyValidation, taxes} = useForm({
+    const { name, description, basePrice, enabled, suportCharge, handleInputChange, emptyValidation, taxes } = useForm({
         name: activeService?.name,
         description: activeService?.description,
         basePrice: activeService?.basePrice,
         enabled: activeService?.enabled,
         id: activeService?.id,
-        //taxes: activeService?.taxes,
         suportCharge: activeService?.suportCharge
     });
     const [isSpecial, setIsSpecial] = useState(activeService?.isSpecial);
     const [tax, setTax] = useState(activeService?.taxes);
+    const [isEnabled, setIsEnabled] = useState(activeService?.enabled);
 
     // Edicion de servicio
     function editService(event) {
@@ -145,36 +145,37 @@ function EditServiceComponent() {
                             </div>
 
                             <div className="row justify-content-center align-items-center">
-                                {/* Persona */}
-
-                                <div className="col-sm-10">
-                                    <h2 className='text-center'>Servicio</h2>
-                                    <div className="row m-4">
-                                        <div className="col-md-6 mb-3">
-                                            <label htmlFor="name" className="form-label">Nombre</label>
-                                            <input
-                                                type="text"
-                                                name="name"
-                                                id="name"
-                                                className="form-control"
-                                                onChange={handleInputChange}
-                                                value={name}
-                                                required
-                                            />
-                                            <label htmlFor="basePrice" className="form-label mt-3">Precio Base</label>
-                                            <input
-                                                type="number"
-                                                name="basePrice"
-                                                id="basePrice"
-                                                className="form-control"
-                                                min={0}
-                                                onChange={handleInputChange}
-                                                value={basePrice}
-                                                required
-                                            />
-                                            <div className='row'>
-                                                <div className="col-md-6 mt-3">
-                                                    <p className="form-label">Servicio Especial</p>
+                                <div className="col-md-6 col-sm-12 d-flex flex-column justify-content-center align-items-center">
+                                    <div className="row mx-4">
+                                        <div className="col-sm-12">
+                                            <div className="row justify-content-md-center">
+                                                <div className="col-md-6 mb-3">
+                                                    <label htmlFor="name" className="form-label">Nombre</label>
+                                                    <input
+                                                        type="text"
+                                                        name="name"
+                                                        id="name"
+                                                        className="form-control"
+                                                        onChange={handleInputChange}
+                                                        value={name}
+                                                        required
+                                                    />
+                                                </div>
+                                                <div className="col-md-6 mb-3">
+                                                    <label htmlFor="basePrice" className="form-label">Precio Base</label>
+                                                    <input
+                                                        type="number"
+                                                        name="basePrice"
+                                                        id="basePrice"
+                                                        className="form-control"
+                                                        min={0}
+                                                        onChange={handleInputChange}
+                                                        value={basePrice}
+                                                        required
+                                                    />
+                                                </div>
+                                                <div className="col-md-6 mb-3">
+                                                    <label htmlFor="isSpecial" className="form-label">Servicio Especial</label>
                                                     <div className='d-flex align-items-end'>
                                                         <input
                                                             type="checkbox"
@@ -205,41 +206,78 @@ function EditServiceComponent() {
                                                         </label>
                                                     </div>
                                                 </div>
-                                                {isSpecial &&
-                                                    <div className="col-md-6 mt-3">
-                                                        <label htmlFor="suportCharge" className="form-label">Precio Soporte</label>
+                                                <div className="col-md-6 mb-3">
+                                                    {isSpecial &&
+                                                        <div className="">
+                                                            <label htmlFor="suportCharge" className="form-label">Precio Soporte</label>
+                                                            <input
+                                                                type="number"
+                                                                name="suportCharge"
+                                                                id="suportCharge"
+                                                                className="form-control"
+                                                                min={0}
+                                                                onChange={handleInputChange}
+                                                                value={suportCharge}
+                                                            />
+                                                        </div>}
+                                                    {!isSpecial &&
+                                                        <div className="">
+                                                            <label htmlFor="suportCharge" className="form-label">Precio Soporte</label>
+                                                            <input
+                                                                type="number"
+                                                                name="suportCharge"
+                                                                id="suportCharge"
+                                                                className="form-control"
+                                                                disabled
+                                                                style={{ background: "#fff3" }}
+                                                            />
+                                                        </div>}
+                                                </div>
+                                                <div className="col-md-6 col-sm-12">
+                                                    <p htmlFor="enabled" className="form-label text-center">Estado</p>
+                                                    <div className='d-flex align-items-end'>
                                                         <input
-                                                            type="number"
-                                                            name="suportCharge"
-                                                            id="suportCharge"
-                                                            className="form-control"
-                                                            min={0}
-                                                            onChange={handleInputChange}
-                                                            value={suportCharge}
+                                                            type="checkbox"
+                                                            name="enabled"
+                                                            id="enabled"
+                                                            // className="form-control"
+                                                            onChange={(event) => setIsEnabled(event.target.checked)}
+                                                            value={isEnabled}
+                                                            className='btn-check'
+                                                            defaultChecked={isEnabled}
                                                         />
-                                                    </div>}
-                                                {!isSpecial &&
-                                                    <div className="col-md-6 mt-3">
-                                                        <label htmlFor="suportCharge" className="form-label">Precio Soporte</label>
-                                                        <input
-                                                            type="number"
-                                                            name="suportCharge"
-                                                            id="suportCharge"
-                                                            className="form-control"
-                                                            disabled
-                                                            style={{ background: "#fff3" }}
-                                                        />
-                                                    </div>}
+                                                        <label htmlFor="enabled" className="btn checkbox-btn w-100">
+                                                            {`${isEnabled ? "Habilitado   " : "Deshabilitado   "}`}
+                                                            <FontAwesomeIcon
+                                                                icon={faCircleCheck}
+                                                                id="specialIsChecked"
+                                                                style={{
+                                                                    color: "#0ee14e",
+                                                                }}
+                                                            />
+                                                            <FontAwesomeIcon
+                                                                icon={faCircleXmark}
+                                                                id="specialIsNotChecked"
+                                                                style={{
+                                                                    color: "#e60f0f",
+                                                                }}
+                                                            />
+                                                        </label>
+                                                    </div>
+                                                </div>
                                             </div>
-
                                         </div>
-                                        <div className="col-md-6 mb-3">
-                                            <label htmlFor="description" className="form-label">Descripción</label>
+                                    </div>
+                                </div>
+                                <div className="col-md-6 col-sm-12">
+                                    <div className="row mx-4">
+                                        <div className="mb-3">
+                                            <label htmlFor="description" className="form-label mb-4">Descripción</label>
                                             <textarea
                                                 name="description"
                                                 id="description"
                                                 className="form-control"
-                                                rows="5"
+                                                rows="3"
                                                 cols="2"
                                                 required
                                                 minLength={1}
@@ -249,35 +287,15 @@ function EditServiceComponent() {
                                                 style={{ resize: "none" }}
                                             >
                                             </textarea>
-                                            <p className="form-label mt-2">Estado</p>
-                                            <div className="d-flex align-items-center gap-3">
-                                                <div className="d-flex align-items-center">
-                                                    <input
-                                                        type="radio"
-                                                        name="enabled"
-                                                        id="enabled"
-                                                        onChange={handleInputChange}
-                                                        value="true"
-                                                        defaultChecked={activeService.enabled === true}
-                                                    />
-                                                    <label className="mb-0 ms-2">Habilitado</label>
-                                                </div>
-                                                <div className="d-flex align-items-center">
-                                                    <input
-                                                        type="radio"
-                                                        name="enabled"
-                                                        id="enabled"
-                                                        onChange={handleInputChange}
-                                                        value="false"
-                                                        defaultChecked={activeService.enabled === false}
-                                                    />
-                                                    <label className="mb-0 ms-2">Deshabilitado</label>
-                                                </div>
-                                            </div>
+                                            
                                         </div>
+                                        <div className="">
+                                                <TaxModal tax={tax} setTax={setTax} />
+                                            </div>
                                     </div>
                                     <TaxModal  tax={tax} setTax={setTax} handler={handleInputChange}/>
                                 </div>
+
                             </div>
                         </section>
 
