@@ -152,7 +152,7 @@ function OrderListComponent() {
                             ? `($${order.totalDiscount.toFixed(2)})`
                             : "---"}
                         </td>
-                        <td>{order.date}</td>
+                        <td>{order.date.split("T")[0]}</td>
                         {/* <td style={{ color: orderState[order.state] }}>
                           {order.state ? order.state : "Pendiente"}
                         </td> */}
