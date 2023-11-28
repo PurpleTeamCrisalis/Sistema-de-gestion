@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   isLoadingServicesDiscount: true,
   servicesDiscount: [],
-  activeServicesDiscount: null,
+  activeServiceDiscount: null,
 };
 
 export const servicesDiscountSlice = createSlice({
@@ -16,10 +16,10 @@ export const servicesDiscountSlice = createSlice({
       state.servicesDiscount = payload;
     },
     onSetActiveServicesDiscount: (state, { payload }) => {
-      state.activeServicesDiscount = payload;
+      state.activeServiceDiscount = payload;
     },
     onPullActiveServicesDiscount: (state) => {
-      state.activeServicesDiscount = null;
+      state.activeServiceDiscount = null;
     },
   },
 });

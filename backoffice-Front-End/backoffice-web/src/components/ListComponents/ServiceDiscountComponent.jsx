@@ -7,15 +7,15 @@ import { useNavigate } from 'react-router-dom';
 import { useServicesDiscountStore } from '../../hooks'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
-import { FaFilePdf } from "react-icons/fa6";
 import { format } from 'date-fns';
 import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
-import EmptyList from '../../utils/EmptyList'
+import { ServiceDiscountDetailModal } from '../Modal/ServiceDiscountDetailModal';
+import { onSetActiveCharge } from '../../redux';
 
 function ServiceDiscountComponent() {
     const navigate = useNavigate();
-    const { servicesDiscount, activeServiceDiscount, startLoadingServicesDiscount } = useServicesDiscountStore();
+    const { servicesDiscount, activeServiceDiscount, startLoadingServicesDiscount, setActiveServicesDiscount } = useServicesDiscountStore();
 
     const [startDate, setStartDate] = useState("1900-01-01");
     const [endDate, setEndDate] = useState(format(new Date(), 'yyyy-MM-dd'));
@@ -71,7 +71,7 @@ function ServiceDiscountComponent() {
     }
 
     function showDetails(item) {
-        console.log(item)
+        setActiveServicesDiscount(item)
     }
 
     return (
@@ -173,7 +173,7 @@ function ServiceDiscountComponent() {
                                             <th scope="col">Fecha</th>
                                             <th scope="col">Descuento</th>
                                             <th scope="col">#</th>
-                                            <th scope="col">#</th>
+                                            {/* <th scope="col">#</th> */}
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -211,21 +211,11 @@ function ServiceDiscountComponent() {
                                                                 cursor: "pointer",
                                                             }}
                                                             data-bs-toggle="modal"
-                                                            data-bs-target="#detail-modal"
+                                                            data-bs-target="#service-discount-detail-modal"
                                                             onClick={() => showDetails(item)}
                                                         />
                                                     </td>
-                                                    <td>
-                                                        {/* Descargar informe */}
-                                                        <FaFilePdf
-                                                            style={{
-                                                                color: "#000000",
-                                                                cursor: "pointer",
-                                                            }}
-                                                            onClick={() => console.log("PDF")}
-                                                        />
 
-                                                    </td>
                                                 </tr>
                                             ))
                                         }
@@ -235,7 +225,7 @@ function ServiceDiscountComponent() {
                             )
                         }
 
-
+                        <ServiceDiscountDetailModal />
 
 
                     </div>
