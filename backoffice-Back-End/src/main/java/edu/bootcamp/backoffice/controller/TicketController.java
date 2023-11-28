@@ -33,8 +33,7 @@ public class TicketController
             @RequestParam(name = "startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
             @RequestParam(name = "endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate
     ) {
-        List<ServiceForMaxDiscountPerClientDto> result = serviceForMaxDiscountPerClientService
-                .getServiceForMaxDiscountPerClient(startDate, endDate);
+        List<ServiceForMaxDiscountPerClientDto> result = serviceForMaxDiscountPerClientService.getServiceForMaxDiscountPerClient(startDate, endDate);
         return ResponseEntity.ok(result);
     }
 }
