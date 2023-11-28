@@ -37,10 +37,9 @@ public class DiscountServiceImpl {
         for (Object[] row : result) {
             DiscountServiceDto dto = new DiscountServiceDto();
             dto.setClientName   ((String) row[0]);
-            dto.setProductsname((String) row[1]);
-            dto.setServicename  ((String) row[2]);
-            dto.setOrderDate    ((Date) row[3]);
-            dto.setTotalDiscount((Double) row[4]);
+            dto.setServicename  ((String) row[1]);
+            dto.setOrderDate    ((Date) row[2]);
+            dto.setTotalDiscount((Double) row[3]);
             dtos.add(dto);
         }
 

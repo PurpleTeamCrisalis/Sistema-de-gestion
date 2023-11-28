@@ -13,9 +13,6 @@ public class DiscountServiceDto {
     @JsonProperty("clientname")
     private String clientName;
 
-    @JsonProperty("productsname")
-    private String productsname;
-
     @JsonProperty("servicename")
     private String servicename;
 
