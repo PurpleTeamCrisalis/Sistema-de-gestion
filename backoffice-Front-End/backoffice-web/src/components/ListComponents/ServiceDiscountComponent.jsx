@@ -7,14 +7,15 @@ import { useNavigate } from 'react-router-dom';
 import { useServicesDiscountStore } from '../../hooks'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
-import { FaFilePdf } from "react-icons/fa6";
 import { format } from 'date-fns';
 import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
+import { ServiceDiscountDetailModal } from '../Modal/ServiceDiscountDetailModal';
+import { onSetActiveCharge } from '../../redux';
 
 function ServiceDiscountComponent() {
     const navigate = useNavigate();
-    const { servicesDiscount, activeServiceDiscount, startLoadingServicesDiscount } = useServicesDiscountStore();
+    const { servicesDiscount, activeServiceDiscount, startLoadingServicesDiscount, setActiveServicesDiscount } = useServicesDiscountStore();
 
     const [startDate, setStartDate] = useState("1900-01-01");
     const [endDate, setEndDate] = useState(format(new Date(), 'yyyy-MM-dd'));
@@ -34,11 +35,7 @@ function ServiceDiscountComponent() {
     function handleFilterButton() {
         // Con las fechas ingresadas, ya se puede buscar
         if (checkInputs()) {
-            const paramsFilter = {
-                startDate: startDate,
-                endDate: endDate,
-            };
-            startLoadingServicesDiscount(paramsFilter);
+            startLoadingServicesDiscount(startDate, endDate);
         }
     }
 
@@ -46,6 +43,18 @@ function ServiceDiscountComponent() {
         // Verifica si los campos no estan vacios y si el rango es correcto
         const startDateValue = document.getElementById("fechaInicio").value;
         const endDateValue = document.getElementById("fechaFin").value;
+
+        if (!startDateValue || !endDateValue) {
+            Toastify({
+                text: "Complete los campos",
+                duration: 2000,
+                style: {
+                    background: "linear-gradient(to right, #f44336, #b71c1c)",
+                },
+            }).showToast();
+            console.error("Error: Complete los campos");
+            return false
+        }
 
         if (startDateValue > endDateValue) {
             Toastify({
@@ -55,23 +64,14 @@ function ServiceDiscountComponent() {
                     background: "linear-gradient(to right, #f44336, #b71c1c)",
                 },
             }).showToast();
-            return console.error("Error: Rango de fechas erróneo");
+            console.error("Error: Rango de fechas erróneo");
+            return false
         }
-
-        if (startDateValue && endDateValue) {
-            Toastify({
-                text: "Complete los campos",
-                duration: 2000,
-                style: {
-                    background: "linear-gradient(to right, #f44336, #b71c1c)",
-                },
-            }).showToast();
-            return console.error("Error: Complete los campos");
-        }
+        return true
     }
 
     function showDetails(item) {
-        console.log(item)
+        setActiveServicesDiscount(item)
     }
 
     return (
@@ -149,89 +149,90 @@ function ServiceDiscountComponent() {
                             </div>
                         </div>
 
-                        {/* Tabla */}
-                        <section
-                            className="rounded-3 shadow"
-                        >
-                            <table className="table table-color m-0 mt-3">
-                                {/* Header de la table */}
-                                <thead
-                                    style={{
-                                        position: "sticky",
-                                        top: 0,
-                                        borderBottom: "2px solid black",
-                                    }}
-                                >
-                                    <tr style={{ textAlign: "center" }}>
-                                        <th scope="col">Cliente</th>
-                                        <th scope="col">Servicio</th>
-                                        <th scope="col">Fecha</th>
-                                        <th scope="col">Descuento</th>
-                                        <th scope="col">#</th>
-                                        <th scope="col">#</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {
-                                        servicesDiscount.map((item) => (
-                                            <tr
-                                                key={item.id}
-                                                style={{ marginBottom: "0px", textAlign: "center" }}
-                                            >
-                                                <td>
-                                                    {
-                                                        item.isBusiness ? item.businessName : `${item.clientname} ${item.lastname}`
-                                                    }
-                                                </td>
-                                                <td>
-                                                    {
-                                                        item.servicename
-                                                    }
-                                                </td>
-                                                <td>
-                                                    {
-                                                        item.orderdate.split("T")[0]
-                                                    }
-                                                </td>
-                                                <td>
-                                                    ${
-                                                        item.totaldiscount.toFixed(2)
-                                                    }
-                                                </td>
-                                                <td>
-                                                    <FontAwesomeIcon
-                                                        icon={faEye}
-                                                        style={{
-                                                            color: "#000000",
-                                                            cursor: "pointer",
-                                                        }}
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#detail-modal"
-                                                        onClick={() => showDetails(item)}
-                                                    />
-                                                </td>
-                                                <td>
-                                                    {/* Descargar informe */}
-                                                    <FaFilePdf
-                                                        style={{
-                                                            color: "#000000",
-                                                            cursor: "pointer",
-                                                        }}
-                                                        onClick={() => console.log("PDF")}
-                                                    />
+                        {servicesDiscount.length === 0 ?
+                            (
+                                <div className='text-center mt-5'>
+                                    <h3>Lista Vacía</h3>
+                                    <h4 className='lead'>No hubo pedidos con descuentos en estas fechas</h4>
+                                </div>
+                            )
+                            :
+                            (< section className="rounded-3 shadow" >
+                                <table className="table table-color m-0 mt-3">
+                                    {/* Header de la table */}
+                                    <thead
+                                        style={{
+                                            position: "sticky",
+                                            top: 0,
+                                            borderBottom: "2px solid black",
+                                        }}
+                                    >
+                                        <tr style={{ textAlign: "center" }}>
+                                            <th scope="col">Cliente</th>
+                                            <th scope="col">Servicio</th>
+                                            <th scope="col">Fecha</th>
+                                            <th scope="col">Descuento</th>
+                                            <th scope="col">#</th>
+                                            {/* <th scope="col">#</th> */}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            servicesDiscount?.map((item) => (
+                                                <tr
+                                                    key={item.id}
+                                                    style={{ marginBottom: "0px", textAlign: "center" }}
+                                                >
+                                                    <td>
+                                                        {
+                                                            item.isBusiness ? item.businessName : `${item.clientname} ${item.lastname}`
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        {
+                                                            item.servicename
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        {
+                                                            item.orderdate.split("T")[0]
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        ${
+                                                            item.totaldiscount.toFixed(2)
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        <FontAwesomeIcon
+                                                            icon={faEye}
+                                                            style={{
+                                                                color: "#000000",
+                                                                cursor: "pointer",
+                                                            }}
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#service-discount-detail-modal"
+                                                            onClick={() => showDetails(item)}
+                                                        />
+                                                    </td>
 
-                                                </td>
-                                            </tr>
-                                        ))
-                                    }
-                                </tbody>
-                            </table>
-                        </section>
+                                                </tr>
+                                            ))
+                                        }
+                                    </tbody>
+                                </table>
+                            </section>
+                            )
+                        }
+
+                        <ServiceDiscountDetailModal />
+
+
                     </div>
 
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
 
