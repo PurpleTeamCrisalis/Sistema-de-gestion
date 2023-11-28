@@ -18,7 +18,7 @@ function ReportListComponent() {
             id: 2,
             title: 'Pedidos', // Pedidos por Cliente, Servicios y producto
             image: < FaListAlt />,
-            navigate: () => navigate("")
+            navigate: () => navigate("/report/ordersHistory")
         },
         {
             id: 3,

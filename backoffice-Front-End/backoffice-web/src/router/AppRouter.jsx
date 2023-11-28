@@ -27,6 +27,7 @@ import NewServiceComponent from "../components/NewElementComponents/NewServiceCo
 import EditServiceComponent from "../components/EditElementComponents/EditServiceComponent"
 import ReportListComponent from "../components/ListComponents/ReportListComponent";
 import ServiceDiscountComponent from "../components/ListComponents/ServiceDiscountComponent";
+import ServiceOrdersHistory from "../components/ListComponents/ServiceOrdersHistory";
 
 export const AppRouter = () => {
   const { status, checkAuthToken } = useAuthStore();
@@ -76,6 +77,7 @@ export const AppRouter = () => {
           <Route path="/order/newOrder" element={<NewOrderComponent />}></Route>
           <Route path="/report" element={<ReportListComponent />}></Route>
           <Route path="/report/servicesDiscount" element={<ServiceDiscountComponent />}></Route>
+          <Route path="/report/ordersHistory" element={<ServiceOrdersHistory />}></Route>
           <Route path="/*" element={<Navigate to="/" />}/>
         </>
       ) : (
