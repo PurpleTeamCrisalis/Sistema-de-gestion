@@ -1,9 +1,6 @@
 package edu.bootcamp.backoffice.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.transaction.Transactional;
 
@@ -94,10 +91,7 @@ public class OrderServiceImpl implements OrderService, OrderStateService
     order.setUser(user);
     order.setOrderState(OrderState.PENDIENT_TO_PAY);
     completeOrderTotals(order);
-    clientService.createSubscriptionsAndMergeWithClient(
-            order.getClient(),
-            order.getServices()
-    );
+
     order = orderRepository.save(order);
     return orderFactory.createOrderResponse(order);
   }
@@ -163,7 +157,7 @@ public class OrderServiceImpl implements OrderService, OrderStateService
     for(ServiceDetail serviceDetail : services)
     {
       setServiceGrossPrice(serviceDetail);
-      applyTaxes(serviceDetail, taxesByOrder);
+      applyTaxes(serviceDetail, taxesByOrder, 1);
       total += serviceDetail.getSubTotal();
     }
     return total;
@@ -178,11 +172,12 @@ public class OrderServiceImpl implements OrderService, OrderStateService
     for(ProductDetail productDetail : productDetails)
     {
       setProductGrossPrice(productDetail);
-      applyTaxes(productDetail, taxesByOrder);
-      Double subtotal = productDetail.getSubTotal();
-      subtotal *= productDetail.getQuantity();
-      productDetail.setSubTotal(subtotal);
-      total += subtotal;
+      applyTaxes(
+              productDetail,
+              taxesByOrder,
+              productDetail.getQuantity()
+      );
+      total += productDetail.getSubTotal();;
     }
     return total;
   }
@@ -228,14 +223,15 @@ public class OrderServiceImpl implements OrderService, OrderStateService
 
   private void applyTaxes(
           OrderDetail orderDetail,
-          Map<Integer, TaxByOrder> taxesByOrder
+          Map<Integer, TaxByOrder> taxesByOrder,
+          Integer quantity
     )
   {
-    double subtotal = orderDetail.getPriceWithoutTaxes();
+    double subtotal = orderDetail.getPriceWithoutTaxes() * quantity;
     for (Tax tax : orderDetail.getAsset().getAllTaxes())
     {
       double tax_factor = tax.getPercentage() / 100.0;
-      double charge = orderDetail.getPriceWithoutTaxes() * tax_factor;
+      double charge = orderDetail.getPriceWithoutTaxes() * tax_factor * quantity;
       addTaxAmount(taxesByOrder, charge, tax);
       subtotal += charge;
     }
@@ -406,6 +402,11 @@ public class OrderServiceImpl implements OrderService, OrderStateService
 	public StateMachine<OrderState, OrderStateEvent> payOrder(Integer id) {
 		StateMachine<OrderState, OrderStateEvent> sm = build(id);
 		sendEvent(id, sm, OrderStateEvent.ORDER_PAYED);
+        Optional<Order> order = orderRepository.findById(id);
+      clientService.createSubscriptionsAndMergeWithClient(
+              order.get().getClient(),
+              order.get().getServices()
+      );
 		return sm;
 	}
 }

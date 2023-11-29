@@ -19,8 +19,14 @@ public class TicketForOrdersHistoryDto {
     @JsonProperty ("client_name")
     private String clientName;
 
-    @JsonProperty ("client_bussiness_name")
-    private String clientBussinessName;
+    @JsonProperty ("client_lastname")
+    private String clientLastName;
+
+    @JsonProperty ("is_bussiness")
+    private Boolean isBussiness;
+
+    @JsonProperty ("bussiness_name")
+    private String bussinessName;
 
     @JsonProperty ("order_id")
     private Integer orderId;
