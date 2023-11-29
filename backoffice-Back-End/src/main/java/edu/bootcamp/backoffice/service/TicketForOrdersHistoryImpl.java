@@ -38,17 +38,19 @@ public class TicketForOrdersHistoryImpl implements TicketForOrdersHistory {
             TicketForOrdersHistoryDto dto = new TicketForOrdersHistoryDto();
             dto.setTicketId((BigInteger) row[0]);
             dto.setClientName((String) row[1]);
-            dto.setClientBussinessName((String) row[2]);
-            dto.setOrderId((Integer) row[3]);
-            dto.setOrderState((String) row[4]);
-            dto.setOrderDate((Date) row[5]);
-            dto.setProductServiceName((String) row[6]);
-            dto.setProductServiceQuantity((Integer) row[7]);
-            dto.setBasePrice((Double) row[8]);
-            dto.setSubTotal((Double) row[9]);
-            dto.setTaxesTotalPrice((Double) row[10]);
-            dto.setTotalDiscount((Double) row[11]);
-            dto.setTotalPrice((Double) row[12]);
+            dto.setClientLastName((String) row[2]);
+            dto.setIsBussiness((Boolean) row[3]);
+            dto.setBussinessName((String) row[4]);
+            dto.setOrderId((Integer) row[5]);
+            dto.setOrderState((String) row[6]);
+            dto.setOrderDate((Date) row[7]);
+            dto.setProductServiceName((String) row[8]);
+            dto.setProductServiceQuantity((Integer) row[9]);
+            dto.setBasePrice((Double) row[10]);
+            dto.setSubTotal((Double) row[11]);
+            dto.setTaxesTotalPrice((Double) row[12]);
+            dto.setTotalDiscount((Double) row[13]);
+            dto.setTotalPrice((Double) row[14]);
             dtos.add(dto);
         }
 

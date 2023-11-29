@@ -29,6 +29,9 @@ public class ServiceDetail extends OrderDetail
   @ManyToOne(optional = false)
   private ServiceEntity service;
 
+  @Column(name = "taxesApplied")
+  private String taxesApplied;
+
   @Override
   public Asset getAsset() {
     return service;

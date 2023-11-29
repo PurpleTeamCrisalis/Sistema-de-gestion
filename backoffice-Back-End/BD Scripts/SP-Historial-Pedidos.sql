@@ -4,6 +4,8 @@ BEGIN
 WITH CombinedData AS (
 SELECT 
         "cli"."name",
+        "cli".last_name,
+        "cli".is_bussiness,
         "cli".bussiness_name,
         "order".id AS order_id,
         "order".order_state,
@@ -22,6 +24,8 @@ SELECT
     LEFT JOIN dbo.tax_by_order AS "tax_by_order" ON "tax_by_order"."order_id" = "order"."id"
     GROUP BY "order"."id", 
             "cli"."name", 
+            "cli".last_name,
+            "cli".is_bussiness,
             "cli".bussiness_name, 
             "order"."order_state", 
             "order"."date", 
@@ -34,6 +38,8 @@ SELECT
     UNION ALL
     SELECT 
         "cli"."name",
+        "cli".last_name,
+        "cli".is_bussiness,
         "cli".bussiness_name,
         "order".id AS order_id,
         "order".order_state,
@@ -52,6 +58,8 @@ SELECT
     LEFT JOIN dbo.tax_by_order AS "tax_by_order" ON "tax_by_order"."order_id" = "order"."id"
     GROUP BY "order"."id", 
             "cli"."name", 
+            "cli".last_name,
+            "cli".is_bussiness,
             "cli".bussiness_name, 
             "order"."order_state", 
             "order"."date", 
@@ -65,5 +73,5 @@ SELECT
 SELECT 
     ROW_NUMBER() OVER (ORDER BY CAST(GETDATE() AS TIMESTAMP)) AS ticket_id, *
 FROM CombinedData
-ORDER BY name, bussiness_name, order_id, product_name, date
+ORDER BY name, last_name, bussiness_name, order_id, product_name, date
 END
