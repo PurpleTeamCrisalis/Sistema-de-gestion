@@ -163,7 +163,7 @@ public class OrderServiceImpl implements OrderService, OrderStateService
     for(ServiceDetail serviceDetail : services)
     {
       setServiceGrossPrice(serviceDetail);
-      applyTaxes(serviceDetail, taxesByOrder);
+      applyTaxes(serviceDetail, taxesByOrder, 1);
       total += serviceDetail.getSubTotal();
     }
     return total;
@@ -178,11 +178,12 @@ public class OrderServiceImpl implements OrderService, OrderStateService
     for(ProductDetail productDetail : productDetails)
     {
       setProductGrossPrice(productDetail);
-      applyTaxes(productDetail, taxesByOrder);
-      Double subtotal = productDetail.getSubTotal();
-      subtotal *= productDetail.getQuantity();
-      productDetail.setSubTotal(subtotal);
-      total += subtotal;
+      applyTaxes(
+              productDetail,
+              taxesByOrder,
+              productDetail.getQuantity()
+      );
+      total += productDetail.getSubTotal();;
     }
     return total;
   }
@@ -228,14 +229,15 @@ public class OrderServiceImpl implements OrderService, OrderStateService
 
   private void applyTaxes(
           OrderDetail orderDetail,
-          Map<Integer, TaxByOrder> taxesByOrder
+          Map<Integer, TaxByOrder> taxesByOrder,
+          Integer quantity
     )
   {
-    double subtotal = orderDetail.getPriceWithoutTaxes();
+    double subtotal = orderDetail.getPriceWithoutTaxes() * quantity;
     for (Tax tax : orderDetail.getAsset().getAllTaxes())
     {
       double tax_factor = tax.getPercentage() / 100.0;
-      double charge = orderDetail.getPriceWithoutTaxes() * tax_factor;
+      double charge = orderDetail.getPriceWithoutTaxes() * tax_factor * quantity;
       addTaxAmount(taxesByOrder, charge, tax);
       subtotal += charge;
     }
