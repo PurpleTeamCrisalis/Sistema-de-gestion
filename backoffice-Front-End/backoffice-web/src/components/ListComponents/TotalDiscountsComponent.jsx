@@ -29,7 +29,8 @@ function TotalDiscountsComponent() {
     let StateForGroupBy = {
         lastClient : null,
         lastService : null,
-        newService : null
+        newService : null,
+        color: "background-color: white"
     }
 
     function getName(item)
@@ -42,7 +43,7 @@ function TotalDiscountsComponent() {
         return name
     }
 
-    function initItem(item)
+    function initGroupBy(item)
     {
         let clientName = "";
         let newClient = getName(item);
@@ -119,7 +120,7 @@ function TotalDiscountsComponent() {
                                                 >
                                                     <td>
                                                         {
-                                                            initItem(item)
+                                                            initGroupBy(item)
                                                         }
                                                     </td>
                                                     <td>
