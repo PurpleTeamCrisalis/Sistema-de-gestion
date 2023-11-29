@@ -1,6 +1,8 @@
 package edu.bootcamp.backoffice.controller;
 
+import edu.bootcamp.backoffice.model.discoutService.DiscountServiceDto;
 import edu.bootcamp.backoffice.model.ticket.ServiceForMaxDiscountPerClientDto;
+import edu.bootcamp.backoffice.service.TotalDiscountServiceImpl;
 import edu.bootcamp.backoffice.service.Interface.ServiceForMaxDiscountPerClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -20,11 +22,15 @@ public class TicketController
 {
     @Autowired
     private final ServiceForMaxDiscountPerClientService serviceForMaxDiscountPerClientService;
+    @Autowired
+    private final TotalDiscountServiceImpl discountServiceImpl;
 
     public TicketController(
+            TotalDiscountServiceImpl discountServiceImpl,
             ServiceForMaxDiscountPerClientService serviceForMaxDiscountPerClientService
         )
     {
+        this.discountServiceImpl = discountServiceImpl;
         this.serviceForMaxDiscountPerClientService = serviceForMaxDiscountPerClientService;
     }
 
@@ -34,6 +40,12 @@ public class TicketController
             @RequestParam(name = "endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate
     ) {
         List<ServiceForMaxDiscountPerClientDto> result = serviceForMaxDiscountPerClientService.getServiceForMaxDiscountPerClient(startDate, endDate);
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping(path = "/totalDiscounts", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<DiscountServiceDto>> totalDiscounts(){
+        List<DiscountServiceDto> result = discountServiceImpl.getTotalDiscountsService();
         return ResponseEntity.ok(result);
     }
 }

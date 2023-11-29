@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 import edu.bootcamp.backoffice.model.order.Order;
 
 @Repository
-public interface DiscountServiceReposity extends JpaRepository<Order, Integer> {
-    @Procedure(name = "getTotalDiscountServices")
-    List<Object[]> getTotalDiscountServices();
+public interface TotalDiscountsService extends JpaRepository<Order, Integer> {
+    @Procedure(name = "getTotalDiscountsService")
+    List<Object[]> getTotalDiscountsService();
 }
 

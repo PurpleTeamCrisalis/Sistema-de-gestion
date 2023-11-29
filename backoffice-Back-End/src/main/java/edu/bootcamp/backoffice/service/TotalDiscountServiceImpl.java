@@ -12,21 +12,21 @@ import org.springframework.stereotype.Service;
 
 import edu.bootcamp.backoffice.model.discoutService.DiscountServiceDto;
 import edu.bootcamp.backoffice.model.ticket.ServiceForMaxDiscountPerClientDto;
-import edu.bootcamp.backoffice.repository.DiscountServiceReposity;
+import edu.bootcamp.backoffice.repository.TotalDiscountsService;
 
 @Service
-public class DiscountServiceImpl {
+public class TotalDiscountServiceImpl {
 
-    private final DiscountServiceReposity repository;
+    private final TotalDiscountsService repository;
 
     @Autowired
-    public DiscountServiceImpl(DiscountServiceReposity repository) {
+    public TotalDiscountServiceImpl(TotalDiscountsService repository) {
         this.repository = repository;
     }
 
     @Transactional
-    public List<DiscountServiceDto> getTotalDiscountServices() {
-        List<Object[]> result = repository.getTotalDiscountServices();
+    public List<DiscountServiceDto> getTotalDiscountsService() {
+        List<Object[]> result = repository.getTotalDiscountsService();
         System.out.println(result);
         return mapToObject(result);
     }
@@ -36,10 +36,11 @@ public class DiscountServiceImpl {
 
         for (Object[] row : result) {
             DiscountServiceDto dto = new DiscountServiceDto();
-            dto.setClientName   ((String) row[0]);
-            dto.setServicename  ((String) row[1]);
-            dto.setOrderDate    ((Date) row[2]);
-            dto.setTotalDiscount((Double) row[3]);
+            dto.setClientName    ((String) row[0]);
+            dto.setClientLastName((String) row[1]);
+            dto.setServicename   ((String) row[2]);
+            dto.setOrderDate     ((Date) row[3]);
+            dto.setTotalDiscount ((Double) row[4]);
             dtos.add(dto);
         }
 
