@@ -3,12 +3,12 @@ import { useOrdersStore } from "../../hooks";
 import Swal from "sweetalert2";
 
 export const DetailModal = () => {
-  const { selectedOrder, pullSelectedOrder, startCancelingOrder } =
+  const { selectedOrder, pullSelectedOrder, startCancelingOrder, startPayingOrder } =
     useOrdersStore();
 
   const cancelOrder = (id) => {
     Swal.fire({
-      title: `¿Seguro que quieres eliminar la orden N°${id}?`,
+      title: `¿Seguro que quieres cancelar la orden N°${id}?`,
       showCancelButton: true,
       confirmButtonText: "Confirmar",
       cancelButtonText: "Cancelar",
@@ -17,6 +17,21 @@ export const DetailModal = () => {
       if (result.isConfirmed) {
         startCancelingOrder(id);
         Swal.fire("Orden cancelada", "", "success");
+      }
+    });
+  };
+
+  const payOrder = (id) => {
+    Swal.fire({
+      title: `¿Marcar orden N°${id} como Pagada?`,
+      showCancelButton: true,
+      confirmButtonText: "Confirmar",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        startPayingOrder(id);
+        Swal.fire("Orden pagada", "", "success");
       }
     });
   };
@@ -209,16 +224,16 @@ export const DetailModal = () => {
             >
               Cancelar orden
             </button>
-            {/* <button
+            <button
               type="button"
               className="btn btn-primary"
               // data-bs-dismiss="modal"
               onClick={() => {
-                alert("Orden pagada");
+                payOrder(selectedOrder.id);
               }} // Llamar a la funcion para que cambie el estado de la orden a pagado.
             >
               Pagar orden
-            </button> */}
+            </button>
           </div>
         </div>
       </div>

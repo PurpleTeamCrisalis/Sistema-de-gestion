@@ -89,11 +89,7 @@ public class ClientController {
     public ResponseEntity<List<SubscriptionResponse>> getClientSubscriptions(@PathVariable int clientId) {
         // clientService.getClientSubscriptions(clientId);
         List<SubscriptionResponse> subscription = new ArrayList<>();
-        for (SubscriptionResponse subscriptionResponse : clientService.getClientSubscriptions(clientId)) {
-            if (subscriptionResponse.getEnabled()) {
-                subscription.add(subscriptionResponse);
-            }
-        }
+        subscription.addAll(clientService.getClientSubscriptions(clientId));
         return ResponseEntity.ok(subscription);
     }
 }

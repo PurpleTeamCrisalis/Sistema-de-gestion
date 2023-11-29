@@ -9,6 +9,7 @@ import { productsSlice } from "./products";
 import { servicesSlice } from "./services";
 import { suscriptionsSlice } from "./suscriptions";
 import { servicesDiscountSlice } from "./servicesDiscount/servicesDiscountSlice";
+import { ordersHistorySlice } from "./ordersHistory";
 
 const rootReducer = combineReducers({
   auth: authSlice.reducer,
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
   services: servicesSlice.reducer,
   suscriptions: suscriptionsSlice.reducer,
   servicesDiscount: servicesDiscountSlice.reducer,
+  ordersHistory: ordersHistorySlice.reducer,
 });
 
 export const store = configureStore({
