@@ -90,7 +90,7 @@ function NewChargeComponent() {
           <div className="tablePane">
             <section className="container bg-primary rounded-3 mt-5 mb-4" style={{ minHeight: "70vh", width: "90%" }}>
               <div className="text-center pt-4">
-                <h3 className="fs-4">Editar Cargo</h3>
+                <h3 className="fs-4">Nuevo Cargo</h3>
                 <hr className="bg-light" />
               </div>
 
@@ -98,9 +98,8 @@ function NewChargeComponent() {
                 {/* Cargo */}
 
                 <div className="col-sm-6">
-                  <h2 className='text-center'>Cargo</h2>
-                  <div className="row m-4">
-                    <div className="col-md-6 mb-3">
+                  <div className="m-5">
+                    <div className="mb-5">
                       <label htmlFor="name" className="form-label">Nombre</label>
                       <input
                         type="text"
@@ -112,7 +111,7 @@ function NewChargeComponent() {
                         required
                       />
                     </div>
-                    <div className="col-md-6 mb-3">
+                    <div className="mt-5">
                       <label htmlFor="basePrice" className="form-label">Porcentaje</label>
                       <input
                         type="number"

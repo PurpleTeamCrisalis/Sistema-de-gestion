@@ -97,9 +97,8 @@ function EditChargeComponent() {
                 {/* Cargo */}
 
                 <div className="col-sm-6">
-                  <h2 className='text-center'>Cargo</h2>
-                  <div className="row m-4">
-                    <div className="col-md-6 mb-3">
+                  <div className="m-5">
+                    <div className="mb-5">
                       <label htmlFor="name" className="form-label">Nombre</label>
                       <input
                         type="text"
@@ -111,7 +110,7 @@ function EditChargeComponent() {
                         required
                       />
                     </div>
-                    <div className="col-md-6 mb-3">
+                    <div className=" mb-5">
                       <label htmlFor="basePrice" className="form-label">Porcentaje</label>
                       <input
                         type="number"

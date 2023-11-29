@@ -138,17 +138,17 @@ function ChargeListComponent() {
                       borderBottom: "2px solid black",
                     }}
                   >
-                    <tr style={{ textAlign: "center" }}>
+                    <tr >
                       <th scope="col" width="5%">
                         #
                       </th>
-                      <th scope="col" width="50%">
+                      <th scope="col" width="30%">
                         Nombre Cargo
                       </th>
-                      <th scope="col" width="10%">
+                      <th scope="col" width="25%">
                         Porcentaje
                       </th>
-                      <th scope="col" width="10%">
+                      <th scope="col" width="15%">
                         Estado
                       </th>
                       <th scope="col" width="5%">
@@ -161,7 +161,6 @@ function ChargeListComponent() {
                       <tr
                         key={charge.id}
                         className=""
-                        style={{ textAlign: "center" }}
                       >
                         <td>
                           <input
