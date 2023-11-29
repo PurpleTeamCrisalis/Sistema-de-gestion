@@ -35,7 +35,8 @@ public class Order implements SoftDeletable{
 
     // OrderState -> Patron State
     // @Column(name = "orderState", nullable = false)
-    // private OrderState orderState;
+    @Enumerated(EnumType.STRING)
+    private OrderState orderState;
 
     @Column(
             name = "date",

@@ -3,12 +3,12 @@ import { useOrdersStore } from "../../hooks";
 import Swal from "sweetalert2";
 
 export const DetailModal = () => {
-  const { selectedOrder, pullSelectedOrder, startCancelingOrder } =
+  const { selectedOrder, pullSelectedOrder, startCancelingOrder, startPayingOrder } =
     useOrdersStore();
 
   const cancelOrder = (id) => {
     Swal.fire({
-      title: `¿Seguro que quieres eliminar la orden N°${id}?`,
+      title: `¿Seguro que quieres cancelar la orden N°${id}?`,
       showCancelButton: true,
       confirmButtonText: "Confirmar",
       cancelButtonText: "Cancelar",
@@ -17,6 +17,21 @@ export const DetailModal = () => {
       if (result.isConfirmed) {
         startCancelingOrder(id);
         Swal.fire("Orden cancelada", "", "success");
+      }
+    });
+  };
+
+  const payOrder = (id) => {
+    Swal.fire({
+      title: `¿Marcar orden N°${id} como Pagada?`,
+      showCancelButton: true,
+      confirmButtonText: "Confirmar",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        startPayingOrder(id);
+        Swal.fire("Orden pagada", "", "success");
       }
     });
   };
@@ -31,7 +46,7 @@ export const DetailModal = () => {
       aria-labelledby="staticBackdropLabel"
       aria-hidden="true"
     >
-      <div className="modal-dialog modal-xl">
+      <div className="modal-dialog modal-lg">
         <div className="modal-content">
           <div className="modal-header">
             <h1 className="modal-title fs-5" id="staticBackdropLabel">
@@ -69,16 +84,13 @@ export const DetailModal = () => {
                         <th scope="col" width="15%">
                           Precio Unitario
                         </th>
-                        <th scope="col" width="10%">
+                        <th scope="col" width="12%">
                           Subtotal A/I
                         </th>
-                        <th scope="col" width="20%">
+                        <th scope="col" width="10%">
                           Impuestos
                         </th>
-                        <th scope="col" width="5%">
-                          %
-                        </th>
-                        <th scope="col" width="15%">
+                        <th scope="col" width="10%">
                           Subtotal
                         </th>
                       </tr>
@@ -93,7 +105,6 @@ export const DetailModal = () => {
                             ${(product.quantity * product.basePrice).toFixed(2)}
                           </td>
                           <td>{product.taxesApplied}</td>
-                          <td>{product.taxCharges.toFixed(2)}%</td>
                           <td>${product.subTotal.toFixed(2)}</td>
                         </tr>
                       ))}
@@ -119,19 +130,16 @@ export const DetailModal = () => {
                         <th scope="col" width="10%">
                           Nombre
                         </th>
-                        <th scope="col" width="22%">
+                        <th scope="col" width="24%">
                           Precio Unitario
                         </th>
-                        <th scope="col" width="10%">
+                        <th scope="col" width="12%">
                           Subtotal A/I
                         </th>
-                        <th scope="col" width="20%">
+                        <th scope="col" width="10%">
                           Impuestos
                         </th>
-                        <th scope="col" width="5%">
-                          %
-                        </th>
-                        <th scope="col" width="15%">
+                        <th scope="col" width="10%">
                           Subtotal
                         </th>
                       </tr>
@@ -143,8 +151,54 @@ export const DetailModal = () => {
                           <td>${service.basePrice.toFixed(2)}</td>
                           <td>${service.basePrice.toFixed(2)}</td>
                           <td>{service.taxesApplied}</td>
-                          <td>{service.taxCharges.toFixed(2)}%</td>
                           <td>${service.subTotal.toFixed(2)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                ""
+              )}
+              {selectedOrder?.taxes.length ? (
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-start",
+                  }}
+                >
+                  <h1 className="fs-6">Impuestos</h1>
+                  <table
+                    className="table table-hover"
+                    style={{ width: "23rem" }}
+                  >
+                    {/* Header de la table */}
+                    <thead
+                      style={{
+                        position: "sticky",
+                        top: 0,
+                        borderBottom: "2px solid black",
+                      }}
+                    >
+                      <tr style={{ textAlign: "center" }}>
+                        <th scope="col" width="30%">
+                          Nombre
+                        </th>
+                        <th scope="col">
+                          Porcentaje
+                        </th>
+                        <th scope="col" width="40%">
+                          Importe
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {selectedOrder?.taxes.map((tax) => (
+                        <tr key={tax.id} style={{ textAlign: "center" }}>
+                          <td>{tax.tax.name}</td>
+                          <td>{tax.tax.percentage.toFixed(2)}%</td>
+                          <td>${tax.amount.toFixed(2)}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -170,16 +224,16 @@ export const DetailModal = () => {
             >
               Cancelar orden
             </button>
-            {/* <button
+            <button
               type="button"
               className="btn btn-primary"
               // data-bs-dismiss="modal"
               onClick={() => {
-                alert("Orden pagada");
+                payOrder(selectedOrder.id);
               }} // Llamar a la funcion para que cambie el estado de la orden a pagado.
             >
               Pagar orden
-            </button> */}
+            </button>
           </div>
         </div>
       </div>

@@ -1,9 +1,8 @@
 package edu.bootcamp.backoffice.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import javax.transaction.Transactional;
 
 import edu.bootcamp.backoffice.config.AppConstants;
 import edu.bootcamp.backoffice.model.Tax.Tax;
@@ -17,6 +16,10 @@ import edu.bootcamp.backoffice.model.service.ServiceEntity;
 import edu.bootcamp.backoffice.model.taxByOrder.TaxByOrder;
 import edu.bootcamp.backoffice.service.Interface.ClientService;
 import edu.bootcamp.backoffice.service.Interface.UserService;
+
+import org.springframework.statemachine.StateMachine;
+import org.springframework.statemachine.config.StateMachineFactory;
+import org.springframework.statemachine.support.DefaultStateMachineContext;
 import org.springframework.stereotype.Service;
 
 import edu.bootcamp.backoffice.exception.custom.dbValidation.EmptyTableException;
@@ -31,11 +34,13 @@ import edu.bootcamp.backoffice.service.Interface.ServiceDetailService;
 import edu.bootcamp.backoffice.service.Interface.Validator;
 import edu.bootcamp.backoffice.model.orderDetail.serviceDetail.ServiceDetail;
 import edu.bootcamp.backoffice.model.user.User;
+import edu.bootcamp.backoffice.model.order.*;
 
 @Service
-public class OrderServiceImpl implements OrderService {
-
-  // Injectar Repository
+public class OrderServiceImpl implements OrderService, OrderStateService  
+{
+	private final StateMachineFactory<OrderState, OrderStateEvent> stateMachineFactory;
+	private final OrderStateChangeInterceptor orderStateChangeInterceptor;
   private final OrderFactory orderFactory;
   private final OrderRepository orderRepository;
   private final ProductDetailService productDetailService;
@@ -44,26 +49,31 @@ public class OrderServiceImpl implements OrderService {
   private final ClientService clientService;
   private final Validator validator;
   private final AppConstants appConstants;
+  public static final String ORDER_ID_HEADER = "Order_id";
 
   public OrderServiceImpl(
       ProductDetailService productDetailService,
       ServiceDetailService serviceDetailService,
-      OrderFactory         orderFactory,
-      OrderRepository      orderRepository,
-      UserService          userService,
-      ClientService        clientService,
-      Validator            validator,
-      AppConstants         appConstants
+      OrderFactory orderFactory,
+      OrderRepository orderRepository,
+      UserService userService,
+      ClientService clientService,
+      Validator validator,
+      AppConstants appConstants,
+			OrderStateChangeInterceptor orderStateChangeInterceptor,
+			StateMachineFactory<OrderState, OrderStateEvent> stateMachineFactory
     )
   {
-    this.userService          = userService;
-    this.clientService        = clientService;
-    this.orderFactory         = orderFactory;
-    this.orderRepository      = orderRepository;
+    this.userService = userService;
+    this.clientService = clientService;
+    this.orderFactory = orderFactory;
+    this.orderRepository = orderRepository;
     this.productDetailService = productDetailService;
     this.serviceDetailService = serviceDetailService;
-    this.validator            = validator;
-    this.appConstants         = appConstants;
+    this.validator = validator;
+    this.appConstants = appConstants;
+		this.stateMachineFactory = stateMachineFactory;
+		this.orderStateChangeInterceptor = orderStateChangeInterceptor;
   }
 
   public OrderResponse registerOrder(
@@ -79,11 +89,9 @@ public class OrderServiceImpl implements OrderService {
     if (errorBuilder.length() > 0)
       throw new IllegalArgumentException(errorBuilder.toString());
     order.setUser(user);
+    order.setOrderState(OrderState.PENDIENT_TO_PAY);
     completeOrderTotals(order);
-    clientService.createSubscriptionsAndMergeWithClient(
-            order.getClient(),
-            order.getServices()
-    );
+
     order = orderRepository.save(order);
     return orderFactory.createOrderResponse(order);
   }
@@ -216,15 +224,15 @@ public class OrderServiceImpl implements OrderService {
   private void applyTaxes(
           OrderDetail orderDetail,
           Map<Integer, TaxByOrder> taxesByOrder,
-          int quantity
+          Integer quantity
     )
   {
     double subtotal = orderDetail.getPriceWithoutTaxes() * quantity;
     for (Tax tax : orderDetail.getAsset().getAllTaxes())
     {
       double tax_factor = tax.getPercentage() / 100.0;
-      double charge = orderDetail.getPriceWithoutTaxes() * tax_factor* quantity;
-      addTaxAmount(taxesByOrder, charge , tax);
+      double charge = orderDetail.getPriceWithoutTaxes() * tax_factor * quantity;
+      addTaxAmount(taxesByOrder, charge, tax);
       subtotal += charge;
     }
     orderDetail.setSubTotal(subtotal);
@@ -355,5 +363,50 @@ public class OrderServiceImpl implements OrderService {
     }
 
     return dtos;
-}
+  }
+
+  private StateMachine<OrderState, OrderStateEvent> build(Integer orderId) {
+		Order order = orderRepository.getOne(orderId);
+
+		StateMachine<OrderState, OrderStateEvent> sm = stateMachineFactory
+				.getStateMachine(Integer.toString(order.getId()));
+
+		sm.stop();
+
+		sm.getStateMachineAccessor().doWithAllRegions(sma -> {
+			sma.addStateMachineInterceptor(orderStateChangeInterceptor);
+			sma.resetStateMachine(new DefaultStateMachineContext<>(order.getOrderState(), null, null, null));
+		});
+
+		sm.start();
+
+		return sm;
+	}
+
+  private void sendEvent(Integer orderId, StateMachine<OrderState, OrderStateEvent> sm, OrderStateEvent event) {
+		OrderStateChangeInterceptor.setOrderId(orderId);
+		sm.sendEvent(event);
+	}
+
+
+	@Transactional
+	@Override
+	public StateMachine<OrderState, OrderStateEvent> cancellOrder(Integer id) {
+		StateMachine<OrderState, OrderStateEvent> sm = build(id);
+		sendEvent(id, sm, OrderStateEvent.ORDER_CANCELLED);
+		return sm;
+	}
+
+	@Transactional
+	@Override
+	public StateMachine<OrderState, OrderStateEvent> payOrder(Integer id) {
+		StateMachine<OrderState, OrderStateEvent> sm = build(id);
+		sendEvent(id, sm, OrderStateEvent.ORDER_PAYED);
+        Optional<Order> order = orderRepository.findById(id);
+      clientService.createSubscriptionsAndMergeWithClient(
+              order.get().getClient(),
+              order.get().getServices()
+      );
+		return sm;
+	}
 }

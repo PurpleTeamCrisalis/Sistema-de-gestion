@@ -20,7 +20,6 @@ export const productsSlice = createSlice({
     },
     onAddNewProduct: (state, { payload }) => {
       state.products.push(payload)
-      console.log(payload)
       state.activeProduct = null
     },
     onSetActiveProduct: (state, { payload }) => {

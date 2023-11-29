@@ -1,5 +1,7 @@
 package edu.bootcamp.backoffice.model.orderDetail.productDetail;
 
+import java.util.List;
+
 import javax.persistence.*;
 
 import edu.bootcamp.backoffice.model.EntitiesConstraints;
@@ -28,6 +30,9 @@ public class ProductDetail extends OrderDetail
 
   @Column(name = "quantity", nullable = false)
   private Integer quantity;
+
+  @Column(name = "taxesApplied")
+  private String taxesApplied;
   
   @Column(name = "warranty")
   private Double warranty;
