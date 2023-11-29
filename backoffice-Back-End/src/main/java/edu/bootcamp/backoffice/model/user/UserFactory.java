@@ -28,7 +28,7 @@ public class UserFactory
         return User
                 .builder()
                 .username(userDTO.getUsername())
-                //.email(userDTO.getEmail())
+                .email(userDTO.getEmail())
                 .password(userDTO.getPassword())
                 .enabled(true)
                 .build();

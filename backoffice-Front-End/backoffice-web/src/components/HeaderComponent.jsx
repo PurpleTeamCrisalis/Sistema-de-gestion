@@ -5,21 +5,11 @@ import imageLogoFinnegans from "../assets/images/logoEmpresa.png";
 import { useAuthStore } from "../hooks/useAuthStore";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
-import { useUsersStore } from "../hooks";
-import axios from "axios";
 import '../assets/styles/userProfileImageStyle.css'
 
 function HeaderComponent() {
   const { startLogout } = useAuthStore();
-  const { setActiveUser, users, startLoadingUsers, activeUsers, startLoadingProfileImage } = useUsersStore();
   const { user } = useAuthStore();
-
-  useEffect(() => {
-    if (users.length === 0) startLoadingUsers();
-    const imageElement = document.getElementById('userProfileImageSmall');
-    const noImageElement = document.getElementById('userNoProfileImageSmall');
-    startLoadingProfileImage(user.username, imageElement, noImageElement)
-  }, []);
 
   function handleLogout(event) {
     event.preventDefault();
@@ -38,11 +28,6 @@ function HeaderComponent() {
         startLogout();
       }
     })
-  }
-
-  function toUserProfile() {
-    const userActive = users.filter((us) => us.username === user.username);
-    setActiveUser(userActive[0]);
   }
 
   return (
@@ -77,17 +62,12 @@ function HeaderComponent() {
             aria-expanded="false"
           >
             <span className="d-none d-sm-inline mx-2 fw-bold">{user.username}</span>
-            <img id="userProfileImageSmall" alt="foto de perfil" width={"40px"} height={"40x"} />
-            <img id="userNoProfileImageSmall" src="src\assets\images\user-no-image.png" alt="foto de perfil" width={"40px"} height={"40px"} />
 
           </button>
           <div className="dropdown-menu">
             <a className="dropdown-item" href="/" onClick={(event)=>handleLogout(event)}>
               Cerrar sesion
             </a>
-            <Link to="/userProfile" onClick={() => toUserProfile()} className="dropdown-item">
-              <span>Perfil de Usuario</span>
-            </Link>
           </div>
         </div>
       </div>

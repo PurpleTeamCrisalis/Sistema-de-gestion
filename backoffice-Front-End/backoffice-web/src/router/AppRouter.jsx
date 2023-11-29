@@ -19,13 +19,11 @@ import NewClientComponent from "../components/NewElementComponents/NewClientComp
 import EditClientComponent from "../components/EditElementComponents/EditClientComponent"
 import { useAuthStore } from "../hooks";
 import EditClientCompanyComponent from "../components/EditElementComponents/EditClientCompanyComponent";
-import { getLastView } from "../helpers";
 import NewClientCompanyComponent from "../components/NewElementComponents/NewClientCompanyComponent";
 import NewProductComponent from "../components/NewElementComponents/NewProductComponent";
 import EditProductComponent from "../components/EditElementComponents/EditProductComponent"
 import NewServiceComponent from "../components/NewElementComponents/NewServiceComponent";
 import EditServiceComponent from "../components/EditElementComponents/EditServiceComponent"
-import UserProfileComponent from "../components/UserProfileComponent";
 
 
 export const AppRouter = () => {
@@ -55,7 +53,6 @@ export const AppRouter = () => {
       {status === "authenticated" ? (
         <>
           <Route path="/" element={<HomePage />}/>
-          <Route path="/userProfile" element={<UserProfileComponent/>}/>
           <Route path="/user" element={<UserListComponent />}></Route>
           <Route path="/user/newUser" element={<NewUserComponent />}></Route>
           <Route path="/user/editUser" element={<EditUserComponent />}></Route>
