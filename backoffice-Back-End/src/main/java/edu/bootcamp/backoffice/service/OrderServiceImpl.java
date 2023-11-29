@@ -1,9 +1,6 @@
 package edu.bootcamp.backoffice.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.transaction.Transactional;
 
@@ -94,10 +91,7 @@ public class OrderServiceImpl implements OrderService, OrderStateService
     order.setUser(user);
     order.setOrderState(OrderState.PENDIENT_TO_PAY);
     completeOrderTotals(order);
-    clientService.createSubscriptionsAndMergeWithClient(
-            order.getClient(),
-            order.getServices()
-    );
+
     order = orderRepository.save(order);
     return orderFactory.createOrderResponse(order);
   }
@@ -408,6 +402,11 @@ public class OrderServiceImpl implements OrderService, OrderStateService
 	public StateMachine<OrderState, OrderStateEvent> payOrder(Integer id) {
 		StateMachine<OrderState, OrderStateEvent> sm = build(id);
 		sendEvent(id, sm, OrderStateEvent.ORDER_PAYED);
+        Optional<Order> order = orderRepository.findById(id);
+      clientService.createSubscriptionsAndMergeWithClient(
+              order.get().getClient(),
+              order.get().getServices()
+      );
 		return sm;
 	}
 }

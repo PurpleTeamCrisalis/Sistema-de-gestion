@@ -5,24 +5,26 @@ import { faEye, faXmark } from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
 import { Tooltip } from "react-tooltip";
 
+const orderState = {
+  PENDIENT_TO_PAY: "#617474",
+  ORDER_DELIVERED: "#198754",
+  ORDER_CANCELLED: "#a32525",
+};
+
 export const ClientOrdersAndSubscriptionsModal = () => {
   const {
     clientSubscriptions,
-    deleteClientSubscriptions,
-    startUpdatingClient,
     activeClient,
-    setActiveClient,
+    startUpdatingClient
   } = useClientsStore();
-  const { clientOrders, startLoadingOrderById, deleteClientOrders } =
+  const { clientOrders, deleteClientOrders } =
     useOrdersStore();
 
-  function showDetails(order) {
-    startLoadingOrderById(order.id);
-  }
+  console.log(clientSubscriptions);
 
   function disableSubscription(subId, serviceName) {
     Swal.fire({
-      title: `¿Seguro que quieres cancelar la subscripción a ${serviceName} ?`,
+      title: `¿Seguro que quieres deshabilitar la subscripción a ${serviceName} ?`,
       showCancelButton: true,
       confirmButtonText: "confirmar",
       cancelButtonText: "cancelar",
@@ -44,13 +46,7 @@ export const ClientOrdersAndSubscriptionsModal = () => {
           subscriptionId: subId,
         };
         startUpdatingClient(clientAux);
-        deleteClientOrders;
-        deleteClientSubscriptions;
-        const modal = bootstrap.Modal.getOrCreateInstance(
-          "#client-orders-modal"
-        );
-        modal.hide();
-        Swal.fire("Subscripción cancelada", "", "success");
+        Swal.fire("Subscripción deshabilitada", "", "success");
       }
     });
   }
@@ -65,7 +61,7 @@ export const ClientOrdersAndSubscriptionsModal = () => {
       aria-labelledby="staticBackdropLabel"
       aria-hidden="true"
     >
-      <div className="modal-dialog">
+      <div className="modal-dialog modal-lg">
         <div className="modal-content" style={{ height: "90vh" }}>
           <div className="modal-header">
             <h1 className="modal-title fs-5" id="staticBackdropLabel">
@@ -78,7 +74,6 @@ export const ClientOrdersAndSubscriptionsModal = () => {
               aria-label="Close"
               onClick={() => {
                 deleteClientOrders;
-                deleteClientSubscriptions;
               }}
             ></button>
           </div>
@@ -103,37 +98,20 @@ export const ClientOrdersAndSubscriptionsModal = () => {
                     <th scope="col">Fecha</th>
                     <th scope="col">Total</th>
                     <th scope="col">Estado</th>
-                    <th scope="col">#</th>
                   </tr>
                 </thead>
                 <tbody>
                   {clientOrders.map((order) => (
                     <tr key={order.id} style={{ textAlign: "center" }}>
                       <td>{order.id}</td>
-                      <td>{order.date}</td>
+                      <td>{order.date.split("T")[0]}</td>
                       <td>${order.total.toFixed(2)}</td>
                       <td
                         style={{
-                          color: order.enabled ? "#198754" : "#a32525",
+                          color: orderState[order.order_state]
                         }}
                       >
-                        {order.enabled ? "Pagado" : "Cancelado"}
-                      </td>
-                      <td>
-                        <Tooltip id="my-tooltip" />
-                        <FontAwesomeIcon
-                          icon={faEye}
-                          data-tooltip-id="my-tooltip"
-                          data-tooltip-content="Ver detalles"
-                          data-tooltip-place="top"
-                          style={{
-                            color: "#000000",
-                            cursor: "pointer",
-                          }}
-                          data-bs-toggle="modal"
-                          data-bs-target="#detail-modal"
-                          onClick={() => showDetails(order)}
-                        />
+                        {order.order_state}
                       </td>
                     </tr>
                   ))}
@@ -156,34 +134,18 @@ export const ClientOrdersAndSubscriptionsModal = () => {
                 >
                   <tr style={{ textAlign: "center" }}>
                     <th scope="col">Servicio</th>
+                    <th scope="col">Estado</th>
                     <th scope="col">#</th>
                   </tr>
                 </thead>
                 <tbody>
                   {clientSubscriptions
-                    .filter((subs) => subs.enabled === true)
                     .map((subscription) => (
                       <tr key={subscription.id} style={{ textAlign: "center" }}>
                         <td>{subscription.serviceName}</td>
-                        <td>
-                          <Tooltip id="my-tooltip" />
-                          <FontAwesomeIcon
-                            icon={faXmark}
-                            data-tooltip-id="my-tooltip"
-                            data-tooltip-content="Cancelar Subscripción"
-                            data-tooltip-place="top"
-                            style={{
-                              color: "#000000",
-                              cursor: "pointer",
-                            }}
-                            onClick={() => {
-                              disableSubscription(
-                                subscription.id,
-                                subscription.serviceName
-                              );
-                            }}
-                          />
-                        </td>
+                        <td>{(subscription.enabled)? "Habilitado" : "Deshabilitado"}</td>
+                        <td><button onClick={() => disableSubscription(subscription.id,
+                          subscription.serviceName)}>cancelar</button></td>
                       </tr>
                     ))}
                 </tbody>
