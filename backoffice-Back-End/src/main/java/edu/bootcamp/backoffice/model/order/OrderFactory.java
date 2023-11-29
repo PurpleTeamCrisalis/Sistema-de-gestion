@@ -46,6 +46,7 @@ public class OrderFactory {
 
 	public Order CreateOrderEntityForInsertNewRecord() {
 		Order order = new Order();
+        order.setOrderState(OrderState.PENDIENT_TO_PAY);
 		order.getFormattedDate();
 		order.setEnabled(true);
 		return order;
@@ -62,6 +63,7 @@ public class OrderFactory {
     return OrderResponse
       .builder()
       .id(order.getId())
+            .orderState(order.getOrderState())
       .date(order.getDate())
       .enabled(order.isEnabled())
       .client(client)

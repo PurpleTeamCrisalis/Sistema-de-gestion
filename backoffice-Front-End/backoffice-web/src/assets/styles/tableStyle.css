@@ -14,3 +14,9 @@
     background-color: white;
     margin: 0 1rem;
 }
+
+th{
+    width: 200px;
+    padding: 0;
+    vertical-align: middle;
+}

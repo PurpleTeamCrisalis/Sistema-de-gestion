@@ -1,14 +1,13 @@
 import { Link } from "react-router-dom";
 import imageLogoFinnegans from "../assets/images/logoEmpresa.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHouse } from "@fortawesome/free-solid-svg-icons";
+import { faChartBar, faHouse } from "@fortawesome/free-solid-svg-icons";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { faUsers } from "@fortawesome/free-solid-svg-icons";
 import { faBox } from "@fortawesome/free-solid-svg-icons";
 import { faBellConcierge } from "@fortawesome/free-solid-svg-icons";
 import { faFileInvoiceDollar } from "@fortawesome/free-solid-svg-icons";
 import { faList } from "@fortawesome/free-solid-svg-icons";
-import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import "../../node_modules/bootstrap/dist/js/bootstrap.bundle";
 import "../assets/styles/navStyle.css";
 import "../assets/styles/tableStyle.css";
@@ -113,6 +112,16 @@ export function NavComponent() {
         />
         <span className="d-none d-sm-inline text-dark fw-normal fs-5 align-middle">
           Cargos
+        </span>
+      </Link>
+      <Link to="/report" className="ps-4 py-2 bg-hover container">
+        <FontAwesomeIcon
+          icon={faChartBar}
+          size="xl"
+          style={{ color: "#000000", width: "30px" }}
+        />
+        <span className="d-none d-sm-inline text-dark fw-normal fs-5 align-middle">
+          Informes
         </span>
       </Link>
     </div>

@@ -14,6 +14,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import edu.bootcamp.backoffice.model.order.dto.OrderRequest;
 import edu.bootcamp.backoffice.model.order.dto.OrderResponse;
 import edu.bootcamp.backoffice.security.JWTGenerator;
+import edu.bootcamp.backoffice.service.OrderStateService;
 import edu.bootcamp.backoffice.service.Interface.OrderService;
 
 @RestController
@@ -21,10 +22,12 @@ import edu.bootcamp.backoffice.service.Interface.OrderService;
 public class OrderController {
 
   private final OrderService orderService;
+  private final OrderStateService orderStateService;
 
   @Autowired
-  public OrderController(OrderService orderService) {
+  public OrderController(OrderService orderService, OrderStateService orderStateService) {
     this.orderService = orderService;
+    this.orderStateService=orderStateService;
   }
 
   @PostMapping(
@@ -74,4 +77,18 @@ public class OrderController {
     OrderResponse order = orderService.delete(id);
     return ResponseEntity.ok(order);
   }
+  
+  @PatchMapping(path = "cancelOrderState/{id}" )
+	public ResponseEntity updateOrder(@PathVariable int id
+			) {
+		 orderStateService.cancellOrder(id);
+		return ResponseEntity.ok("ORDER_CANCELLED");
+	}
+	
+	@PatchMapping(path = "payOrderState/{id}" )
+	public ResponseEntity updateOrderPayed(@PathVariable int id
+			) {
+		 orderStateService.payOrder(id);
+		return ResponseEntity.ok("ORDER_DELIVERED");
+	}
 }

@@ -39,6 +39,7 @@ export function useOrdersStore() {
   async function startLoadingOrders() {
     try {
       const { data } = await projectApi.get('/order/list')
+      console.log(data)
       dispatch(onLoadOrders(data))
       getSuccessResponse("Ordenes cargadas!")
     } catch (error) {
@@ -64,6 +65,7 @@ export function useOrdersStore() {
       const { data } = await projectApi.post('/order', order)
       dispatch(onAddNewOrder({
         client: data.client,
+        order_state: data.order_state,
         date: data.date,
         services: data.services,
         products: data.products,
@@ -82,9 +84,17 @@ export function useOrdersStore() {
 
   async function startCancelingOrder(id) {
     try {
-      const { data } = await projectApi.delete(`/order/${id}`)
-      console.log(data)
-      dispatch(onChangeOrderState(data))
+      const { data } = await projectApi.patch(`/order/cancelOrderState/${id}`)
+      dispatch(onChangeOrderState({state: data, id}))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async function startPayingOrder(id) {
+    try {
+      const { data } = await projectApi.patch(`/order/payOrderState/${id}`)
+      dispatch(onChangeOrderState({state: data, id}))
     } catch (error) {
       console.log(error)
     }
@@ -105,6 +115,7 @@ export function useOrdersStore() {
     startLoadingOrderById,
     deleteClientOrders,
     pullSelectedOrder,
-    startCancelingOrder
+    startCancelingOrder,
+    startPayingOrder
   }
 }
