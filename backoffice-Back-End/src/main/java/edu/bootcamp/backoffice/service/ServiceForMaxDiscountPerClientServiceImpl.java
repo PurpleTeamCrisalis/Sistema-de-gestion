@@ -50,11 +50,11 @@ public class ServiceForMaxDiscountPerClientServiceImpl
             dto.setDni((Integer) row[3]);
             dto.setPhone(((BigInteger) row[4]).longValueExact());
             dto.setAdress((String) row[5]);
-            dto.setStartDate((Date) row[6]);
+            dto.setStartDate(row[6] == null ? null : (Date) row[6]);
             dto.setClientEnabled((Boolean) row[7]);
             dto.setIsBussiness((Boolean) row[8]);
-            dto.setBussinessName((String) row[9]);
-            dto.setCuit(((BigInteger) row[10]).longValueExact());
+            dto.setBussinessName(row[9] == null ? "" : (String) row[9]);
+            dto.setCuit(row[10] == null ? 0 : ((BigInteger) row[10]).longValueExact());
             dto.setServiceId((Integer) row[11]);
             dto.setServiceName((String) row[12]);
             dto.setDescription((String) row[13]);
