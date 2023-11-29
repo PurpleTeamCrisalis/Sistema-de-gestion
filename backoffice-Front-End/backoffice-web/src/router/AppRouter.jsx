@@ -27,11 +27,8 @@ import NewServiceComponent from "../components/NewElementComponents/NewServiceCo
 import EditServiceComponent from "../components/EditElementComponents/EditServiceComponent"
 import ReportListComponent from "../components/ListComponents/ReportListComponent";
 import ServiceDiscountComponent from "../components/ListComponents/ServiceDiscountComponent";
-<<<<<<< HEAD
 import TotalDiscountsComponent from "../components/ListComponents/TotalDiscountsComponent";
-=======
 import ServiceOrdersHistory from "../components/ListComponents/ServiceOrdersHistory";
->>>>>>> 2337a62076328a74f62030650cae43879f269040
 
 export const AppRouter = () => {
   const { status, checkAuthToken } = useAuthStore();
