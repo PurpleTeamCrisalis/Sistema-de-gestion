@@ -24,7 +24,7 @@ function ReportListComponent() {
             id: 3,
             title: "Descuentos Totales",//por Cliente, Servicio y Fecha
             image: < FaPercent />,
-            navigate: () => navigate("")
+            navigate: () => navigate("/report/totalDiscounts")
         }
     ]
 
