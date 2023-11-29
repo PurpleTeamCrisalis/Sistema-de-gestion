@@ -55,8 +55,7 @@ export const clientsSlice = createSlice({
       state.activeClient = null;
     },
     onChangeClientSubscriptionState: (state, {payload}) => {
-      state.clients = state.orders.map(client => {if(client.id === payload.id) 
-        return {...clients, enabled: payload.state}})
+      state.clients = state.clients.map(client => client.id === payload.id ? payload : client)
     }
   },
 });
@@ -71,4 +70,5 @@ export const {
   onPullActiveClient,
   onLoadClientSubscriptions,
   onDeleteClientSubcriptions,
+  onChangeClientSubscriptionState,
 } = clientsSlice.actions;

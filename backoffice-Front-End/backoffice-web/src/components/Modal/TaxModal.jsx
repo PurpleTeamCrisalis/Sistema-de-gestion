@@ -12,7 +12,7 @@ function TaxModal({ tax, setTax }) {
     const [filteredList, setFilteredList] = useState(charges);
 
 
-  // const [tax, setTax] = useState([]); //Guarda los impuestos seleccionados por id
+    // const [tax, setTax] = useState([]); //Guarda los impuestos seleccionados por id
 
 
     useEffect(() => {
@@ -37,11 +37,11 @@ function TaxModal({ tax, setTax }) {
                 }
             }
 
- 
+
         }
-      }
     }
-  }
+
+
 
     function deleteTax(event) {
         let button = event.target;
@@ -123,11 +123,8 @@ function TaxModal({ tax, setTax }) {
                     </div>
                 </div>
             </div>
-          </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 }
 
 export default TaxModal;

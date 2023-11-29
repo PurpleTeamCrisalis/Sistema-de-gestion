@@ -9,6 +9,7 @@ import {
   onDeleteClient,
   onLoadClientSubscriptions,
   onDeleteClientSubcriptions,
+  onChangeClientSubscriptionState,
 } from "../redux/client/clientsSlice";
 import { getErrorResponse, getSuccessResponse } from "../helpers";
 
@@ -91,7 +92,9 @@ export function useClientsStore() {
         `/client/update/${client.id}`,
         client
       );
+      console.log(data);
       dispatch(onUpdateClient(data));
+      dispatch(onChangeClientSubscriptionState(data));
     } catch (error) {
       console.error(error);
     }
