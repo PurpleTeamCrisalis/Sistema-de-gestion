@@ -110,11 +110,10 @@ public class OrderFactory {
 
   private List<ServiceDetailResponse> createServiceDetailResponses(List<ServiceDetail> serviceDetails) {
     List<ServiceDetailResponse> servicesResponses = new ArrayList<ServiceDetailResponse>();
-    if(serviceDetails != null)
-      for(ServiceDetail serviceDetail : serviceDetails) {
-        ServiceDetailResponse serviceDetailResponse = serviceDetailFactory.createResponse(serviceDetail);
-        servicesResponses.add(serviceDetailResponse);
-      }
+    for(ServiceDetail serviceDetail : serviceDetails) {
+      ServiceDetailResponse serviceDetailResponse = serviceDetailFactory.createResponse(serviceDetail);
+      servicesResponses.add(serviceDetailResponse);
+    }
     return servicesResponses;
   }
 }

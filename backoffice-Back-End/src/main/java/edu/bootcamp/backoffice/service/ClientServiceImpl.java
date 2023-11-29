@@ -374,7 +374,7 @@ public class ClientServiceImpl implements ClientService {
             throw new IllegalArgumentException(errorBuilder.toString());
     }
 
-/*
+
     @Override
     public void registerSubscriptions(Client client, List<ServiceDetail> serviceDetails) {
         //Verifica que los parámetros no sean nulos
@@ -403,7 +403,7 @@ public class ClientServiceImpl implements ClientService {
             }
         }
     }
-*/
+
     public Boolean clientHaveActiveSubscription(Client client, ServiceEntity service, StringBuilder errorBuilder) {
         if (client == null || service == null) {
             throw new IllegalArgumentException("Client and service must not be null");
