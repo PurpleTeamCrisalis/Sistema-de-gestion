@@ -24,8 +24,8 @@ function NewProductComponent() {
 
 
     useEffect(() => {
-        if(charges.length === 0)startLoadingCharges();
-      }, []);
+        if (charges.length === 0) startLoadingCharges();
+    }, []);
 
     function addProduct(event) {
         event.preventDefault();
@@ -95,7 +95,7 @@ function NewProductComponent() {
         }
 
         try {
-            startAddingProduct({...product, taxes: tax});
+            startAddingProduct({ ...product, taxes: tax });
             setTax([]); //Vacia los datos de impuestos
             clearForm();
             Toastify({
@@ -134,11 +134,8 @@ function NewProductComponent() {
                                 <hr className="bg-light" />
                             </div>
 
-                            <div className="row justify-content-center align-items-center">
-                                {/* Persona */}
-
-                                <div className="col-sm-6">
-                                    <h2 className='text-center'>Producto</h2>
+                            <div className="row">
+                                <div className="col-md-6">
                                     <div className="row m-4">
                                         <div className="col-md-6 mb-3">
                                             <label htmlFor="name" className="form-label">Nombre</label>
@@ -183,10 +180,12 @@ function NewProductComponent() {
                                             </textarea>
                                         </div>
                                         <div>
-                                            
+
                                         </div>
                                     </div>
-                                    <TaxModal tax={tax} setTax={setTax}/>   
+                                </div>
+                                <div className="col-md-6 mt-4">
+                                    <TaxModal tax={tax} setTax={setTax} />
                                 </div>
                             </div>
                         </section>

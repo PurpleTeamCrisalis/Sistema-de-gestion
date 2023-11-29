@@ -13,6 +13,7 @@ import "../assets/styles/navStyle.css";
 import "../assets/styles/tableStyle.css";
 import { useAuthStore } from "../hooks/useAuthStore";
 import Swal from 'sweetalert2';
+import { NavLink } from "react-router-dom";
 
 export function NavComponent() {
   const { user } = useAuthStore()
@@ -41,10 +42,10 @@ export function NavComponent() {
 
   return (
     <div className="col-auto me-2 px-0 d-flex flex-column align-items-center align-items-sm-start custom-shadow bg-white"
-    style={{minHeight:"89vh"}}>{/*col-md-3 col-xl-2*/}
-      
+      style={{ minHeight: "89vh" }}>{/*col-md-3 col-xl-2*/}
+
       <hr className="mb-5" />
-      <Link to="/" className="ps-4 py-2 bg-hover container">
+      <NavLink to="/" activeClassName="active" className="ps-4 py-2 bg-hover container">
         <FontAwesomeIcon
           icon={faHouse}
           size="xl"
@@ -53,8 +54,8 @@ export function NavComponent() {
         <span className="d-none d-sm-inline text-dark fw-normal fs-5 align-middle">
           Inicio
         </span>
-      </Link>
-      <Link to="/user" className="ps-4 py-2 bg-hover container">
+      </NavLink >
+      <NavLink to="/user" activeClassName="active" className="ps-4 py-2 bg-hover container">
         <FontAwesomeIcon
           icon={faUser}
           size="xl"
@@ -63,8 +64,8 @@ export function NavComponent() {
         <span className="d-none d-sm-inline text-dark fw-normal fs-5 align-middle">
           Usuarios
         </span>
-      </Link>
-      <Link to="/client" className="ps-4 py-2 bg-hover container">
+      </NavLink>
+      <NavLink to="/client" activeClassName="active" className="ps-4 py-2 bg-hover container">
         <FontAwesomeIcon
           icon={faUsers}
           size="xl"
@@ -73,8 +74,8 @@ export function NavComponent() {
         <span className="d-none d-sm-inline text-dark fw-normal fs-5 align-middle">
           Clientes
         </span>
-      </Link>
-      <Link to="/order" className="ps-4 py-2 bg-hover container">
+      </NavLink>
+      <NavLink to="/order" activeClassName="active" className="ps-4 py-2 bg-hover container">
         <FontAwesomeIcon
           icon={faList}
           size="xl"
@@ -83,8 +84,8 @@ export function NavComponent() {
         <span className="d-none d-sm-inline text-dark fw-normal fs-5 align-middle">
           Pedidos
         </span>
-      </Link>
-      <Link to="/product" className="ps-4 py-2 bg-hover container">
+      </NavLink>
+      <NavLink to="/product" activeClassName="active" className="ps-4 py-2 bg-hover container">
         <FontAwesomeIcon
           icon={faBox}
           size="xl"
@@ -93,8 +94,8 @@ export function NavComponent() {
         <span className="d-none d-sm-inline text-dark fw-normal fs-5 align-middle">
           Productos
         </span>
-      </Link>
-      <Link to="/service" className="ps-4 py-2 bg-hover container">
+      </NavLink>
+      <NavLink to="/service" activeClassName="active" className="ps-4 py-2 bg-hover container">
         <FontAwesomeIcon
           icon={faBellConcierge}
           size="xl"
@@ -103,8 +104,8 @@ export function NavComponent() {
         <span className="d-none d-sm-inline text-dark fw-normal fs-5 align-middle">
           Servicios
         </span>
-      </Link>
-      <Link to="/charge" className="ps-4 py-2 bg-hover container">
+      </NavLink>
+      <NavLink to="/charge" activeClassName="active" className="ps-4 py-2 bg-hover container">
         <FontAwesomeIcon
           icon={faFileInvoiceDollar}
           size="xl"
@@ -113,8 +114,8 @@ export function NavComponent() {
         <span className="d-none d-sm-inline text-dark fw-normal fs-5 align-middle">
           Cargos
         </span>
-      </Link>
-      <Link to="/report" className="ps-4 py-2 bg-hover container">
+      </NavLink>
+      <NavLink to="/report" activeClassName="active" className="ps-4 py-2 bg-hover container">
         <FontAwesomeIcon
           icon={faChartBar}
           size="xl"
@@ -123,7 +124,7 @@ export function NavComponent() {
         <span className="d-none d-sm-inline text-dark fw-normal fs-5 align-middle">
           Informes
         </span>
-      </Link>
+      </NavLink>
     </div>
   );
 }

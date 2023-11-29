@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import NavComponent from '../NavComponent'
 import { useNavigate } from 'react-router-dom'
 import { useForm, useServicesStore } from '../../hooks';
@@ -14,7 +14,7 @@ import TaxModal from '../Modal/TaxModal';
 function EditServiceComponent() {
     const navigate = useNavigate();
     const { startUpdatingService, activeService, setActiveService, services } = useServicesStore();
-    const { name, description, basePrice, enabled, suportCharge, handleInputChange, emptyValidation, taxes} = useForm({
+    const { name, description, basePrice, enabled, suportCharge, handleInputChange, emptyValidation, taxes } = useForm({
         name: activeService?.name,
         description: activeService?.description,
         basePrice: activeService?.basePrice,
@@ -145,12 +145,9 @@ function EditServiceComponent() {
                             </div>
 
                             <div className="row justify-content-center align-items-center">
-                                {/* Persona */}
-
-                                <div className="col-sm-10">
-                                    <h2 className='text-center'>Servicio</h2>
+                                <div className="col-sm-12">
                                     <div className="row m-4">
-                                        <div className="col-md-6 mb-3">
+                                        <div className="col-md-4 mb-3">
                                             <label htmlFor="name" className="form-label">Nombre</label>
                                             <input
                                                 type="text"
@@ -233,13 +230,13 @@ function EditServiceComponent() {
                                             </div>
 
                                         </div>
-                                        <div className="col-md-6 mb-3">
+                                        <div className="col-md-4 mb-3">
                                             <label htmlFor="description" className="form-label">Descripción</label>
                                             <textarea
                                                 name="description"
                                                 id="description"
                                                 className="form-control"
-                                                rows="5"
+                                                rows="8"
                                                 cols="2"
                                                 required
                                                 minLength={1}
@@ -249,7 +246,14 @@ function EditServiceComponent() {
                                                 style={{ resize: "none" }}
                                             >
                                             </textarea>
-                                            <p className="form-label mt-2">Estado</p>
+
+                                        </div>
+                                        <div className="col-md-4">
+                                            <TaxModal tax={tax} setTax={setTax} handler={handleInputChange} />
+                                        </div>
+
+                                        <div className='d-flex align-items-center justify-content-center m-4'>
+                                            <h5 className="mb-0 me-3">Estado</h5>
                                             <div className="d-flex align-items-center gap-3">
                                                 <div className="d-flex align-items-center">
                                                     <input
@@ -276,7 +280,6 @@ function EditServiceComponent() {
                                             </div>
                                         </div>
                                     </div>
-                                    <TaxModal  tax={tax} setTax={setTax} handler={handleInputChange}/>
                                 </div>
                             </div>
                         </section>

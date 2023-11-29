@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import NavComponent from '../NavComponent'
 import { useNavigate } from 'react-router-dom'
 import { useForm, useServicesStore } from '../../hooks'
@@ -108,7 +108,7 @@ function NewServiceComponent() {
             //Si no es especial se manda un cero, para evitar que viaje un número cuando no debería
             startAddingService({
                 ...service,
-                suportCharge: isSpecial?suportCharge:0,
+                suportCharge: isSpecial ? suportCharge : 0,
                 taxes: tax
             });
             setTax([]);
@@ -143,19 +143,16 @@ function NewServiceComponent() {
                     {/* Imputs and Buttons */}
                     <div className="tablePane">
                         {/* Inputs */}
-                        <section className="container bg-primary rounded-3 mt-5 mb-4" style={{ minHeight: "70vh", width: "90%" }}>
+                        <section className="container bg-primary rounded-3 mt-4 mb-4 " style={{ minHeight: "70vh", width: "95%" }}>
                             <div className="text-center py-4">
                                 <h3 className="fs-4 text-light">Añadir Servicio</h3>
                                 <hr className="bg-light" />
                             </div>
 
                             <div className="row justify-content-center align-items-center">
-                                {/* Persona */}
-
-                                <div className="col-sm-10">
-                                    <h2 className='text-center'>Servicio</h2>
+                                <div className="col-sm-12">
                                     <div className="row m-4">
-                                        <div className="col-md-6 mb-3">
+                                        <div className="col-md-4 mb-3">
                                             <label htmlFor="name" className="form-label">Nombre</label>
                                             <input
                                                 type="text"
@@ -238,7 +235,7 @@ function NewServiceComponent() {
                                             </div>
 
                                         </div>
-                                        <div className="col-md-6 mb-3">
+                                        <div className="col-md-4 mb-3">
                                             <label htmlFor="description" className="form-label">Descripción</label>
                                             <textarea
                                                 name="description"
@@ -255,8 +252,10 @@ function NewServiceComponent() {
                                             >
                                             </textarea>
                                         </div>
+                                        <div className="col-md-4">
+                                            <TaxModal tax={tax} setTax={setTax} />
+                                        </div>
                                     </div>
-                                    <TaxModal tax={tax} setTax={setTax}/>
                                 </div>
                             </div>
                         </section>

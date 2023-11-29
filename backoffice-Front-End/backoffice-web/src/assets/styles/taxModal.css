@@ -3,7 +3,7 @@
     left: 50px !important;
 }
 .divCharge{
-    margin: 35px;
+    /* margin: 35px; */
 }
 
 /* .modal-body{
@@ -24,7 +24,7 @@
 
 .boxTax{
     width: auto; 
-    height: 130px; 
+    height: 140px; 
     background: #fff;
     border-radius: 8px;
 }
