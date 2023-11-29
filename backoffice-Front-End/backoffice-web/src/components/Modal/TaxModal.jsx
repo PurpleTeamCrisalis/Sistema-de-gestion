@@ -1,5 +1,5 @@
-import '../../assets/styles/AddRemoveButtonsStyle.css'
-import '../../assets/styles/taxModal.css';
+import "../../assets/styles/AddRemoveButtonsStyle.css";
+import "../../assets/styles/taxModal.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
 import SearchBar from '../Utils/SearchBar';
@@ -11,7 +11,9 @@ function TaxModal({ tax, setTax }) {
     const { charges, startLoadingCharges } = useChargesStore();
     const [filteredList, setFilteredList] = useState(charges);
 
-    // const [tax, setTax] = useState([]); //Guarda los impuestos seleccionados por id
+
+  // const [tax, setTax] = useState([]); //Guarda los impuestos seleccionados por id
+
 
     useEffect(() => {
         if (tax.length > 0) CheckActive();
@@ -34,9 +36,12 @@ function TaxModal({ tax, setTax }) {
                     setTax(tax.filter((charge) => charge.id != item.id));
                 }
             }
+
+ 
         }
-        console.log(tax);
+      }
     }
+  }
 
     function deleteTax(event) {
         let button = event.target;
@@ -118,8 +123,11 @@ function TaxModal({ tax, setTax }) {
                     </div>
                 </div>
             </div>
+          </div>
         </div>
-    )
+      </div>
+    </div>
+  );
 }
 
 export default TaxModal;

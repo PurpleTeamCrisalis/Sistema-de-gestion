@@ -82,13 +82,13 @@ public class OrderController {
 	public ResponseEntity updateOrder(@PathVariable int id
 			) {
 		 orderStateService.cancellOrder(id);
-		return ResponseEntity.ok("");
+		return ResponseEntity.ok("ORDER_CANCELLED");
 	}
 	
 	@PatchMapping(path = "payOrderState/{id}" )
 	public ResponseEntity updateOrderPayed(@PathVariable int id
 			) {
 		 orderStateService.payOrder(id);
-		return ResponseEntity.ok("");
+		return ResponseEntity.ok("ORDER_DELIVERED");
 	}
 }

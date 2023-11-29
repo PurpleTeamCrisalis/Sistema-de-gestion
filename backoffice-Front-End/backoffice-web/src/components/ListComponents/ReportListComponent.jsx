@@ -18,13 +18,13 @@ function ReportListComponent() {
             id: 2,
             title: 'Pedidos', // Pedidos por Cliente, Servicios y producto
             image: < FaListAlt />,
-            navigate: () => navigate("")
+            navigate: () => navigate("/report/ordersHistory")
         },
         {
             id: 3,
             title: "Descuentos Totales",//por Cliente, Servicio y Fecha
             image: < FaPercent />,
-            navigate: () => navigate("")
+            navigate: () => navigate("/report/totalDiscounts")
         }
     ]
 

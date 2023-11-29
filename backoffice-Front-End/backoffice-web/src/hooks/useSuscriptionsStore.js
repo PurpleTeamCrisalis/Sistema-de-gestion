@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { projectApi } from '../api'
 import { onAddNewSuscription, onLoadSuscriptions, onSetActiveSuscription, onUpdateSuscription, onLoadSuscriptionById, onLoadClientSuscriptions, onDeleteCLientSuscriptions } from '../redux'
 
-export function usesuscriptionsStore() {
+export function useSuscriptionsStore() {
 
   const { suscriptions, activeSuscription, selectedSuscription, clientSuscriptions } = useSelector(state => state.suscriptions)
   const dispatch = useDispatch()
@@ -16,6 +16,7 @@ export function usesuscriptionsStore() {
   async function startLoadingSuscriptionById(id) {
     try {
       const { data } = await projectApi.get(`/suscription/${id}`)
+      console.log(data);
       dispatch(onLoadSuscriptionById(data))
     } catch (error) {
       console.error(error)

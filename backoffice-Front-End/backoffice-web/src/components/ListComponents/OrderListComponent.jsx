@@ -14,9 +14,9 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const orderState = {
-  Pendiente: "#617474",
-  Pagado: "#198754",
-  Cancelado: "#a32525",
+  PENDIENT_TO_PAY: "#617474",
+  ORDER_DELIVERED: "#198754",
+  ORDER_CANCELLED: "#a32525",
 };
 
 function OrderListComponent() {
@@ -158,12 +158,10 @@ function OrderListComponent() {
                         </td> */}
                         <td
                           style={{
-                            color: order.enabled
-                              ? orderState["Pagado"]
-                              : orderState["Cancelado"],
+                            color: orderState[order.order_state]
                           }}
                         >
-                          {order.enabled ? "Pagado" : "Cancelado"}
+                          {order.order_state}
                         </td>
                         <td>
                           <FontAwesomeIcon

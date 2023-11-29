@@ -86,7 +86,7 @@ export const ClientModal = () => {
                     borderBottom: "2px solid black",
                   }}
                 >
-                  <tr>
+                  <tr style={{ textAlign: "center" }}>
                     <th scope="col">#</th>
                     <th scope="col">Tipo</th>
                     <th scope="col">Nombre</th>
@@ -98,6 +98,7 @@ export const ClientModal = () => {
                       client.enabled && (
                         <tr
                           key={client.id}
+                          style={{ textAlign: "center" }}
                           className={
                             selectedClient
                               ? selectedClient.id === client.id
