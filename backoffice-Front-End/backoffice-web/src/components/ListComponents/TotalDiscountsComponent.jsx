@@ -1,17 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import HeaderComponent from '../HeaderComponent'
 import NavComponent from '../NavComponent'
-import { FaFilter } from "react-icons/fa";
 import { IoIosArrowBack } from "react-icons/io";
 import { useNavigate } from 'react-router-dom';
 import { useTotalDiscountsStore } from '../../hooks'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye } from "@fortawesome/free-solid-svg-icons";
-import { format } from 'date-fns';
-import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
-import { ServiceDiscountDetailModal } from '../Modal/ServiceDiscountDetailModal';
-import { onSetActiveCharge } from '../../redux';
 
 function TotalDiscountsComponent() {
     const navigate = useNavigate();
