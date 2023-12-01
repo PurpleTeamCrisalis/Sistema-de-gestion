@@ -6,14 +6,16 @@ import { useNavigate } from 'react-router-dom';
 import "toastify-js/src/toastify.css";
 import { useOrdersHistoryStore } from '../../hooks/useOrdersHistoryStore';
 import '../../assets/styles/tableStyle.css'
+import SearchBar from "../Utils/SearchBar";
 
 function ServiceOrdersHistory() {
     const navigate = useNavigate();
     const { ordersHistory, activeOrdersHistory, startLoadingOrdersHistory } = useOrdersHistoryStore();
 
+    // const [filteredList, setFilteredList] = useState(ordersHistory);
 
     useEffect(() => {
-        if (ordersHistory.length === 0) startLoadingOrdersHistory();
+        startLoadingOrdersHistory();
     }, [])
 
     let StateForGroupBy = {
@@ -69,7 +71,11 @@ function ServiceOrdersHistory() {
                                 <IoIosArrowBack style={{ fontSize: '1.7em' }} />
                             </button>
                         </div>
-
+                        {/* <SearchBar
+                            rawList={ordersHistory}
+                            setFilteredList={setFilteredList}
+                            compareTag={"username"}
+                        /> */}
                         {ordersHistory.length === 0 ?
                             (
                                 <div className='text-center mt-5'>

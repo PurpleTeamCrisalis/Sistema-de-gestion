@@ -92,7 +92,6 @@ export function useClientsStore() {
         `/client/update/${client.id}`,
         client
       );
-      console.log(data);
       dispatch(onUpdateClient(data));
       dispatch(onChangeClientSubscriptionState(data));
     } catch (error) {

@@ -21,7 +21,7 @@ function ServiceDiscountComponent() {
     const [endDate, setEndDate] = useState(format(new Date(), 'yyyy-MM-dd'));
 
     useEffect(() => {
-        if (servicesDiscount.length === 0) startLoadingServicesDiscount(startDate, endDate);
+        startLoadingServicesDiscount(startDate, endDate);
     }, [])
 
     function handleInputStartDate(event) {

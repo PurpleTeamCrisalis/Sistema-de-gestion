@@ -23,7 +23,6 @@ export function useOrdersHistoryStore() {
   async function startLoadingOrdersHistory() {
     try {
       const { data } = await projectApi.get(`/ticket/orders-history`);
-      console.log("data", data)
       dispatch(onLoadOrdersHistory(data));
       getSuccessResponse("Historial de pedidos cargados!");
     } catch (error) {

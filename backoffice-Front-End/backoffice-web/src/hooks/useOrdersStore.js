@@ -39,7 +39,6 @@ export function useOrdersStore() {
   async function startLoadingOrders() {
     try {
       const { data } = await projectApi.get('/order/list')
-      console.log(data)
       dispatch(onLoadOrders(data))
       getSuccessResponse("Ordenes cargadas!")
     } catch (error) {

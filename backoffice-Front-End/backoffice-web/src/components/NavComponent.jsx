@@ -45,7 +45,7 @@ export function NavComponent() {
       style={{ minHeight: "88vh" }}>{/*col-md-3 col-xl-2*/}
 
       <hr className="mb-5" />
-      <NavLink to="/" activeClassName="active" className="ps-4 py-2 bg-hover container">
+      <NavLink to="/" activeclassname="active" className="ps-4 py-2 bg-hover container">
         <FontAwesomeIcon
           icon={faHouse}
           size="xl"
@@ -55,7 +55,7 @@ export function NavComponent() {
           Inicio
         </span>
       </NavLink >
-      <NavLink to="/user" activeClassName="active" className="ps-4 py-2 bg-hover container">
+      <NavLink to="/user" activeclassname="active" className="ps-4 py-2 bg-hover container">
         <FontAwesomeIcon
           icon={faUser}
           size="xl"
@@ -65,7 +65,7 @@ export function NavComponent() {
           Usuarios
         </span>
       </NavLink>
-      <NavLink to="/client" activeClassName="active" className="ps-4 py-2 bg-hover container">
+      <NavLink to="/client" activeclassname="active" className="ps-4 py-2 bg-hover container">
         <FontAwesomeIcon
           icon={faUsers}
           size="xl"
@@ -75,7 +75,7 @@ export function NavComponent() {
           Clientes
         </span>
       </NavLink>
-      <NavLink to="/order" activeClassName="active" className="ps-4 py-2 bg-hover container">
+      <NavLink to="/order" activeclassname="active" className="ps-4 py-2 bg-hover container">
         <FontAwesomeIcon
           icon={faList}
           size="xl"
@@ -85,7 +85,7 @@ export function NavComponent() {
           Pedidos
         </span>
       </NavLink>
-      <NavLink to="/product" activeClassName="active" className="ps-4 py-2 bg-hover container">
+      <NavLink to="/product" activeclassname="active" className="ps-4 py-2 bg-hover container">
         <FontAwesomeIcon
           icon={faBox}
           size="xl"
@@ -95,7 +95,7 @@ export function NavComponent() {
           Productos
         </span>
       </NavLink>
-      <NavLink to="/service" activeClassName="active" className="ps-4 py-2 bg-hover container">
+      <NavLink to="/service" activeclassname="active" className="ps-4 py-2 bg-hover container">
         <FontAwesomeIcon
           icon={faBellConcierge}
           size="xl"
@@ -105,7 +105,7 @@ export function NavComponent() {
           Servicios
         </span>
       </NavLink>
-      <NavLink to="/charge" activeClassName="active" className="ps-4 py-2 bg-hover container">
+      <NavLink to="/charge" activeclassname="active" className="ps-4 py-2 bg-hover container">
         <FontAwesomeIcon
           icon={faFileInvoiceDollar}
           size="xl"
@@ -115,7 +115,7 @@ export function NavComponent() {
           Cargos
         </span>
       </NavLink>
-      <NavLink to="/report" activeClassName="active" className="ps-4 py-2 bg-hover container">
+      <NavLink to="/report" activeclassname="active" className="ps-4 py-2 bg-hover container">
         <FontAwesomeIcon
           icon={faChartBar}
           size="xl"

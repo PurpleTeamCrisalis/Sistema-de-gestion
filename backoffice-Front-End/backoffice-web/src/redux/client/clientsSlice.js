@@ -55,7 +55,8 @@ export const clientsSlice = createSlice({
       state.activeClient = null;
     },
     onChangeClientSubscriptionState: (state, {payload}) => {
-      state.clients = state.clients.map(client => client.id === payload.id ? payload : client)
+      state.clients = state.clients.map(client => client.id === payload.id ? payload : client);
+      state.activeClient = {...state.activeClient, ['subscriptionByServices']: payload.subscriptionByServices};
     }
   },
 });

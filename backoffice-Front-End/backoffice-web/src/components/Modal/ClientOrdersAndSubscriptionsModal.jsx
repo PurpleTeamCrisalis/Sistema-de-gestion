@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faXmark } from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
 import { Tooltip } from "react-tooltip";
+import '../../assets/styles/modalStyle.css'
 
 const orderState = {
   PENDIENT_TO_PAY: "#617474",
@@ -19,8 +20,6 @@ export const ClientOrdersAndSubscriptionsModal = () => {
   } = useClientsStore();
   const { clientOrders, deleteClientOrders } =
     useOrdersStore();
-
-  console.log(clientSubscriptions);
 
   function disableSubscription(subId, serviceName) {
     Swal.fire({
@@ -139,13 +138,20 @@ export const ClientOrdersAndSubscriptionsModal = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {clientSubscriptions
+                  {activeClient?.subscriptionsByServices
                     .map((subscription) => (
                       <tr key={subscription.id} style={{ textAlign: "center" }}>
-                        <td>{subscription.serviceName}</td>
-                        <td>{(subscription.enabled)? "Habilitado" : "Deshabilitado"}</td>
-                        <td><button onClick={() => disableSubscription(subscription.id,
-                          subscription.serviceName)}>cancelar</button></td>
+                        <td className="align-center">{subscription.serviceName}</td>
+                        <td 
+                        className="align-center"
+                        style={{
+                          color: subscription.enabled ? "#198754" : "red",
+                        }}
+                        >
+                          {(subscription.enabled)? "Habilitado" : "Deshabilitado"}
+                          </td>
+                        <td className="align-center"><button className="button-62" onClick={() => disableSubscription(subscription.id,
+                          subscription.serviceName)}>Deshabilitar</button></td>
                       </tr>
                     ))}
                 </tbody>

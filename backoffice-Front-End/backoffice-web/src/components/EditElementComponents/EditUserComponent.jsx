@@ -64,13 +64,13 @@ function EditUserComponent() {
       username,
       email,
       id: activeUser.id,
-      enabled
+      enabled: isEnabled
     };
 
     if (activeUser.username !== user.username) {
       startUpdatingUser(userAux);
     } else {
-      if (enabled !== "false") {
+      if (isEnabled) {
         startUpdatingUser(userAux);
         changeAuthUsername(userAux.username);
       } else {

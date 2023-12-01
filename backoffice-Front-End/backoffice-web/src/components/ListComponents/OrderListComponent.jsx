@@ -96,7 +96,7 @@ function OrderListComponent() {
             ) : (
               <section
                 className="d-flex justify-content-center rounded-3 custom-shadow tabla-container-color"
-                style={{ maxHeight: "85vh", overflowY: "auto" }}
+                style={{ maxHeight: "80vh", overflowY: "auto" }}
               >
                 <table className="table table-color">
                   {/* Header de la table */}

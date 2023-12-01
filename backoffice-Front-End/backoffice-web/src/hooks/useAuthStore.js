@@ -38,7 +38,7 @@ export const useAuthStore = () => {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "No existe usuario registrado con ese E-mail",
+        text: "E-mail Incorrecto",
       });
     }
   }

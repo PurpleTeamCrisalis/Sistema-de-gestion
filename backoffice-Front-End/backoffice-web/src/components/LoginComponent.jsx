@@ -35,7 +35,7 @@ export const LoginComponent = () => {
   }
   const handlePassRecovery= async () =>{
     const { value: email } = await Swal.fire({
-      title: 'Ingresa un E-mail registrado',
+      title: 'Ingrese E-mail',
       input: 'email',
       inputLabel: 'Tu dirección de correo electrónico',
       inputPlaceholder: 'Ingresa el E-mail'
