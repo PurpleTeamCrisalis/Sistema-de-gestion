@@ -7,8 +7,7 @@ import { useAuthStore } from "../hooks/useAuthStore";
 import HeaderComponent from './HeaderComponent';
 import { useNavigate } from "react-router-dom";
 
-const Home = () =>
-{
+const Home = () => {
     const { user } = useAuthStore()
     const navigate = useNavigate();
 
@@ -39,16 +38,16 @@ const Home = () =>
                         <div className="mx-auto">
                             <div className='d-flex justify-content-around' style={{ marginTop: "-2rem" }}>
                                 {dashboard.map((item) => (
-                                <div onClick={() => item.navigate()} key={item.id} className="e-card playing mx-5">
-                                    <div className="image"></div>
-                                    <div className="wave"></div>
-                                    <div className="wave"></div>
-                                    <div className="wave"></div>
-                                    <div className="infotop" style={{ marginTop: "-3rem" }}>
-                                        {item.image}
-                                        <div style={{ marginTop: "-1rem" }}>{item.title}</div>
+                                    <div onClick={() => item.navigate()} key={item.id} className="e-card playing mx-5">
+                                        <div className="image"></div>
+                                        <div className="wave"></div>
+                                        <div className="wave"></div>
+                                        <div className="wave"></div>
+                                        <div className="infotop" style={{ marginTop: "-3rem" }}>
+                                            {item.image}
+                                            <div style={{ marginTop: "-1rem" }}>{item.title}</div>
+                                        </div>
                                     </div>
-                                </div>
                                 ))}
                             </div>
                         </div>

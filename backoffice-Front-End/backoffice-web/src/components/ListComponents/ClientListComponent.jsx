@@ -20,6 +20,8 @@ import { useOrdersStore } from "../../hooks";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+
+
 function ClientListComponent() {
   const navigate = useNavigate();
   const [abierto, setAbierto] = useState(false);

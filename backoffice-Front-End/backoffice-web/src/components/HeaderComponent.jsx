@@ -27,6 +27,19 @@ function HeaderComponent() {
     })
   }
 
+  function clearStorage() {
+
+    let session = sessionStorage.getItem('register');
+
+    if (session == null) {
+
+      startLogout();
+
+    }
+    sessionStorage.setItem('register', 1);
+  }
+  window.addEventListener('load', clearStorage);
+
   return (
     <nav className="navbar navbar-expand-lg header-shadow gradient-sky">
       <div className="container-fluid logo">
