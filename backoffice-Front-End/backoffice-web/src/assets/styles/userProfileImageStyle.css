@@ -1,0 +1,8 @@
+img[src*="image"] {
+    border-radius:150px;
+    object-fit: cover;
+}
+
+img[src*="hideme"] {
+    display: none;
+}

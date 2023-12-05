@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NavComponent from "../NavComponent";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,6 +12,7 @@ import AddRemoveButtonsComponent from "../AddRemoveButtonsComponent";
 import "../../assets/styles/tableStyle.css";
 import EmptyList from "../../utils/EmptyList";
 import { ToastContainer } from "react-toastify";
+import SearchBar from "../Utils/SearchBar";
 
 function ProductListComponent() {
   const navigate = useNavigate();
@@ -23,6 +24,8 @@ function ProductListComponent() {
     startDeletingProduct,
     activeProduct,
   } = useProductsStore();
+
+  const [filteredList, setFilteredList] = useState(products);
 
   useEffect(() => {
     if (products.length === 0) startLoadingProducts();
@@ -103,14 +106,18 @@ function ProductListComponent() {
               removeHandler={deleteProduct}
               name=""
             />
-
+            <SearchBar
+              rawList={products}
+              setFilteredList={setFilteredList}
+              compareTag={"name"}
+            />
             {/* Table Section */}
-            {products.length === 0 ? (
+            {filteredList.length === 0 ? (
               <EmptyList name={"Productos"} />
             ) : (
               <section
                 className="d-flex justify-content-center rounded-3 custom-shadow tabla-container-color"
-                style={{ maxHeight: "85vh", overflowY: "auto" }}
+                style={{ maxHeight: "65vh", overflowY: "auto" }}
               >
                 <table className="table table-color">
                   <thead
@@ -142,7 +149,7 @@ function ProductListComponent() {
                     </tr>
                   </thead>
                   <tbody>
-                    {products?.map((product) => (
+                    {filteredList?.map((product) => (
                       <tr
                         key={product.id}
                         className=""

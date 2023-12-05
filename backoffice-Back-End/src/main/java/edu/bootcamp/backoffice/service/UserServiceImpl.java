@@ -12,10 +12,13 @@ import edu.bootcamp.backoffice.model.user.dto.UserResponse;
 import edu.bootcamp.backoffice.repository.UserRepository;
 import edu.bootcamp.backoffice.service.Interface.UserService;
 import edu.bootcamp.backoffice.service.Interface.Validator;
+import edu.bootcamp.backoffice.utils.ImageUtil;
 import edu.bootcamp.backoffice.utils.PasswordGenerator;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -53,6 +56,30 @@ public class UserServiceImpl implements UserService
         emailService.sendNewPassword(newPass,email);
     }
 
+    @Override
+    public String updateUserProfileImage(String userUsername, MultipartFile file) throws IOException {
+        User user = userRepository.findByUsername(userUsername).get();
+
+        user.setImageData(ImageUtil.compressImage(file.getBytes()));
+        userRepository.save(user);
+
+        if(user!=null){
+            return ("Image updated successfully: " +
+                    file.getOriginalFilename());
+        }
+        return null;
+    }
+
+    @Override
+    public byte[] getUserProfileImage(String userUsername) {
+        User userImage = userRepository.findByUsername(userUsername).get();
+        if(userImage == null){
+            return null;
+        }
+        byte[] image = ImageUtil.decompressImage(userImage.getImageData());
+        return image;
+    }
+
     public boolean isUserPresent(UserRequest userDto){
         StringBuilder errors = new StringBuilder();
         validateUsername(userDto.getUsername(), errors);
@@ -67,8 +94,7 @@ public class UserServiceImpl implements UserService
     public boolean isUserPresent(String email){
         return userRepository.existsByEmail(email);
     }
-    public UserResponse registerUser(UserRequest userRequest)
-    {
+    public UserResponse registerUser(UserRequest userRequest) throws IOException {
         validateNewUserRequest(userRequest);
         String password = encoder.encode(userRequest.getPassword());
         userRequest.setPassword(password);

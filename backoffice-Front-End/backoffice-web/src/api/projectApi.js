@@ -11,6 +11,7 @@ projectApi.interceptors.response.use(
   (response) => {
     if (response.headers['authorization']) {
       localStorage.setItem('token', response.headers['authorization']);
+      
     }
     return response;
   },
@@ -25,7 +26,6 @@ projectApi.interceptors.response.use(
 projectApi.interceptors.request.use(config => {
   config.headers = {
     ...config.headers,
-    'Content-Type': 'application/json',
     'authorization': localStorage.getItem('token'),
   }
   return config

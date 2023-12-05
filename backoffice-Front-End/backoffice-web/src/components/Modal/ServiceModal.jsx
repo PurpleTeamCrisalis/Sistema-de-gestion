@@ -92,9 +92,8 @@ export const ServiceModal = () => {
                   }}
                 >
                   <tr style={{ textAlign: "center" }}>
-                    <th scope="col">#</th>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Detalle</th>
+                    <th scope="col" style={{ width: "10%" }}>#</th>
+                    <th scope="col" style={{ width: "30%" }}>Nombre</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -124,9 +123,6 @@ export const ServiceModal = () => {
                             />
                           </td>
                           <td>{service.name}</td>
-                          <td className="text-overflow">
-                            {service.description}
-                          </td>
                         </tr>
                       )
                   )}

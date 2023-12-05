@@ -29,6 +29,7 @@ import ReportListComponent from "../components/ListComponents/ReportListComponen
 import ServiceDiscountComponent from "../components/ListComponents/ServiceDiscountComponent";
 import TotalDiscountsComponent from "../components/ListComponents/TotalDiscountsComponent";
 import ServiceOrdersHistory from "../components/ListComponents/ServiceOrdersHistory";
+import UserProfileComponent from "../components/UserProfileComponent";
 
 export const AppRouter = () => {
   const { status, checkAuthToken } = useAuthStore();
@@ -37,20 +38,6 @@ export const AppRouter = () => {
     checkAuthToken();
   }, []);
 
-  /* const { pathname } = useLocation();
-   const navigate = useNavigate();
- 
-   useEffect(() => {
-     checkAuthToken();
-     if (status === "authenticated") navigate(localStorage.getItem("lastView"));
-   }, []);
- 
-   useEffect(() => {
-     if (pathname !== "/login") {
-       localStorage.setItem("lastView", getLastView(pathname));
-     }
-   }, [pathname]);*/
-
 
   return (
     <Routes>
@@ -58,6 +45,7 @@ export const AppRouter = () => {
         <>
           <Route path="/" element={<HomePage />}/>
           <Route path="/user" element={<UserListComponent />}></Route>
+          <Route path="/user/userProfile" element={<UserProfileComponent />}></Route>
           <Route path="/user/newUser" element={<NewUserComponent />}></Route>
           <Route path="/user/editUser" element={<EditUserComponent />}></Route>
           <Route path="/service" element={<ServiceListComponent />}></Route>

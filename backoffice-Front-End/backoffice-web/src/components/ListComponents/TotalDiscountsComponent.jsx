@@ -5,6 +5,9 @@ import { IoIosArrowBack } from "react-icons/io";
 import { useNavigate } from 'react-router-dom';
 import { useTotalDiscountsStore } from '../../hooks'
 import "toastify-js/src/toastify.css";
+import jsPDF from 'jspdf'
+import 'jspdf-autotable'
+import '../../assets/styles/buttonPDFStyle.css'
 
 function TotalDiscountsComponent() {
     const navigate = useNavigate();
@@ -14,6 +17,12 @@ function TotalDiscountsComponent() {
         () => {startLoadingTotalDiscounts()},
         []
     );
+
+    function generatePDF() {
+        const doc = new jsPDF('l', 'pt');
+        doc.autoTable({ html: '#my-table' })
+        doc.save('Descuentos-totales.pdf')
+    }
 
     function showDetails(item) {
         setActiveTotalDiscounts(item)
@@ -68,14 +77,16 @@ function TotalDiscountsComponent() {
 
                     <div className='container-fluid mt-4'>
                         {/* Boton back */}
-                        <div className='mb-2'>
+                        <div className='mb-2 d-flex justify-content-between'>
                             <button
                                 type="button"
-                                className="btn btn-outline-secondary m-0 pt-0"
+                                className="btn btn-outline-secondary m-0 pt-0 fw-bold fs-5"
                                 onClick={() => navigate("/report")}
                             >
                                 <IoIosArrowBack style={{ fontSize: '1.7em' }} />
+                                Volver
                             </button>
+                            <button className="button-pdf" type='button' onClick={generatePDF}>Generar pdf</button>
                         </div>
 
                         {totalDiscounts.length === 0 ?
@@ -86,8 +97,8 @@ function TotalDiscountsComponent() {
                                 </div>
                             )
                             :
-                            (< section className="rounded-3 shadow" >
-                                <table className="table table-color m-0 mt-3">
+                            (< section className="rounded-3 shadow" style={{maxHeight: "75vh", overflow: "auto"}}>
+                                <table className="table table-color m-0 mt-3" id="my-table">
                                     {/* Header de la table */}
                                     <thead
                                         style={{
@@ -106,7 +117,8 @@ function TotalDiscountsComponent() {
                                     </thead>
                                     <tbody>
                                         {                                     
-                                            totalDiscounts?.map((item) => (
+                                            totalDiscounts?.filter(item => item.totaldiscount !== 0)
+                                            .map((item) => (
                                                 <tr
                                                     key={++id}
                                                     style={{ marginBottom: "0px", textAlign: "center" }}

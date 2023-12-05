@@ -34,7 +34,7 @@ function NewServiceComponent() {
             description,
             basePrice: parseFloat(basePrice),
             isSpecial,
-            suportCharge
+            suportCharge: parseFloat(suportCharge)
         };
 
         if (!emptyValidation()) {
@@ -143,16 +143,16 @@ function NewServiceComponent() {
                     {/* Imputs and Buttons */}
                     <div className="tablePane">
                         {/* Inputs */}
-                        <section className="container bg-primary rounded-3 mt-4 mb-4 " style={{ minHeight: "70vh", width: "95%" }}>
+                        <section className="container bg-primary rounded-3 mt-4 mb-4 form-section" style={{ minHeight: "70vh", width: "95%" }}>
                             <div className="text-center py-4">
                                 <h3 className="fs-4 text-light">Añadir Servicio</h3>
                                 <hr className="bg-light" />
                             </div>
 
-                            <div className="row justify-content-center align-items-center">
-                                <div className="col-sm-12">
+                            <div className="row">
+                                <div className="col-md-6 col-sm-12">
                                     <div className="row m-4">
-                                        <div className="col-md-4 mb-3">
+                                        <div className="col-md-12 mb-3">
                                             <label htmlFor="name" className="form-label">Nombre</label>
                                             <input
                                                 type="text"
@@ -165,7 +165,7 @@ function NewServiceComponent() {
                                             />
                                             <label htmlFor="basePrice" className="form-label mt-3">Precio Base</label>
                                             <input
-                                                type="number"
+                                                type="text"
                                                 name="basePrice"
                                                 id="basePrice"
                                                 className="form-control"
@@ -211,7 +211,7 @@ function NewServiceComponent() {
                                                     <div className="col-md-6 mt-3">
                                                         <label htmlFor="suportCharge" className="form-label">Precio Soporte</label>
                                                         <input
-                                                            type="number"
+                                                            type="text"
                                                             name="suportCharge"
                                                             id="suportCharge"
                                                             className="form-control"
@@ -235,27 +235,31 @@ function NewServiceComponent() {
                                             </div>
 
                                         </div>
-                                        <div className="col-md-4 mb-3">
-                                            <label htmlFor="description" className="form-label">Descripción</label>
-                                            <textarea
-                                                name="description"
-                                                id="description"
-                                                className="form-control"
-                                                rows="8"
-                                                cols="2"
-                                                required
-                                                minLength={1}
-                                                maxLength={200}
-                                                onChange={handleInputChange}
-                                                value={description}
-                                                style={{ resize: "none" }}
-                                            >
-                                            </textarea>
-                                        </div>
-                                        <div className="col-md-4">
-                                            <TaxModal tax={tax} setTax={setTax} />
-                                        </div>
+
+
                                     </div>
+                                </div>
+                                <div className="col-md-6 col-sm-12 ">
+                                    <div className='row m-4'>
+                                        <label htmlFor="description" className="form-label">Descripción</label>
+                                        <textarea
+                                            name="description"
+                                            id="description"
+                                            className="form-control mb-3"
+                                            rows="3"
+                                            cols="2"
+                                            required
+                                            minLength={1}
+                                            maxLength={200}
+                                            onChange={handleInputChange}
+                                            value={description}
+                                            style={{ resize: "none" }}
+                                        >d
+                                        </textarea>
+                                        <TaxModal tax={tax} setTax={setTax} />
+
+                                    </div>
+
                                 </div>
                             </div>
                         </section>

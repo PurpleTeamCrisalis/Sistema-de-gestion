@@ -3,10 +3,18 @@ import "../assets/styles/headerStyle.css";
 import imageLogoFinnegans from "../assets/images/logoEmpresa.png";
 import { useAuthStore } from "../hooks/useAuthStore";
 import Swal from "sweetalert2";
+import { Link } from "react-router-dom";
+import { useUsersStore } from "../hooks";
+import '../assets/styles/userProfileImageStyle.css'
 
 function HeaderComponent() {
   const { startLogout } = useAuthStore();
   const { user } = useAuthStore();
+  // const { users, startLoadingUsers, startLoadingProfileImage, setActiveUser } = useUsersStore();
+
+  // useEffect(() => {
+  //   startLoadingUsers();  
+  // }, []);
 
   function handleLogout(event) {
     event.preventDefault();
@@ -39,6 +47,11 @@ function HeaderComponent() {
     sessionStorage.setItem('register', 1);
   }
   window.addEventListener('load', clearStorage);
+
+  // function toUserProfile() {
+  //   const userActive = users.filter((us) => us.username === user.username);
+  //   setActiveUser(userActive[0]);
+  // }
 
   return (
     <nav className="navbar navbar-expand-lg header-shadow gradient-sky">
@@ -77,6 +90,9 @@ function HeaderComponent() {
             <a className="dropdown-item" href="/" onClick={(event) => handleLogout(event)}>
               Cerrar sesion
             </a>
+            {/* <Link to="/user/userProfile" onClick={() => toUserProfile()} className="dropdown-item">
+              <span>Perfil de Usuario</span>
+            </Link> */}
           </div>
         </div>
       </div>

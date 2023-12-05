@@ -73,60 +73,6 @@ public class ValidatorImpl implements Validator
                     " The id must be grater than 0."
             );
     }
-/*
-    public void validateInterger(
-        Integer integer,
-        int minLength,
-        int maxLength,
-        StringBuilder errors,
-        String propertyName
-    ){
-        StringBuilder newErrors = new StringBuilder();
-        if( ! isValueMax(integer, maxLength, newErrors))            
-            if(isValueMin(integer, minLength, newErrors));
-            
-        if(newErrors.length() != 0)
-            errors
-                    .append("| ")
-                    .append(propertyName)
-                    .append(" :")
-                    .append(newErrors);
-    }
-    
-    public Boolean isValueMax(
-            Integer integer,
-            Integer maxLength,
-            StringBuilder errors
-        )
-    {
-        if (integer > maxLength)
-        {
-            errors
-                    .append(" Exceeds ")
-                    .append(maxLength)
-                    .append(" value.");
-            return Boolean.TRUE;
-        }
-        return Boolean.FALSE;
-    }
-
-    public Boolean isValueMin(
-            Integer integer,
-            Integer minLength,
-            StringBuilder errors
-        )
-    {
-        if (integer < minLength)
-        {
-            errors
-                    .append(" Exceeds ")
-                    .append(minLength)
-                    .append(" value.");
-            return Boolean.TRUE;
-        }
-        return Boolean.FALSE;
-    }
-    */
 
     public void validateLongValue(
             Long longNumber,
@@ -169,6 +115,22 @@ public class ValidatorImpl implements Validator
         else if(integerNumber>maxStrict)
             errorBuilder.append(
                     " The " + propertyName + " must be smaller than " + maxStrict +  "."
+            );
+    }
+
+    @Override
+    public void validateFloatValue(Float longNumber, Integer maxStrict, Integer minStrict, String propertyName, StringBuilder errorBuilder) {
+        if(longNumber == null)
+            errorBuilder.append(
+                    " Debe proveerse un valor a " + propertyName + "."
+            );
+        else if(longNumber>maxStrict )
+            errorBuilder.append(
+                    " The " + propertyName + " must be smaller than " + maxStrict +  "."
+            );
+        else if(longNumber<minStrict)
+            errorBuilder.append(
+                    " The " + propertyName + " must be grater than " + minStrict +  "."
             );
     }
 

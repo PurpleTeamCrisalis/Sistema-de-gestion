@@ -7,7 +7,7 @@ export const NewOrderProductTable = ({
   checkActiveDetail,
 }) => {
   return (
-    <table className="table table-hover" style={{ minWidth: "100%" }}>
+    <table className="table table-hover">
       {/* Header de la table */}
       <thead
         style={{
@@ -54,60 +54,49 @@ export const NewOrderProductTable = ({
             </td>
             <td>{detail.name}</td>
             <td className="text-overflow">{detail.description}</td>
-            <td
-              style={{
-                justifyContent: "center",
-              }}
-            >
-              <div className="input-group">
+            <td style={{ justifyContent: "center" }}>
+              <div className="d-flex align-items-center">
                 <input
-                  type="number"
+                  type="text"
                   className="form-control"
                   style={{
-                    width: "25px",
+                    width: "50%",
                     height: "25px",
                     textAlign: "center",
+                    display: "inline-block",
+                    marginRight: "5px",
                   }}
                   aria-describedby="basic-addon2"
                   onChange={(event) => handleWarranty(detail, event)}
                   value={detail.warranty}
                 />
                 <span
-                  className="input-group-text"
+                  className="input-group-text d-flex justify-content-center align-items-center"
                   id="basic-addon2"
-                  style={{ height: "25px" }}
+                  style={{
+                    height: "25px",
+                    display: "inline-block",
+                    minWidth: "40px",
+                  }}
                 >
                   Años
                 </span>
               </div>
             </td>
-            <td
-              style={{
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
-              <div
-                className="input-group"
+            <td>
+              <input
+                type="number"
+                className="form-control"
                 style={{
-                  width: "70px",
-                  display: "flex",
-                  justifyContent: "center",
+                  width: "50%",
+                  height: "25px",
+                  textAlign: "center",
+                  margin: "0 auto",
                 }}
-              >
-                <input
-                  type="number"
-                  className="form-control"
-                  style={{
-                    width: "100%",
-                    height: "25px",
-                    textAlign: "center",
-                  }}
-                  onChange={(event) => handleQuantity(detail, event)}
-                  value={detail.quantity}
-                  disabled={detail.type === "Service" ? true : false}
-                />
-              </div>
+                onChange={(event) => handleQuantity(detail, event)}
+                value={detail.quantity}
+                disabled={detail.type === "Service" ? true : false}
+              />
             </td>
             <td>
               $

@@ -63,9 +63,14 @@ function TaxModal({ tax, setTax }) {
     return (
         <div className='divCharge'>
             <div>
-                <label htmlFor="impuesto" className="form-label">Impuesto</label>
+                <label htmlFor="impuesto" className="form-label mb-3 mx-3">
+                    Impuesto
+                    <button type="button" className="mx-2 bgAdd circle  " data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <FontAwesomeIcon icon={faCirclePlus} color="white" />
+                    </button>
+                </label>
 
-                <div className=" p-1 boxTax">
+                <div className="boxTax">
                     {
                         tax.map((charge) => (
                             <div className='d-inline-flex align-items-center alert alert-primary p-1 m-sm-2' key={charge.id}>
@@ -76,13 +81,6 @@ function TaxModal({ tax, setTax }) {
                             </div>
                         ))
                     }
-                </div>
-
-                {/* Boton add*/}
-                <div className='m-2 text-center'>
-                    <button type="button" className="btn fw-bold btn-lg bgAdd circle  " data-bs-toggle="modal" data-bs-target="#exampleModal">
-                        <FontAwesomeIcon icon={faCirclePlus} color="white" />
-                    </button>
                 </div>
 
             </div>

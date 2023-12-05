@@ -65,8 +65,8 @@ function NewChargeComponent() {
       }).showToast();
       return console.error("Error: Nombre de cargo ya existe");
     }
-    const percentageParse = parseInt(percentage, 10);
-    const charge = { name, percentage: percentageParse };
+
+    const charge = { name, percentage: parseFloat(percentage) };
     console.log(charge)
 
     startAddingCharge(charge);

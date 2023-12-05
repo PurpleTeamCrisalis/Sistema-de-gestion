@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NavComponent from "../NavComponent";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,6 +12,7 @@ import "../../assets/styles/tableStyle.css";
 import AddRemoveButtonsComponent from "../AddRemoveButtonsComponent";
 import EmptyList from "../../utils/EmptyList";
 import { ToastContainer } from "react-toastify";
+import SearchBar from "../Utils/SearchBar";
 
 function ServiceListComponent() {
   const navigate = useNavigate();
@@ -23,6 +24,8 @@ function ServiceListComponent() {
     startDeletingService,
     activeService,
   } = useServicesStore();
+
+  const [filteredList, setFilteredList] = useState(services);
 
   useEffect(() => {
     if (services.length === 0) startLoadingServices();
@@ -103,13 +106,18 @@ function ServiceListComponent() {
               removeHandler={deleteService}
               name=""
             />
+            <SearchBar
+              rawList={services}
+              setFilteredList={setFilteredList}
+              compareTag={"name"}
+            />
             {/* Table Section */}
-            {services.length === 0 ? (
+            {filteredList.length === 0 ? (
               <EmptyList name={"Servicios"} />
             ) : (
               <section
                 className="d-flex justify-content-center rounded-3 custom-shadow tabla-container-color"
-                style={{ maxHeight: "85vh", overflowY: "auto" }}
+                style={{ maxHeight: "65vh", overflowY: "auto" }}
               >
                 <table className="table table-color">
                   <thead
@@ -144,7 +152,7 @@ function ServiceListComponent() {
                     </tr>
                   </thead>
                   <tbody>
-                    {services?.map((service) => (
+                    {filteredList?.map((service) => (
                       <tr
                         key={service.id}
                         className=""

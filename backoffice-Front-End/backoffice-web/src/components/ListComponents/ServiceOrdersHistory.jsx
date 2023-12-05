@@ -7,12 +7,21 @@ import "toastify-js/src/toastify.css";
 import { useOrdersHistoryStore } from '../../hooks/useOrdersHistoryStore';
 import '../../assets/styles/tableStyle.css'
 import SearchBar from "../Utils/SearchBar";
+import jsPDF from 'jspdf'
+import 'jspdf-autotable'
+import '../../assets/styles/buttonPDFStyle.css'
 
 function ServiceOrdersHistory() {
     const navigate = useNavigate();
     const { ordersHistory, activeOrdersHistory, startLoadingOrdersHistory } = useOrdersHistoryStore();
 
-    // const [filteredList, setFilteredList] = useState(ordersHistory);
+    const [filteredList, setFilteredList] = useState(ordersHistory);
+
+    function generatePDF() {
+        const doc = new jsPDF('l', 'pt');
+        doc.autoTable({ html: '#my-table' })
+        doc.save('Historial-de-pedidos.pdf')
+    }
 
     useEffect(() => {
         startLoadingOrdersHistory();
@@ -62,21 +71,23 @@ function ServiceOrdersHistory() {
 
                     <div className='container-fluid mt-4'>
                         {/* Boton back */}
-                        <div className='mb-2'>
+                        <div className='mb-2 d-flex justify-content-between'>
                             <button
                                 type="button"
-                                className="btn btn-outline-secondary m-0 pt-0"
+                                className="btn btn-outline-secondary m-0 pt-0 fw-bold fs-5"
                                 onClick={() => navigate("/report")}
                             >
                                 <IoIosArrowBack style={{ fontSize: '1.7em' }} />
+                                Volver
                             </button>
+                            <button className="mx-4 button-pdf" type='button' onClick={generatePDF}>Generar pdf</button>
                         </div>
                         {/* <SearchBar
                             rawList={ordersHistory}
                             setFilteredList={setFilteredList}
-                            compareTag={"username"}
+                            compareTag={"name"}
                         /> */}
-                        {ordersHistory.length === 0 ?
+                        {filteredList.length === 0 ?
                             (
                                 <div className='text-center mt-5'>
                                     <h3>Lista Vacía</h3>
@@ -84,8 +95,8 @@ function ServiceOrdersHistory() {
                                 </div>
                             )
                             :
-                            (<section className="rounded-3 shadow" style={{ maxHeight: "75vh", maxWidth: "80vw", overflowY: "auto" }}>
-                                <table className="table table-color m-0 mt-3" style={{ tableLayout: "fixed", width: "100%" }}>
+                            (<section className="rounded-3 shadow" style={{ maxHeight: "75vh", maxWidth: "85vw", overflowY: "auto" }}>
+                                <table className="table table-color m-0 mt-3" id="my-table" style={{ tableLayout: "fixed", width: "100%" }}>
                                     {/* Header de la tabla */}
                                     <colgroup>
                                         <col style={{ width: "200px" }} />
@@ -125,7 +136,7 @@ function ServiceOrdersHistory() {
                                     </thead>
                                     <tbody>
                                         {
-                                            ordersHistory?.map((item) => (
+                                            filteredList?.map((item) => (
                                                 <tr
                                                     key={item.ticket_id}
                                                     style={{ marginBottom: "0px", textAlign: "center" }}

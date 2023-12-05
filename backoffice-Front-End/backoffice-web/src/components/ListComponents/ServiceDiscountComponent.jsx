@@ -87,10 +87,11 @@ function ServiceDiscountComponent() {
                         <div className='mb-2'>
                             <button
                                 type="button"
-                                className="btn btn-outline-secondary m-0 pt-0"
+                                className="btn btn-outline-secondary m-0 pt-0 fw-bold fs-5"
                                 onClick={() => navigate("/report")}
                             >
                                 <IoIosArrowBack style={{ fontSize: '1.7em' }} />
+                                Volver
                             </button>
                         </div>
 
@@ -157,7 +158,7 @@ function ServiceDiscountComponent() {
                                 </div>
                             )
                             :
-                            (< section className="rounded-3 shadow" >
+                            (< section className="rounded-3 shadow" style={{maxHeight: "75vh", overflow: "auto"}}>
                                 <table className="table table-color m-0 mt-3">
                                     {/* Header de la table */}
                                     <thead
@@ -178,14 +179,15 @@ function ServiceDiscountComponent() {
                                     </thead>
                                     <tbody>
                                         {
-                                            servicesDiscount?.map((item) => (
+                                            servicesDiscount?.filter(item => item.totaldiscount !== 0)
+                                            .map((item) => (
                                                 <tr
                                                     key={item.id}
                                                     style={{ marginBottom: "0px", textAlign: "center" }}
                                                 >
                                                     <td>
                                                         {
-                                                            item.isBusiness ? item.businessName : `${item.clientname} ${item.lastname}`
+                                                            item.isbussiness ? item.bussinessname : `${item.clientname} ${item.lastname}`
                                                         }
                                                     </td>
                                                     <td>

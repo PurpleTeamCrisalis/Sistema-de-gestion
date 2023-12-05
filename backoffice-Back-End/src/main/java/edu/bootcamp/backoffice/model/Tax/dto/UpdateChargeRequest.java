@@ -16,7 +16,7 @@ public class UpdateChargeRequest {
     private String name;
 
     @JsonProperty("percentage")
-    private Integer percentage;
+    private Float percentage;
 
     @JsonProperty("enabled")
     private Boolean enabled;

@@ -82,56 +82,55 @@ export const ProductModal = () => {
                 setFilteredList={setFilteredList}
                 compareTag={"name"}
               />
-              <table className="table table-hover">
-                {/* Header de la table */}
-                <thead
-                  style={{
-                    position: "sticky",
-                    top: 0,
-                    borderBottom: "2px solid black",
-                  }}
-                >
-                  <tr style={{ textAlign: "center" }}>
-                    <th scope="col">#</th>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Detalle</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredList?.map(
-                    (product) =>
-                      product.enabled && (
-                        <tr
-                          key={product.id}
-                          style={{ textAlign: "center" }}
-                          className={
-                            checkItems[product.id] ? "table-active" : ""
-                          }
-                        >
-                          <td>
-                            <input
-                              type="checkbox"
-                              id={product.id}
-                              style={{
-                                color: "#000000",
-                                cursor: "pointer",
-                              }}
-                              onChange={(event) =>
-                                checkActiveItem(event, product)
-                              }
-                              className="custom-checkbox"
-                              defaultChecked={checkItems[product.id]}
-                            />
-                          </td>
-                          <td>{product.name}</td>
-                          <td className="text-overflow">
-                            {product.description}
-                          </td>
-                        </tr>
-                      )
-                  )}
-                </tbody>
-              </table>
+              <div style={{ maxHeight: "50vh", overflowY: "auto" }}>
+                <table className="table table-hover">
+                  {/* Header de la table */}
+                  <thead
+                    style={{
+                      position: "sticky",
+                      top: 0,
+                      borderBottom: "2px solid black",
+                    }}
+                  >
+                    <tr style={{ textAlign: "center" }}>
+                      <th scope="col" style={{ width: "10%" }}>#</th>
+                      <th scope="col" style={{ width: "30%" }}>Nombre</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredList?.map(
+                      (product) =>
+                        product.enabled && (
+                          <tr
+                            key={product.id}
+                            style={{ textAlign: "center" }}
+                            className={
+                              checkItems[product.id] ? "table-active" : ""
+                            }
+                          >
+                            <td>
+                              <input
+                                type="checkbox"
+                                id={product.id}
+                                style={{
+                                  color: "#000000",
+                                  cursor: "pointer",
+                                }}
+                                onChange={(event) =>
+                                  checkActiveItem(event, product)
+                                }
+                                className="custom-checkbox"
+                                defaultChecked={checkItems[product.id]}
+                              />
+                            </td>
+                            <td>{product.name}</td>
+                          </tr>
+                        )
+                    )}
+                  </tbody>
+                </table>
+              </div>
+
             </div>
           </div>
           <div className="modal-footer">
