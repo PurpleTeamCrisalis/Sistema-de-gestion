@@ -12,13 +12,13 @@ import HeaderComponent from "../HeaderComponent";
 const formDTO = {
     name: "",
     lastname: "",
-    dni: "", 
-    phone: "", 
+    dni: "",
+    phone: "",
     adress: "",
     isbussiness: true,
     bussinessname: "",
     startdate: "",
-    cuit: "" 
+    cuit: ""
 }
 
 function NewClientCompanyComponent() {
@@ -34,7 +34,7 @@ function NewClientCompanyComponent() {
             name,
             lastname,
             dni: parseInt(dni),
-            phone: parseInt(phone), 
+            phone: parseInt(phone),
             adress,
             isbussiness,
             bussinessname,
@@ -93,7 +93,7 @@ function NewClientCompanyComponent() {
                     {/* Imputs and Buttons */}
                     <div className="tablePane">
                         {/* Inputs */}
-                        <section className="container bg-primary rounded-3 mt-5 mb-4" style={{ minHeight: "70vh", width: "90%" }}>
+                        <section className="container bg-primary rounded-3 mt-5 mb-4 form-section" style={{ minHeight: "70vh", width: "90%" }}>
                             <div className="text-center py-4">
                                 <h3 className="fs-4">Añadir Cliente Empresa</h3>
                                 <hr className="bg-light" />
@@ -105,7 +105,7 @@ function NewClientCompanyComponent() {
                                     <h2>Responsable</h2>
                                     <div className="row m-4">
                                         <div className="col-md-6 mb-3">
-                                            <h5 className="form-h5">Nombre</h5>
+                                            <label htmlFor="name" className="form-label">Nombre</label>
                                             <input
                                                 type="text"
                                                 name="name"
@@ -116,7 +116,7 @@ function NewClientCompanyComponent() {
                                             />
                                         </div>
                                         <div className="col-md-6 mb-3">
-                                            <h5 className="form-h5">Apellido</h5>
+                                            <label htmlFor="lastname" className="form-label">Apellido</label>
                                             <input
                                                 type="text"
                                                 name="lastname"
@@ -127,7 +127,7 @@ function NewClientCompanyComponent() {
                                             />
                                         </div>
                                         <div className="col-md-6 mb-3">
-                                            <h5 className="form-h5">D.N.I</h5>
+                                            <label htmlFor="dni" className="form-label">D.N.I</label>
                                             <input
                                                 type="text"
                                                 name="dni"
@@ -138,7 +138,7 @@ function NewClientCompanyComponent() {
                                             />
                                         </div>
                                         <div className="col-md-6 mb-3">
-                                            <h5 className="form-h5">Teléfono</h5>
+                                            <label htmlFor="phone" className="form-label">Teléfono</label>
                                             <input
                                                 type="text"
                                                 name="phone"
@@ -149,7 +149,7 @@ function NewClientCompanyComponent() {
                                             />
                                         </div>
                                         <div className="col-md-12 mb-3">
-                                            <h5 className="form-h5">Dirección</h5>
+                                            <label htmlFor="adress" className="form-label">Dirección</label>
                                             <input
                                                 type="text"
                                                 name="adress"
@@ -167,7 +167,7 @@ function NewClientCompanyComponent() {
                                     <h2>Empresa</h2>
                                     <div className="row m-4">
                                         <div className="mb-3">
-                                            <h5 className="form-h5">Nombre</h5>
+                                            <label htmlFor="bussinessname" className="form-label">Nombre</label>
                                             <input
                                                 type="text"
                                                 name="bussinessname"
@@ -178,7 +178,7 @@ function NewClientCompanyComponent() {
                                             />
                                         </div>
                                         <div className="mb-3">
-                                            <h5 className="form-h5">CUIT</h5>
+                                            <label htmlFor="cuit" className="form-label">CUIT</label>
                                             <input
                                                 type="text"
                                                 name="cuit"
@@ -189,7 +189,7 @@ function NewClientCompanyComponent() {
                                             />
                                         </div>
                                         <div className="mb-3">
-                                            <h5 className="form-h5">Inicio de Actividades</h5>
+                                            <label htmlFor="startdate" className="form-label">Inicio de Actividades</label>
                                             <input
                                                 type="date"
                                                 name="startdate"

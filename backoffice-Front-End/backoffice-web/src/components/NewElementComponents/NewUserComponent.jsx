@@ -94,7 +94,7 @@ function NewUserComponent()
           <NavComponent />
 
           {/* Table and Buttons */}
-          <div className="">
+          <div className="tablePane">
             <section className="container bg-primary rounded-3 mt-5 mb-3" style={{ minHeight: "70vh", width: "90%" }}>
               <div className="text-center pt-4">
                 <h3 className="fs-4 text-light">Añadir Usuario</h3>

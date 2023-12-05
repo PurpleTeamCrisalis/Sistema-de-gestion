@@ -7,6 +7,9 @@ import { formValidations } from '../../utils/FormValidations'
 import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
 import HeaderComponent from "../HeaderComponent";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
+import { useState } from "react";
 
 function EditClientCompanyComponent() {
 
@@ -25,6 +28,7 @@ function EditClientCompanyComponent() {
         cuit: activeClient?.cuit,
         id: activeClient?.id,
     });
+    const [isEnabled, setIsEnabled] = useState(activeClient?.enabled);
 
     // Edicion de cliente
     function editClient(event) {
@@ -41,7 +45,7 @@ function EditClientCompanyComponent() {
             isbussiness,
             bussinessname,
             startdate,
-            enabled,
+            enabled: isEnabled,
             cuit: parseInt(cuit),
         };
 
@@ -81,7 +85,7 @@ function EditClientCompanyComponent() {
     return (
 
         <div className="bgGrey">
-        <HeaderComponent />
+            <HeaderComponent />
             <div className="container-fluid mainContainer">
                 <div className="secondContainer">
                     {/* Navbar */}
@@ -90,79 +94,70 @@ function EditClientCompanyComponent() {
                     {/* Imputs and Buttons */}
                     <div className="tablePane">
                         {/* Inputs */}
-                        <section
-                            className="container bg-primary rounded-3 mt-5 mb-4"
-                            style={{ minHeight: "70vh", width: "90%" }}
-                        >
-                            <div className="text-center py-4">
-                                <h3 className="fs-4">Editar Cliente</h3>
+                        <section className="container bg-primary rounded-3 mt-5 mb-3 form-section" style={{ minHeight: "70vh", width: "90%" }}>
+                            <div className="text-center pt-2">
+                                <h3 className="fs-4">Editar Cliente Empresa</h3>
                                 <hr className="bg-light" />
                             </div>
 
-                            <div className="row">
-                                {/* Persona/Responsable */}
+                            <div className="row justify-content-center">
+                                {/* Responsable */}
                                 <div className="col-md-6 col-sm-12 d-flex flex-column justify-content-center align-items-center">
-                                    <h2>Persona/Responsable</h2>
+                                    <h2>Responsable</h2>
                                     <div className="row m-4">
                                         <div className="col-md-6 mb-3">
-                                            <h5 className="form-h5">Nombre</h5>
+                                            <label htmlFor="name" className="form-label">Nombre</label>
                                             <input
                                                 type="text"
-                                                name='name'
-                                                id='name'
+                                                name="name"
+                                                id="name"
+                                                className="form-control"
                                                 onChange={handleInputChange}
                                                 value={name}
-                                                className="form-control"
-                                                placeholder={"Ingresa Nombre"}
                                             />
                                         </div>
                                         <div className="col-md-6 mb-3">
-                                            <h5 className="form-h5">Apellido</h5>
+                                            <label htmlFor="lastname" className="form-label">Apellido</label>
                                             <input
                                                 type="text"
-                                                name='lastname'
-                                                id='lastname'
+                                                name="lastname"
+                                                id="lastname"
+                                                className="form-control"
                                                 onChange={handleInputChange}
                                                 value={lastname}
-                                                className="form-control"
-                                                placeholder={"Ingresa Apellido"}
                                             />
                                         </div>
                                         <div className="col-md-6 mb-3">
-                                            <h5 className="form-h5">D.N.I</h5>
+                                            <label htmlFor="dni" className="form-label">D.N.I</label>
                                             <input
                                                 type="text"
-                                                name='dni'
-                                                id='dni'
+                                                name="dni"
+                                                id="dni"
+                                                className="form-control"
                                                 onChange={handleInputChange}
                                                 value={dni}
-                                                className="form-control"
-                                                placeholder={"Ingresa DNI"}
                                             />
                                         </div>
                                         <div className="col-md-6 mb-3">
-                                            <h5 className="form-h5">Teléfono</h5>
+                                            <label htmlFor="phone" className="form-label">Teléfono</label>
                                             <input
                                                 type="text"
-                                                name='phone'
-                                                id='phone'
+                                                name="phone"
+                                                id="phone"
+                                                className="form-control"
                                                 onChange={handleInputChange}
                                                 value={phone}
-                                                className="form-control"
-                                                placeholder={"Ingresa N° telefono"}
                                             />
                                         </div>
-                                        <div className="col-md-12 mb-3">
-                                            <h5 className="form-h5">Dirección</h5>
-
+                                        <div className="col-md-12">
+                                            <label htmlFor="adress" className="form-label">Dirección</label>
                                             <input
                                                 type="text"
-                                                name='adress'
-                                                id='adress'
+                                                name="adress"
+                                                id="adress"
+                                                className="form-control"
                                                 onChange={handleInputChange}
                                                 value={adress}
-                                                className="form-control"
-                                                placeholder={"Ingresa direccion"}
                                             />
                                         </div>
                                     </div>
@@ -173,74 +168,72 @@ function EditClientCompanyComponent() {
                                     <h2>Empresa</h2>
                                     <div className="row m-4">
                                         <div className="mb-3">
-                                            <h5 className="form-h5">Nombre</h5>
+                                            <label htmlFor="bussinessname" className="form-label">Nombre</label>
                                             <input
                                                 type="text"
-                                                name='bussinessname'
-                                                id='bussinessname'
+                                                name="bussinessname"
+                                                id="bussinessname"
+                                                className="form-control"
                                                 onChange={handleInputChange}
                                                 value={bussinessname}
-                                                className="form-control"
-                                                placeholder={"Ingresa Nombre de Empresa"}
                                             />
                                         </div>
                                         <div className="mb-3">
-                                            <h5 className="form-h5">CUIT</h5>
+                                            <label htmlFor="cuit" className="form-label">CUIT</label>
                                             <input
                                                 type="text"
-                                                name='cuit'
-                                                id='cuit'
+                                                name="cuit"
+                                                id="cuit"
+                                                className="form-control"
                                                 onChange={handleInputChange}
                                                 value={cuit}
-                                                className="form-control"
-                                                placeholder={"Ingresa CUIT"}
                                             />
                                         </div>
-                                        <div className="mb-3">
-                                            <h5 className="form-h5">Inicio de Actividades</h5>
+                                        <div className="">
+                                            <label htmlFor="startdate" className="form-label">Inicio de Actividades</label>
                                             <input
                                                 type="date"
-                                                name='startdate'
-                                                id='startdate'
+                                                name="startdate"
+                                                id="startdate"
+                                                className="form-control"
                                                 onChange={handleInputChange}
                                                 value={startdate}
-                                                className="form-control"
-                                                placeholder={"Ingresa CUIT"}
                                             />
                                         </div>
                                     </div>
                                 </div>
-
-                                {/* Estado del cliente */}
-                                <div className="d-flex align-items-center justify-content-center">
-                                    <h5 className="mb-0 me-3">Estado</h5>
-                                    <div className="d-flex align-items-center gap-3">
-                                        <div className="d-flex align-items-center">
-                                            <input
-                                                type="radio"
-                                                name="enabled"
-                                                id="enabled"
-                                                onChange={handleInputChange}
-                                                value="true"
-                                                defaultChecked={activeClient.enabled === true}
+                                <div className="col-10 mb-3">
+                                    <label htmlFor="enabled" className="form-label">Estado</label>
+                                    <div className='d-flex align-items-end'>
+                                        <input
+                                            type="checkbox"
+                                            name="enabled"
+                                            id="enabled"
+                                            // className="form-control"
+                                            onChange={(event) => setIsEnabled(event.target.checked)}
+                                            value={isEnabled}
+                                            className='btn-check'
+                                            defaultChecked={isEnabled}
+                                        />
+                                        <label htmlFor="enabled" className="btn checkbox-btn w-100">
+                                            {`${isEnabled ? "Habilitado   " : "Deshabilitado   "}`}
+                                            <FontAwesomeIcon
+                                                icon={faCircleCheck}
+                                                id="specialIsChecked"
+                                                style={{
+                                                    color: "#0ee14e",
+                                                }}
                                             />
-                                            <label className="mb-0 ms-2 fs-5">Habilitado</label>
-                                        </div>
-                                        <div className="d-flex align-items-center">
-                                            <input
-                                                type="radio"
-                                                name="enabled"
-                                                id="enabled"
-                                                onChange={handleInputChange}
-                                                value="false"
-                                                defaultChecked={activeClient.enabled === false}
+                                            <FontAwesomeIcon
+                                                icon={faCircleXmark}
+                                                id="specialIsNotChecked"
+                                                style={{
+                                                    color: "#e60f0f",
+                                                }}
                                             />
-                                            <label className="mb-0 ms-2 fs-5">Deshabilitado</label>
-                                        </div>
+                                        </label>
                                     </div>
                                 </div>
-
-
                             </div>
 
                         </section>

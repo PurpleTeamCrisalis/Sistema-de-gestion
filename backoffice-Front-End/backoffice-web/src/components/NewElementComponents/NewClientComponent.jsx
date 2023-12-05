@@ -92,16 +92,16 @@ function NewClientComponent() {
                     {/* Imputs and Buttons */}
                     <div className="tablePane">
                         {/* Inputs */}
-                        <section className="container bg-primary rounded-3 mt-5 mb-4" style={{ minHeight: "70vh", width: "90%" }}>
+                        <section className="container bg-primary rounded-3 mt-5 mb-4 form-section" style={{ minHeight: "70vh", width: "90%" }}>
                             <div className="text-center py-4">
-                                <h3 className="fs-4 text-light">Añadir Cliente</h3>
+                                <h3 className="fs-4 text-light">Añadir Cliente Persona</h3>
                                 <hr className="bg-light" />
                             </div>
 
                             <div className="row justify-content-center align-items-center">
                                 {/* Persona */}
 
-                                <div className="col-sm-6">
+                                <div className="col-sm-12">
                                     <h2 className='text-center'>Persona</h2>
                                     <div className="row m-4">
                                         <div className="col-md-6 mb-3">

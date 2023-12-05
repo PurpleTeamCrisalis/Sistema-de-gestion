@@ -1,8 +1,6 @@
 package edu.bootcamp.backoffice.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
@@ -43,7 +41,16 @@ public class JWTGenerator {
     public boolean validateToken(String token) {
         try {
             Jwts.parser().setSigningKey(SecurityConstants.JWT_SECRET).parseClaimsJws(token);
-            return !tokenBlacklist.isTokenBlacklisted(token);
+            if (tokenBlacklist.isTokenBlacklisted(token)) {
+                throw new ExpiredJwtException(null, null, "Token is blacklisted");
+            }
+            return true;
+        } catch (ExpiredJwtException ex) {
+            throw ex; // O podrías manejar la excepción aquí, por ejemplo, lanzando una excepción diferente para token expirado
+        } catch (MalformedJwtException ex) {
+            throw ex; // O manejar la excepción aquí, por ejemplo, lanzando una excepción diferente para token mal formado
+        } catch (SignatureException ex) {
+            throw ex; // O manejar la excepción aquí, por ejemplo, lanzando una excepción diferente para firma incorrecta
         } catch (Exception ex) {
             throw new AuthenticationCredentialsNotFoundException("JWT expired or incorrect");
         }

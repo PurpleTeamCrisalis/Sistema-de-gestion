@@ -65,7 +65,9 @@ function NewChargeComponent() {
       }).showToast();
       return console.error("Error: Nombre de cargo ya existe");
     }
-    const charge = { name, percentage };
+    const percentageParse = parseInt(percentage, 10);
+    const charge = { name, percentage: percentageParse };
+    console.log(charge)
 
     startAddingCharge(charge);
     clearForm();
@@ -88,7 +90,7 @@ function NewChargeComponent() {
 
           {/* Table and Buttons */}
           <div className="tablePane">
-            <section className="container bg-primary rounded-3 mt-5 mb-4" style={{ minHeight: "70vh", width: "90%" }}>
+            <section className="container bg-primary rounded-3 mt-5 mb-4 form-section" style={{ minHeight: "70vh", width: "90%" }}>
               <div className="text-center pt-4">
                 <h3 className="fs-4">Nuevo Cargo</h3>
                 <hr className="bg-light" />
@@ -97,7 +99,7 @@ function NewChargeComponent() {
               <div className="row justify-content-center align-items-center">
                 {/* Cargo */}
 
-                <div className="col-sm-6">
+                <div className="col-sm-12">
                   <div className="m-5">
                     <div className="mb-5">
                       <label htmlFor="name" className="form-label">Nombre</label>
@@ -114,11 +116,10 @@ function NewChargeComponent() {
                     <div className="mt-5">
                       <label htmlFor="basePrice" className="form-label">Porcentaje</label>
                       <input
-                        type="number"
+                        type="text"
                         name="percentage"
                         id="percentage"
                         className="form-control"
-                        min={0}
                         onChange={handleInputChange}
                         value={percentage}
                         required

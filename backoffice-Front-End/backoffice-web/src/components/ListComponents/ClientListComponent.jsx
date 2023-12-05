@@ -37,7 +37,7 @@ function ClientListComponent() {
   const { startLoadingClientOrders } = useOrdersStore();
 
   useEffect(() => {
-    if (clients.length === 0) startLoadingClient();
+    startLoadingClient();
   }, []);
 
   // Modal de nuevo cliente
