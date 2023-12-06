@@ -89,7 +89,7 @@ public class OrderServiceImpl implements OrderService, OrderStateService
     if (errorBuilder.length() > 0)
       throw new IllegalArgumentException(errorBuilder.toString());
     order.setUser(user);
-    clientService.createSubscriptionsAndMergeWithClient(
+    clientService.validateSubscriptionsAndMergeWithClient(
             order.getClient(),
             order.getServices()
     );

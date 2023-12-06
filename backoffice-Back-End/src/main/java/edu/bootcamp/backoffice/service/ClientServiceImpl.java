@@ -350,10 +350,10 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void createSubscriptionsAndMergeWithClient(
+    public void validateSubscriptionsAndMergeWithClient(
             Client client,
             List<ServiceDetail> serviceDetails
-        )
+    )
     {
         if (client == null || serviceDetails == null)
             throw new IllegalArgumentException("Client and services must not be null");
@@ -361,7 +361,24 @@ public class ClientServiceImpl implements ClientService {
         for (ServiceDetail detail : serviceDetails)
         {
             ServiceEntity service = detail.getService();
-            if (!clientHaveActiveSubscription(client, service, errorBuilder)) {
+            validateClientHasActiveSubscription(client, service, errorBuilder);
+        }
+        if(errorBuilder.length()>0)
+            throw new IllegalArgumentException(errorBuilder.toString());
+    }
+
+    public void createSubscriptionsAndMergeWithClient(
+            Client client,
+            List<ServiceDetail> serviceDetails
+    )
+    {
+        if (client == null || serviceDetails == null)
+            throw new IllegalArgumentException("Client and services must not be null");
+        StringBuilder errorBuilder = new StringBuilder();
+        for (ServiceDetail detail : serviceDetails)
+        {
+            ServiceEntity service = detail.getService();
+            if (!validateClientHasActiveSubscription(client, service, errorBuilder)) {
                 Subscription subscription = new Subscription();
                 subscription.setClient(client);
                 subscription.setEnabled(true);
@@ -391,7 +408,7 @@ public class ClientServiceImpl implements ClientService {
 
         //Guardado de suscripcion con sus validaciones
         for (ServiceEntity service : services) {
-            if (!clientHaveActiveSubscription(client, service, errorBuilder)) {
+            if (!validateClientHasActiveSubscription(client, service, errorBuilder)) {
                 Subscription subscription = new Subscription();
                 subscription.setClient(client);
                 subscription.setEnabled(true);
@@ -404,7 +421,7 @@ public class ClientServiceImpl implements ClientService {
         }
     }
 
-    public Boolean clientHaveActiveSubscription(Client client, ServiceEntity service, StringBuilder errorBuilder) {
+    public Boolean validateClientHasActiveSubscription(Client client, ServiceEntity service, StringBuilder errorBuilder) {
         if (client == null || service == null) {
             throw new IllegalArgumentException("Client and service must not be null");
         }

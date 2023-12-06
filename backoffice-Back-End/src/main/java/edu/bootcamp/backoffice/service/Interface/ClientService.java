@@ -33,6 +33,9 @@ public interface ClientService {
 
     public void registerSubscriptions(Client client, List<ServiceDetail> services);
     public void createSubscriptionsAndMergeWithClient(Client client, List<ServiceDetail> services);
+    public void validateSubscriptionsAndMergeWithClient(Client client, List<ServiceDetail> services);
+
+
 
     public ServiceEntity getDiscountService(Client client);
 
