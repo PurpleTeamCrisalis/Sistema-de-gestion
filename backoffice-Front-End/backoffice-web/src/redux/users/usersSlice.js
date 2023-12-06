@@ -12,7 +12,6 @@ export const usersSlice = createSlice({
   reducers: {
     onLoadUsers: (state, { payload = [] }) => {
       state.isLoadingUsers = false
-      // state.users = payload
       payload.forEach(user => {
         const exists = state.users.some(dbUser => dbUser.id === user.id)
         if (!exists) state.users.push(user)

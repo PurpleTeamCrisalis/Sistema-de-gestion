@@ -1,0 +1,22 @@
+.text-overflow {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.custom-shadow {
+    box-shadow: 1px 3px 5px 0.2px rgba(0,0,0,0.3);
+}
+
+.table-color,
+.tabla-container-color {
+    background-color: white;
+    margin: 0 1rem;
+}
+
+th{
+    width: 200px;
+    padding: 0;
+    vertical-align: middle;
+}

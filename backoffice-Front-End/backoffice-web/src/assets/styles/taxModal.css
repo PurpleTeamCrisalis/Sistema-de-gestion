@@ -1,0 +1,29 @@
+.modal{
+    top: 50px !important;
+    left: 50px !important;
+}
+.divCharge{
+    padding: 0 !important;
+}
+
+/* .modal-body{
+    height: 300px !important;
+} */
+
+.listTax{
+    width: 400px;
+    height: 100% !important;
+}
+
+.scroll {
+    height: 5em;
+    line-height: 1em;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.boxTax{ 
+    height: 100px; 
+    background: #fff;
+    border-radius: 8px;
+}

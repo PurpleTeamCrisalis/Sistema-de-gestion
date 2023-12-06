@@ -35,7 +35,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
-            tokenBlacklist.addToBlacklist(token, new Date().getTime() + SecurityConstants.JWT_EXPIRATION_TIME);
+            //tokenBlacklist.addToBlacklist(token, new Date().getTime() + SecurityConstants.JWT_EXPIRATION_TIME);
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             response.setHeader("Authorization","Bearer "+jwtGenerator.generateToken(authentication));
         }
