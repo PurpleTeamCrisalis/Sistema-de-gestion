@@ -11,6 +11,12 @@ import jsPDF from 'jspdf'
 import 'jspdf-autotable'
 import '../../assets/styles/buttonPDFStyle.css'
 
+const orderState = {
+    PENDIENT_TO_PAY: { color: "#617474", state: "Pendiente" },
+    ORDER_DELIVERED: { color: "#198754", state: "Pagado" },
+    ORDER_CANCELLED: { color: "#a32525", state: "Cancelado" }
+};
+
 function ServiceOrdersHistory() {
     const navigate = useNavigate();
     const { ordersHistory, activeOrdersHistory, startLoadingOrdersHistory } = useOrdersHistoryStore();
@@ -153,8 +159,12 @@ function ServiceOrdersHistory() {
                                                     <td style={{ width: "200px" }}>
                                                         {item.order_date.split("T")[0]}
                                                     </td>
-                                                    <td style={{ width: "200px" }}>
-                                                        {item.order_state}
+                                                    <td
+                                                        style={{
+                                                            color: orderState[item.order_state]["color"]
+                                                        }}
+                                                    >
+                                                        {orderState[item.order_state]["state"]}
                                                     </td>
                                                     <td style={{ width: "200px" }}>
                                                         {item.product_service_quantity}

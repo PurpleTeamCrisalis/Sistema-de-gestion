@@ -15,9 +15,9 @@ import "react-toastify/dist/ReactToastify.css";
 
 
 const orderState = {
-  PENDIENT_TO_PAY: "#617474",
-  ORDER_DELIVERED: "#198754",
-  ORDER_CANCELLED: "#a32525",
+  PENDIENT_TO_PAY: {color: "#617474", state: "Pendiente"},
+  ORDER_DELIVERED: {color:"#198754", state: "Pagado"},
+  ORDER_CANCELLED: {color:"#a32525", state: "Cancelado"}
 };
 
 function OrderListComponent() {
@@ -149,10 +149,10 @@ function OrderListComponent() {
                         </td> */}
                         <td
                           style={{
-                            color: orderState[order.order_state]
+                            color: orderState[order.order_state]["color"]
                           }}
                         >
-                          {order.order_state}
+                          {orderState[order.order_state]["state"]}
                         </td>
                         <td>
                           <FontAwesomeIcon
