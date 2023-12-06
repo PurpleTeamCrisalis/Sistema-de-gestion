@@ -13,7 +13,7 @@ export const totalDiscountsSlice = createSlice({
     onLoadTotalDiscounts: (state, { payload = [] }) => {
       state.isLoadingTotalDiscounts = false;
 
-      state.totalDiscounts = payload;
+      state.totalDiscounts = payload?.filter((item)=>{ return item.totaldiscount > 0;});
     },
     onSetActiveTotalDiscounts: (state, { payload }) => {
       state.activeTotalDiscounts = payload;
