@@ -49,6 +49,14 @@ public interface Validator
             StringBuilder errorBuilder
     );
 
+    public void validateFloatValue(
+            Float longNumber,
+            Integer maxStrict,
+            Integer minStrict,
+            String propertyName,
+            StringBuilder errorBuilder
+    );
+
     public void validateVarchar(
             String varchar,
             Integer minLength,

@@ -25,6 +25,7 @@ function EditServiceComponent() {
     });
     const [isSpecial, setIsSpecial] = useState(activeService?.isSpecial);
     const [tax, setTax] = useState(activeService?.taxes);
+    const [isEnabled, setIsEnabled] = useState(activeService?.enabled);
 
     // Edicion de servicio
     function editService(event) {
@@ -36,7 +37,7 @@ function EditServiceComponent() {
             name,
             description,
             basePrice: parseFloat(basePrice),
-            enabled,
+            enabled: isEnabled,
             isSpecial,
             suportCharge
         };
@@ -138,16 +139,16 @@ function EditServiceComponent() {
                     {/* Imputs and Buttons */}
                     <div className="tablePane">
                         {/* Inputs */}
-                        <section className="container bg-primary rounded-3 mt-5 mb-4" style={{ minHeight: "70vh", width: "90%" }}>
-                            <div className="text-center pt-4">
-                                <h3 className="fs-4">Editar Servicio</h3>
+                        <section className="container bg-primary rounded-3 mt-4 mb-4 form-section" style={{ minHeight: "70vh", width: "95%" }}>
+                            <div className="text-center py-4">
+                                <h3 className="fs-4 text-light">Editar Servicio</h3>
                                 <hr className="bg-light" />
                             </div>
 
-                            <div className="row justify-content-center align-items-center">
-                                <div className="col-sm-12">
+                            <div className="row">
+                                <div className="col-md-6 col-sm-12">
                                     <div className="row m-4">
-                                        <div className="col-md-4 mb-3">
+                                        <div className="col-md-12 mb-3">
                                             <label htmlFor="name" className="form-label">Nombre</label>
                                             <input
                                                 type="text"
@@ -160,7 +161,7 @@ function EditServiceComponent() {
                                             />
                                             <label htmlFor="basePrice" className="form-label mt-3">Precio Base</label>
                                             <input
-                                                type="number"
+                                                type="text"
                                                 name="basePrice"
                                                 id="basePrice"
                                                 className="form-control"
@@ -206,7 +207,7 @@ function EditServiceComponent() {
                                                     <div className="col-md-6 mt-3">
                                                         <label htmlFor="suportCharge" className="form-label">Precio Soporte</label>
                                                         <input
-                                                            type="number"
+                                                            type="text"
                                                             name="suportCharge"
                                                             id="suportCharge"
                                                             className="form-control"
@@ -228,61 +229,69 @@ function EditServiceComponent() {
                                                         />
                                                     </div>}
                                             </div>
-
-                                        </div>
-                                        <div className="col-md-4 mb-3">
-                                            <label htmlFor="description" className="form-label">Descripción</label>
-                                            <textarea
-                                                name="description"
-                                                id="description"
-                                                className="form-control"
-                                                rows="8"
-                                                cols="2"
-                                                required
-                                                minLength={1}
-                                                maxLength={200}
-                                                onChange={handleInputChange}
-                                                value={description}
-                                                style={{ resize: "none" }}
-                                            >
-                                            </textarea>
-
-                                        </div>
-                                        <div className="col-md-4">
-                                            <TaxModal tax={tax} setTax={setTax} handler={handleInputChange} />
-                                        </div>
-
-                                        <div className='d-flex align-items-center justify-content-center m-4'>
-                                            <h5 className="mb-0 me-3">Estado</h5>
-                                            <div className="d-flex align-items-center gap-3">
-                                                <div className="d-flex align-items-center">
+                                            <div className="">
+                                                <label htmlFor="enabled" className="form-label mt-2">Estado</label>
+                                                <div className='d-flex align-items-end'>
                                                     <input
-                                                        type="radio"
+                                                        type="checkbox"
                                                         name="enabled"
                                                         id="enabled"
-                                                        onChange={handleInputChange}
-                                                        value="true"
-                                                        defaultChecked={activeService.enabled === true}
+                                                        // className="form-control"
+                                                        onChange={(event) => setIsEnabled(event.target.checked)}
+                                                        value={isEnabled}
+                                                        className='btn-check'
+                                                        defaultChecked={isEnabled}
                                                     />
-                                                    <label className="mb-0 ms-2">Habilitado</label>
-                                                </div>
-                                                <div className="d-flex align-items-center">
-                                                    <input
-                                                        type="radio"
-                                                        name="enabled"
-                                                        id="enabled"
-                                                        onChange={handleInputChange}
-                                                        value="false"
-                                                        defaultChecked={activeService.enabled === false}
-                                                    />
-                                                    <label className="mb-0 ms-2">Deshabilitado</label>
+                                                    <label htmlFor="enabled" className="btn checkbox-btn w-100">
+                                                        {`${isEnabled ? "Habilitado   " : "Deshabilitado   "}`}
+                                                        <FontAwesomeIcon
+                                                            icon={faCircleCheck}
+                                                            id="specialIsChecked"
+                                                            style={{
+                                                                color: "#0ee14e",
+                                                            }}
+                                                        />
+                                                        <FontAwesomeIcon
+                                                            icon={faCircleXmark}
+                                                            id="specialIsNotChecked"
+                                                            style={{
+                                                                color: "#e60f0f",
+                                                            }}
+                                                        />
+                                                    </label>
                                                 </div>
                                             </div>
+
                                         </div>
+
+
                                     </div>
+                                </div>
+                                <div className="col-md-6 col-sm-12 ">
+                                    <div className='row m-4'>
+                                        <label htmlFor="description" className="form-label">Descripción</label>
+                                        <textarea
+                                            name="description"
+                                            id="description"
+                                            className="form-control mb-3"
+                                            rows="3"
+                                            cols="2"
+                                            required
+                                            minLength={1}
+                                            maxLength={200}
+                                            onChange={handleInputChange}
+                                            value={description}
+                                            style={{ resize: "none" }}
+                                        >d
+                                        </textarea>
+                                        <TaxModal tax={tax} setTax={setTax} />
+
+                                    </div>
+
                                 </div>
                             </div>
                         </section>
+
 
 
                         {/* Buttons */}
@@ -292,7 +301,7 @@ function EditServiceComponent() {
                                 className="btn btn-primary mx-3 fw-bold btn-lg"
                                 onClick={editService}
                             >
-                                Editar
+                                Añadir
                             </button>
                             <button
                                 type="button"

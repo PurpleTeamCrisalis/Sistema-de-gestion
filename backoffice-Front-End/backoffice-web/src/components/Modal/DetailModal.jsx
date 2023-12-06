@@ -60,8 +60,8 @@ export const DetailModal = () => {
               onClick={pullSelectedOrder}
             ></button>
           </div>
-          <div className="modal-body modal-dialog-scrollable">
-            <div className="bg-white rounded-3 overflow-hidden">
+          <div className="modal-body modal-dialog-scrollable" style={{ maxHeight: '50vh', overflow: "auto" }}>
+            <div className="bg-white rounded-3">
               {selectedOrder?.products.length ? (
                 <div>
                   <h1 className="fs-6">Productos</h1>
@@ -69,7 +69,6 @@ export const DetailModal = () => {
                     {/* Header de la table */}
                     <thead
                       style={{
-                        position: "sticky",
                         top: 0,
                         borderBottom: "2px solid black",
                       }}
@@ -121,7 +120,6 @@ export const DetailModal = () => {
                     {/* Header de la table */}
                     <thead
                       style={{
-                        position: "sticky",
                         top: 0,
                         borderBottom: "2px solid black",
                       }}

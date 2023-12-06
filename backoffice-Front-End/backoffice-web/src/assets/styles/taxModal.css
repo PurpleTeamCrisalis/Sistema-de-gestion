@@ -3,7 +3,7 @@
     left: 50px !important;
 }
 .divCharge{
-    /* margin: 35px; */
+    padding: 0 !important;
 }
 
 /* .modal-body{
@@ -22,9 +22,8 @@
     overflow-y: scroll;
 }
 
-.boxTax{
-    width: auto; 
-    height: 140px; 
+.boxTax{ 
+    height: 100px; 
     background: #fff;
     border-radius: 8px;
 }

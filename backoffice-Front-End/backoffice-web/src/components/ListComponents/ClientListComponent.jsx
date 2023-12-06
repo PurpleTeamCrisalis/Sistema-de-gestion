@@ -19,6 +19,7 @@ import { DetailModal } from "../Modal/DetailModal";
 import { useOrdersStore } from "../../hooks";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import SearchBar from "../Utils/SearchBar";
 
 
 
@@ -35,6 +36,7 @@ function ClientListComponent() {
   } = useClientsStore();
 
   const { startLoadingClientOrders } = useOrdersStore();
+  const [filteredList, setFilteredList] = useState(clients);
 
   useEffect(() => {
     startLoadingClient();
@@ -156,14 +158,18 @@ function ClientListComponent() {
                 <FontAwesomeIcon icon={faTrash} color="white" />
               </button>
             </section>
-
+            <SearchBar
+              rawList={clients}
+              setFilteredList={setFilteredList}
+              compareTag={"isbussiness"}
+            />
             {/* Table Section */}
-            {clients.length === 0 ? (
+            {filteredList.length === 0 ? (
               <EmptyList name={"Clientes"} />
             ) : (
               <section
                 className="d-flex justify-content-center rounded-3 custom-shadow tabla-container-color"
-                style={{ maxHeight: "85vh", overflowY: "auto" }}
+                style={{ maxHeight: "65vh", overflowY: "auto" }}
               >
                 <table className="table table-color">
                   <thead
@@ -199,7 +205,7 @@ function ClientListComponent() {
                   </thead>
                   <tbody>
                     {/* Acá se va a recorrer la lista de la entidad */}
-                    {clients?.map((client) => (
+                    {filteredList?.map((client) => (
                       <tr key={client.id} style={{ textAlign: "center" }}>
                         {/* Checkbox */}
                         <td>

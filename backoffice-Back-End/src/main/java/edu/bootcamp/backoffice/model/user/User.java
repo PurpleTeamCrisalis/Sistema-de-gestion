@@ -53,6 +53,10 @@ public class User implements SoftDeletable
     )
     private boolean enabled = true;
 
+    @Lob
+    @Column(name = "imageData")
+    private byte[] imageData;
+
     @OneToMany(
             mappedBy = "user",
             fetch = FetchType.LAZY

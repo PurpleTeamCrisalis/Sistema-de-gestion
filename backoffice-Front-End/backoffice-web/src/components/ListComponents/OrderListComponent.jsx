@@ -13,10 +13,11 @@ import EmptyList from "../../utils/EmptyList";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+
 const orderState = {
-  PENDIENT_TO_PAY: "#617474",
-  ORDER_DELIVERED: "#198754",
-  ORDER_CANCELLED: "#a32525",
+  PENDIENT_TO_PAY: {color: "#617474", state: "Pendiente"},
+  ORDER_DELIVERED: {color:"#198754", state: "Pagado"},
+  ORDER_CANCELLED: {color:"#a32525", state: "Cancelado"}
 };
 
 function OrderListComponent() {
@@ -66,16 +67,6 @@ function OrderListComponent() {
           {/* Table and Buttons */}
           <div className="tablePane">
             {/* Button Section */}
-            {/*<section className='d-flex justify-content-center m-3 gap-2'>
-                <button type="button" className="btn fw-bold btn-lg bgAdd circle iconButton" onClick={()=>{}} data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                  <FontAwesomeIcon className="gradientWhite" icon={faCirclePlus} color="white"/>
-                </button>
-                {/*<button type="button" className="btn fw-bold btn-lg bgRemove circle iconButton" onClick={deleteUser}>
-                  <FontAwesomeIcon className="gradientWhite" icon={faTrash} color="white"/>
-        </button>}
-                <ScrollModalComponent list={orders}/>
-            </section>*/}
-
             <section className="d-flex justify-content-center m-3 gap-2">
               <button
                 type="button"
@@ -158,10 +149,10 @@ function OrderListComponent() {
                         </td> */}
                         <td
                           style={{
-                            color: orderState[order.order_state]
+                            color: orderState[order.order_state]["color"]
                           }}
                         >
-                          {order.order_state}
+                          {orderState[order.order_state]["state"]}
                         </td>
                         <td>
                           <FontAwesomeIcon

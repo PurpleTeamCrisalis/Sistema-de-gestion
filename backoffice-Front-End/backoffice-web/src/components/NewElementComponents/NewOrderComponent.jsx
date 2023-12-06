@@ -185,13 +185,12 @@ export const NewOrderComponent = () => {
               </div>
             </section>
             <section
-              className="container p-0 mt-3"
-              style={{ overflowY: "auto" }}
+              className="container"
             >
               {newOrder?.products.length !== 0 ? (
                 <div>
                   <h2 className="fs-5 mt-4">Productos</h2>
-                  <div className="bg-white rounded-3 overflow-hidden d-flex align-items-center container mt-2 rounded-3 custom-shadow tabla-container-color">
+                  <div className="bg-white rounded-3 container mt-2 rounded-3 custom-shadow tabla-container-color" style={{ maxHeight: "25vh", overflow: "auto"  }}>
                     <NewOrderProductTable
                       items={newOrder.products}
                       handleWarranty={handleWarranty}
@@ -206,7 +205,7 @@ export const NewOrderComponent = () => {
               {newOrder.services.length !== 0 ? (
                 <div>
                   <h2 className="fs-5 mt-4">Servicios</h2>
-                  <div className="bg-white rounded-3 overflow-hidden d-flex align-items-center container mt-2 rounded-3 custom-shadow">
+                  <div className="bg-white rounded-3 container mt-2 rounded-3 custom-shadow tabla-container-color" style={{ maxHeight: "25vh", overflow: "auto"}}>
                     <NewOrderServiceTable
                       items={newOrder.services}
                       checkActiveDetail={checkActiveDetail}

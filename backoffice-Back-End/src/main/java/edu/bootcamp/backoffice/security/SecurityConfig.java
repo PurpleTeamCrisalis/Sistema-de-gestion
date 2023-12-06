@@ -44,11 +44,11 @@ public class SecurityConfig {
         http
                 .cors()
                 .and()
-                .authorizeRequests()/*
-                .antMatchers("/auth/login").permitAll()
-                .antMatchers("/auth/recover").permitAll()
-                .antMatchers("/h2-console/**").permitAll()
-                .antMatchers("/**").authenticated()*/
+                .authorizeRequests()
+                //.antMatchers("/auth/login").permitAll()
+                //.antMatchers("/auth/recover").permitAll()
+                //.antMatchers("/h2-console/**").permitAll()
+                //.antMatchers("/**").authenticated()
                 .antMatchers("/**").permitAll()
                 .and()
                 .httpBasic();

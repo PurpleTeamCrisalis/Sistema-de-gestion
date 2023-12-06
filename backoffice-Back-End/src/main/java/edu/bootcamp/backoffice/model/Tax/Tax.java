@@ -46,7 +46,7 @@ public class Tax implements SoftDeletable{
         length = EntitiesConstraints.CHARGEPERCENTAGE_MAX_LENGTH,
         nullable = false
     )
-    private Integer percentage;
+    private Float percentage;
 
     @Column(
         name = "enabled",

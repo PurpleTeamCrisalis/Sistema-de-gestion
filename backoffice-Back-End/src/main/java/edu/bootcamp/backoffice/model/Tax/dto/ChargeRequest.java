@@ -15,6 +15,6 @@ public class ChargeRequest {
     private String name;
     
     @JsonProperty("percentage")
-    private Integer percentage;
+    private Float percentage;
 
 }
