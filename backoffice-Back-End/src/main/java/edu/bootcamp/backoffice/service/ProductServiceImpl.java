@@ -207,7 +207,7 @@ public class ProductServiceImpl implements ProductService {
 		// product.setEnabled(false);
 		// productRepository.save(product);
 		// } else
-		if (product.getProductDetails().isEmpty()) {
+		if (product.getProductDetails().isEmpty() && product.getTaxes().isEmpty()) {
 			productRepository.delete(product);
 		} else {
 			product.setEnabled(false);
