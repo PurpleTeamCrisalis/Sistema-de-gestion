@@ -406,6 +406,11 @@ public class OrderServiceImpl implements OrderService, OrderStateService
 	public StateMachine<OrderState, OrderStateEvent> payOrder(Integer id) {
 		StateMachine<OrderState, OrderStateEvent> sm = build(id);
 		sendEvent(id, sm, OrderStateEvent.ORDER_PAYED);
+      Optional<Order> order = orderRepository.findById(id);
+      clientService.createSubscriptionsAndMergeWithClient(
+              order.get().getClient(),
+              order.get().getServices()
+      );
 		return sm;
 	}
 }
