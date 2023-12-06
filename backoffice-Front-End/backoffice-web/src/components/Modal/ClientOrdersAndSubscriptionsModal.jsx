@@ -20,6 +20,14 @@ export const ClientOrdersAndSubscriptionsModal = () => {
     useOrdersStore();
 
   function disableSubscription(subId, serviceName) {
+    const sub = clientSubscriptions.filter(item => item.id === subId)
+    if (sub[0].enabled === false){
+      return Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Esta subscripción ya se encuentra deshabilitada",
+      });
+    }
     Swal.fire({
       title: `¿Seguro que quieres deshabilitar la subscripción a ${serviceName} ?`,
       showCancelButton: true,
