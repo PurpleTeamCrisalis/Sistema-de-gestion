@@ -12,9 +12,13 @@ import edu.bootcamp.backoffice.model.user.dto.UserResponse;
 import edu.bootcamp.backoffice.repository.UserRepository;
 import edu.bootcamp.backoffice.service.Interface.UserService;
 import edu.bootcamp.backoffice.service.Interface.Validator;
+import edu.bootcamp.backoffice.utils.ImageUtil;
+import edu.bootcamp.backoffice.utils.PasswordGenerator;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,19 +29,55 @@ public class UserServiceImpl implements UserService
     private final UserRepository userRepository;
     private final UserFactory dtoFactory;
     private final Validator validator;
-    private final PasswordEncoder encoder;
+    private  final PasswordEncoder encoder;
+    private final EmailService emailService;
 
     public UserServiceImpl(
             UserRepository userRepository,
             UserFactory dtoFactory,
             Validator validator,
-            PasswordEncoder encoder
+            PasswordEncoder encoder,
+            EmailService emailService
         )
     {
         this.userRepository = userRepository;
         this.dtoFactory = dtoFactory;
         this.validator = validator;
         this.encoder = encoder;
+        this.emailService = emailService;
+    }
+
+    @Override
+    public void changePasswordByEmail(String email) {
+        User user = userRepository.findByEmail(email);
+        String newPass = PasswordGenerator.generateRandomPassword(8);
+        user.setPassword(encoder.encode(newPass));
+        userRepository.save(user);
+        emailService.sendNewPassword(newPass,email);
+    }
+
+    @Override
+    public String updateUserProfileImage(String userUsername, MultipartFile file) throws IOException {
+        User user = userRepository.findByUsername(userUsername).get();
+
+        user.setImageData(ImageUtil.compressImage(file.getBytes()));
+        userRepository.save(user);
+
+        if(user!=null){
+            return ("Image updated successfully: " +
+                    file.getOriginalFilename());
+        }
+        return null;
+    }
+
+    @Override
+    public byte[] getUserProfileImage(String userUsername) {
+        User userImage = userRepository.findByUsername(userUsername).get();
+        if(userImage == null){
+            return null;
+        }
+        byte[] image = ImageUtil.decompressImage(userImage.getImageData());
+        return image;
     }
 
     public boolean isUserPresent(UserRequest userDto){
@@ -51,9 +91,10 @@ public class UserServiceImpl implements UserService
             return ! result.get().isDeleted();
         return false;
     }
-
-    public UserResponse registerUser(UserRequest userRequest)
-    {
+    public boolean isUserPresent(String email){
+        return userRepository.existsByEmail(email);
+    }
+    public UserResponse registerUser(UserRequest userRequest) throws IOException {
         validateNewUserRequest(userRequest);
         String password = encoder.encode(userRequest.getPassword());
         userRequest.setPassword(password);
@@ -121,6 +162,7 @@ public class UserServiceImpl implements UserService
             user = validateEnabledUserSearchResult(result, id);
         modified |= mergeEnabled(userDto, user);
         modified |= mergePassword(userDto, user);
+        modified |= mergeEmail(userDto, user);
         if( ! modified )
             throw new AlreadyUpdatedException(
                     "Not modified database."
@@ -175,6 +217,18 @@ public class UserServiceImpl implements UserService
         if(dtoEnabled != null && !userEnabled.equals(dtoEnabled))
         {
             user.setEnabled(userDto.getEnabled());
+            return true;
+        }
+        return false;
+    }
+
+    private boolean mergeEmail(UpdateUserRequest userDto, User user)
+    {
+        String dtoEmail = userDto.getEmail();
+        String userEmail = user.getEmail();
+        if(!dtoEmail.isBlank() && !userEmail.equalsIgnoreCase(dtoEmail))
+        {
+            user.setEmail(userDto.getEmail());
             return true;
         }
         return false;

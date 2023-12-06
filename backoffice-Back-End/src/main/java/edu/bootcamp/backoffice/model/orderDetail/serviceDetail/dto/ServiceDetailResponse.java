@@ -18,18 +18,20 @@ public class ServiceDetailResponse {
   @JsonProperty("serviceId")
   private Integer serviceId;
 
-  @JsonProperty("name")
-  private String name;
-
-  @JsonProperty("basePrice")
-  private Double basePrice;
-
   @JsonProperty("subTotal")
   private Double subTotal;
 
   @JsonProperty("taxesApplied")
   private String taxesApplied;
 
-  @JsonProperty("taxCharges")
-  private Double taxCharges;
+  /*
+   * @JsonProperty("taxCharges")
+   * private Double taxCharges;
+   */
+  
+  @JsonProperty("name")
+  private String name;
+
+  @JsonProperty("basePrice")
+  private Double basePrice;
 }

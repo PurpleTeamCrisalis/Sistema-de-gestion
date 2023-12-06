@@ -4,6 +4,10 @@ import { useForm, useChargesStore } from "../../hooks";
 import { useAuthStore } from "../../hooks";
 import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
+import HeaderComponent from "../HeaderComponent";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
+import { useState } from "react";
 
 // const formDTO = {
 //   username: "",
@@ -16,8 +20,10 @@ function EditChargeComponent() {
     name: activeCharge?.name,
     percentage: activeCharge?.percentage,
     enabled: activeCharge?.enabled,
-    id : activeCharge?.id
+    id: activeCharge?.id
   });
+
+  const [isEnabled, setIsEnabled] = useState(activeCharge?.enabled);
   // const { user, changeAuthUsername } = useAuthStore()
 
   function editCharge(event) {
@@ -34,7 +40,7 @@ function EditChargeComponent() {
       return console.error("Error: Campos vacíos");
     }
 
-    if(name.length < 2){
+    if (name.length < 2) {
       Toastify({
         text: "Nombre del cargo debe ser mayor a 1 caracter",
         duration: 2000,
@@ -46,7 +52,7 @@ function EditChargeComponent() {
     }
 
     const chargeExists = charges?.find(charge => charge.name === name);
-    if((chargeExists) && (activeCharge.name !== name)){
+    if ((chargeExists) && (activeCharge.name !== name)) {
       Toastify({
         text: "Nombre de cargo ya existe",
         duration: 2000,
@@ -57,30 +63,14 @@ function EditChargeComponent() {
       return console.error("Error: Nombre de cargo ya existe");
     }
 
+    const percentageParse = parseFloat(percentage);
     const chargeAux = {
       name,
       id,
-      enabled,
-      percentage
+      enabled: isEnabled,
+      percentage: percentageParse
     };
-    console.log(chargeAux)
     startUpdatingCharge(chargeAux);
-    
-    // } else {
-    //   if (enabled !== "false") {
-    //     startUpdatingCharge(chargeAux);
-    //     // changeAuthUsername(chargeAux.username);
-    //   } else {
-    //     Toastify({
-    //       text: "No se puede deshabilitar el usuario con el que está logeado",
-    //       duration: 2000,
-    //       style: {
-    //         background: "linear-gradient(to right, #f44336, #b71c1c)",
-    //       },
-    //     }).showToast();
-    //     return console.error("Error: usuario logeado intentó auto-deshabilitarse");
-    //   }
-    // }
 
     Toastify({
       text: "Cargo Actualizado",
@@ -94,94 +84,90 @@ function EditChargeComponent() {
   }
 
   return (
-    <>
-      <div className="container-fluid">
-        <div className="row">
+    <div className="bgGrey">
+      <HeaderComponent />
+      <div className="container-fluid mainContainer">
+        <div className="secondContainer">
           {/* Navbar */}
           <NavComponent />
-
-          {/* Table and Buttons */}
-          <div className="col-md-9 col-xl-10">
-            <section
-              className="container bg-primary rounded-3 mt-5 mb-3"
-              style={{ minHeight: "75vh", width: "90%" }}
-            >
-              <div className="">
-                <h2 className="text-center pt-4 pb-2">Editar Cargo</h2>
-                <hr></hr>
+          {/* Imputs and Buttons */}
+          <div className="tablePane">
+            <section className="container bg-primary rounded-3 mt-5 mb-4 form-section" style={{ minHeight: "70vh", width: "90%" }}>
+              <div className="text-center pt-4">
+                <h3 className="fs-4">Editar Cargo</h3>
+                <hr className="bg-light" />
               </div>
-              <div
-                className="d-flex flex-column align-items-center justify-content-center gap-5"
-                style={{ minHeight: "50vh" }}
-              >
-                <div className="d-flex">
-                  <span
-                    className="d-inline-block fs-2"
-                    style={{ width: "500px" }}
-                  >
-                    Nuevo Nombre de Cargo
-                  </span>
-                  <input
-                    type="text"
-                    name="name"
-                    id="name"
-                    onChange={handleInputChange}
-                    value={name}
-                    placeholder="Ingresar nombre del cargo"
-                    style={{ width: "350px", height: "50px" }}
-                  />
-                </div>
-                <div className="d-flex">
-                  <span
-                    className="d-inline-block fs-2"
-                    style={{ width: "500px" }}
-                  >
-                    Porcentaje de Recargo
-                  </span>
-                  <input
-                    type="number"
-                    name="percentage"
-                    id="percentage"
-                    onChange={handleInputChange}
-                    value={percentage}
-                    placeholder="Ingresar el porcentaje"
-                    style={{ width: "350px", height: "50px" }}
-                  />
-                </div>
-                <div className="d-flex align-items-center gap-5">
-                  <span
-                    className="d-inline-block fs-2"
-                    style={{ width: "400px" }}
-                  >
-                    Estado
-                  </span>
-                  <div className="d-flex align-items-center gap-3">
-                    <div className="d-flex align-items-center">
+
+              <div className="row justify-content-center align-items-center">
+                {/* Cargo */}
+
+                <div className="col-sm-12">
+                  <div className="m-5">
+                    <div className="mb-5">
+                      <label htmlFor="name" className="form-label">Nombre</label>
                       <input
-                        type="radio"
-                        name="enabled"
-                        id="enabled"
+                        type="text"
+                        name="name"
+                        id="name"
+                        className="form-control"
                         onChange={handleInputChange}
-                        value="true"
-                        defaultChecked={activeCharge.enabled === true}
+                        value={name}
+                        required
                       />
-                      <label className="ms-4 fs-5">Habilitado</label>
                     </div>
-                    <div className="d-flex align-items-center">
+                    <div className=" mb-5">
+                      <label htmlFor="basePrice" className="form-label">Porcentaje</label>
                       <input
-                        type="radio"
-                        name="enabled"
-                        id="enabled"
+                        type="number"
+                        name="percentage"
+                        id="percentage"
+                        className="form-control"
+                        min={0}
                         onChange={handleInputChange}
-                        value="false"
-                        defaultChecked={activeCharge.enabled === false}
+                        value={percentage}
+                        required
                       />
-                      <label className="ms-4 fs-5">Deshabilitado</label>
+                    </div>
+                    {/* Estado del cargo */}
+                    <div className="col-12 mb-3">
+                      <label htmlFor="enabled" className="form-label">Estado</label>
+                      <div className='d-flex align-items-end'>
+                        <input
+                          type="checkbox"
+                          name="enabled"
+                          id="enabled"
+                          // className="form-control"
+                          onChange={(event) => setIsEnabled(event.target.checked)}
+                          value={isEnabled}
+                          className='btn-check'
+                          defaultChecked={isEnabled}
+                        />
+                        <label htmlFor="enabled" className="btn checkbox-btn w-100">
+                          {`${isEnabled ? "Habilitado   " : "Deshabilitado   "}`}
+                          <FontAwesomeIcon
+                            icon={faCircleCheck}
+                            id="specialIsChecked"
+                            style={{
+                              color: "#0ee14e",
+                            }}
+                          />
+                          <FontAwesomeIcon
+                            icon={faCircleXmark}
+                            id="specialIsNotChecked"
+                            style={{
+                              color: "#e60f0f",
+                            }}
+                          />
+                        </label>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </section>
+            {/* Table and Buttons */}
+
+
             <section className="d-flex justify-content-center ">
               <button
                 type="button"
@@ -201,7 +187,7 @@ function EditChargeComponent() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

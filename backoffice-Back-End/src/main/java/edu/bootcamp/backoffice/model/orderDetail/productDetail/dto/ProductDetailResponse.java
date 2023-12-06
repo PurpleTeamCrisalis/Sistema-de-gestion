@@ -18,12 +18,6 @@ public class ProductDetailResponse {
   @JsonProperty("id")
   private Integer id;
 
-  @JsonProperty("name")
-  private String name;
-
-  @JsonProperty("basePrice")
-  private Double basePrice;
-
   @JsonProperty("quantity")
   private Integer quantity;
 
@@ -32,7 +26,13 @@ public class ProductDetailResponse {
 
   @JsonProperty("taxesApplied")
   private String taxesApplied;
+  /*
+   * @JsonProperty("taxCharges")
+   * private Double taxCharges;
+   */
+  @JsonProperty("name")
+  private String name;
 
-  @JsonProperty("taxCharges")
-  private Double taxCharges;
+  @JsonProperty("basePrice")
+  private Double basePrice;
 }

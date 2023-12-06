@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { projectApi } from '../api'
 import { onAddNewCharge, onDeleteCharge, onLoadCharges, onPullActiveCharge, onSetActiveCharge, onUpdateCharge } from '../redux'
+import { getErrorResponse, getSuccessResponse } from '../helpers'
 
 export function useChargesStore() {
 
@@ -15,40 +16,41 @@ export function useChargesStore() {
     }
     async function startLoadingCharges() {
         try {
-            const { data } = await projectApi.get('/charge/list')
+            const { data } = await projectApi.get('/charge/list');
+            if (data.length === 0) throw { response: { status: 404 } }
             dispatch(onLoadCharges(data))
+            getSuccessResponse("Impuestos cargados!")
         } catch (error) {
-            dispatch(onLoadCharges([]))
-            // console.error(error)
+            getErrorResponse(error, "impuestos")
         }
     }
     async function startAddingCharge(charge) {
         try {
-        const { data } = await projectApi.post('/charge/create', charge)
-        dispatch(onAddNewCharge({
-            name: data.username,
-            percentage: data.percentage,
-            enabled: data.enabled,
-            id: data.id
-        }))
+            const { data } = await projectApi.post('/charge/create', charge)
+            dispatch(onAddNewCharge({
+                name: data.name,
+                percentage: data.percentage,
+                enabled: data.enabled,
+                id: data.id
+            }))
         } catch (error) {
-        console.error(error)
+            console.error(error)
         }
     }
     async function startDeletingCharge() {
         try {
-        await projectApi.delete(`/charge/delete/${activeCharge.id}`)
-        dispatch(onDeleteCharge())
+            await projectApi.delete(`/charge/delete/${activeCharge.id}`)
+            dispatch(onDeleteCharge())
         } catch (error) {
-        console.error(error)
+            console.error(error)
         }
     }
     async function startUpdatingCharge(charge) {
         try {
-        const {data} = await projectApi.patch(`/charge/update/${charge.id}`, charge)
-        dispatch(onUpdateCharge(data))
+            const { data } = await projectApi.patch(`/charge/update/${charge.id}`, charge)
+            dispatch(onUpdateCharge(data))
         } catch (error) {
-        console.error(error)
+            console.error(error)
         }
     }
 

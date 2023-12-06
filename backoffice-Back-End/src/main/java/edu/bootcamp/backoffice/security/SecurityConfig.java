@@ -8,7 +8,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +22,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
     private final JwtAuthEntryPoint authEntryPoint;
     private final CustomUserDetailsService customUserDetailsService;
+
     @Autowired
     public SecurityConfig(CustomUserDetailsService customUserDetailsService, JwtAuthEntryPoint authEntryPoint) {
         this.customUserDetailsService = customUserDetailsService;
@@ -30,10 +30,9 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-        //disabling frameOptions so h2-console can be accessed
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        // disabling frameOptions so h2-console can be accessed
         http.headers().frameOptions().disable();
-//        http.headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
         // turn off checking for CSRF tokens
         http.csrf().disable();
 
@@ -46,10 +45,11 @@ public class SecurityConfig {
                 .cors()
                 .and()
                 .authorizeRequests()
-                 .antMatchers("/auth/login").permitAll()
-                 .antMatchers("/h2-console/**").permitAll()
-                 .antMatchers("/**").authenticated()
-               //.antMatchers("/**").permitAll()
+                //.antMatchers("/auth/login").permitAll()
+                //.antMatchers("/auth/recover").permitAll()
+                //.antMatchers("/h2-console/**").permitAll()
+                //.antMatchers("/**").authenticated()
+                .antMatchers("/**").permitAll()
                 .and()
                 .httpBasic();
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
@@ -71,7 +71,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception{
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+            throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
@@ -81,7 +82,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public JWTAuthenticationFilter jwtAuthenticationFilter(){
+    public JWTAuthenticationFilter jwtAuthenticationFilter() {
         return new JWTAuthenticationFilter();
     }
 }

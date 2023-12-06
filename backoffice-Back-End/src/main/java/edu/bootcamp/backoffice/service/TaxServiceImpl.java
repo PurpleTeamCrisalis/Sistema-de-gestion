@@ -79,8 +79,8 @@ public class TaxServiceImpl implements TaxService{
     }
     
     //Validacion de percentage
-    public void validatePercentage(Integer percentage, StringBuilder errorBuilder){
-        validator.validateIntegerValue(
+    public void validatePercentage(Float percentage, StringBuilder errorBuilder){
+        validator.validateFloatValue(
             percentage,
             EntitiesConstraints.CHARGEPERCENTAGE_MAX_LENGTH,
             EntitiesConstraints.CHARGEPERCENTAGE_MIN_LENGTH,
@@ -99,7 +99,7 @@ public class TaxServiceImpl implements TaxService{
         //     taxRepository.save(charge);
         // }
         // else{
-            charge.getProducts().clear();
+            //charge.getProducts().clear();
             taxRepository.delete(charge);
         // }
         
@@ -112,8 +112,6 @@ public class TaxServiceImpl implements TaxService{
         List<ChargeResponse> dtos = new ArrayList<>();
 
         for(Tax charge : charges) dtos.add(dtoFactory.createResponse(charge));
-        if(dtos.isEmpty()) 
-            throw new EmptyTableException("There aren't registered users.");
 
         return dtos;
     }
@@ -182,8 +180,8 @@ public class TaxServiceImpl implements TaxService{
     
     private boolean mergePercentage(UpdateChargeRequest chargeDto, Tax charge)
     {
-        Integer dtoPercentage = chargeDto.getPercentage();
-        Integer chargePercentage = charge.getPercentage();
+        Float dtoPercentage = chargeDto.getPercentage();
+        Float chargePercentage = charge.getPercentage();
         if(dtoPercentage != null && !chargePercentage.equals(dtoPercentage))
         {
             charge.setPercentage(chargeDto.getPercentage());

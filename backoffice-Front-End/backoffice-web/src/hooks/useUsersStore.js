@@ -26,6 +26,7 @@ export function useUsersStore() {
       const { data } = await projectApi.post('/user/create', user)
       dispatch(onAddNewUser({
         username: data.username,
+        email: data.email,
         enabled: data.enabled,
         id: data.id
       }))
@@ -43,8 +44,28 @@ export function useUsersStore() {
   }
   async function startUpdatingUser(user) {
     try {
-      const {data} = await projectApi.patch(`/user/update/${user.id}`, user)
+      const { data } = await projectApi.patch(`/user/update/${user.id}`, user)
       dispatch(onUpdateUser(data))
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  async function startLoadingProfileImage(username, imageElement) {
+    try {
+      const { data } = await projectApi.get(`/user/profileImage/${username}`);
+      if (!data) throw new Error()
+      imageElement.src = `http://localhost:8080/user/profileImage/${username}`;
+    } catch (error) {
+    }
+  }
+
+  async function startUpdatingProfileImage(username, form, imageElement) {
+    try {
+      const { data } = await projectApi.patch(`/user/profileImage/${username}`, form)
+      if (!data) throw new Error()
+      imageElement.src = `http://localhost:8080/user/profileImage/${username}`;
+      return;
     } catch (error) {
       console.error(error)
     }
@@ -60,6 +81,8 @@ export function useUsersStore() {
     setActiveUser,
     pullActiveUser,
     startDeletingUser,
-    startUpdatingUser
+    startUpdatingUser,
+    startLoadingProfileImage,
+    startUpdatingProfileImage
   }
 }

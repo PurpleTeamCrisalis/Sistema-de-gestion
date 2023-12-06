@@ -6,6 +6,8 @@ import java.util.Optional;
 import java.util.Set;
 
 import edu.bootcamp.backoffice.model.Tax.Tax;
+import edu.bootcamp.backoffice.model.Tax.dto.ChargeRequest;
+import edu.bootcamp.backoffice.model.Tax.dto.ChargeResponse;
 import edu.bootcamp.backoffice.service.Interface.TaxService;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,7 @@ import edu.bootcamp.backoffice.model.product.dto.ProductRequest;
 import edu.bootcamp.backoffice.model.product.dto.ProductResponse;
 import edu.bootcamp.backoffice.model.product.dto.UpdateProductRequest;
 import edu.bootcamp.backoffice.repository.ProductRepository;
+import edu.bootcamp.backoffice.repository.TaxRepository;
 import edu.bootcamp.backoffice.service.Interface.ProductService;
 import edu.bootcamp.backoffice.service.Interface.Validator;
 
@@ -28,25 +31,30 @@ public class ProductServiceImpl implements ProductService {
 	private final ProductRepository productRepository;
 	private final ProductFactory dtoFactory;
 	private final Validator validator;
+	private final TaxRepository taxRepository;
 
-	public ProductServiceImpl(ProductRepository productRepository, ProductFactory dtoFactory, Validator validator) {
+	public ProductServiceImpl(ProductRepository productRepository, ProductFactory dtoFactory, Validator validator,
+			TaxRepository taxRepository) {
 		this.productRepository = productRepository;
 		this.dtoFactory = dtoFactory;
 		this.validator = validator;
+		this.taxRepository = taxRepository;
 
 	}
-/*
-	public boolean isPresent(ProductRequest productDto) {
-		StringBuilder errors = new StringBuilder();
-		validateName(productDto.getName(), errors);
-		if (errors.length() > 0)
-			throw new InvalidCredentialsException("Invalid Product Name");
-		Optional<Product> result = productRepository.findByName(productDto.getName());
-		if (result.isPresent())
-			return !result.get().isDeleted();
-		return false;
-	}
-*/
+
+	/*
+	 * public boolean isPresent(ProductRequest productDto) {
+	 * StringBuilder errors = new StringBuilder();
+	 * validateName(productDto.getName(), errors);
+	 * if (errors.length() > 0)
+	 * throw new InvalidCredentialsException("Invalid Product Name");
+	 * Optional<Product> result =
+	 * productRepository.findByName(productDto.getName());
+	 * if (result.isPresent())
+	 * return !result.get().isDeleted();
+	 * return false;
+	 * }
+	 */
 	private void validateNewProductDbConflicts(ProductRequest productRequest) {
 		Optional<Product> result = productRepository.findByName(productRequest.getName());
 		if (result.isPresent())
@@ -58,12 +66,11 @@ public class ProductServiceImpl implements ProductService {
 		validateName(productRequest.getName(), errors);
 		validateDescription(productRequest.getDescription(), errors);
 		validator.validateLongValue(
-				(long)productRequest.getBasePrice(),
+				(long) productRequest.getBasePrice(),
 				Long.MAX_VALUE,
 				1L,
 				"Base price",
-				errors
-				);
+				errors);
 		validateErrors(errors);
 	}
 
@@ -71,10 +78,8 @@ public class ProductServiceImpl implements ProductService {
 		StringBuilder errors = new StringBuilder();
 		Product product = validator.validateIdExistence(
 				id,
-				productRepository
-		);
-		if (productRequest.getName() != null)
-		{
+				productRepository);
+		if (productRequest.getName() != null) {
 			validateName(productRequest.getName(), errors);
 			product.setName(productRequest.getName());
 		}
@@ -82,49 +87,52 @@ public class ProductServiceImpl implements ProductService {
 			validateDescription(productRequest.getDescription(), errors);
 			product.setDescription(productRequest.getDescription());
 		}
-		if(productRequest.getBasePrice() > 0)
+		if (productRequest.getBasePrice() > 0)
 			product.setBasePrice(productRequest.getBasePrice());
 		else
 			validator.validateLongValue(
-					(long)productRequest.getBasePrice(),
+					(long) productRequest.getBasePrice(),
 					Long.MAX_VALUE,
 					0L,
 					"Base price",
-					errors
-			);
-		if(productRequest.getEnabled() != null)
+					errors);
+		if (productRequest.getEnabled() != null)
 			product.setEnabled(productRequest.getEnabled());
+
+		product.setTaxes(dtoFactory.createTaxResponses(productRequest.getTaxes()));
 		validateErrors(errors);
 		return product;
 	}
 
-/*
-	private Product validateEnabledProductSearchResult(Optional<Product> result, int requesteId) {
-		Product product = result.get();
-		/*
-		 * Si se decide evitar dar alta logica : if(user.isDeleted()) throw new
-		 * DeletedAccountUpdateException("");
-		 *
-		if (product.getId() != requesteId)
-			throw new AlreadyRegisteredException("Already registered product");
-		return product;
-	}
-*
-	private boolean mergeEnabled(UpdateProductRequest productDto, Product product) {
-		Boolean dtoEnabled = productDto.getEnabled();
-		Boolean productEnabled = product.isEnabled();
-		if (dtoEnabled != null && !productEnabled.equals(dtoEnabled)) {
-			product.setEnabled(productDto.getEnabled());
-			return true;
-		}
-		return false;
-	}
-*/
+	/*
+	 * private Product validateEnabledProductSearchResult(Optional<Product> result,
+	 * int requesteId) {
+	 * Product product = result.get();
+	 * /*
+	 * Si se decide evitar dar alta logica : if(user.isDeleted()) throw new
+	 * DeletedAccountUpdateException("");
+	 *
+	 * if (product.getId() != requesteId)
+	 * throw new AlreadyRegisteredException("Already registered product");
+	 * return product;
+	 * }
+	 *
+	 * private boolean mergeEnabled(UpdateProductRequest productDto, Product
+	 * product) {
+	 * Boolean dtoEnabled = productDto.getEnabled();
+	 * Boolean productEnabled = product.isEnabled();
+	 * if (dtoEnabled != null && !productEnabled.equals(dtoEnabled)) {
+	 * product.setEnabled(productDto.getEnabled());
+	 * return true;
+	 * }
+	 * return false;
+	 * }
+	 */
 	public List<ProductResponse> getProducts() {
 		List<Product> products = productRepository.findAll();
 		List<ProductResponse> dtos = new ArrayList<>();
 		for (Product p : products)
-			dtos.add(dtoFactory.createResponse(p));
+			dtos.add(dtoFactory.createProductResponse(p));
 		if (dtos.isEmpty())
 			throw new EmptyTableException("There aren't registered products.");
 		return dtos;
@@ -160,40 +168,52 @@ public class ProductServiceImpl implements ProductService {
 		validateNewProductDbConflicts(productDto);
 		Product product = dtoFactory.CreateEntityForInsertNewRecord(productDto);
 		product = productRepository.save(product);
-		return dtoFactory.createResponse(product);
+		return dtoFactory.createProductResponse(product);
 	}
 
 	@Override
 	public ProductResponse get(int id) {
 		Product product = validator.completeValidationForId(id, productRepository);
-		return dtoFactory.createResponse(product);
+		return dtoFactory.createProductResponse(product);
 	}
 
-	public Product getProductById(Integer id) {
-		return validator.completeValidationForId(id, productRepository);
+	public Product getProductById(
+			Integer id,
+			StringBuilder errorBuilder
+	) {
+		return validator.validateFkExistence(
+				id,
+				productRepository,
+				errorBuilder
+		);
 	}
 
 	@Override
 	public ProductResponse update(int id, UpdateProductRequest productDto) {
 		Product product = validateUpdateRequest(id, productDto);
 		product = productRepository.save(product);
-		return dtoFactory.createResponse(product);
+		return dtoFactory.createProductResponse(product);
 	}
 
 	@Override
 	public ProductResponse delete(int id) {
-		Product product = validator.validateIdExistence(id, productRepository);
+		Product product = validator.validateSoftDeletableEntityExistence(id, productRepository);
 		/*
-		Set<Tax> taxes = product.getTaxes();
-		taxes.clear();
-		*/
+		 * Set<Tax> taxes = product.getTaxes();
+		 * taxes.clear();
+		 */
 		// List<Taxs> taxs = product.getTaxs();
 		// if (taxs.size() > 0) {
-		// 	product.setEnabled(false);
-		// 	productRepository.save(product);
+		// product.setEnabled(false);
+		// productRepository.save(product);
 		// } else
-		productRepository.delete(product);
-		return dtoFactory.createResponse(product);
+		if (product.getProductDetails().isEmpty() && product.getTaxes().isEmpty()) {
+			productRepository.delete(product);
+		} else {
+			product.setEnabled(false);
+			productRepository.save(product);
+		}
+		return dtoFactory.createProductResponse(product);
 	}
 
 	@Override
@@ -201,7 +221,7 @@ public class ProductServiceImpl implements ProductService {
 		List<Product> products = productRepository.findAll();
 		List<ProductResponse> dtos = new ArrayList<>();
 		for (Product p : products)
-			dtos.add(dtoFactory.createResponse(p));
+			dtos.add(dtoFactory.createProductResponse(p));
 		if (dtos.isEmpty())
 			throw new EmptyTableException("There aren't registered products.");
 		return dtos;

@@ -1,11 +1,13 @@
 package edu.bootcamp.backoffice.model.Tax;
 
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import edu.bootcamp.backoffice.model.Tax.dto.ChargeRequest;
 import edu.bootcamp.backoffice.model.Tax.dto.ChargeResponse;
 
 @Component
+@NoArgsConstructor
 public class TaxFactory {
     //Lo que vamos a recibir
     public Tax CreateEntityForInsertNewRecord(ChargeRequest chargeDTO){

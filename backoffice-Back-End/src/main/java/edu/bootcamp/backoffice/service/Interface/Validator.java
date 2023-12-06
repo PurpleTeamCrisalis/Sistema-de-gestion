@@ -17,6 +17,12 @@ public interface Validator
             JpaRepository<Entity, Integer> repository
         );
 
+    public <Entity> Entity validateFkExistence(
+            Integer id,
+            JpaRepository<Entity, Integer> repository,
+            StringBuilder errorBuilder
+    );
+
     public <Entity> Entity validateIdExistence(
             Integer id,
             JpaRepository<Entity, Integer> repository
@@ -43,6 +49,14 @@ public interface Validator
             StringBuilder errorBuilder
     );
 
+    public void validateFloatValue(
+            Float longNumber,
+            Integer maxStrict,
+            Integer minStrict,
+            String propertyName,
+            StringBuilder errorBuilder
+    );
+
     public void validateVarchar(
             String varchar,
             Integer minLength,
@@ -61,17 +75,14 @@ public interface Validator
 
     public Boolean isEmpty(
             String varchar,
-            StringBuilder errors
+            StringBuilder errors,
+            String propertyName
     );
 
-    public Boolean isEmpty(
-            Boolean flag,
-            StringBuilder errors
-    );
-
-    public Boolean isEmpty(
-            Date date,
-            StringBuilder errors
+    public Boolean isNull(
+            Object obj,
+            StringBuilder errors,
+            String propertyName
     );
 
     public Boolean isLonger(

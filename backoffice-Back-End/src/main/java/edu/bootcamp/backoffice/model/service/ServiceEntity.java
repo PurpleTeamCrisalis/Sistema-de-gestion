@@ -1,7 +1,6 @@
 package edu.bootcamp.backoffice.model.service;
 
-import javax.persistence.*;
-
+import edu.bootcamp.backoffice.model.Subscription.Subscription;
 import edu.bootcamp.backoffice.model.Tax.Tax;
 import edu.bootcamp.backoffice.model.asset.Asset;
 import edu.bootcamp.backoffice.model.order.Order;
@@ -11,9 +10,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -33,15 +36,30 @@ public class ServiceEntity extends Asset {
 	@Column(name = "suportCharge", nullable = false)
 	private double suportCharge;
 
-	@ManyToMany
-	@JoinTable(name = "taxesByServices", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "tax_id"))
-	public Set<Tax> taxes;
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(
+			name = "taxesByServices",
+			joinColumns = @JoinColumn(name = "id"),
+			inverseJoinColumns = @JoinColumn(name = "tax_id")
+	)
+	public List<Tax> taxes = new ArrayList<>();
 
 	@OneToMany(mappedBy = "discountService", fetch = FetchType.LAZY)
 	private List<Order> ordersWithDiscount = new ArrayList<>();
 
 	@OneToMany(mappedBy = "service", fetch = FetchType.LAZY)
 	private List<ServiceDetail> serviceDetails = new ArrayList<>();
+
+	@OneToMany(
+			mappedBy = "service",
+			fetch = FetchType.LAZY
+	)
+	private List<Subscription> serviceSubscriptions = new ArrayList<>();
+
+	@Override
+	public List<Tax> getAllTaxes() {
+		return taxes;
+	}
 
 	/*
 	 * public double suportCharge() {

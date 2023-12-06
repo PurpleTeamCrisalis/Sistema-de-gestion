@@ -1,8 +1,9 @@
 package edu.bootcamp.backoffice.controller;
 
-import edu.bootcamp.backoffice.model.client.dto.UpdateClientRequest;
+import edu.bootcamp.backoffice.model.Subscription.dto.SubscriptionResponse;
 import edu.bootcamp.backoffice.model.client.dto.ClientRequest;
 import edu.bootcamp.backoffice.model.client.dto.ClientResponse;
+import edu.bootcamp.backoffice.model.client.dto.UpdateClientRequest;
 import edu.bootcamp.backoffice.service.Interface.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -20,7 +22,9 @@ public class ClientController {
     private final ClientService clientService;
 
     @Autowired
-    public ClientController(ClientService clientService) { this.clientService = clientService; }
+    public ClientController(ClientService clientService) {
+        this.clientService = clientService;
+    }
 
     @PostMapping(
             path = "/",
@@ -29,7 +33,7 @@ public class ClientController {
     )
     public ResponseEntity<ClientResponse> registerClient(
             @RequestBody ClientRequest createRequest
-    ){
+    ) {
         ClientResponse clientDto = clientService.registerClient(createRequest);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -43,8 +47,7 @@ public class ClientController {
             value = "/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<ClientResponse> getClient(@PathVariable int id)
-    {
+    public ResponseEntity<ClientResponse> getClient(@PathVariable int id) {
         ClientResponse client = clientService.get(id);
         return ResponseEntity.ok(client);
     }
@@ -53,8 +56,7 @@ public class ClientController {
             path = "/list",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<List<ClientResponse>> getAllClients()
-    {
+    public ResponseEntity<List<ClientResponse>> getAllClients() {
         List<ClientResponse> clients = clientService.get();
         return ResponseEntity.ok(clients);
     }
@@ -66,8 +68,7 @@ public class ClientController {
     )
     public ResponseEntity<ClientResponse> updateClient(
             @PathVariable int id,
-            @RequestBody UpdateClientRequest clientDTO)
-    {
+            @RequestBody UpdateClientRequest clientDTO) {
         ClientResponse client = clientService.update(id, clientDTO);
         return ResponseEntity.ok(client);
     }
@@ -76,10 +77,19 @@ public class ClientController {
             value = "delete/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<ClientResponse> deleteClient(@PathVariable int id)
-    {
+    public ResponseEntity<ClientResponse> deleteClient(@PathVariable int id) {
         ClientResponse client = clientService.delete(id);
         return ResponseEntity.ok(client);
     }
 
+    @GetMapping(
+            value = "list/{clientId}/subscriptions",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<List<SubscriptionResponse>> getClientSubscriptions(@PathVariable int clientId) {
+        // clientService.getClientSubscriptions(clientId);
+        List<SubscriptionResponse> subscription = new ArrayList<>();
+        subscription.addAll(clientService.getClientSubscriptions(clientId));
+        return ResponseEntity.ok(subscription);
+    }
 }

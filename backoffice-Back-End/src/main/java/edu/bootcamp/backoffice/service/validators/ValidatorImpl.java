@@ -44,8 +44,23 @@ public class ValidatorImpl implements Validator
     {
         Optional<Entity> entity = repository.findById(id);
         if(entity.isEmpty())
-            throw new IdNotFountException(" Id not found");
+            throw new IdNotFountException(" Id not found.");
         return entity.get();
+    }
+
+    public <Entity> Entity validateFkExistence(
+            Integer id,
+            JpaRepository<Entity, Integer> repository,
+            StringBuilder errorBuilder
+            )
+    {
+        Optional<Entity> entity = repository.findById(id);
+        if(entity.isEmpty())
+            errorBuilder
+                    .append(" There is no registered element for the Foreign Key ")
+                    .append(id)
+                    .append(".");
+        return entity.orElse(null);
     }
 
     public void validateIdFormat(
@@ -58,60 +73,6 @@ public class ValidatorImpl implements Validator
                     " The id must be grater than 0."
             );
     }
-/*
-    public void validateInterger(
-        Integer integer,
-        int minLength,
-        int maxLength,
-        StringBuilder errors,
-        String propertyName
-    ){
-        StringBuilder newErrors = new StringBuilder();
-        if( ! isValueMax(integer, maxLength, newErrors))            
-            if(isValueMin(integer, minLength, newErrors));
-            
-        if(newErrors.length() != 0)
-            errors
-                    .append("| ")
-                    .append(propertyName)
-                    .append(" :")
-                    .append(newErrors);
-    }
-    
-    public Boolean isValueMax(
-            Integer integer,
-            Integer maxLength,
-            StringBuilder errors
-        )
-    {
-        if (integer > maxLength)
-        {
-            errors
-                    .append(" Exceeds ")
-                    .append(maxLength)
-                    .append(" value.");
-            return Boolean.TRUE;
-        }
-        return Boolean.FALSE;
-    }
-
-    public Boolean isValueMin(
-            Integer integer,
-            Integer minLength,
-            StringBuilder errors
-        )
-    {
-        if (integer < minLength)
-        {
-            errors
-                    .append(" Exceeds ")
-                    .append(minLength)
-                    .append(" value.");
-            return Boolean.TRUE;
-        }
-        return Boolean.FALSE;
-    }
-    */
 
     public void validateLongValue(
             Long longNumber,
@@ -157,6 +118,22 @@ public class ValidatorImpl implements Validator
             );
     }
 
+    @Override
+    public void validateFloatValue(Float longNumber, Integer maxStrict, Integer minStrict, String propertyName, StringBuilder errorBuilder) {
+        if(longNumber == null)
+            errorBuilder.append(
+                    " Debe proveerse un valor a " + propertyName + "."
+            );
+        else if(longNumber>maxStrict )
+            errorBuilder.append(
+                    " The " + propertyName + " must be smaller than " + maxStrict +  "."
+            );
+        else if(longNumber<minStrict)
+            errorBuilder.append(
+                    " The " + propertyName + " must be grater than " + minStrict +  "."
+            );
+    }
+
     public void validateVarchar(
             String varchar,
             Integer minLength,
@@ -166,7 +143,7 @@ public class ValidatorImpl implements Validator
         )
     {
         StringBuilder newErrors = new StringBuilder();
-        if( ! isEmpty(varchar, newErrors) )
+        if( ! isEmpty(varchar, newErrors, propertyName) )
             if ( ! isLonger(varchar, maxLength, newErrors))
                 isShorter(varchar, minLength, newErrors);
         if(newErrors.length() != 0)
@@ -179,38 +156,30 @@ public class ValidatorImpl implements Validator
 
     public Boolean isEmpty(
             String varchar,
-            StringBuilder errors
+            StringBuilder errors,
+            String propertyName
         )
     {
-        if (varchar == null || varchar.isEmpty())
+        if(isNull(varchar, errors, propertyName))
+            return Boolean.TRUE;
+        if ( varchar.isEmpty() )
         {
-            errors.append(" It has no content.");
+            errors.append(" " + propertyName + " has no content.");
             return Boolean.TRUE;
         }
         return  Boolean.FALSE;
     }
 
     @Override
-    public Boolean isEmpty(
-            Boolean flag,
-            StringBuilder errors)
+    public Boolean isNull(
+            Object obj,
+            StringBuilder errors,
+            String propertyName
+        )
     {
-        if (flag == null)
+        if (obj == null)
         {
-            errors.append(" It has no content.");
-            return Boolean.TRUE;
-        }
-        return  Boolean.FALSE;
-    }
-
-    @Override
-    public Boolean isEmpty(
-            Date date,
-            StringBuilder errors)
-    {
-        if (date == null)
-        {
-            errors.append(" It has no content.");
+            errors.append(" " + propertyName + " has no value.");
             return Boolean.TRUE;
         }
         return  Boolean.FALSE;

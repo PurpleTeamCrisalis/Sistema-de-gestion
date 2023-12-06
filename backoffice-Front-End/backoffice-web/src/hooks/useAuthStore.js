@@ -14,7 +14,6 @@ export const useAuthStore = () => {
     try {
       // Peticion a API para Login
       const response = await authApi.post("/login", { username, password });
-
       if (response.data) {
         // Si la API devuelve datos, el inicio de sesión fue exitoso
         localStorage.setItem('user', JSON.stringify({ username })) // Guarda en localStorage el usuario autenticado
@@ -29,6 +28,20 @@ export const useAuthStore = () => {
       });
     }
   }
+  async function startPassRecovery(email) {
+    try {
+      // Peticion a API para Login
+      const response = await authApi.post("/recover", { email });
+
+    } catch (error) {
+      // Ingresa al catch si el fetch no encuentra datos
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "E-mail Incorrecto",
+      });
+    }
+  }
 
   function startLogout() {
     // Cambia estado a deslogueado
@@ -39,11 +52,9 @@ export const useAuthStore = () => {
 
   function checkAuthToken() {
     const token = localStorage.getItem('token') // Busca en localStorage el Token.
-    const userAuthenticated = JSON.parse(localStorage.getItem('user')) // Busca en localStorage el usuario autenticado.
-    if (!token) return dispatch(onLogout()) // Si no se encuentra el token, despacha la funcion onLogout para cambiar el estado a 'not-authenticated'.
-    if (!userAuthenticated) return dispatch(onLogout()) // Si no se encuentra el token, despacha la funcion onLogout para cambiar el estado a 'not-authenticated'.
+    const userAuthenticated = JSON.parse(localStorage.getItem('user')) || '' // Busca en localStorage el usuario autenticado.
+    if (token === "undefined" || !userAuthenticated.username) return dispatch(onLogout()) // Si no se encuentra el token, despacha la funcion onLogout para cambiar el estado a 'not-authenticated'.
     dispatch(onLogin(userAuthenticated)) // Si se encuentra el token, despacha la funcion onLogin para cambiar el estado con las credenciales del usuario autenticado.
-
   }
 
   function changeAuthUsername(username) {
@@ -60,7 +71,8 @@ export const useAuthStore = () => {
     startLogin,
     startLogout,
     checkAuthToken,
-    changeAuthUsername
+    changeAuthUsername,
+    startPassRecovery
 
   };
 };

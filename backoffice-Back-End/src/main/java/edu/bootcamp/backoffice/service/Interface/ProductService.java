@@ -22,5 +22,8 @@ public interface ProductService {
         public ProductResponse delete(int id)
                         throws InvalidIdFormatException;
 
-        public Product getProductById(Integer id);
+        public Product getProductById(
+                Integer id,
+                StringBuilder errorBuilder
+        );
 }
